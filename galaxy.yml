@@ -1,0 +1,42 @@
+# Copyright (c) IBM Corporation 2020 
+
+# IBM collection namespace
+namespace: ibm
+
+# Ansible collection to work with z/OS based on z/OSMF
+name: ibm_zos_zosmf
+
+# The collection version
+version: 1.0.0
+
+# Collection README file
+readme: README.md
+
+# Contributors
+authors:
+  - "Yang Cao <caoy@cn.ibm.com>"
+  - "Yun Juan Yang <yunyyang@cn.ibm.com>"
+
+# Description
+description: Ansible collection consisting of modules and roles to work with z/OS based on z/OS Management Facility (z/OSMF).
+
+# License
+license:
+  - GPL-3.0-only
+  - Apache-2.0
+
+# Tags
+tags:
+  - ibm
+  - z
+  - zos
+  - zosmf
+
+# The URL of the originating SCM repository
+repository: https://www.github.com/IBM/ibm_zos_zosmf
+
+# The URL to any online docs
+documentation: https://www.github.com/IBM/ibm_zos_zosmf/blob/master/README.md
+
+# The URL to the collection issue tracker
+issues: https://www.github.com/IBM/ibm_zos_zosmf/issues

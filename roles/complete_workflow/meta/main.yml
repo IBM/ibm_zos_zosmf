@@ -1,0 +1,20 @@
+# Copyright (c) IBM Corporation 2020 
+
+---
+galaxy_info:
+  authors:
+    - "Yang Cao <caoy@cn.ibm.com>"
+    - "Yun Juan Yang <yunyyang@cn.ibm.com>"
+  description: Ansible role to complete a z/OS workflow forcibly or idempotently.
+  company: IBM
+  min_ansible_version: 2.9
+  galaxy_tags:
+    - ibm
+    - z
+    - zos
+    - zosmf
+    - workflow
+  license:
+    - GPL-3.0-only
+    - Apache-2.0
+dependencies: []
