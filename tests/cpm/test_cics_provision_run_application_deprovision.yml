@@ -1,0 +1,55 @@
+# Copyright (c) IBM Corporation 2020
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: test role for complete_zmf_cpm_provision
+  hosts: any
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    - name: instance_info_json_path #will store instance json information globally thru the playbook
+
+  vars_prompt:
+    - name: zmf_username
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
+
+    - name: application_path_input
+      prompt: "Enter your application file full path"
+      private: no
+
+  tasks:
+    - include_role:
+        name: complete_cpm_provision
+      vars:
+        zmf_host: "52.116.65.208:10443"
+        cpm_template_name: "CICS55_With_WLP"
+        domain_name: "default"
+        tenant_name: "default"
+        systems_nicknames: "S0W1"
+        instance_record_dir: "/tmp"
+        api_polling_retry_count: 30
+        api_polling_interval_seconds: 10
+
+    - include_role:
+        name: cics_wlp_install_app
+      vars:
+        zmf_host: "52.116.65.208:10443"
+        instance_info_json: "{{lookup('file', instance_info_json_path)}}"
+        username: ibmuser
+        password: sys1
+        app_root_uri: "/CloudTestServlet"
+        app_file_name: "CloudTestServlet.war"
+        application_path: "{{ application_path_input }}"
+
+    - include_role:
+        name: complete_cpm_action
+      vars:
+        zmf_host: "52.116.65.208:10443"
+        instance_action_name: "deprovision"
+        api_polling_retry_count: 50
+        api_polling_interval_seconds: 10

@@ -1,0 +1,46 @@
+# Copyright (c) IBM Corporation 2020
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: test role for complete_zmf_cpm_provision
+  hosts: any
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    - name: instance_info_json_path #will store instance json information globally thru the playbook
+  vars_prompt:
+    - name: zmf_username
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
+  tasks:
+    - include_role:
+        name: complete_cpm_provision
+      vars:
+        zmf_host: "pev065.pok.ibm.com"
+        cpm_template_name: "<template-name>"
+        domain_name: "default"
+        tenant_name: "default"
+        systems_nicknames: "SY1"
+        instance_record_dir: "/tmp"
+        api_polling_retry_count: 10
+        api_polling_interval_seconds: 3
+
+    - include_role:
+        name: complete_cpm_action
+      vars:
+        zmf_host: "pev065.pok.ibm.com"
+        instance_action_name: "sleep-30"
+        api_polling_retry_count: 20
+        api_polling_interval_seconds: 10
+
+    - include_role:
+        name: complete_cpm_action
+      vars:
+        zmf_host: "pev065.pok.ibm.com"
+        instance_action_name: "deprovisionPlaceholder"
+        api_polling_retry_count: 20
+        api_polling_interval_seconds: 10
