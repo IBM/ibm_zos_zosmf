@@ -1,6 +1,6 @@
 =# Provison z/OS middlewares, for example CICS, Db2, IMS, WLP etc. 
 
-This collection also provide capabilities to provision and manage z/OS middlewares/softwares using Ansible playbooks. There are two roles provided to interact with z/OSMF Cloud Provisioning & Management (CP&M). These roles drives z/OSMF RESTful services provided by CP&M to provision and manage software services.
+This collection also provide capabilities to provision and manage z/OS middlewares/softwares using Ansible playbooks. There are two roles provided to interact with z/OSMF Cloud Provisioning & Management (CP&M). These roles drive z/OSMF RESTful services provided by CP&M to provision and manage software services.
 
 - [provision_software_service](../roles/provision_software_service/README.md) : Provisions an instance of a specific middleware/software by driving a software template defined in CP&M software catalog. 
 
