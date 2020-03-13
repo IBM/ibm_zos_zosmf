@@ -12,7 +12,7 @@ The information of z/OSMF server should be configured in vars file, including th
 
 
 ## Contents
-- [Manipulate z/OS Workflows](docs/README_workflow.md)
+- [Operate z/OS Workflows](docs/README_workflow.md)
     - module - [workflow](docs/README_workflow.md#Modules)
     - role - [complete_workflow](docs/README_workflow.md#Roles)
 - [Provision and Manage z/OS Softwares](docs/README_cpm.md)
