@@ -17,15 +17,15 @@ This collection also provide capabilities to provision and manage z/OS middlewar
 - [provision_software_service](../roles/provision_software_service): This role can be used to provision a z/OS software service. 
 
   Variables:
-     - instance_record_dir: Path of the directory that provision role will use to capture various information about provisioned instance in json format.
+    - instance_record_dir: Path of the directory that provision role will use to capture various information about provisioned instance in json format.
     - zmf_username: z/OSMF username  
     - zmf_password: z/OSMF password
     - instance_info_json_path: Path to the file that holds provisioned instance information, `provison_software_service` role will automatically generate this variable in the foramt of `<instance_record_dir>/<template_name>-<instance external_name>.json`
     - zmf_host: z/OSMF host uri, excluding https, including port
     - cpm_template_name: Template name i.e. software service to be provisioned
     - domain_name: Cloud domain name associated with the template
-    - tenant_name: (optional) Identifies the CP&M Tenant name associated with the user that is driving this role
-    - systems_nicknames: System nick name, no multi-sysplex support at current stage
+    - tenant_name: (optional) Identifies the CP&M Tenant name associated with the user that is driving this role. This variable is required if zmf_username is associated with multiple CP&M tenants.
+    - systems_nicknames: (optional) System nick name as identified in z/OSMF. If this variable is not specified, provisioning will take place on a system where z/OSMF is currently running.
     - api_polling_retry_count: Total retries number before role exit with failure waiting on provisioning to complete
     - api_polling_interval_seconds: Interval time for each polling request in seconds
 
@@ -45,8 +45,7 @@ This collection also provide capabilities to provision and manage z/OS middlewar
 ### Control Node
 
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) - 2.9 or later.
-- [Python](https://www.python.org/downloads/release/latest) -  3.7 or later.
-- [Requests library for Python](https://requests.readthedocs.io/en/latest/) - 2.23 or later.
+- [urllib3](https://urllib3.readthedocs.io/en/latest/) - 1.25 or later.
 
 ### provision_software_service
 
@@ -55,10 +54,11 @@ Addtional required Python library listed [here](../roles/provision_software_serv
 ### Managed Node
 
 - [z/OS](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3/en/homepage.html) - 2.3 or later.
+- [Cloud Provisioning & Management](https://www.ibm.com/support/z-content-solutions/cloud-provisioning)
 
 ## Usage
 
-Please refer to directory [examples](../examples/README.md) for various example playbooks.
+Please refer to directory [examples](../examples/cpm/README.md) for various example playbooks.
 
 ## Test
 
