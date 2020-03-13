@@ -20,7 +20,7 @@
     - include_role:
         name: complete_cpm_provision
       vars:
-        zmf_host: "pev065.pok.ibm.com"
+        zmf_host: ""
         cpm_template_name: "<template-name>"
         domain_name: "default"
         tenant_name: "default"
@@ -32,15 +32,15 @@
     - include_role:
         name: complete_cpm_action
       vars:
-        zmf_host: "pev065.pok.ibm.com"
-        instance_action_name: "sleep-30"
+        zmf_host: ""
+        instance_action_name: ""
         api_polling_retry_count: 20
         api_polling_interval_seconds: 10
 
     - include_role:
         name: complete_cpm_action
       vars:
-        zmf_host: "pev065.pok.ibm.com"
-        instance_action_name: "deprovisionPlaceholder"
+        zmf_host: ""
+        instance_action_name: ""
         api_polling_retry_count: 20
         api_polling_interval_seconds: 10
