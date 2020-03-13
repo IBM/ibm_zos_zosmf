@@ -49,7 +49,7 @@ This collection also provide capabilities to provision and manage z/OS middlewar
 
 ### provision_software_service
 
-Addtional required Python library listed [here](../roles/provision_software_service/requirement.txt)
+Additional required Python library listed [here](../roles/provision_software_service/requirement.txt)
 
 ### Managed Node
 

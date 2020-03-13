@@ -1,38 +1,32 @@
-Role Name
-=========
+# Ansible Role: manage_software_instance
+The collection [ibm_zos_zosmf](../../README.md) provides an [Ansible role](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html), referred to as `manage_software_instance`, to manage a provisioned instance of z/OS middleware/software. Various management such as starting or stopping the instance can be performed using this role. When software service instance is not required any more, it can be deprovisioned using this role. 
 
-A brief description of the role goes here.
+## Role Variables
+The variables used by the role are listed below:
 
-Requirements
-------------
+- 'zmf_host' - z/OSMF host uri, excluding https, including port
+- 'zmf_username' - z/OSMF username  
+- 'zmf_password' - z/OSMF password
+- 'instance_info_json_path' - Path to the file that holds provisioned instance information. Refer to `provison_software_service` role to determine what value should be assigned to this variable
+- 'instance_action_name' - Action to be performed on a provisioned software instance. for example Deprovision 
+- 'api_polling_retry_count' - Total retries number before role exit with failure waiting on provisioning to complete
+- 'api_polling_interval_seconds' -  Interval time for each polling request in seconds
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Requirements
+Please refer to section [Requirements](requirements.txt). 
 
-Role Variables
---------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+## Dependencies
+None
 
-Dependencies
-------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+## Usage
+Please refer to directory [examples](../../examples/cpm/README.md) for various example playbooks.
 
-Example Playbook
-----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+## Test
+Please refer to the test playbook [test_role_deprovision_cics.yml](../../tests/cpm/test_role_provision_cics.yml) in the directory [tests/cpm](../../tests/cpm/README.md).
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
 
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+## Copyright
+© Copyright IBM Corporation 2020
