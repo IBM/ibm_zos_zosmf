@@ -14,7 +14,7 @@ This collection also provide capabilities to provision and manage z/OS middlewar
 
 ## Roles Specification
 
-- [provision_software_service](../roles/provision_software_service):
+- [provision_software_service](../roles/provision_software_service): This role can be used to provision a z/OS software service. 
 Variables:
   - instance_record_dir: Path of the directory that provision role will use to capture various information about provisioned instance in json format.
   - zmf_username: z/OSMF username  
@@ -28,7 +28,8 @@ Variables:
   - api_polling_retry_count: Total retries number before role exit with failure waiting on provisioning to complete
   - api_polling_interval_seconds: Interval time for each polling request in seconds
 
-- [manage_software_instance](../roles/manage_software_instance):
+- [manage_software_instance](../roles/manage_software_instance): This role can be used to manage a provisioned software service instance. Various actions can be performed on a provisioned instance using this role. 
+Variables:
   - zmf_host: z/OSMF host uri, excluding https, including port
   - zmf_username: z/OSMF username  
   - zmf_password: z/OSMF password
