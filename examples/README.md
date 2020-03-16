@@ -36,16 +36,16 @@ Included in this directory are sample variable files located in directory [group
   - The value for property __zmf_password__ is the password of your username of z/OSMF. Actually, client certificate is the recommanded way to do the authentication, you can use __zmf_crt__ and __zmf_key__ to specify the certificate file and key file to be used in authentication. But it's easier to try the examples by using username/password system here.
 
 - `cpm.yml` contians variables for all groups for sample_role(s)_*.yml:
-  - The value for property cpm_template_name is the template name in CP&M user want to provision
-  - The value for property domain_name where the template under
-  - The value for property tenant_name is for which tenant that is associated with the template under domain_name
-  - The value for property systems_nicknames is for system nickname
-  - The value for property instance_record_dir is for the file path in local system where the provision result (in json) will be stored
-  - The value for property api_polling_retry_count is for max times of status polling before task fail and exit
-  - The value for property api_polling_interval_seconds is for interval in seconds between each api_polling_retry_count polling
-  - The value for property instance_action_name is the name which instance action user want to perform provision_software_service role, common format is /{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json
-  - The value for property instance_info_json_path is the full file path of the provision json file that is created by
-
+  # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
+  # The value for property domain_name which identifies CP&M domain in which specified template is defined
+  # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
+  # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+  # The value for property instance_record_dir identifies the file path in local system where the provision result (in json) will be stored
+  # The value for property instance_action_name identifies which instance action user wants to perform  
+  # The value for property instance_info_json_path identifies full file path of the provisioned instance json file that is created by provision_software_service role, common format is /{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json
+  # The value for property api_polling_retry_count identifies max times of status polling before task fail and exit
+  # The value for property api_polling_interval_seconds identifies interval in seconds between each api_polling_retry_count polling
+  
 ## Sample Playbooks
 
 ### [sample_role_complete_workflow.yml](sample_role_complete_workflow.yml)
@@ -98,18 +98,18 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
       - include_role:
          name: provision_software_service
          vars:
-            cpm_template_name: "<template-name>"
-            domain_name: "default"
-            tenant_name: "default"
-            systems_nicknames: "SY1"
+            cpm_template_name: "<fill-me-template-name>"
+            domain_name: "<fill-me-domain-name>"
+            tenant_name: "<fill-me-tenant_name>"
+            systems_nicknames: "<fill-me-system-nickname>"
             instance_record_dir: "/tmp"
             api_polling_retry_count: 10
             api_polling_interval_seconds: 3
    ```
 
-### [sample_roles_cpm_cics_full_cycle.yml](sample_roles_cpm_cics_full_cycle.yml)
+### [sample_roles_cpm_deploy_cics_application.yml](sample_roles_cpm_deploy_cics_application.yml)
 
-This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&M, and then deprovision the instance once it's done:
+This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&M. Please copy files/role_cics_wlp_install_app directory to roles directory before using this example
 
    ```yaml
    tasks:

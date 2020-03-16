@@ -1,16 +1,25 @@
 # Copyright (c) IBM Corporation 2020
 
 - name: test role for manage_software_instance
-  hosts: pev
+  hosts: any
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
+
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
+
   tasks:
     - include_role:
         name: manage_software_instance
       vars:
-        zmf_host: ""
-        instance_action_name: "deprovision"
-        instance_info_json_path: "/tmp/<instanceID-externalName>.json"
+        instance_action_name: "<fill-me-action-name>"
+        instance_info_json_path: "/tmp/<fill-me-file-name>.json"
         api_polling_retry_count: 10
         api_polling_interval_seconds: 7

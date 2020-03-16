@@ -26,11 +26,10 @@
     - include_role:
         name: provision_software_service
       vars:
-        zmf_host: ""
-        cpm_template_name: "CICS55_With_WLP"
+        cpm_template_name: "<template-name>"
         domain_name: "default"
         tenant_name: "default"
-        systems_nicknames: "S0W1"
+        systems_nicknames: "SY1"
         instance_record_dir: "/tmp"
         api_polling_retry_count: 30
         api_polling_interval_seconds: 10

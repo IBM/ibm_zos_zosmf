@@ -1,5 +1,4 @@
 # Copyright (c) IBM Corporation 2020
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # This sample playbook demonstrates using manage_software_instance to perform a
 # specific action on provisioned software instance. 
@@ -15,7 +14,6 @@
     - include_role:
         name: manage_software_instance
       vars:
-        zmf_host: ""
         instance_action_name: "{{ action_name_placeholder }}"
         instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"
         api_polling_retry_count: 10

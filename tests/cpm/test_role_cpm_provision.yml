@@ -21,11 +21,10 @@
     - include_role:
         name: provision_software_service
       vars:
-        zmf_host: ""
-        cpm_template_name: "<fill_me_in_template-name>"
-        domain_name: "default"
-        tenant_name: "default"
-        systems_nicknames: "SY1"
+        cpm_template_name: "<fill-me-template-name>"
+        domain_name: "<fill-me-domain-name>"
+        tenant_name: "<fill-me-tenant-name>"
+        systems_nicknames: "<fill-me-system-nickname>"
         instance_record_dir: "/tmp"
         api_polling_retry_count: 10
-        api_polling_interval_seconds: 3
+        api_polling_interval_seconds: 7
