@@ -28,19 +28,3 @@
         instance_record_dir: "/tmp"
         api_polling_retry_count: 10
         api_polling_interval_seconds: 3
-
-    - include_role:
-        name: manage_software_instance
-      vars:
-        zmf_host: ""
-        instance_action_name: ""
-        api_polling_retry_count: 20
-        api_polling_interval_seconds: 10
-
-    - include_role:
-        name: manage_software_instance
-      vars:
-        zmf_host: ""
-        instance_action_name: ""
-        api_polling_retry_count: 20
-        api_polling_interval_seconds: 10

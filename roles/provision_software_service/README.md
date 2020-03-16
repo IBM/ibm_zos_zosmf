@@ -25,11 +25,11 @@ None
 
 ## Usage
 
-Please refer to directory [examples](../../examples/cpm/README.md) for various example playbooks.
+Please refer to directory [examples](../examples/README.md) for various example playbooks.
 
 ## Test
 
-Please refer to the test playbook [test_role_provision_cics.yml](../../tests/cpm/test_role_provision_cics.yml) in the directory [tests/cpm](../../tests/cpm/README.md).
+Please refer to the test playbook [test_role_provision_cics.yml](../tests/cpm/test_role_cpm_provision.yml) in the directory [tests/cpm](../tests/cpm/README.md).
 
 ## Copyright
 
