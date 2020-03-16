@@ -2,7 +2,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 - name: test role for provision_software_service
-  hosts: pev
+  hosts: cpm
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
@@ -11,7 +11,7 @@
         name: manage_software_instance
       vars:
         zmf_host: ""
-        instance_action_name: "deprovisionPlaceholder"
-        instance_info_json_path: "/tmp/<instanceID-externalName>.json"
+        instance_action_name: "{{ action_name_placeholder }}"
+        instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"
         api_polling_retry_count: 10
         api_polling_interval_seconds: 7

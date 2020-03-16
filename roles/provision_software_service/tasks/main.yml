@@ -1,0 +1,95 @@
+# Copyright (c) IBM Corporation 2020
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+# tasks file for provision_software_service
+
+- name: Provision template
+  uri:
+    url: "https://{{ zmf_host }}/zosmf/provisioning/rest/1.0/psc/{{ cpm_template_name }}/actions/run"
+    return_content: yes
+    user: "{{ zmf_user| trim }}"
+    password: "{{ zmf_password| trim  }}"
+    force_basic_auth: yes
+    headers:
+      Host: "{{ zmf_host }}"
+      Origin: "https://{{ zmf_host }}"
+    method: POST
+    status_code: "200"
+    validate_certs: no
+    body_format: json
+    body: '{"domain-name":"{{domain_name}}","tenant-name":"{{tenant_name}}","systems-nicknames":["{{systems_nicknames}}"]}'
+  delegate_to: localhost
+  register: provision_results
+
+# - name: Display instance information
+#   loop:
+#     - "Workflow key: {{ provision_results.json['workflow-info']['workflowKey'] }}"
+#     - "Object ID: {{ provision_results.json['registry-info']['object-id'] }}"
+#   loop_control:
+#     label: ""
+#   debug:
+#     msg: "{{ item }}"
+
+# - name: Get workflow name
+#   uri:
+#     url: "https://{{ zmf_host }}/zosmf/workflow/rest/1.0/workflows/{{ provision_results.json['workflow-info']['workflowKey'] }}"
+#     return_content: yes
+#     user: "{{ zmf_user| trim  }}"
+#     password: "{{ zmf_password| trim  }}"
+#     force_basic_auth: yes
+#     headers:
+#       Host: "{{ zmf_host }}"
+#       Origin: "https://{{ zmf_host }}"
+#       Referer: "https://{{ zmf_host }}/zosmf/provisioning/sc.jsp"
+#     method: GET
+#     status_code: "200"
+#     validate_certs: no
+#   delegate_to: localhost
+#   register: workflow_results
+
+# - name: Display workflow information
+#   debug:
+#     msg: "Workflow name: {{ workflow_results.json.workflowName }}"
+
+##############################################################################
+# Verify workflow step status, requires the following variables:
+# {{zmf_host:zmf_port}} -> z/OSMF host uri
+# {{max_retry}} -> max retry count before task exit with failing status
+##############################################################################
+- name: Provision instance section
+  include_tasks: loop_instance_provision_step_state.yml
+  vars:
+    instance_object_id: "{{ provision_results.json['registry-info']['object-id'] }}"
+
+- name: Get provisioned instance information
+  uri:
+    url: "https://{{ zmf_host }}/zosmf/provisioning/rest/1.0/scr/{{ provision_results.json['registry-info']['object-id'] }}"
+    method: GET
+    user: "{{ zmf_user | trim  }}"
+    password: "{{ zmf_password | trim  }}"
+    force_basic_auth: yes
+    headers:
+      Host: "{{ zmf_host }}"
+      Origin: "https://{{ zmf_host }}"
+    status_code: "200"
+    validate_certs: no
+    return_content: yes
+  register: full_instance_json
+  delegate_to: localhost
+
+- name: Save instance information to local
+  block:
+    - name: Write instance information to disk
+      copy:
+        content: "{{ full_instance_json.json| to_nice_json(indent=2) }}"
+        dest: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+      delegate_to: localhost
+
+    - name: Display instance record file path
+      debug:
+        msg: "Instance record saved at: {{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+
+    - set_fact:
+        zosmf_instance_info: "{{ full_instance_json.json }}"
+        instance_info_json_path: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"

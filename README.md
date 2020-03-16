@@ -6,7 +6,7 @@ The IBM z/OS Management Facility Ansible collection, referred to as `ibm_zos_zos
 This project intends to allow Ansible to drive z/OS operation and configuration through manipulating z/OS resources and data based on z/OSMF RESTful services, e.g. z/OSMF workflow services, cloud provisioning services, z/OS jobs REST interface, z/OS data set and file REST interface, etc.
 
 ### Configure z/OS System and z/OSMF Server
-The target z/OS systems should be configured as the target hosts (managed nodes) in playbook. It doesn’t matter whether z/OSMF server is installed on these z/OS systems, but there should be at least one z/OSMF server installed on any z/OS system in the same sysplex. 
+The target z/OS systems should be configured as the target hosts (managed nodes) in playbook. It doesn’t matter whether z/OSMF server is installed on these z/OS systems, but there should be at least one z/OSMF server installed on any z/OS system in the same sysplex.
 
 The information of z/OSMF server should be configured in vars file, including the hostname, port number, and authentication info. Both username/password and client-certificate are supported for authenticating with z/OSMF server, and client-certificate will be used first if both of them are supplied.
 

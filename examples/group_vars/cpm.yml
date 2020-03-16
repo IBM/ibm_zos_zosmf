@@ -1,0 +1,27 @@
+# Copyright (c) IBM Corporation 2020
+
+# The value for property cpm_template_name is the template name in CP&M user want to provision
+# The value for property domain_name where the template under
+# The value for property tenant_name is for which tenant that is associated with the template under domain_name
+# The value for property systems_nicknames is for system nickname
+# The value for property instance_record_dir is for the file path in local system where the provision result (in json) will be stored
+# The value for property api_polling_retry_count is for max times of status polling before task fail and exit
+# The value for property api_polling_interval_seconds is for interval in seconds between each api_polling_retry_count polling
+
+cpm_template_name: "CICS55_With_WLP"
+domain_name: "default"
+tenant_name: "default"
+systems_nicknames: "S0W1"
+instance_record_dir: "/tmp"
+api_polling_retry_count: 30
+api_polling_interval_seconds: 10
+
+# The value for property instance_action_name is the name which instance action user want to perform provision_software_service role, common format is /{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json
+# The value for property instance_info_json_path is the full file path of the provision json file that is created by
+# The value for property api_polling_retry_count is for max times of status polling before task fail and exit
+# The value for property api_polling_interval_seconds is for interval in seconds between each api_polling_retry_count polling
+
+instance_action_name: "action_foo"
+instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"
+api_polling_retry_count: 10
+api_polling_interval_seconds: 7

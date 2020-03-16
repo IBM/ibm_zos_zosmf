@@ -1,4 +1,4 @@
-# Copyright (c) IBM Corporation 2020 
+# Copyright (c) IBM Corporation 2020
 
 # IBM collection namespace
 namespace: ibm
@@ -16,6 +16,8 @@ readme: README.md
 authors:
   - "Yang Cao <caoy@cn.ibm.com>"
   - "Yun Juan Yang <yunyyang@cn.ibm.com>"
+  - "Hiren Shah <hiren@us.ibm.com>"
+  - "Allen Zhou <xiao-yu.zhou@ibm.com>"
 
 # Description
 description: Ansible collection consisting of modules and roles to work with z/OS based on z/OS Management Facility (z/OSMF).
