@@ -37,7 +37,7 @@
 
 #########################################################################################################
 #
-#   WARNING! to user this role, you need to manually copy ./files/ole_cics_wlp_install_app
+#   WARNING! to user this role, you need to manually copy ./files/role_cics_wlp_install_app
 #   to collections/roles/ibm/ibm_zos_zosmf to make the role self available to user
 #
 ##########################################################################################################
