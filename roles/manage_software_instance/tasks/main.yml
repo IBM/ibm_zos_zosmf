@@ -6,15 +6,6 @@
 
 - name: Read instance record
   block:
-    - name: Confirm action before deprovision
-      pause:
-        prompt: "Are you sure to perform {{instance_action_name}} (yes/no)"
-      register: confirm_deprovison
-
-    - fail:
-        msg: User abort action
-      when: confirm_deprovison.user_input != "yes"
-
     - name: Read from json file path
       set_fact:
         instance_record: "{{ lookup('file', instance_info_json_path) | from_json }}"

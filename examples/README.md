@@ -124,12 +124,6 @@ This sample playbook shows how to install a web application on a provisioned ins
         app_root_uri: "/CloudTestServlet"
         app_file_name: "./files/cpm/CloudTestServlet.war"
         application_path: "{{ application_path_input }}"
-
-      - include_role:
-          name: manage_software_instance
-        vars:
-          instance_action_name: "deprovision"
-          ...
    ```
 
 - In the inventory file, the z/OS target system is configured as managed node like below:

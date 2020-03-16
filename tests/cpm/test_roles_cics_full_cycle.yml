@@ -8,7 +8,6 @@
     - ibm.ibm_zos_zosmf
   vars:
     - name: instance_info_json_path #will store instance json information globally thru the playbook
-
   vars_prompt:
     - name: zmf_user
       prompt: "Enter your zOSMF username"
@@ -17,39 +16,31 @@
     - name: zmf_password
       prompt: "Enter your zOSMF password"
       private: yes
-
-    # - name: application_path_input
-    #   prompt: "Enter your application file full path"
-    #   private: no
-
   tasks:
     - include_role:
         name: provision_software_service
       vars:
         zmf_host: ""
-        cpm_template_name: "CICS55_With_WLP"
+        cpm_template_name: "<template-name>"
         domain_name: "default"
         tenant_name: "default"
-        systems_nicknames: "S0W1"
+        systems_nicknames: "SY1"
         instance_record_dir: "/tmp"
-        api_polling_retry_count: 30
-        api_polling_interval_seconds: 10
-
-    # - include_role:
-    #     name: cics_wlp_install_app
-    #   vars:
-    #     zmf_host: ""
-    #     instance_info_json: "{{lookup('file', instance_info_json_path)}}"
-    #     username: ""
-    #     password: ""
-    #     app_root_uri: "/CloudTestServlet"
-    #     app_file_name: "CloudTestServlet.war"
-    #     application_path: "{{ application_path_input }}"
+        api_polling_retry_count: 10
+        api_polling_interval_seconds: 3
 
     - include_role:
         name: manage_software_instance
       vars:
         zmf_host: ""
-        instance_action_name: "deprovision"
-        api_polling_retry_count: 50
+        instance_action_name: ""
+        api_polling_retry_count: 20
+        api_polling_interval_seconds: 10
+
+    - include_role:
+        name: manage_software_instance
+      vars:
+        zmf_host: ""
+        instance_action_name: ""
+        api_polling_retry_count: 20
         api_polling_interval_seconds: 10

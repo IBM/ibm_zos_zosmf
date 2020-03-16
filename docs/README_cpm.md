@@ -27,10 +27,6 @@ None
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) - 2.9 or later.
 - [urllib3](https://urllib3.readthedocs.io/en/latest/) - 1.25 or later.
 
-### provision_software_service
-
-Additional required Python library listed [here](../roles/provision_software_service/requirement.txt)
-
 ### Managed Node
 
 - [z/OS](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3/en/homepage.html) - 2.3 or later.
