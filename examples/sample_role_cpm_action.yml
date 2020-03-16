@@ -1,7 +1,12 @@
 # Copyright (c) IBM Corporation 2020
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- name: test role for provision_software_service
+# This sample playbook demonstrates using manage_software_instance to perform a
+# specific action on provisioned software instance. 
+# Example:
+# ansible-playbook -i hosts sample_role_cpm_action.yml
+
+- name: sample of managing software instance
   hosts: cpm
   gather_facts: no
   collections:

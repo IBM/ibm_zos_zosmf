@@ -1,11 +1,11 @@
 # Copyright (c) IBM Corporation 2020
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 - name: test role for provision_software_service
   hosts: any
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
+
   vars:
     - name: instance_info_json_path #will store instance json information globally thru the playbook
   vars_prompt:
@@ -16,12 +16,13 @@
     - name: zmf_password
       prompt: "Enter your zOSMF password"
       private: yes
+
   tasks:
     - include_role:
         name: provision_software_service
       vars:
         zmf_host: ""
-        cpm_template_name: "<template-name>"
+        cpm_template_name: "<fill_me_in_template-name>"
         domain_name: "default"
         tenant_name: "default"
         systems_nicknames: "SY1"

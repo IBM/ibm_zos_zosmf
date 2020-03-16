@@ -1,7 +1,6 @@
 # Copyright (c) IBM Corporation 2020
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- name: test role for provision_software_service
+- name: test role for manage_software_instance
   hosts: pev
   gather_facts: no
   collections:
@@ -11,7 +10,7 @@
         name: manage_software_instance
       vars:
         zmf_host: ""
-        instance_action_name: "deprovisionPlaceholder"
+        instance_action_name: "deprovision"
         instance_info_json_path: "/tmp/<instanceID-externalName>.json"
         api_polling_retry_count: 10
         api_polling_interval_seconds: 7
