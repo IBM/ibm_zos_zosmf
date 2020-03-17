@@ -15,6 +15,5 @@ galaxy_info:
     - zosmf
     - cpm
   license:
-    - GPL-3.0-only
     - Apache-2.0
 dependencies: []

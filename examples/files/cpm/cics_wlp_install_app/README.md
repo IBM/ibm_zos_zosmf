@@ -25,8 +25,8 @@ None
 
 Please refer to directory [examples](../examples/README.md) for various example playbooks.
 
-## Test
+## Examples
 
-Please refer to the test playbook [test_roles_deploy_cics_application.yml](../tests/cpm/test_roles_deploy_cics_application.yml) in the directory [tests/cpm](../tests/cpm/README.md).
+Please refer to the test playbook [sample_role_deploy_cics_application.yml](../../../sample_role_deploy_cics_application.yml) in the directory [/examples](../../../README.md).
 
 ## Copyright
