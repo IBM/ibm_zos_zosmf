@@ -36,16 +36,13 @@ Included in this directory are sample variable files located in directory [group
   - The value for property __zmf_password__ is the password of your username of z/OSMF. Actually, client certificate is the recommanded way to do the authentication, you can use __zmf_crt__ and __zmf_key__ to specify the certificate file and key file to be used in authentication. But it's easier to try the examples by using username/password system here.
 
 - `cpm.yml` contians variables for all groups for sample_role(s)_*.yml:
-  # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
   # The value for property domain_name which identifies CP&M domain in which specified template is defined
   # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
   # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
   # The value for property instance_record_dir identifies the file path in local system where the provision result (in json) will be stored
-  # The value for property instance_action_name identifies which instance action user wants to perform  
-  # The value for property instance_info_json_path identifies full file path of the provisioned instance json file that is created by provision_software_service role, common format is /{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json
   # The value for property api_polling_retry_count identifies max times of status polling before task fail and exit
   # The value for property api_polling_interval_seconds identifies interval in seconds between each api_polling_retry_count polling
-  
+
 ## Sample Playbooks
 
 ### [sample_role_complete_workflow.yml](sample_role_complete_workflow.yml)
@@ -83,10 +80,10 @@ This sample playbook shows how to perform instance action on a provisioned insta
       - include_role:
          name: manage_software_instance
          vars:
-            instance_action_name: "{{ action_name_placeholder }}"
-            instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"
-            api_polling_retry_count: 10
-            api_polling_interval_seconds: 7
+            instance_action_name: "{{ action_name_placeholder }}"  # The value for property instance_action_name identifies which instance action user wants to perform
+            instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"  # The value for property instance_info_json_path identifies full file path of the provisioned instance json file that is created by provision_software_service role, common format is /{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json
+
+
    ```
 
 ### [sample_role_cpm_provision.yml](sample_role_cpm_provision.yml)
@@ -98,13 +95,7 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
       - include_role:
          name: provision_software_service
          vars:
-            cpm_template_name: "<fill-me-template-name>"
-            domain_name: "<fill-me-domain-name>"
-            tenant_name: "<fill-me-tenant_name>"
-            systems_nicknames: "<fill-me-system-nickname>"
-            instance_record_dir: "/tmp"
-            api_polling_retry_count: 10
-            api_polling_interval_seconds: 3
+            cpm_template_name: "<fill-me-template-name>"   # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
    ```
 
 ### [sample_roles_cpm_deploy_cics_application.yml](sample_roles_cpm_deploy_cics_application.yml)

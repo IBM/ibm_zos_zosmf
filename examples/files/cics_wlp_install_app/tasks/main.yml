@@ -9,7 +9,7 @@
 
 - name: Install CICS application - Create USS empty file
   uri:
-    url: "https://{{ zmf_host }}/zosmf/restfiles/fs{{ CICS_DROP_APP_DIR.value }}/workdir/DFHWLP/wlp/usr/servers/defaultServer/dropins/{{ app_file_name }}"
+    url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/fs{{ CICS_DROP_APP_DIR.value }}/workdir/DFHWLP/wlp/usr/servers/defaultServer/dropins/{{ app_file_name }}"
     return_content: yes
     user: "{{ zmf_user }}"
     password: "{{ zmf_password  }}"
@@ -26,7 +26,7 @@
 
 - name: Install CICS application - Write application binary to USS file
   uri:
-    url: "https://{{ zmf_host }}/zosmf/restfiles/fs{{ CICS_DROP_APP_DIR.value }}/workdir/DFHWLP/wlp/usr/servers/defaultServer/dropins/{{ app_file_name }}"
+    url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/fs{{ CICS_DROP_APP_DIR.value }}/workdir/DFHWLP/wlp/usr/servers/defaultServer/dropins/{{ app_file_name }}"
     return_content: yes
     user: "{{ zmf_user }}"
     password: "{{ zmf_password  }}"

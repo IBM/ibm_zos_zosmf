@@ -9,7 +9,7 @@ SY1 ansible_host=hostname_of_zos_system
 zsystems
 
 [cpmsystem]
-SY1 ansible_host=hostname_of_zos_system
+SY1 ansible_host=local
 
 # this group is used in sample_cpm_*.yml
 [cpm:children]

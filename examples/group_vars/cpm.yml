@@ -1,21 +1,14 @@
 # Copyright (c) IBM Corporation 2020
 
-# The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
 # The value for property domain_name which identifies CP&M domain in which specified template is defined
 # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
 # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
 # The value for property instance_record_dir identifies the file path in local system where the provision result (in json) will be stored
 
-cpm_template_name: "<fill-me-template-name>"
-domain_name: "<fill-me-domain-name>"
-tenant_name: "<fill-me-tenant_name>"
-systems_nicknames: "<fill-me-system-nickname>"
-
-# The value for property instance_action_name identifies which instance action user wants to perform  
-# The value for property instance_info_json_path identifies full file path of the provisioned instance json file that is created by provision_software_service role, common format is /{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json
-
-instance_action_name: "<fill-me-action-name"
-instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"
+domain_name: ""
+tenant_name: ""
+systems_nicknames: ""
+instance_record_dir: "/tmp"
 
 # The value for property api_polling_retry_count identifies max times of status polling before task fail and exit
 # The value for property api_polling_interval_seconds identifies interval in seconds between each api_polling_retry_count polling

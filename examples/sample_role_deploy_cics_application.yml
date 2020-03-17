@@ -13,14 +13,6 @@
     - name: instance_info_json_path #will store instance json information globally thru the playbook
 
   vars_prompt:
-    - name: zmf_user
-      prompt: "Enter your zOSMF username"
-      private: no
-
-    - name: zmf_password
-      prompt: "Enter your zOSMF password"
-      private: yes
-
     - name: application_path_input
       prompt: "Enter your application file full path"
       private: no
@@ -29,13 +21,7 @@
     - include_role:
         name: provision_software_service
       vars:
-        cpm_template_name: "<cics-template-name>"
-        domain_name: "default"
-        tenant_name: "default"
-        systems_nicknames: "SY1"
-        instance_record_dir: "/tmp"
-        api_polling_retry_count: 30
-        api_polling_interval_seconds: 10
+        cpm_template_name: "<template-name>"
 
 #########################################################################################################
 #
@@ -47,8 +33,7 @@
     - include_role:
         name: cics_wlp_install_app
       vars:
-        zmf_host: ""
         instance_info_json: "{{lookup('file', instance_info_json_path)}}"
         app_root_uri: "/CloudTestServlet"
-        app_file_name: "./files/cpm/CloudTestServlet.war"
+        app_file_name: "CloudTestServlet.war"
         application_path: "{{ application_path_input }}"

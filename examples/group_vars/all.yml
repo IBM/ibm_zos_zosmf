@@ -5,14 +5,14 @@
 # The value for property zmf_user is your username of z/OSMF.
 # The value for property zmf_password is the password of your username of z/OSMF.
 
-zmf_host: "<fill-me-host-name>"
-zmf_port: "<fill-me-port-number>"
-zmf_user: user1   
-zmf_password: password1
+zmf_host: ""
+zmf_port: ""
+zmf_user: ""
+zmf_password: ""
 
 # Client certificate is supported by specifying the location of client certificate and key files on control node via zmf_crt and zmf_key.
 # If below variables are specified, then the module and role will use client certificate to login instead of using username/password even those variables are specified.
 # zmf_crt:
 # zmf_key:
 
-        
+
