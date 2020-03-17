@@ -10,6 +10,14 @@
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
   tasks:
     - include_role:
         name: manage_software_instance

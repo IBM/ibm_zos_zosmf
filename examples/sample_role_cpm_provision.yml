@@ -3,14 +3,24 @@
 - name: test role for provision_software_service
   hosts: cpm
   gather_facts: no
-  vars_files:
-    - "group_vars/all.yml"
   collections:
     - ibm.ibm_zos_zosmf
   vars:
     - name: instance_info_json_path #will store instance json information globally thru the playbook
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
   tasks:
     - include_role:
         name: provision_software_service
       vars:
         cpm_template_name: "<template-name>"
+        domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
+        tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
+        systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+

@@ -11,8 +11,15 @@
     - ibm.ibm_zos_zosmf
   vars:
     - name: instance_info_json_path #will store instance json information globally thru the playbook
-
   vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
+
     - name: application_path_input
       prompt: "Enter your application file full path"
       private: no

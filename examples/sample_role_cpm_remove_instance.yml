@@ -3,12 +3,18 @@
 - name: test role for provision_software_service
   hosts: cpm
   gather_facts: no
-  vars_files:
-    - "group_vars/all.yml"
   collections:
     - ibm.ibm_zos_zosmf
   vars:
     - name: instance_info_json_path #will store instance json information globally thru the playbook
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
   tasks:
     - include_role:
         name: remove_software_instance

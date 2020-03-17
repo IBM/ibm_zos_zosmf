@@ -1,13 +1,7 @@
 # Copyright (c) IBM Corporation 2020
 
-# The value for property domain_name which identifies CP&M domain in which specified template is defined
-# The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
-# The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
 # The value for property instance_record_dir identifies the file path in local system where the provision result (in json) will be stored
 
-domain_name: ""
-tenant_name: ""
-systems_nicknames: ""
 instance_record_dir: "/tmp"
 
 # The value for property api_polling_retry_count identifies max times of status polling before task fail and exit
