@@ -21,7 +21,7 @@
           Host: "{{ zmf_host }}"
           Origin: "https://{{ zmf_host }}"
         method: DELETE
-        status_code: "200"
+        status_code: 204, 404
         validate_certs: no
         body_format: json
         body: '{}'

@@ -31,7 +31,7 @@
 
     - name: "Action <{{ instance_action_name }}> progress status: in-progress"
       uri:
-        url: "https://{{ zmf_host }}/zosmf/provisioning/rest/1.0/scr/{{instance_record['object-id']}}/actions/{{action_results.json['action-id']}}"
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{instance_record['object-id']}}/actions/{{action_results.json['action-id']}}"
         return_content: yes
         user: "{{ zmf_user| trim }}"
         password: "{{ zmf_password| trim  }}"
@@ -44,7 +44,7 @@
         validate_certs: no
       delegate_to: localhost
       register: action_status_result
-      until: (action_status_result.json.state == "complete") or (action_status_result.json.state == "failed")
+      until: ('json' in action_status_result) and (action_status_result.json.state == "complete" or action_status_result.json.state == "failed")
       retries: "{{ api_polling_retry_count }}"
       delay: "{{ api_polling_interval_seconds }}"
 

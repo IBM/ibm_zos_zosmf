@@ -6,7 +6,7 @@
   block:
     # - name: Retrieve all workflow steps status
     #   uri:
-    #     url: "https://{{ zmf_host }}/zosmf/workflow/WorkflowManager/workflow/?workflowKey={{ provision_results.json['workflow-info']['workflowKey'] }}&workflowName={{workflow_results.json.workflowName}}"
+    #     url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/workflow/WorkflowManager/workflow/?workflowKey={{ provision_results.json['workflow-info']['workflowKey'] }}&workflowName={{workflow_results.json.workflowName}}"
     #     return_content: yes
     #     user: "{{ zmf_user| trim  }}"
     #     password: "{{ zmf_password| trim  }}"
