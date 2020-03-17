@@ -1,12 +1,10 @@
 # Copyright (c) IBM Corporation 2020
 
-- name: test role for provision_software_service
+- name: test role for remove_software_instance
   hosts: cpm
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
-  vars:
-    - name: instance_info_json_path #will store instance json information globally thru the playbook
   vars_prompt:
     - name: zmf_user
       prompt: "Enter your zOSMF username"

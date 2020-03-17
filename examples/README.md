@@ -114,10 +114,10 @@ This sample playbook shows how to install a web application on a provisioned ins
       - include_role:
         name: cics_wlp_install_app
       vars:
-        instance_info_json: "{{lookup('file', instance_info_json_path)}}"
-        app_root_uri: "/CloudTestServlet"
-        app_file_name: "./files/cpm/CloudTestServlet.war"
-        application_path: "{{ application_path_input }}"
+        instance_info_json: "{{lookup('file', instance_info_json_path)}}" # Path of the instance json file contains cics public variables
+        app_root_uri: "/CloudTestServlet" # The URI path to access the application once upload
+        app_file_name: "CloudTestServlet.war" # The file name that the application file will be written to the USS file system in z/OS
+        application_path: "{{ application_path_input }}" # The local absolute file path to the application binary file
    ```
 
 - In the inventory file, the z/OS target system is configured as managed node like below:
