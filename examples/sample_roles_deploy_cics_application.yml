@@ -1,7 +1,10 @@
 # Copyright (c) IBM Corporation 2020
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- name: test role for provision_software_service
+# This sample playbook demonstrates provisioning CICS region and deploying application into CICS region file system
+# Example:
+# ansible-playbook -i hosts sample_roles_deploy_cics_application.yml
+
+- name: Sample for provisioning CICS region and deploying application
   hosts: cpm
   gather_facts: no
   collections:
@@ -26,7 +29,7 @@
     - include_role:
         name: provision_software_service
       vars:
-        cpm_template_name: "<template-name>"
+        cpm_template_name: "<cics-template-name>"
         domain_name: "default"
         tenant_name: "default"
         systems_nicknames: "SY1"
@@ -36,8 +39,8 @@
 
 #########################################################################################################
 #
-#   WARNING! to user this role, you need to manually copy ./files/role_cics_wlp_install_app
-#   to collections/roles/ibm/ibm_zos_zosmf to make the role self available to user
+#   WARNING! to use this role, you need to manually copy ./files/cics_wlp_install_app
+#   to collections/roles/ibm/ibm_zos_zosmf/roles to make the role self available to user
 #
 ##########################################################################################################
 

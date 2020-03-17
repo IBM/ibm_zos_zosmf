@@ -16,5 +16,5 @@
       vars:
         instance_action_name: "{{ action_name_placeholder }}"
         instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"
-        api_polling_retry_count: 10
-        api_polling_interval_seconds: 7
+        api_polling_retry_count: 20
+        api_polling_interval_seconds: 10

@@ -1,5 +1,7 @@
+# Copyright (c) IBM Corporation 2020
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 ---
-# tasks file for cics
+# tasks to deplou application file in provisioned CICS region
 
 - name: Set variables
   set_fact:
