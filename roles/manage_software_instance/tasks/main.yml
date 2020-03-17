@@ -12,7 +12,7 @@
 
     - name: "Perform action <{{ instance_action_name }}> on {{instance_record['object-id']}}"
       uri:
-        url: "https://{{ zmf_host }}/zosmf/provisioning/rest/1.0/scr/{{instance_record['object-id']}}/actions/{{ instance_action_name }}"
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{instance_record['object-id']}}/actions/{{ instance_action_name }}"
         return_content: yes
         user: "{{ zmf_user| trim }}"
         password: "{{ zmf_password| trim  }}"

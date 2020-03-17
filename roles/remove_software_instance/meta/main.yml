@@ -1,0 +1,20 @@
+# Copyright (c) IBM Corporation 2020
+
+---
+galaxy_info:
+  authors:
+    - "Hiren Shah <hiren@us.ibm.com>"
+    - "Allen Zhou <xiao-yu.zhou@ibm.com>"
+  description: Perform management action on z/OSMF CP&M instance
+  company: IBM
+  min_ansible_version: 2.9
+  galaxy_tags:
+    - ibm
+    - z
+    - zos
+    - zosmf
+    - cpm
+  license:
+    - GPL-3.0-only
+    - Apache-2.0
+dependencies: []

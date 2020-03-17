@@ -6,7 +6,8 @@ The collection [ibm_zos_zosmf](../../README.md) provides an [Ansible role](https
 
 The variables used by the role are listed below:
 
-    - zmf_host: z/OSMF host uri, excluding https, including port
+    - zmf_host: z/OSMF host name
+    - zmf_port: z/OSMF port number
     - zmf_user: z/OSMF username
     - zmf_password: z/OSMF password
     - instance_action_name: Action to be performed on a provisioned software instance. for example Deprovision
@@ -28,7 +29,7 @@ Please refer to directory [examples](../examples/README.md) for various example 
 
 ## Test
 
-Please refer to the test playbook [test_roles_cics_full_cycle.yml](../tests/cpm/test_roles_cics_full_cycle.yml) in the directory [tests/cpm](../tests/cpm/README.md).
+Please refer to the test playbook [test_role_cpm_action.yml](../tests/cpm/test_role_cpm_action.yml) in the directory [tests/cpm](../tests/cpm/README.md).
 
 ## Copyright
 

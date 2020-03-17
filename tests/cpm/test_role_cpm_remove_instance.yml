@@ -17,11 +17,7 @@
 
   tasks:
     - include_role:
-        name: manage_software_instance
+        name: remove_software_instance
       vars:
-        # instance_action_name: "<fill-me-action-name>"
         # instance_info_json_path: "/tmp/<fill-me-file-name>.json"
-        instance_action_name: "deprovision"
         instance_info_json_path: "/tmp/CICS55_With_WLP-CICS_ZCICS000.json"
-        api_polling_retry_count: 10
-        api_polling_interval_seconds: 7

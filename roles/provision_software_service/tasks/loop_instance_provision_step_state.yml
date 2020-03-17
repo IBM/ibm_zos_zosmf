@@ -29,7 +29,7 @@
 
     - name: Retrieve provision step information
       uri:
-        url: "https://{{ zmf_host }}/zosmf/provisioning/rest/1.0/scr/{{ instance_object_id }}"
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_object_id }}"
         return_content: yes
         user: "{{ zmf_user| trim  }}"
         password: "{{ zmf_password| trim  }}"
