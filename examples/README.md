@@ -96,6 +96,9 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
          name: provision_software_service
          vars:
             cpm_template_name: "<fill-me-template-name>"   # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
+            domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
+            tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
+            systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
    ```
 
 ### [sample_roles_cpm_deploy_cics_application.yml](sample_roles_cpm_deploy_cics_application.yml)
@@ -132,7 +135,7 @@ Before running the sample playbooks, ensure you are within the directory `exampl
 `~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/examples/`
 
 You can use the [ansible-playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) command to run the sample playbooks. The command syntax is `ansible-playbook -i <inventory> <playbook>`, for example:
-`ansible-playbook -i hosts sample_role_complete_workflow.yml`
+`ansible-playbook [-i hosts] sample_role_*.yml [-e zmf_user=<username> -e zmf_password=<password>]`
 
 Optionally, during playbook execution, logging to the console verbosity can be configured. This is helpful in situations where communication is failing and you want more detail. To adjust logging verbosity, append more letter `v`'s, for example: `-v`, `-vv`, `-vvv`, or `-vvvv`. Each letter `v` increases logging vebosity similar to traditional logging levels INFO, WARN, ERROR, DEBUG.
 
