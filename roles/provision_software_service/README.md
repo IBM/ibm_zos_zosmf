@@ -1,6 +1,6 @@
 # Ansible Role: provision_software_service
 
-The collection [ibm_zos_zosmf](../../README.md) provides an [Ansible role](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html), referred to as `provision_software_service`, to provision a z/OS middleware/software service using Cloud Provisioning @ Management (CP&M) template.
+The collection [ibm_zos_zosmf](../../README.md) provides an [Ansible role](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html), referred to as `provision_software_service`, to provision a z/OS middleware/software service using Cloud Provisioning & Management (CP&M) template.
 
 ## Role Variables
 
@@ -28,9 +28,6 @@ None
 
 Please refer to directory [examples](../examples/README.md) for various example playbooks.
 
-## Test
-
-Please refer to the test playbook [test_role_provision_cics.yml](../tests/cpm/test_role_cpm_provision.yml) in the directory [tests/cpm](../tests/cpm/README.md).
 
 ## Copyright
 

@@ -1,4 +1,0 @@
-# Copyright (c) IBM Corporation 2020
-
-[any]
-SY1 ansible_host=pev065.pok.ibm.com

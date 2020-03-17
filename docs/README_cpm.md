@@ -14,13 +14,13 @@ This collection also provide capabilities to provision and manage z/OS middlewar
 
 - `Check Mode` - The module does not support check mode. (dry run or test run)
 
-## Roles Specification
+## Roles-Specification
 
 - [provision_software_service](../roles/provision_software_service/README.md): This role can be used to provision a z/OS software service.
 
 - [manage_software_instance](../roles/manage_software_instance/README.md): This role can be used to manage a provisioned software service instance. Various actions can be performed on a provisioned instance using this role.
 
-- [remove_software_instance](../roles/remove_software_instance/README.md): This role can be used to remove a deprovisioned software service instance. 
+- [remove_software_instance](../roles/remove_software_instance/README.md): This role can be used to remove a deprovisioned software service instance.
 
 ## Requirements
 
@@ -38,11 +38,7 @@ None
 
 ## Usage
 
-Please refer to directory [examples](../examples/cpm/README.md) for various example playbooks.
-
-## Test
-
-Please refer to directory [tests/cpm](../tests/cpm/README.md).
+Please refer to directory [examples](../examples/README.md) for various example playbooks.
 
 ## Copyright
 

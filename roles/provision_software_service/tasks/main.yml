@@ -22,36 +22,6 @@
   delegate_to: localhost
   register: provision_results
 
-# - name: Display instance information
-#   loop:
-#     - "Workflow key: {{ provision_results.json['workflow-info']['workflowKey'] }}"
-#     - "Object ID: {{ provision_results.json['registry-info']['object-id'] }}"
-#   loop_control:
-#     label: ""
-#   debug:
-#     msg: "{{ item }}"
-
-# - name: Get workflow name
-#   uri:
-#     url: "https://{{ zmf_host }}/zosmf/workflow/rest/1.0/workflows/{{ provision_results.json['workflow-info']['workflowKey'] }}"
-#     return_content: yes
-#     user: "{{ zmf_user| trim  }}"
-#     password: "{{ zmf_password| trim  }}"
-#     force_basic_auth: yes
-#     headers:
-#       Host: "{{ zmf_host }}"
-#       Origin: "https://{{ zmf_host }}"
-#       Referer: "https://{{ zmf_host }}/zosmf/provisioning/sc.jsp"
-#     method: GET
-#     status_code: "200"
-#     validate_certs: no
-#   delegate_to: localhost
-#   register: workflow_results
-
-# - name: Display workflow information
-#   debug:
-#     msg: "Workflow name: {{ workflow_results.json.workflowName }}"
-
 ##############################################################################
 # Verify workflow step status, requires the following variables:
 # {{zmf_host:zmf_port}} -> z/OSMF host uri

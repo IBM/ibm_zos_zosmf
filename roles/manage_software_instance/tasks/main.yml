@@ -20,7 +20,7 @@
         headers:
           Host: "{{ zmf_host }}"
           Origin: "https://{{ zmf_host }}"
-          Referer: "https://{{ zmf_host }}/zosmf/provisioning/sc.jsp"
+
         method: POST
         status_code: "200"
         validate_certs: no

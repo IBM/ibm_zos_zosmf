@@ -4,24 +4,6 @@
 ---
 - name: Examing workflow progress status
   block:
-    # - name: Retrieve all workflow steps status
-    #   uri:
-    #     url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/workflow/WorkflowManager/workflow/?workflowKey={{ provision_results.json['workflow-info']['workflowKey'] }}&workflowName={{workflow_results.json.workflowName}}"
-    #     return_content: yes
-    #     user: "{{ zmf_user| trim  }}"
-    #     password: "{{ zmf_password| trim  }}"
-    #     force_basic_auth: yes
-    #     headers:
-    #       Host: "{{ zmf_host }}"
-    #       Origin: "https://{{ zmf_host }}"
-    #       Referer: "https://{{ zmf_host }}/zosmf/provisioning/sc.jsp"
-    #     method: GET
-    #     status_code: "200"
-    #     validate_certs: no
-    #   delegate_to: localhost
-    #   register: results
-    #   no_log: true
-
     - name: pause
       pause:
         prompt: "Waiting {{ api_polling_interval_seconds }} seconds before next polling workflow progress status"
@@ -37,7 +19,6 @@
         headers:
           Host: "{{ zmf_host }}"
           Origin: "https://{{ zmf_host }}"
-          # Referer: "https://{{ zmf_host }}/zosmf/provisioning/sc.jsp"
         method: GET
         status_code: "200"
         validate_certs: no
@@ -45,7 +26,6 @@
       register: results
       no_log: true
 
-    # TODO
     - name: "Check if provision failed"
       fail:
         msg:
@@ -64,13 +44,6 @@
     - name: Display current polling count
       debug:
         msg: "Polling {{retry_count}} of {{ api_polling_retry_count }} tries..."
-
-    # - name: Output each workflow step status
-    #   loop: "{{ results.json.steps }}"
-    #   loop_control:
-    #     label: item.stepNumber
-    #   debug:
-    #     msg: "({% if item.state| int == 7 %}√{% elif item.state| int == 10 %}X{% else %}-{% endif %}) Step #{{ item.stepNumber }} <{{ item.name }}> {% if item.state| int == 7 %}successed{% elif item.state| int == 10 %}failed{% else %}executing{% endif %}"
 
     - name: "Gather provision API response"
       set_fact:
@@ -97,12 +70,6 @@
         msg: "Ignore and retry"
       when:
         - provision_current_state != 'provisioned'
-
-
-    # - name: "Intermediate workflow progress checking (ignore the failure of this task)"
-    #   fail:
-    #     msg: "Workflow is not at 100% complete (ignore the failure of this task)"
-    #   when: results.json.percentComplete|int != 100
 
   rescue:
     - fail:
