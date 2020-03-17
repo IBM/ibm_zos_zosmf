@@ -22,6 +22,16 @@
   delegate_to: localhost
   register: provision_results
 
+- name: Write instance information to disk
+  copy:
+    content: "{{ provision_results.json | to_nice_json(indent=2) }}"
+    dest: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+  delegate_to: localhost
+
+- name: Display instance record file path
+  debug:
+    msg: "Instance record saved at: {{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+
 ##############################################################################
 # Verify workflow step status, requires the following variables:
 # {{zmf_host:zmf_port}} -> z/OSMF host uri
@@ -48,9 +58,9 @@
   register: full_instance_json
   delegate_to: localhost
 
-- name: Save instance information to local
+- name: Update instance information
   block:
-    - name: Write instance information to disk
+    - name: Update fully provisioned instance information to local
       copy:
         content: "{{ full_instance_json.json| to_nice_json(indent=2) }}"
         dest: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"

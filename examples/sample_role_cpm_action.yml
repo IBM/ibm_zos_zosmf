@@ -6,7 +6,7 @@
 # ansible-playbook -i hosts sample_role_cpm_action.yml
 
 - name: sample of managing software instance
-  hosts: cpm
+  hosts: cpm # use to match group_vars/cpm.yml
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf

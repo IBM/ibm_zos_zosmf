@@ -16,7 +16,8 @@ This collection also provide capabilities to provision and manage z/OS middlewar
 
 ## Roles-Specification
 
-- [provision_software_service](../roles/provision_software_service/README.md): This role can be used to provision a z/OS software service.
+- [provision_software_service](../roles/provision_software_service/README.md): This role can be used to provision a z/OS software service. The provision role will create a local record file of instance information that is responsed from registry API in json format, and this file will be served to other CP&M roles such like manage_software_instance and
+remove_software_instance.
 
 - [manage_software_instance](../roles/manage_software_instance/README.md): This role can be used to manage a provisioned software service instance. Various actions can be performed on a provisioned instance using this role.
 

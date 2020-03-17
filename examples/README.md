@@ -62,20 +62,16 @@ This sample playbook shows how to invoke role complete_workflow to complete (cre
             zos_workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
    ```
 
-- In the inventory file, the z/OS target system is configured as managed node like below:
-
-   ```yml
-   [zsystems]
-   SY1 ansible_host=hostname_of_zos_system
-   ```
-
-   `SY1` is the nickname of z/OS system, you can replace it with yours. To try this sample playbook, the system `SY1` (or your system name) should be configured in the z/OSMF __Systems__ task, or the playbook will be failed.
-
 ### [sample_role_cpm_action.yml](sample_role_cpm_action.yml)
 
 This sample playbook shows how to perform instance action on a provisioned instance in z/OSMF CP&M:
 
    ```yaml
+   - name: sample of managing software instance
+   hosts: cpm # use to match group_vars/cpm.yml
+   gather_facts: no
+   collections:
+      - ibm.ibm_zos_zosmf
    tasks:
       - include_role:
          name: manage_software_instance
@@ -91,6 +87,21 @@ This sample playbook shows how to perform instance action on a provisioned insta
 This sample playbook shows how to provision an instance in z/OSMF CP&M:
 
    ```yaml
+   - name: test role for provision_software_service
+   hosts: cpm # use to match group_vars/cpm.yml
+   gather_facts: no
+   collections:
+      - ibm.ibm_zos_zosmf
+   vars:
+      - name: instance_info_json_path #will store instance json information globally thru the playbook
+   vars_prompt:
+      - name: zmf_user
+         prompt: "Enter your zOSMF username"
+         private: no
+
+      - name: zmf_password
+         prompt: "Enter your zOSMF password"
+         private: yes
    tasks:
       - include_role:
          name: provision_software_service
@@ -106,6 +117,26 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
 This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&M. Please copy files/role_cics_wlp_install_app directory to roles directory before using this example
 
    ```yaml
+   - name: Sample for provisioning CICS region and deploying application
+   hosts: cpm # use to match group_vars/cpm.yml
+   gather_facts: no
+   collections:
+      - ibm.ibm_zos_zosmf
+   vars:
+      - name: instance_info_json_path #will store instance json information globally thru the playbook
+   vars_prompt:
+      - name: zmf_user
+         prompt: "Enter your zOSMF username"
+         private: no
+
+      - name: zmf_password
+         prompt: "Enter your zOSMF password"
+         private: yes
+
+      - name: application_path_input
+         prompt: "Enter your application file full path"
+         private: no
+
    tasks:
       - include_role:
          name: provision_software_service
@@ -120,14 +151,7 @@ This sample playbook shows how to install a web application on a provisioned ins
         application_path: "{{ application_path_input }}" # The local absolute file path to the application binary file
    ```
 
-- In the inventory file, the z/OS target system is configured as managed node like below:
-
-   ```yml
-   [cpmsystem]
-   SY1 ansible_host=hostname_of_zos_system
-   ```
-
-   `SY1` is the nickname of z/OS system, you can replace it with yours. To try this sample playbook, the system `SY1` (or your system name) should be configured in the z/OSMF __Systems__ task, or the playbook will be failed.
+- **For CP&M roles, the inventory file is merely a placeholder for retriving cpm group variables, you shouldn't need to modify the intentory file or change the host to something else other than cpm**
 
 ## Running
 
