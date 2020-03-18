@@ -85,7 +85,7 @@
   when: (force_complete == true) or 
         ('workflow_completed' not in compare_result or compare_result.workflow_completed == false)
 
-- name: Priodically check status of the workflow instance and return final result
+- name: Periodically check status of the workflow instance and return final result
   workflow:
     action: "check"
     zmf_host: "{{ zmf_host }}"

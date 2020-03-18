@@ -189,7 +189,7 @@ def __parse_dict_vars(module, dict_vars):
     list_vars = []
     for k, v in dict_vars.items():
         if type(v) == dict:
-            module.fail_json(msg='Invalid argument: zos_workflow_vars. Only string type or array type is accecpted for each variable.')
+            module.fail_json(msg='Invalid argument: zos_workflow_vars. Only string type or array type is accepted for each variable.')
         elif type(v) == list:
             v = json.dumps(v)
         list_vars.append({'name': k, 'value': v})

@@ -10,9 +10,9 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: workflow
-short_description: Ansible module for handling with z/OS workflows
+short_description: Ansible module for running z/OS workflows
 description:
-    - "Ansible module to work with z/OS workflows using z/OSMF workflow services APIs"
+    - "Ansible module for running z/OS workflows by issuing z/OSMF workflow RESTful services."
 version_added: "2.9"
 author:
     - "Yang Cao <caoy@cn.ibm.com>"
@@ -21,171 +21,172 @@ requirements: []
 options:
     action:
         description:
-            - The intended action to work with z/OS workflows.
+            - Action to be performed by the module.
         required: true
         type: str
         choices: ['compare', 'start', 'check', 'delete']
     zmf_host:
         description:
-            - The hostname of z/OSMF server.
+            - Hostname of the z/OSMF server.
         required: true
         type: str
     zmf_post:
         description:
-            - The port number of z/OSMF server.
+            - Port number of the z/OSMF server.
         required: false
         type: int
     zmf_user:
         description:
-            - The username for authenticating with z/OSMF server.
-            - If zmf_crt and zmf_key are supplied, zmf_user and zmf_password will be ignored.
+            - User name to be used for authenticating with z/OSMF server.
+            - If zmf_crt and zmf_key are supplied, zmf_user and zmf_password are ignored.
         required: false
         type: str
     zmf_password:
         description:
-            - The password for authenticating with z/OSMF server.
-            - If zmf_crt and zmf_key are supplied, zmf_user and zmf_password will be ignored.
+            - Password to be used for authenticating with z/OSMF server.
+            - If zmf_crt and zmf_key are supplied, zmf_user and zmf_password are ignored.
         required: false
         type: str
     zmf_crt:
         description:
-            - The location of PEM formatted certificate chain file to be used for HTTPS client authentication.
+            - Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.
         required: false
         type: str
     zmf_key:
         description:
-            - The location of PEM formatted file that contains your private key to be used for HTTPS client authentication.
+            - Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.
         required: false
         type: str
     zos_workflow_name:
         description:
-            - The descriptive name of workflow.
-            - The naming rule ansible_workflowName_{{ zos_workflow_host }} is recommended when create a workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Descriptive name of the workflow.
+            - It is recommended that you use the naming rule ansible_workflowName_{{ zos_workflow_host }}.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_file:
         description:
-            - The location of workflow definition file.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Location of the workflow definition file.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_host:
         description:
-            - The nickname of system on which the workflow is to be performed.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Nickname of the system on which the workflow is to be performed.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_owner:
         description:
-            - The username of workflow owner.
-            - If omit, zmf_user will be used as workflow owner.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - User name of the workflow owner.
+            - If this value is omitted, zmf_user is used as workflow owner.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_file_system:
         description:
-            - The nickname of system on which the specified workflow definition file and any related files reside.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Nickname of the system on which the specified workflow definition file and any related files reside.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_vars_file:
         description:
-            - The location of optional properties file to be used to pre-specify the values of one or more variables that are defined in workflow definition file.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Location of the optional properties file to be used to pre-specify the values of one or more variables that are defined in workflow definition file.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_vars:
         description:
-            - The values of one or more workflow variables in JSON format.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Values of one or more workflow variables in JSON format.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: dict
     zos_workflow_resolve_global_conflict_by_using:
         description:
-            - The version of variable to be used if the supplied workflow variable conflict with existing global variables in z/OSMF Workflows task when create a workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Version of the variable to be used if the supplied workflow variable conflicts with an existing global variable in z/OSMF Workflows task.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         choices: ['global', 'input']
     zos_workflow_comments:
         description:
-            - The information to associate with the creation of workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - User-specified information to be associated with the workflow at creation time.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_assign_to_owner:
         description:
-            - Specify whether the workflow steps are assigned to the workflow owner when create a workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Specifies whether the workflow steps are assigned to the workflow owner when the workflow is created.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
     zos_workflow_access_type:
         description:
-            - The access type for the workflow when create a workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Access type for the workflow when the workflow is created.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         choices: ['Public', 'Restricted', 'Private']
     zos_workflow_account_info:
         description:
-            - The account information to use in the JCL JOB statement when create a workflow that submits a job.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - For a workflow that submits a batch job, this variable specifies the account information for the JCL JOB statement.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_job_statement:
         description:
-            - The JOB statement JCL that is used in the job when create a workflow that submits a job.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - For a workflow that submits a batch job, this variable specifies the JOB statement JCL for the job.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_delete_completed_jobs:
         description:
-            - Specify whether the job is deleted from the JES spool after it completes successfully when create a workflow that submits a job. 
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - For a workflow that submits a batch job, this variable specifies whether the job is deleted from the JES spool after it completes.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
     zos_workflow_resolve_conflict_by_using:
         description:
-            - Specify how to handle variable conflicts when z/OSMF Workflows task reads in the output file from a step that runs a REXX exec or UNIX shell script when start a workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Specifies how to handle variable conflicts if any are detected at workflow creation time.
+            - Such conflicts can be found when z/OSMF Workflows task reads the output file from a step that runs a REXX exec or UNIX shell script.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         choices: ['outputFileValue', 'existingValue', 'leaveConflict']
     zos_workflow_step_name:
         description:
-            - The name of workflow step at which automation is to begin when start a workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Name of the workflow step at which automation processing is to begin when the workflow is started.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_perform_subsequent:
         description:
-            - Specify whether the subsequent automated steps are performed when start a workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Specifies whether the subsequent automated steps are performed when the workflow is started.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
     zos_workflow_notification_url:
         description:
-            - The notification URL when start a workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - URL to be used for notification when the workflow is started.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_category:
         description:
-            - The category of workflow.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Category for the workflow.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         choices: ['general', 'configuration']
     zos_workflow_vender:
         description:
-            - The name of vendor that provided the workflow definition file.
-            - Refer to the documentation of z/OSMF workflow services API for more information.
+            - Name of the vendor that provided the workflow definition file.
+            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
     zos_workflow_key:
         description:
-            - The generated key of workflow to uniquely identify the workflow instance.
+            - Generated key to uniquely identify the workflow instance.
         required: false
         type: str
 '''
@@ -204,28 +205,28 @@ RETURN = '''
         returned: success
         type: str
     exist_workflow_key:
-        description: The key of the existing workflow instance.
+        description: Key for the existing workflow instance.
         returned: success
         type: str
     same_workflow_instance:
-        description: Indicate whether the existing workflow instance has same or different definition file, variables and properties.
+        description: Indicate whether the existing workflow instance has the same or different definition file, variables and properties.
         returned: success
         type: bool
     workflow_completed:
-        description: Indicate whether the existing workflow instance with same definition file, variables and properties has been completed.
+        description: Indicate whether the existing workflow instance has been completed.
         returned: success
         type: bool
 - action: start:
     changed:
-        description: Indicate whether the workflow instance is created/started.
+        description: Indicate whether the workflow instance is created and started.
         returned: always
         type: bool
     message:
-        description: Indicate the workflow instance is started.
+        description: Indicate whether the workflow instance is started.
         returned: success
         type: str
     workflow_key:
-        description: The key of the started workflow instance.
+        description: Key for the started workflow instance.
         returned: success
         type: str
 - action: check:
@@ -238,7 +239,7 @@ RETURN = '''
         returned: success
         type: str
     waiting:
-        description: Indicate whether it needs to wait and check again since the workflow instance is still in progress.
+        description: Indicate whether it needs to wait and check again because the workflow instance is still in progress.
         returned: success
         type: bool
 - action: delete:
@@ -441,7 +442,7 @@ def action_compare(module, argument_spec_mapping):
     )
     # create session
     session = get_connect_session(module)
-    # step1 - find workfolw instance by name
+    # step1 - find workflow instance by name
     response_list = call_workflow_api(module, session, 'list', workflow_key)
     if type(response_list) == dict:
         if 'workflows' in response_list and len(response_list['workflows']) > 0:
@@ -470,7 +471,7 @@ def action_compare(module, argument_spec_mapping):
     elif sameP == False:
         compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' with different property: ' + diff_item + ' = ' + str(diff_value) + ' is found.'
     elif sameD == None or sameV == None:
-        compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' is found. While it could not be compared since the argument: zos_workflow_file is required, and please supply variables by the argumnet: zos_workflow_vars rather than the argument: zos_workflow_vars_file.'
+        compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' is found. While it could not be compared since the argument: zos_workflow_file is required, and please supply variables by the argument: zos_workflow_vars rather than the argument: zos_workflow_vars_file.'
     else:
         compare_result['same_workflow_instance'] = True
         compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' with same definition file, variables and properties is found.'
@@ -483,7 +484,7 @@ def action_compare(module, argument_spec_mapping):
 def action_start(module):
     """
     Start the workflow instance specified by zos_workflow_key
-    If zos_workflow_key is not sppulied, create the workflow instance specified by zos_workflow_name if not exist and then start it
+    If zos_workflow_key is not supplied, create the workflow instance specified by zos_workflow_name if not exist and then start it
     Return the message to indicate the workflow instance is started
     Return the workflow_key of the started workflow instance
     :param AnsibleModule module: the ansible module
@@ -501,7 +502,7 @@ def action_start(module):
     if module.params['zos_workflow_key'] != None and module.params['zos_workflow_key'].strip() != '':
         workflow_key = module.params['zos_workflow_key']
         start_by_key = True
-    # step1 - find workfolw instance by name
+    # step1 - find workflow instance by name
     if workflow_key == '':
         if module.params['zos_workflow_name'] == None or module.params['zos_workflow_name'].strip() == '':
             module.fail_json(msg='A valid argument of either zos_workflow_name or zos_workflow_key is required.')
@@ -511,7 +512,7 @@ def action_start(module):
                 workflow_key = response_list['workflows'][0]['workflowKey']           
         else:
             module.fail_json(msg='Failed to find workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_list)
-    # step2 - create workfolw instance if needed
+    # step2 - create workflow instance if needed
     if workflow_key == '':
         response_create = call_workflow_api(module, session, 'create', workflow_key)
         if type(response_create) == dict:
@@ -521,7 +522,7 @@ def action_start(module):
                 module.fail_json(msg='Failed to create workflow instance named: ' + module.params['zos_workflow_name'] + '.')
         else:
             module.fail_json(msg='Failed to create workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_create)
-    # step3 - start workfolw instance
+    # step3 - start workflow instance
     response_start = call_workflow_api(module, session, 'start', workflow_key)
     if type(response_start) == dict:
         start_result['changed'] = True
@@ -545,7 +546,7 @@ def action_start(module):
 def action_check(module):
     """
     Check status of the workflow instance specified by zos_workflow_key
-    If zos_workflow_key is not sppulied, check status of the workflow instance specified by zos_workflow_name
+    If zos_workflow_key is not supplied, check status of the workflow instance specified by zos_workflow_name
     Return the message to indicate whether the workflow instance is completed, is not completed, or is still in progress
     Return the waiting flag to indicate whether it needs to wait and check again since the workflow instance is still in progress
     :param AnsibleModule module: the ansible module
@@ -565,7 +566,7 @@ def action_check(module):
     if module.params['zos_workflow_key'] != None and module.params['zos_workflow_key'].strip() != '':
         workflow_key = module.params['zos_workflow_key']
         check_by_key = True
-    # step1 - find workfolw instance by name if needed
+    # step1 - find workflow instance by name if needed
     if workflow_key == '':
         if module.params['zos_workflow_name'] == None or module.params['zos_workflow_name'].strip() == '':
             module.fail_json(msg='A valid argument of either zos_workflow_name or zos_workflow_key is required.')
@@ -577,7 +578,7 @@ def action_check(module):
                 module.fail_json(msg='No workflow instance named: ' + module.params['zos_workflow_name'] + ' is found.')
         else:
             module.fail_json(msg='Failed to find workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_list)
-    # step2 - get workfolw properties
+    # step2 - get workflow properties
     response_retrieveP = call_workflow_api(module, session, 'retrieveProperties', workflow_key)
     if type(response_retrieveP) == dict:
         if 'statusName' in response_retrieveP: 
@@ -636,7 +637,7 @@ def action_check(module):
 def action_delete(module):
     """
     Delete the workflow instance specified by zos_workflow_key
-    If zos_workflow_key is not sppulied, delete the workflow instance specified by zos_workflow_name
+    If zos_workflow_key is not supplied, delete the workflow instance specified by zos_workflow_name
     Return the message to indicate whether the workflow instance does not exist or is deleted
     :param AnsibleModule module: the ansible module
     """
@@ -652,7 +653,7 @@ def action_delete(module):
     if module.params['zos_workflow_key'] != None and module.params['zos_workflow_key'].strip() != '':
         workflow_key = module.params['zos_workflow_key']
         delete_by_key = True
-    # step1 - find workfolw instance by name if needed
+    # step1 - find workflow instance by name if needed
     if workflow_key == '':
         if module.params['zos_workflow_name'] == None or module.params['zos_workflow_name'].strip() == '':
             module.fail_json(msg='A valid argument of either zos_workflow_name or zos_workflow_key is required.')
@@ -665,7 +666,7 @@ def action_delete(module):
                 module.exit_json(**delete_result)
         else:
             module.fail_json(msg='Failed to find workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_list)
-    # step2 - delete workfolw instance
+    # step2 - delete workflow instance
     response_delete = call_workflow_api(module, session, 'delete', workflow_key)
     if type(response_delete) == dict:
         delete_result['changed'] = True
