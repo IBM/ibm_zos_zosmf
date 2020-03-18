@@ -1,5 +1,5 @@
-# Manipulating z/OS workflows
-The collection provides a module `workflow` and a role [complete_workflow](../roles/complete_workflow/README.md) for working with z/OS workflows. The module uses z/OSMF workflow RESTful services to manipulate a workflow, based on the different parameters it receives. The module provides the following functions: compare, start, check and delete. The role is used for completing a workflow, either forcibly or idempotently. 
+# Operate z/OS workflows
+The collection provides a module `workflow` and a role [complete_workflow](../roles/complete_workflow/README.md) for working with z/OS workflows. The module uses z/OSMF workflow RESTful services to operate a workflow, based on the different parameters it receives. The module provides the following functions: compare, start, check and delete. The role is used for completing a workflow, either forcibly or idempotently. 
 
 **NOTE**:
 - `delegate_to` - The **“delegate_to: localhost”** statement is required for using the module in your playbook task. This statement is hard-coded within the role. The statement causes the module to run locally in control node. With this setting in effect, it is not necessary for you to set up an SSH connection and install Python on the target z/OS systems. Instead, the module creates HTTPS connections with the z/OSMF server.
