@@ -10,12 +10,13 @@ In order to use this role in any playbook, cics_wlp_install_app directory needs 
 The variables used by the role are listed below:
 
 Variables:
-    - zmf_host: z/OSMF host name
-    - zmf_port: z/OSMF port number
-    - zmf_user: z/OSMF username
-    - zmf_password: z/OSMF password
-    - instance_info_json: JSON record of provisioned instance
-    - application_path: location of application file on local workstation
+
+- zmf_host: z/OSMF host name
+- zmf_port: z/OSMF port number
+- zmf_user: z/OSMF username
+- zmf_password: z/OSMF password
+- instance_info_json: JSON record of provisioned instance
+- application_path: location of application file on local workstation
 
 ## Dependencies
 
@@ -23,7 +24,7 @@ None
 
 ## Usage
 
-Please refer to directory [examples](../examples/README.md) for various example playbooks.
+Please refer to directory [examples](../../examples/README.md) for various example playbooks.
 
 ## Examples
 

@@ -62,7 +62,7 @@ This sample playbook shows how to invoke role complete_workflow to complete (cre
             zos_workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
    ```
 
-### [sample_role_cpm_action.yml](sample_role_cpm_action.yml)
+### [sample_role_cpm_manage_instance.yml](sample_role_cpm_manage_instance.yml)
 
 This sample playbook shows how to perform instance action on a provisioned instance in z/OSMF CP&M:
 
@@ -78,8 +78,6 @@ This sample playbook shows how to perform instance action on a provisioned insta
          vars:
             instance_action_name: "{{ action_name_placeholder }}"  # The value for property instance_action_name identifies which instance action user wants to perform
             instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"  # The value for property instance_info_json_path identifies full file path of the provisioned instance json file that is created by provision_software_service role, common format is /{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json
-
-
    ```
 
 ### [sample_role_cpm_provision.yml](sample_role_cpm_provision.yml)
@@ -110,6 +108,18 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
             domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
             tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
             systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+   ```
+
+### [sample_role_cpm_remove_instance.yml](sample_role_cpm_remove_instance.yml)
+
+This sample playbook shows how to remove the deprovisioned instance in z/OSMF CP&M:
+
+   ```yaml
+      tasks:
+        - include_role:
+            name: remove_software_instance
+          vars:
+            instance_info_json_path: "<full-instance-json-file-path>"
    ```
 
 ### [sample_role_cpm_deploy_cics_application.yml](sample_role_cpm_deploy_cics_application.yml)

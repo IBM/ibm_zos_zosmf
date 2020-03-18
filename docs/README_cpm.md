@@ -30,7 +30,6 @@ None
 ### Control Node
 
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) - 2.9 or later.
-- [urllib3](https://urllib3.readthedocs.io/en/latest/) - 1.25 or later.
 
 ### Managed Node
 

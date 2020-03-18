@@ -3,7 +3,7 @@
 # This sample playbook demonstrates using manage_software_instance to perform a
 # specific action on provisioned software instance.
 # Example:
-# ansible-playbook -i hosts sample_role_cpm_action.yml
+# ansible-playbook -i hosts sample_role_cpm_manage_instance.yml
 
 - name: sample of managing software instance
   hosts: cpm # use to match group_vars/cpm.yml
