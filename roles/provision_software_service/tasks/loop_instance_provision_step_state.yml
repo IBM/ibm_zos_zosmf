@@ -1,0 +1,78 @@
+# Copyright (c) IBM Corporation 2020
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+- name: Examing workflow progress status
+  block:
+    - name: pause
+      pause:
+        prompt: "Waiting {{ api_polling_interval_seconds }} seconds before next polling workflow progress status"
+        seconds: "{{ api_polling_interval_seconds }}"
+
+    - name: Retrieve provision step information
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_object_id }}"
+        return_content: yes
+        user: "{{ zmf_user| trim  }}"
+        password: "{{ zmf_password| trim  }}"
+        force_basic_auth: yes
+        headers:
+          Host: "{{ zmf_host }}"
+          Origin: "https://{{ zmf_host }}"
+        method: GET
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: results
+      no_log: true
+
+    - name: "Check if provision failed"
+      fail:
+        msg:
+          - Provision Failed at - step <{{ results.json['workflow-current-step-name'] }}> ({{ results.json['workflow-current-step-number'] }} / {{ results.json['workflow-total-steps'] }})
+          - Reason - results.json['workflow-message-text']
+      when: results.json.state == "provisioning-failed"
+
+- name: Verify overall workflow progress status
+  block:
+
+    - name: Set the retry count for verification progress
+      set_fact:
+        retry_count: "{{ 1 if retry_count is undefined else retry_count|int + 1 }}"
+        max_retry: "{{ api_polling_retry_count }}"
+
+    - name: Display current polling count
+      debug:
+        msg: "Polling {{retry_count}} of {{ api_polling_retry_count }} tries..."
+
+    - name: "Gather provision API response"
+      set_fact:
+        provision_current_state: "{{ 'being-provisioned' if results.json.state is undefined else results.json.state| string }}"
+        provision_current_step_name: "{{ 'Not available' if results.json['workflow-current-step-name'] is undefined else results.json['workflow-current-step-name']| string }}"
+        provision_current_step: "{{ provision_current_step if results.json['workflow-current-step-number'] is undefined else results.json['workflow-current-step-number'] }}"
+        provision_total_step: "{{ 1 if results.json['workflow-total-steps']|int == 0 else results.json['workflow-total-steps']|int }}"
+
+    - name: "Display over all provision process"
+      command: echo "Provision status\nCurrent step name {{ 'Not available' if provision_current_step_name == '' else provision_current_step_name }}\nCurrent step progress ({{ 0 if provision_current_step | int == 0 else provision_current_step }} / {{provision_total_step}})"
+      delegate_to: localhost
+      register: progress_result
+      when:
+        - provision_current_state != 'provisioned'
+
+
+    - debug: msg="{{ progress_result.stdout.split("\\n") }}"
+      when:
+        - provision_current_state != 'provisioned'
+
+
+    - name: "Check over all provision process (ignore the failure of this task), skip if complete"
+      fail:
+        msg: "Ignore and retry"
+      when:
+        - provision_current_state != 'provisioned'
+
+  rescue:
+    - fail:
+        msg: "Reached max retry limit {{ api_polling_retry_count }} while workflow still not at 100% complete, aborting..."
+      when: retry_count|int == max_retry
+    - include_tasks: loop_instance_provision_step_state.yml

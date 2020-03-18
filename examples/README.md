@@ -20,7 +20,7 @@ collections_paths = ../../../../../collections
 ### Inventory
 This directory contains an example Ansible inventory [hosts](hosts), which is used to manage the target z/OS systems (managed nodes). Information is specified in the following format:
 
-```
+```yml
 [zsystems]
 SY1 ansible_host=hostname_of_zos_system
 ```
@@ -41,18 +41,10 @@ You can supply group variables in either the inventory file or the separate vari
    
    **NOTE**: This is an easy example to use username and password for authenticating with z/OSMF server. Actually, client-certificate authorization is recommended. You can use `zmf_crt` and `zmf_key` to specify the certificate chain file and key file to be used for HTTPS client authentication.
 
-
-## Run the playbooks
-The sample playbooks must be run from the directory `examples` of the installed collection. For example:  
-`~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/examples/`  
-
-You can use the [ansible-playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) command to run the sample playbooks as follows:
-
-```
-ansible-playbook -i hosts sample_role_complete_workflow.yml
-```
-
-To adjust the logging verbosity, include the `-v` option with [ansible-playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) command. You can append more letter `v`'s, for example, `-v`, `-vv`, `-vvv`, or `-vvvv`, to obtain more details in case a connection failed. Each letter `v` increases the logging verbosity similar to the traditional logging levels, such as INFO, WARN, ERROR, or DEBUG.
+- [cpm.yml](group_vars/cpm.yml) contains variables for system group `cpm`:
+  - `instance_record_dir` - File path in local system where the provision result (in json) will be stored.
+  - `api_polling_retry_count` - Max times of status polling before task fail and exit.
+  - `api_polling_interval_seconds` - Interval in seconds between each `api_polling_retry_count` polling.
 
 
 ## Sample playbooks
@@ -80,6 +72,105 @@ This sample playbook shows how to invoke role [complete_workflow](../roles/compl
    [zsystems]
    SY1 ansible_host=hostname_of_zos_system
    ```
+   
+### [sample_role_cpm_action.yml](sample_role_cpm_action.yml)
+This sample playbook shows how to perform instance action on a provisioned instance in z/OSMF CP&M:
+
+   ```yaml
+   - name: sample of managing software instance
+   hosts: cpm # use to match group_vars/cpm.yml
+   gather_facts: no
+   collections:
+      - ibm.ibm_zos_zosmf
+   tasks:
+      - include_role:
+         name: manage_software_instance
+         vars:
+            instance_action_name: "{{ action_name_placeholder }}"  # The value for property instance_action_name identifies which instance action user wants to perform
+            instance_info_json_path: "/{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json"  # The value for property instance_info_json_path identifies full file path of the provisioned instance json file that is created by provision_software_service role, common format is /{{ instance_record_dir }}/{{ instanceID }}-{{ externalName }}.json
+   ```
+
+### [sample_role_cpm_provision.yml](sample_role_cpm_provision.yml)
+This sample playbook shows how to provision an instance in z/OSMF CP&M:
+
+   ```yaml
+   - name: test role for provision_software_service
+   hosts: cpm # use to match group_vars/cpm.yml
+   gather_facts: no
+   collections:
+      - ibm.ibm_zos_zosmf
+   vars:
+      - name: instance_info_json_path #will store instance json information globally thru the playbook
+   vars_prompt:
+      - name: zmf_user
+         prompt: "Enter your zOSMF username"
+         private: no
+
+      - name: zmf_password
+         prompt: "Enter your zOSMF password"
+         private: yes
+   tasks:
+      - include_role:
+         name: provision_software_service
+         vars:
+            cpm_template_name: "<fill-me-template-name>"   # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
+            domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
+            tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
+            systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+   ```
+
+### [sample_role_cpm_deploy_cics_application.yml](sample_role_cpm_deploy_cics_application.yml)
+This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&M. Please copy files/role_cics_wlp_install_app directory to roles directory before using this example
+
+   ```yaml
+   - name: Sample for provisioning CICS region and deploying application
+   hosts: cpm # use to match group_vars/cpm.yml
+   gather_facts: no
+   collections:
+      - ibm.ibm_zos_zosmf
+   vars:
+      - name: instance_info_json_path #will store instance json information globally thru the playbook
+   vars_prompt:
+      - name: zmf_user
+         prompt: "Enter your zOSMF username"
+         private: no
+
+      - name: zmf_password
+         prompt: "Enter your zOSMF password"
+         private: yes
+
+      - name: application_path_input
+         prompt: "Enter your application file full path"
+         private: no
+
+   tasks:
+      - include_role:
+         name: provision_software_service
+         ...
+
+      - include_role:
+        name: cics_wlp_install_app
+      vars:
+        instance_info_json: "{{lookup('file', instance_info_json_path)}}" # Path of the instance json file contains cics public variables
+        app_root_uri: "/CloudTestServlet" # The URI path to access the application once upload
+        app_file_name: "CloudTestServlet.war" # The file name that the application file will be written to the USS file system in z/OS
+        application_path: "{{ application_path_input }}" # The local absolute file path to the application binary file
+   ```
+
+**NOTE**: For CP&M roles, the inventory file is merely a placeholder for retrieving cpm group variables, you shouldn't need to modify the inventory file or change the host to something else other than cpm.
+
+
+## Run the playbooks
+The sample playbooks must be run from the directory `examples` of the installed collection. For example:  
+`~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/examples/`  
+
+You can use the [ansible-playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) command to run the sample playbooks as follows:
+
+```
+ansible-playbook [-i hosts] sample_role_*.yml [-e zmf_user=<username> -e zmf_password=<password>]
+```
+
+To adjust the logging verbosity, include the `-v` option with [ansible-playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) command. You can append more letter `v`'s, for example, `-v`, `-vv`, `-vvv`, or `-vvvv`, to obtain more details in case a connection failed. Each letter `v` increases the logging verbosity similar to the traditional logging levels, such as INFO, WARN, ERROR, or DEBUG.
 
 
 ## Copyright

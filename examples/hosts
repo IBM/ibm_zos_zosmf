@@ -1,4 +1,4 @@
-# Copyright (c) IBM Corporation 2020 
+# Copyright (c) IBM Corporation 2020
 
 # defines a group of z/OS systems
 [zsystems]
@@ -7,3 +7,10 @@ SY1 ansible_host=hostname_of_zos_system
 # this group is used in sample_role_complete_workflow.yml
 [workflow:children]
 zsystems
+
+[cpmsystem]
+SY1 ansible_host=local
+
+# this group is used in sample_cpm_*.yml
+[cpm:children]
+cpmsystem

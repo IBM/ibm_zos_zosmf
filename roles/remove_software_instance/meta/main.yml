@@ -3,9 +3,9 @@
 ---
 galaxy_info:
   authors:
-    - "Yang Cao <caoy@cn.ibm.com>"
-    - "Yun Juan Yang <yunyyang@cn.ibm.com>"
-  description: Ansible role to complete a z/OS workflow forcibly or idempotently.
+    - "Hiren Shah <hiren@us.ibm.com>"
+    - "Allen Zhou <xiao-yu.zhou@ibm.com>"
+  description: Perform management action on z/OSMF CP&M instance
   company: IBM
   min_ansible_version: 2.9
   galaxy_tags:
@@ -13,7 +13,7 @@ galaxy_info:
     - z
     - zos
     - zosmf
-    - workflow
+    - cpm
   license:
     - Apache-2.0
 dependencies: []

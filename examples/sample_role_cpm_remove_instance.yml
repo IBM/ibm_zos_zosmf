@@ -1,0 +1,20 @@
+# Copyright (c) IBM Corporation 2020
+
+- name: test role for remove_software_instance
+  hosts: cpm # use to match group_vars/cpm.yml
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
+  tasks:
+    - include_role:
+        name: remove_software_instance
+      vars:
+        instance_info_json_path: "<full-instance-json-file-path>"

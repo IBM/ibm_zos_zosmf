@@ -7,7 +7,7 @@
 
 zmf_host: pev076.pok.ibm.com
 zmf_port: 443
-zmf_user: user1   
+zmf_user: user1
 zmf_password: password1
 
 # Client certificate is supported by specifying the location of client certificate and key files on control node via zmf_crt and zmf_key.
@@ -15,4 +15,4 @@ zmf_password: password1
 # zmf_crt:
 # zmf_key:
 
-        
+
