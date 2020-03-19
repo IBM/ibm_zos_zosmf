@@ -5,7 +5,7 @@
 # The value for property zmf_user is your username of z/OSMF.
 # The value for property zmf_password is the password of your username of z/OSMF.
 
-zmf_host: pev076.pok.ibm.com
+zmf_host: sample.ibm.com
 zmf_port: 443
 zmf_user: user1
 zmf_password: password1
