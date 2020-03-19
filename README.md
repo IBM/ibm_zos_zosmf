@@ -19,7 +19,7 @@ Information about the z/OSMF server must be configured in the `vars` file, such 
         - [workflow](docs/README_workflow.md#Modules)
     - roles:
         - [complete_workflow](docs/README_workflow.md#Roles)
-- [Provision and Manage z/OS Software Instances](docs/README_cpm.md)
+- [Provision and manage z/OS software instances](docs/README_cpm.md)
     - roles:
         - [provision_software_service](docs/README_cpm.md#Roles-Specification)
         - [manage_software_instance](docs/README_cpm.md#Roles-Specification)

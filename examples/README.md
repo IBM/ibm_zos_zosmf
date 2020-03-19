@@ -73,7 +73,7 @@ This sample playbook shows how to invoke role [complete_workflow](../roles/compl
    SY1 ansible_host=hostname_of_zos_system
    ```
 
-### [sample_role_cpm_action.yml](sample_role_cpm_action.yml)
+### [sample_role_cpm_manage_instance.yml](sample_role_cpm_manage_instance.yml)
 This sample playbook shows how to perform instance action on a provisioned instance in z/OSMF CP&M:
 
    ```yaml
@@ -131,7 +131,7 @@ This sample playbook shows how to remove the deprovisioned instance in z/OSMF CP
             instance_info_json_path: "<full-instance-json-file-path>"
    ```
 
-### [sample_role_cpm_deploy_cics_application.yml](sample_role_cpm_deploy_cics_application.yml)
+### [sample_role_deploy_cics_application.yml](sample_role_deploy_cics_application.yml)
 This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&M. Please copy files/role_cics_wlp_install_app directory to roles directory before using this example
 
    ```yaml
