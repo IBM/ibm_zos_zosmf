@@ -6,8 +6,8 @@ The collection [ibm_zos_zosmf](../README.md) provides a directory of [Ansible pl
 Before setup, obtain the installation path for the collection, see the section [Installation](../README.md#Installation).
 
 ### Ansible config
-This directory contains an example Ansible config [ansible.cfg](ansible.cfg), which refers to the default installation path for the collection:  
-`~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf`. 
+This directory contains an example Ansible config [ansible.cfg](ansible.cfg), which refers to the default installation path for the collection:
+`~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf`.
 
 You can modify the following configuration statement to refer to your own installation path for the collection:
 
@@ -38,7 +38,7 @@ You can supply group variables in either the inventory file or the separate vari
    - `zmf_port` - Port number of the z/OSMF server.
    - `zmf_user` - User name to be used for authenticating with z/OSMF server (see note).
    - `zmf_password` - Password to be used for authenticating with z/OSMF server (see note).
-   
+
    **NOTE**: This is an easy example to use username and password for authenticating with z/OSMF server. Actually, client-certificate authorization is recommended. You can use `zmf_crt` and `zmf_key` to specify the certificate chain file and key file to be used for HTTPS client authentication.
 
 - [cpm.yml](group_vars/cpm.yml) contains variables for system group `cpm`:
@@ -48,7 +48,7 @@ You can supply group variables in either the inventory file or the separate vari
 
 
 ## Sample playbooks
-The sections that follow explain how to use the sample playbooks. 
+The sections that follow explain how to use the sample playbooks.
 
 ### [sample_role_complete_workflow.yml](sample_role_complete_workflow.yml)
 This sample playbook shows how to invoke role [complete_workflow](../roles/complete_workflow/README.md) to complete a z/OS workflow on the target z/OS systems via z/OSMF. To run the sample playbook, below preparation works are required:
@@ -72,7 +72,7 @@ This sample playbook shows how to invoke role [complete_workflow](../roles/compl
    [zsystems]
    SY1 ansible_host=hostname_of_zos_system
    ```
-   
+
 ### [sample_role_cpm_action.yml](sample_role_cpm_action.yml)
 This sample playbook shows how to perform instance action on a provisioned instance in z/OSMF CP&M:
 
@@ -119,6 +119,18 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
             systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
    ```
 
+### [sample_role_cpm_remove_instance.yml](sample_role_cpm_remove_instance.yml)
+
+This sample playbook shows how to remove the deprovisioned instance in z/OSMF CP&M:
+
+   ```yaml
+      tasks:
+        - include_role:
+            name: remove_software_instance
+          vars:
+            instance_info_json_path: "<full-instance-json-file-path>"
+   ```
+
 ### [sample_role_cpm_deploy_cics_application.yml](sample_role_cpm_deploy_cics_application.yml)
 This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&M. Please copy files/role_cics_wlp_install_app directory to roles directory before using this example
 
@@ -161,8 +173,8 @@ This sample playbook shows how to install a web application on a provisioned ins
 
 
 ## Run the playbooks
-The sample playbooks must be run from the directory `examples` of the installed collection. For example:  
-`~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/examples/`  
+The sample playbooks must be run from the directory `examples` of the installed collection. For example:
+`~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/examples/`
 
 You can use the [ansible-playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) command to run the sample playbooks as follows:
 
