@@ -10,9 +10,9 @@
       set_fact:
         instance_record: "{{ lookup('file', instance_info_json_path) | from_json }}"
 
-    - name: "Remove instance {{instance_record['object-id']}}"
+    - name: "Remove instance {{ instance_record['object-id'] }}"
       uri:
-        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{instance_record['object-id']}}"
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_record['object-id'] }}"
         return_content: yes
         user: "{{ zmf_user| trim }}"
         password: "{{ zmf_password| trim  }}"

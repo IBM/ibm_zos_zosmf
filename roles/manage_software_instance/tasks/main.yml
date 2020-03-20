@@ -10,9 +10,9 @@
       set_fact:
         instance_record: "{{ lookup('file', instance_info_json_path) | from_json }}"
 
-    - name: "Perform action <{{ instance_action_name }}> on {{instance_record['object-id']}}"
+    - name: "Perform action <{{ instance_action_name }}> on {{ instance_record['object-id'] }}"
       uri:
-        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{instance_record['object-id']}}/actions/{{ instance_action_name }}"
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_record['object-id'] }}/actions/{{ instance_action_name }}"
         return_content: yes
         user: "{{ zmf_user| trim }}"
         password: "{{ zmf_password| trim  }}"
@@ -31,7 +31,11 @@
 
     - name: "Action <{{ instance_action_name }}> progress status: in-progress"
       uri:
-        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{instance_record['object-id']}}/actions/{{action_results.json['action-id']}}"
+        url: >-
+          https://{{ zmf_host }}:{{ zmf_port }}/zosmf
+          /provisioning/rest/1.0/scr
+          /{{ instance_record['object-id'] }}
+          /actions/{{ action_results.json['action-id'] }}
         return_content: yes
         user: "{{ zmf_user| trim }}"
         password: "{{ zmf_password| trim  }}"
@@ -48,10 +52,11 @@
       retries: "{{ api_polling_retry_count }}"
       delay: "{{ api_polling_interval_seconds }}"
 
-    - fail:
-        msg: "Action <{{ instance_action_name }}> progress status: {{action_status_result.json.state}} "
+    - name: "Display privision failure information"
+      fail:
+        msg: "Action <{{ instance_action_name }}> progress status: {{ action_status_result.json.state }} "
       when: action_status_result.json.state == "failed"
 
     - debug:
-        msg: "Action <{{ instance_action_name }}> progress status: {{action_status_result.json.state}}"
+        msg: "Action <{{ instance_action_name }}> progress status: {{ action_status_result.json.state }}"
       when: action_status_result.json.state == "complete"

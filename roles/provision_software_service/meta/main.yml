@@ -2,7 +2,7 @@
 
 ---
 galaxy_info:
-  authors:
+  author:
     - "Hiren Shah <hiren@us.ibm.com>"
     - "Allen Zhou <xiao-yu.zhou@ibm.com>"
   description: Perform provision of z/OSMF CP&M instance
@@ -16,4 +16,8 @@ galaxy_info:
     - cpm
   license:
     - Apache-2.0
+  platforms:
+    - name: Any
+      versions:
+        - all
 dependencies: []

@@ -26,10 +26,16 @@
       register: results
       no_log: true
 
+    - name: "Gather provision step information"
+      set_fact:
+        current_step_name: "{{ results.json['workflow-current-step-name'] }}"
+        current_step_number: "{{ results.json['workflow-current-step-number'] }}"
+        total_step_number: "{{ results.json['workflow-total-steps'] }}"
+
     - name: "Check if provision failed"
       fail:
         msg:
-          - Provision Failed at - step <{{ results.json['workflow-current-step-name'] }}> ({{ results.json['workflow-current-step-number'] }} / {{ results.json['workflow-total-steps'] }})
+          - Provision Failed at - step <{{ step_name }}> ({{ current_step_number }} / {{ total_step_number }})
           - Reason - results.json['workflow-message-text']
       when: results.json.state == "provisioning-failed"
 
@@ -43,7 +49,7 @@
 
     - name: Display current polling count
       debug:
-        msg: "Polling {{retry_count}} of {{ api_polling_retry_count }} tries..."
+        msg: "Polling {{ retry_count }} of {{ api_polling_retry_count }} tries..."
 
     - name: "Gather provision API response"
       set_fact:
@@ -53,7 +59,7 @@
         provision_total_step: "{{ 1 if results.json['workflow-total-steps']|int == 0 else results.json['workflow-total-steps']|int }}"
 
     - name: "Display over all provision process"
-      command: echo "Provision status\nCurrent step name {{ 'Not available' if provision_current_step_name == '' else provision_current_step_name }}\nCurrent step progress ({{ 0 if provision_current_step | int == 0 else provision_current_step }} / {{provision_total_step}})"
+      command: echo "Provision status\nCurrent step name {{ 'Not available' if not provision_current_step_name else provision_current_step_name }}\nCurrent step progress ({{ 0 if provision_current_step | int == 0 else provision_current_step }} / {{ provision_total_step })"
       delegate_to: localhost
       register: progress_result
       when:
@@ -72,7 +78,8 @@
         - provision_current_state != 'provisioned'
 
   rescue:
-    - fail:
+    - name: "Failure exit on polling provision information"
+      fail:
         msg: "Reached max retry limit {{ api_polling_retry_count }} while workflow still not at 100% complete, aborting..."
       when: retry_count|int == max_retry
     - include_tasks: loop_instance_provision_step_state.yml
