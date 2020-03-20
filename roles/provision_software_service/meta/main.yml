@@ -2,7 +2,7 @@
 
 ---
 galaxy_info:
-  author:
+  authors:
     - "Hiren Shah <hiren@us.ibm.com>"
     - "Allen Zhou <xiao-yu.zhou@ibm.com>"
   description: Perform provision of z/OSMF CP&M instance
