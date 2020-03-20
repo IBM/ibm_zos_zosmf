@@ -1,4 +1,4 @@
-# Copyright (c) IBM Corporation 2020 
+# Copyright (c) IBM Corporation 2020
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_util import handle_request
@@ -27,7 +27,10 @@ def __get_workflow_apis():
             url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/'+version+'/workflows',
             args=dict(
                 workflowName=dict(required=False, type='str', nickname='zos_workflow_name'),
-                category=dict(required=False, type='str', nickname='zos_workflow_category', choices=['general', 'configuration']),
+                category=dict(
+                    required=False, type='str', nickname='zos_workflow_category',
+                    choices=['general', 'configuration']
+                ),
                 system=dict(required=False, type='str', nickname='zos_workflow_host'),
                 statusName=dict(required=False, type='str', nickname=''),
                 owner=dict(required=False, type='str', nickname='zos_workflow_owner'),
@@ -65,12 +68,18 @@ def __get_workflow_apis():
                 workflowDefinitionFileSystem=dict(required=False, type='str', nickname='zos_workflow_file_system'),
                 variableInputFile=dict(required=False, type='str', nickname='zos_workflow_vars_file'),
                 variables=dict(required=False, type='dict', nickname='zos_workflow_vars'),
-                resolveGlobalConflictByUsing=dict(required=False, type='str', default='global', nickname='zos_workflow_resolve_global_conflict_by_using', choices=['global', 'input']),
+                resolveGlobalConflictByUsing=dict(
+                    required=False, type='str', default='global', nickname='zos_workflow_resolve_global_conflict_by_using',
+                    choices=['global', 'input']
+                ),
                 system=dict(required=True, type='str', nickname='zos_workflow_host'),
                 owner=dict(required=True, type='str', nickname='zos_workflow_owner'),
                 comments=dict(required=False, type='str', nickname='zos_workflow_comments'),
                 assignToOwner=dict(required=False, type='bool', default=True, nickname='zos_workflow_assign_to_owner'),
-                accessType=dict(required=False, type='str', default='Public', nickname='zos_workflow_access_type', choices=['Public', 'Restricted', 'Private']),
+                accessType=dict(
+                    required=False, type='str', default='Public', nickname='zos_workflow_access_type',
+                    choices=['Public', 'Restricted', 'Private']
+                ),
                 accountInfo=dict(required=False, type='str', nickname='zos_workflow_account_info'),
                 jobStatement=dict(required=False, type='str', nickname='zos_workflow_job_statement'),
                 deleteCompletedJobs=dict(required=False, type='bool', default=False, nickname='zos_workflow_delete_completed_jobs')
@@ -82,7 +91,10 @@ def __get_workflow_apis():
             method='put',
             url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/'+version+'/workflows/{workflowKey}/operations/start',
             args=dict(
-                resolveConflictByUsing=dict(required=False, type='str', default='outputFileValue', nickname='zos_workflow_resolve_conflict_by_using', choices=['outputFileValue', 'existingValue', 'leaveConflict']),
+                resolveConflictByUsing=dict(
+                    required=False, type='str', default='outputFileValue', nickname='zos_workflow_resolve_conflict_by_using',
+                    choices=['outputFileValue', 'existingValue', 'leaveConflict']
+                ),
                 stepName=dict(required=False, type='str', nickname='zos_workflow_step_name'),
                 performSubsequent=dict(required=False, type='bool', default=True, nickname='zos_workflow_perform_subsequent'),
                 notificationUrl=dict(required=False, type='str', nickname='zos_workflow_notification_url')
@@ -119,21 +131,23 @@ def __get_workflow_api_url(module, url, key):
     :rtype: str
     """
     # format the input for zmd_port
-    if module.params['zmf_port'] == None or str(module.params['zmf_port']).strip() == '' or str(module.params['zmf_port']).strip() == '-1':
+    if (module.params['zmf_port'] is None
+            or str(module.params['zmf_port']).strip() == ''
+            or str(module.params['zmf_port']).strip() == '-1'):
         module.params['zmf_port'] = ''
     else:
         module.params['zmf_port'] = str(module.params['zmf_port']).strip()
-    matchObj = re.findall('\{(.+?)\}', url)
+    matchObj = re.findall('{(.+?)}', url)
     for x in matchObj:
         if x == 'workflowKey':
-            if key == None or key.strip() == '':
+            if key is None or key.strip() == '':
                 module.fail_json(msg='Missing required argument or invalid argument: zos_workflow_key.')
             else:
-                url = re.sub('\{'+x+'\}', key.strip(), url)
+                url = re.sub('{'+x+'}', key.strip(), url)
         elif x == 'zmf_port' and module.params[x] == '':
-            url = re.sub('\:{'+x+'\}', module.params[x], url)
+            url = re.sub(':{'+x+'}', module.params[x], url)
         else:
-            url = re.sub('\{'+x+'\}', module.params[x].strip(), url)
+            url = re.sub('{'+x+'}', module.params[x].strip(), url)
     return url
 
 
@@ -149,13 +163,13 @@ def __get_workflow_api_params(module, args):
         if k == 'returnData':
             params[k] = v['default']
         elif k == 'owner':
-            if module.params[v['nickname']] != None and module.params[v['nickname']].strip() != '':
+            if module.params[v['nickname']] is not None and module.params[v['nickname']].strip() != '':
                 params[k] = module.params[v['nickname']].strip()
-            elif module.params['zmf_user'] != None and module.params['zmf_user'].strip() != '':
+            elif module.params['zmf_user'] is not None and module.params['zmf_user'].strip() != '':
                 params[k] = module.params['zmf_user'].strip()
-            elif v['required'] == True:
+            elif v['required'] is True:
                 module.fail_json(msg='Missing required argument or invalid argument: ' + v['nickname'] + '.')
-        elif v['nickname'] != '' and module.params[v['nickname']] != None and str(module.params[v['nickname']]).strip() != '':
+        elif v['nickname'] != '' and module.params[v['nickname']] is not None and str(module.params[v['nickname']]).strip() != '':
             # format the input for params with choices
             if 'choices' in v:
                 found = False
@@ -164,13 +178,15 @@ def __get_workflow_api_params(module, args):
                         found = True
                         params[k] = vv
                         break
-                if found == False:
-                    module.fail_json(msg='Missing required argument or invalid argument: ' + v['nickname'] + '. The following values are valid: ' + str(v['choices']) + '.')
+                if found is False:
+                    module.fail_json(
+                        msg='Missing required argument or invalid argument: ' + v['nickname'] + '. The following values are valid: ' + str(v['choices']) + '.'
+                    )
             elif v['type'] == 'str':
                 params[k] = module.params[v['nickname']].strip()
             else:
                 params[k] = module.params[v['nickname']]
-        elif v['nickname'] != '' and v['required'] == True:
+        elif v['nickname'] != '' and v['required'] is True:
             module.fail_json(msg='Missing required argument or invalid argument: ' + v['nickname'] + '.')
     if 'variables' in params:
         params['variables'] = __parse_dict_vars(module, params['variables'])
@@ -207,7 +223,7 @@ def call_workflow_api(module, session, api, key):
     """
     zmf_api = __get_workflow_api_argument_spec(api)
     zmf_api_url = __get_workflow_api_url(module, zmf_api['url'], key)
-    zmf_api_params = __get_workflow_api_params(module, zmf_api['args']) 
+    zmf_api_params = __get_workflow_api_params(module, zmf_api['args'])
     if (module.params['action'].strip().lower() == 'compare' or module.params['action'].strip().lower() == 'delete') and api == 'list':
         v = zmf_api_params['workflowName']
         zmf_api_params.clear()
