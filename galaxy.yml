@@ -7,7 +7,7 @@ namespace: ibm
 name: ibm_zos_zosmf
 
 # The collection version
-version: 1.0.0
+version: 1.0.1
 
 # Collection README file
 readme: README.md
@@ -32,13 +32,23 @@ tags:
   - ibm
   - z
   - zos
+  - z_os
   - zosmf
+  - workflow
+  - cpm
+  - cloud provisioning
+  - cics
+  - db2
+  - ims
+  - mq
+  - liberty
+  - was
 
 # The URL of the originating SCM repository
 repository: https://www.github.com/IBM/ibm_zos_zosmf
 
 # The URL to any online docs
-documentation: https://www.github.com/IBM/ibm_zos_zosmf/blob/master/README.md
+documentation: https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/README.md
 
 # The URL to the collection issue tracker
 issues: https://www.github.com/IBM/ibm_zos_zosmf/issues
