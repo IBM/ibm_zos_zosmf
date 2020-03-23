@@ -1,4 +1,4 @@
-# Copyright (c) IBM Corporation 2020 
+# Copyright (c) IBM Corporation 2020
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 import requests
@@ -31,9 +31,9 @@ def get_connect_session(module):
     key = module.params['zmf_key']
     user = module.params['zmf_user']
     pw = module.params['zmf_password']
-    if (crt != None and crt.strip() != '') and (key != None and key.strip() != ''):
+    if (crt is not None and crt.strip() != '') and (key is not None and key.strip() != ''):
         session.cert = (crt.strip(), key.strip())
-    elif (user != None and user.strip() != '') and (pw != None and pw.strip() != ''):
+    elif (user is not None and user.strip() != '') and (pw is not None and pw.strip() != ''):
         session.auth = (user.strip(), pw.strip())
     else:
         # fail the module since auth is must for zosmf connection
@@ -69,13 +69,13 @@ def handle_request(module, session, method, url, params=None, rcode=200, timeout
         elif method == 'post':
             response = session.post(url, data=json.dumps(params), headers=__get_request_headers(), verify=False, timeout=timeout)
         elif method == 'delete':
-            response = session.delete(url, headers=__get_request_headers(), verify=False, timeout=timeout)        
+            response = session.delete(url, headers=__get_request_headers(), verify=False, timeout=timeout)
     except Exception as ex:
         module.fail_json(msg='HTTP request error: ' + str(ex))
     else:
         response_code = response.status_code
         if response.content:
-            response_content = json.loads(response.content) 
+            response_content = json.loads(response.content)
         else:
             response_content = dict()
         if response_code == rcode:
@@ -106,14 +106,14 @@ def cmp_list(list1, list2):
                         found = True
                         break
                 elif type(v) == list and type(vv) == list:
-                    if cmp_list(v, vv) == True:
+                    if cmp_list(v, vv) is True:
                         found = True
                         break
                 elif type(v) == dict and type(vv) == dict:
-                    if cmp_dict(v, vv) == True:
+                    if cmp_dict(v, vv) is True:
                         found = True
                         break
-            if found == False:
+            if found is False:
                 return False
     return True
 
@@ -129,8 +129,8 @@ def cmp_dict(dict1, dict2):
     if len(dict1) != len(dict2):
         return False
     else:
-        key1=list(dict1.keys()).sort()
-        key2=list(dict2.keys()).sort()
+        key1 = list(dict1.keys()).sort()
+        key2 = list(dict2.keys()).sort()
         if key1 != key2:
             return False
         else:
@@ -142,12 +142,12 @@ def cmp_dict(dict1, dict2):
                     if type(dict2[k]) != list:
                         return False
                     else:
-                        if cmp_list(v, dict2[k]) == False:
+                        if cmp_list(v, dict2[k]) is False:
                             return False
                 elif type(v) == dict:
                     if type(dict2[k]) != dict:
                         return False
                     else:
-                        if com_dict(v, dict2[k]) == False:
+                        if cmp_dict(v, dict2[k]) is False:
                             return False
     return True

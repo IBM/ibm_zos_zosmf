@@ -14,16 +14,16 @@ Information about the z/OSMF server must be configured in the `vars` file, such 
 
 
 ## Contents
-- [Operate z/OS workflows](docs/README_workflow.md)
+- [Operate z/OS workflows](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/docs/README_workflow.md)
     - modules:
-        - [workflow](docs/README_workflow.md#Modules)
+        - [workflow](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/docs/README_workflow.md#Modules)
     - roles:
-        - [complete_workflow](docs/README_workflow.md#Roles)
-- [Provision and manage z/OS software instances](docs/README_cpm.md)
+        - [complete_workflow](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/docs/README_workflow.md#Roles)
+- [Provision and manage z/OS software instances](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/docs/README_cpm.md)
     - roles:
-        - [provision_software_service](docs/README_cpm.md#Roles-Specification)
-        - [manage_software_instance](docs/README_cpm.md#Roles-Specification)
-        - [remove_software_instance](docs/README_cpm.md#Roles-Specification)
+        - [provision_software_service](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/docs/README_cpm.md#Roles-Specification)
+        - [manage_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/docs/README_cpm.md#Roles-Specification)
+        - [remove_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/docs/README_cpm.md#Roles-Specification)
 
 
 ## Installation
@@ -38,7 +38,7 @@ By default, the collection is installed in `~/.ansible/collections`. The output 
 ```
 Process install dependency map
 Starting collection install process
-Installing 'ibm.ibm_zos_zosmf:1.0.0' to '~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf'
+Installing 'ibm.ibm_zos_zosmf:1.0.1' to '~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf'
 ```
 
 To specify the installation path, include the `-p` option with [ansible-galaxy](https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html) command:
@@ -66,13 +66,13 @@ For local build and installation, you can clone the Git repository, build the co
     The example output looks like this:
 
     ```
-    Created collection for ibm.ibm_zos_zosmf at /Users/user/git/ibm/ibm_zos_zosmf/ibm-ibm_zos_zosmf-1.0.0.tar.gz
+    Created collection for ibm.ibm_zos_zosmf at /Users/user/git/ibm/ibm_zos_zosmf/ibm-ibm_zos_zosmf-1.0.1.tar.gz
     ```
 
 3.  Install the locally built collection:
 
     ```
-    ansible-galaxy collection install ibm-ibm_zos_zosmf-1.0.0.tar.gz
+    ansible-galaxy collection install ibm-ibm_zos_zosmf-1.0.1.tar.gz
     ```
 
     The example output looks like this:
@@ -80,16 +80,16 @@ For local build and installation, you can clone the Git repository, build the co
     ```
     Process install dependency map
     Starting collection install process
-    Installing 'ibm.ibm_zos_zosmf:1.0.0' to '~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf'
+    Installing 'ibm.ibm_zos_zosmf:1.0.1' to '~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf'
     ```
 
 
 ## Usage
-The collection provides various sample playbooks to demonstrate the use of modules and roles in the directory [examples](examples/README.md).
+The collection provides various sample playbooks to demonstrate the use of modules and roles in the directory [examples](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/examples/README.md).
 
 
 ## Contributions
-See the section [Contributing In General](CONTRIBUTING.md).
+See the section [Contributing In General](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.1/CONTRIBUTING.md).
 
 
 ## Copyright
