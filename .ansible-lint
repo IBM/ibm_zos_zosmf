@@ -1,2 +1,3 @@
 skip_list:
   - '701' #ignore role multi authors
+  - '204' #ignore line that is longer than 160 chars
