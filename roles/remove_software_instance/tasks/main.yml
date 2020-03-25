@@ -26,3 +26,5 @@
         body_format: json
         body: '{}'
       delegate_to: localhost
+
+    # TODO: remove local instance record json file

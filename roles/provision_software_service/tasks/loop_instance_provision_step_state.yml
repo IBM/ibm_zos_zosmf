@@ -35,8 +35,8 @@
     - name: "Check if provision failed"
       fail:
         msg:
-          - Provision Failed at - step <{{ step_name }}> ({{ current_step_number }} / {{ total_step_number }})
-          - Reason - results.json['workflow-message-text']
+          - Provision Failed at - step <{{ current_step_name }}> ({{ current_step_number }} / {{ total_step_number }})
+          - Reason - {{ results.json['workflow-message-text'] }}
       when: results.json.state == "provisioning-failed"
 
 - name: Verify overall workflow progress status
@@ -58,18 +58,14 @@
         provision_current_step: "{{ provision_current_step if results.json['workflow-current-step-number'] is undefined else results.json['workflow-current-step-number'] }}"
         provision_total_step: "{{ 1 if results.json['workflow-total-steps']|int == 0 else results.json['workflow-total-steps']|int }}"
 
-    - name: "Display over all provision process"
-      command: echo "Provision status\nCurrent step name {{ 'Not available' if not provision_current_step_name else provision_current_step_name }}\nCurrent step progress ({{ 0 if provision_current_step | int == 0 else provision_current_step }} / {{ provision_total_step })"
-      delegate_to: localhost
-      register: progress_result
+    - name: Display current polling count
+      debug:
+        msg:
+          - "Current status: {{ provision_current_state }}"
+          - "Step name: {{ provision_current_step_name }}"
+          - "Progress: ({{ provision_current_step }} / {{ provision_total_step }})"
       when:
         - provision_current_state != 'provisioned'
-
-
-    - debug: msg="{{ progress_result.stdout.split("\\n") }}"
-      when:
-        - provision_current_state != 'provisioned'
-
 
     - name: "Check over all provision process (ignore the failure of this task), skip if complete"
       fail:
