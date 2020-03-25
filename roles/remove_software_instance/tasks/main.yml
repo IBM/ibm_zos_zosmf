@@ -31,3 +31,4 @@
   file:
     state: absent
     path: "{{ instance_info_json_path }}"
+  delegate_to: localhost
