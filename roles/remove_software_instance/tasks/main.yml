@@ -27,4 +27,7 @@
         body: '{}'
       delegate_to: localhost
 
-    # TODO: remove local instance record json file
+- name: Clean instance record file
+  file:
+    state: absent
+    path: "{{ instance_info_json_path }}"
