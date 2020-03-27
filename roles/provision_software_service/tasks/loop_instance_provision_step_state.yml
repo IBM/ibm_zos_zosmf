@@ -54,10 +54,12 @@
     - name: "Gather provision API response"
       set_fact:
         provision_current_state: "{{ 'being-provisioned' if results.json.state is undefined else results.json.state| string }}"
-        provision_current_step_name: "{{ 'Not available' if results.json['workflow-current-step-name'] is undefined\
-                                       else results.json['workflow-current-step-name']| string }}"
-        provision_current_step: "{{ provision_current_step if results.json['workflow-current-step-number'] is undefined\
-                                       else results.json['workflow-current-step-number'] }}"
+        provision_current_step_name: >-
+                                  "{{ 'Not available' if results.json['workflow-current-step-name'] is undefined
+                                  else results.json['workflow-current-step-name']| string }}"
+        provision_current_step: >-
+                                  "{{ provision_current_step if results.json['workflow-current-step-number'] is undefined
+                                  else results.json['workflow-current-step-number'] }}"
         provision_total_step: "{{ 1 if results.json['workflow-total-steps']|int == 0 else results.json['workflow-total-steps']|int }}"
 
     - name: Display current polling count
