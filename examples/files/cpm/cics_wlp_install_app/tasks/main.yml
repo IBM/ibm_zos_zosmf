@@ -6,9 +6,9 @@
 
 - name: Set variables
   set_fact:
-    HOST_IP: "{{instance_info_json | json_query('variables[?name == `DFH_REGION_HOSTNAME`]') | join(' ') }}"
-    HTTPS_PORT_OBJ: "{{instance_info_json | json_query('variables[?name == `DFH_REGION_HTTPS`]') | join(' ') }}"
-    CICS_DROP_APP_DIR: "{{instance_info_json | json_query('variables[?name == `DFH_REGION_ZFS_DIRECTORY`]') | join(' ') }}"
+    HOST_IP: "{{ instance_info_json['registry-info'] | json_query('variables[?name == `DFH_REGION_HOSTNAME`]') | join(' ') }}"
+    HTTPS_PORT_OBJ: "{{ instance_info_json['registry-info'] | json_query('variables[?name == `DFH_REGION_HTTPS`]') | join(' ') }}"
+    CICS_DROP_APP_DIR: "{{ instance_info_json['registry-info'] | json_query('variables[?name == `DFH_REGION_ZFS_DIRECTORY`]') | join(' ') }}"
 
 - name: Install CICS application - Create USS empty file
   uri:

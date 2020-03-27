@@ -10,9 +10,9 @@
       set_fact:
         instance_record: "{{ lookup('file', instance_info_json_path) | from_json }}"
 
-    - name: "Remove instance {{ instance_record['object-id'] }}"
+    - name: "Remove instance {{ instance_record['registry-info']['object-id'] }}"
       uri:
-        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_record['object-id'] }}"
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_record['registry-info']['object-id'] }}"
         return_content: yes
         user: "{{ zmf_user| trim }}"
         password: "{{ zmf_password| trim  }}"
@@ -27,4 +27,8 @@
         body: '{}'
       delegate_to: localhost
 
-    # TODO: remove local instance record json file
+- name: Clean instance record file
+  file:
+    state: absent
+    path: "{{ instance_info_json_path }}"
+  delegate_to: localhost
