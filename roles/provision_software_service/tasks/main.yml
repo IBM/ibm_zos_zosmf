@@ -74,3 +74,4 @@
 - name: Display instance record file path
   debug:
     msg: "Instance record saved at: {{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+  run_once: true
