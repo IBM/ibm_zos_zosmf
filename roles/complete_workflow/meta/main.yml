@@ -2,9 +2,7 @@
 
 ---
 galaxy_info:
-  authors:
-    - "Yang Cao <caoy@cn.ibm.com>"
-    - "Yun Juan Yang <yunyyang@cn.ibm.com>"
+  author: Yang Cao <caoy@cn.ibm.com>, Yun Juan Yang <yunyyang@cn.ibm.com>
   description: Ansible role to complete a z/OS workflow forcibly or idempotently.
   company: IBM
   min_ansible_version: 2.9
@@ -16,4 +14,6 @@ galaxy_info:
     - workflow
   license:
     - Apache-2.0
+  platforms:
+    - name: All
 dependencies: []

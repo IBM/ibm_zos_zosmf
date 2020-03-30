@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.0.2](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.2) - 2020-03-30
+### Fixed
+- cleanup ansible_lint checks
+- fix bug for cmp roles: instance variable is not correctly parsed in the role
+
 ## [v1.0.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.1) - 2020-03-23
 ### Fixed
 - cleanup ansible_lint checks

@@ -10,7 +10,7 @@ This collection also provide capabilities to provision and manage z/OS middlewar
 
 **NOTE**:
 
-- `delegate_to` - The “delegate_to: localhost” statement is required when using the module in your playbook's task, which makes the module run locally (in control node), so that it does not need to set up SSH connection and install Python on all of the target z/OS systems. Instead, the module will set up HTTPS connections with z/OSMF server. The “delegate_to: localhost” statement is hard-coded inside the role.
+- `delegate_to` - The "delegate_to: localhost" statement is required when using the module in your playbook's task, which makes the module run locally (in control node), so that it does not need to set up SSH connection and install Python on all of the target z/OS systems. Instead, the module will set up HTTPS connections with z/OSMF server. The "delegate_to: localhost" statement is hard-coded inside the role.
 
 - `Check Mode` - The module does not support check mode. (dry run or test run)
 
