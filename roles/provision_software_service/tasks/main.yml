@@ -62,15 +62,16 @@
   block:
     - name: Update fully provisioned instance information to local
       copy:
-        content: "{{ full_instance_json.json| to_nice_json(indent=2) }}"
+        content: '{ "registry-info" : {{ full_instance_json.json| to_nice_json(indent=2) }}}'
         dest: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
       delegate_to: localhost
-
-    - name: Display instance record file path
-      debug:
-        msg: "Instance record saved at: {{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
 
     - name: Set variable for instance json file path
       set_fact:
         zosmf_instance_info: "{{ full_instance_json.json }}"
         instance_info_json_path: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+
+- name: Display instance record file path
+  debug:
+    msg: "Instance record saved at: {{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+  run_once: true
