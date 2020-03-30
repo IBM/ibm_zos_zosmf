@@ -14,5 +14,3 @@ zmf_password: password1
 # If below variables are specified, then the module and role will use client certificate to login instead of using username/password even those variables are specified.
 # zmf_crt:
 # zmf_key:
-
-
