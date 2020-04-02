@@ -15,5 +15,7 @@ galaxy_info:
   license:
     - Apache-2.0
   platforms:
-    - name: All
+    - name: GenericLinux
+      versions:
+      - all
 dependencies: []
