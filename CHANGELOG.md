@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.0.3](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.3) - 2020-04-02
+### Fixed
+- cleanup ansible_lint checks
+- cleanup sanity test checks
+
 ## [v1.0.2](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.2) - 2020-03-30
 ### Fixed
 - cleanup ansible_lint checks
