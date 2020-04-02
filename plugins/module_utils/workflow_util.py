@@ -1,7 +1,13 @@
 # Copyright (c) IBM Corporation 2020
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
-import requests
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+
+try:
+    import requests
+except ImportError:
+    requests = None
 import json
 
 
@@ -26,6 +32,8 @@ def get_connect_session(module):
     :param AnsibleModule module: the ansible module
     :rtype: Session
     """
+    if requests is None:
+        module.fail_json(msg='ImportError: cannot import requests')
     session = requests.Session()
     crt = module.params['zmf_crt']
     key = module.params['zmf_key']
@@ -49,7 +57,7 @@ def __get_request_headers():
     return {'X-CSRF-ZOSMF-HEADER': 'TEST'}
 
 
-def handle_request(module, session, method, url, params=None, rcode=200, timeout=10):
+def handle_request(module, session, method, url, params=None, rcode=200, timeout=30):
     """
     Return the response or error message of HTTP request
     :param AnsibleModule module: the ansible module
@@ -101,15 +109,15 @@ def cmp_list(list1, list2):
         for v in list1:
             found = False
             for vv in list2:
-                if (type(v) == str or type(v) == bool) and (type(vv) == str or type(vv) == bool):
+                if (isinstance(v, str) or isinstance(v, bool)) and (isinstance(vv, str) or isinstance(vv, bool)):
                     if str(v).strip().upper() == str(vv).strip().upper():
                         found = True
                         break
-                elif type(v) == list and type(vv) == list:
+                elif isinstance(v, list) and isinstance(vv, list):
                     if cmp_list(v, vv) is True:
                         found = True
                         break
-                elif type(v) == dict and type(vv) == dict:
+                elif isinstance(v, dict) and isinstance(vv, dict):
                     if cmp_dict(v, vv) is True:
                         found = True
                         break
@@ -135,17 +143,17 @@ def cmp_dict(dict1, dict2):
             return False
         else:
             for k, v in dict1.items():
-                if type(v) == str or type(v) == bool:
+                if isinstance(v, str) or isinstance(v, bool):
                     if str(v).strip().upper() != str(dict2[k]).strip().upper():
                         return False
-                elif type(v) == list:
-                    if type(dict2[k]) != list:
+                elif isinstance(v, list):
+                    if not isinstance(dict2[k], list):
                         return False
                     else:
                         if cmp_list(v, dict2[k]) is False:
                             return False
-                elif type(v) == dict:
-                    if type(dict2[k]) != dict:
+                elif isinstance(v, dict):
+                    if not isinstance(dict2[k], dict):
                         return False
                     else:
                         if cmp_dict(v, dict2[k]) is False:
