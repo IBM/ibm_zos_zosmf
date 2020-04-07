@@ -2,7 +2,7 @@
 
 cd ../../..
 
-rm -rf ibm-ibm_zos_zosmf-*.tar.gz | true
+rm -rf ibm-ibm_zos_zosmf-*.tar.gz || true
 
 ansible-galaxy collection build -f
 
