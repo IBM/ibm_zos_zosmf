@@ -31,12 +31,12 @@ remove_software_instance.
 
 ### Managed Node
 
-- [z/OS](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3/en/homepage.html) - 2.3 or later.
+- [z/OS](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3/en/homepage.html) - V02.03.00 or later.
 - [Cloud Provisioning & Management](https://www.ibm.com/support/z-content-solutions/cloud-provisioning)
 
 ## Usage
 
-Please refer to directory [examples](../examples/README.md) for various example playbooks.
+Please refer to directory [playbooks](../playbooks/README.md) for various example playbooks.
 
 ## Copyright
 

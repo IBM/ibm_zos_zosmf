@@ -16,9 +16,9 @@ Information about the z/OSMF server must be configured in the `vars` file, such 
 ## Contents
 - [Operate z/OS workflows](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md)
     - modules:
-        - [workflow](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md#Modules)
+        - [zmf_workflow](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md#Modules)
     - roles:
-        - [complete_workflow](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md#Roles)
+        - [zmf_workflow_complete](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md#Roles)
 - [Provision and manage z/OS software instances](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md)
     - roles:
         - [provision_software_service](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
@@ -85,7 +85,7 @@ For local build and installation, you can clone the Git repository, build the co
 
 
 ## Usage
-The collection provides various sample playbooks to demonstrate the use of modules and roles in the directory [examples](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/examples/README.md).
+The collection provides various sample playbooks to demonstrate the use of modules and roles in the directory [playbooks](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/playbooks/README.md).
 
 
 ## Contributions

@@ -26,7 +26,7 @@ None
 
 ## Usage
 
-Please refer to directory [examples](../../examples/README.md) for various example playbooks.
+Please refer to directory [playbooks](../../playbooks/README.md) for various example playbooks.
 
 
 ## Copyright
