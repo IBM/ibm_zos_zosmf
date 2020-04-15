@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # Copyright (c) IBM Corporation 2020
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
@@ -12,22 +13,37 @@ ANSIBLE_METADATA = {
     'supported_by': 'community'
 }
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
-module: workflow
+module: zmf_workflow
 short_description: Ansible module for running z/OS workflows
 description:
-    - "Ansible module for running z/OS workflows by issuing z/OSMF workflow RESTful services."
+    - Ansible module for running z/OS workflows by issuing z/OSMF workflow RESTful services.
+    - This module supports to compare, start, check and delete a workflow.
 version_added: "2.9"
-author: "Yang Cao (@zosmf-Young), Yun Juan Yang (@zosmf-Robyn)"
-requirements: []
+author:
+    - Yang Cao (@zosmf-Young)
+    - Yun Juan Yang (@zosmf-Robyn)
 options:
     action:
         description:
             - Action to be performed by the module.
+            - >
+              If I(action=compare), indicate whether a workflow with the given name does not exist,
+              or exists with same or different definition file, variables and properties.
+            - >
+              If I(action=start), create a workflow if it does not exist, and start it.
+            - >
+              If I(action=check), check the status of a workflow.
+            - >
+              If I(action=delete), delete a workflow if it exists.
         required: true
         type: str
-        choices: ['compare', 'start', 'check', 'delete']
+        choices:
+            - compare
+            - start
+            - check
+            - delete
     zmf_host:
         description:
             - Hostname of the z/OSMF server.
@@ -38,250 +54,305 @@ options:
             - Port number of the z/OSMF server.
         required: false
         type: int
+        default: null
     zmf_user:
         description:
             - User name to be used for authenticating with z/OSMF server.
-            - If zmf_crt and zmf_key are supplied, zmf_user and zmf_password are ignored.
+            - Required when I(zmf_crt) and I(zmf_key) are not supplied.
+            - If I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
         required: false
         type: str
+        default: null
     zmf_password:
         description:
             - Password to be used for authenticating with z/OSMF server.
-            - If zmf_crt and zmf_key are supplied, zmf_user and zmf_password are ignored.
+            - Required when I(zmf_crt) and I(zmf_key) are not supplied.
+            - If I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
         required: false
         type: str
+        default: null
     zmf_crt:
         description:
             - Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.
+            - Required when I(zmf_user) and I(zmf_password) are not supplied.
         required: false
         type: str
+        default: null
     zmf_key:
         description:
             - Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.
+            - Required when I(zmf_user) and I(zmf_password) are not supplied.
         required: false
         type: str
-    zos_workflow_name:
+        default: null
+    workflow_name:
         description:
             - Descriptive name of the workflow.
-            - It is recommended that you use the naming rule ansible_workflowName_{{ zos_workflow_host }}.
+            - It is recommended that you use the naming rule C(ansible_workflowName_{{ workflow_host }}) when I(action=start).
+            - Required when I(action=compare).
+            - Either I(workflow_name) or I(workflow_key) is required when I(action=start/check/delete).
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_file:
+        default: null
+    workflow_file:
         description:
             - Location of the workflow definition file.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_host:
+        default: null
+    workflow_host:
         description:
             - Nickname of the system on which the workflow is to be performed.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_owner:
+        default: null
+    workflow_owner:
         description:
             - User name of the workflow owner.
-            - If this value is omitted, zmf_user is used as workflow owner.
+            - If this value is omitted, I(zmf_user) is used as workflow owner.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_file_system:
+        default: null
+    workflow_file_system:
         description:
             - Nickname of the system on which the specified workflow definition file and any related files reside.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_vars_file:
+        default: null
+    workflow_vars_file:
         description:
             - Location of the optional properties file to be used to pre-specify the values of one or more variables
               that are defined in workflow definition file.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_vars:
+        default: null
+    workflow_vars:
         description:
             - Values of one or more workflow variables in JSON format.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: dict
-    zos_workflow_resolve_global_conflict_by_using:
+        default: null
+    workflow_resolve_global_conflict_by_using:
         description:
             - Version of the variable to be used if the supplied workflow variable conflicts with an existing global variable in z/OSMF Workflows task.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-        choices: ['global', 'input']
-    zos_workflow_comments:
+        default: global
+        choices:
+            - global
+            - input
+    workflow_comments:
         description:
             - User-specified information to be associated with the workflow at creation time.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_assign_to_owner:
+        default: null
+    workflow_assign_to_owner:
         description:
             - Specifies whether the workflow steps are assigned to the workflow owner when the workflow is created.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
-    zos_workflow_access_type:
+        default: true
+    workflow_access_type:
         description:
             - Access type for the workflow when the workflow is created.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-        choices: ['Public', 'Restricted', 'Private']
-    zos_workflow_account_info:
+        default: Public
+        choices:
+            - Public
+            - Restricted
+            - Private
+    workflow_account_info:
         description:
             - For a workflow that submits a batch job, this variable specifies the account information for the JCL JOB statement.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_job_statement:
+        default: null
+    workflow_job_statement:
         description:
             - For a workflow that submits a batch job, this variable specifies the JOB statement JCL for the job.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_delete_completed_jobs:
+        default: null
+    workflow_delete_completed_jobs:
         description:
             - For a workflow that submits a batch job, this variable specifies whether the job is deleted from the JES spool after it completes.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
-    zos_workflow_resolve_conflict_by_using:
+        default: false
+    workflow_resolve_conflict_by_using:
         description:
             - Specifies how to handle variable conflicts if any are detected at workflow creation time.
             - Such conflicts can be found when z/OSMF Workflows task reads the output file from a step that runs a REXX exec or UNIX shell script.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-        choices: ['outputFileValue', 'existingValue', 'leaveConflict']
-    zos_workflow_step_name:
+        default: outputFileValue
+        choices:
+            - outputFileValue
+            - existingValue
+            - leaveConflict
+    workflow_step_name:
         description:
             - Name of the workflow step at which automation processing is to begin when the workflow is started.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_perform_subsequent:
+        default: null
+    workflow_perform_subsequent:
         description:
             - Specifies whether the subsequent automated steps are performed when the workflow is started.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
-    zos_workflow_notification_url:
+        default: true
+    workflow_notification_url:
         description:
             - URL to be used for notification when the workflow is started.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_category:
+        default: null
+    workflow_category:
         description:
             - Category for the workflow.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-        choices: ['general', 'configuration']
-    zos_workflow_vender:
+        choices:
+            - general
+            - configuration
+        default: null
+    workflow_vendor:
         description:
             - Name of the vendor that provided the workflow definition file.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
-    zos_workflow_key:
+        default: null
+    workflow_key:
         description:
             - Generated key to uniquely identify the workflow instance.
+            - Either I(workflow_name) or I(workflow_key) is required when I(action=start/check/delete).
         required: false
         type: str
+        default: null
+requirements:
+    - requests >= 2.23.0
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
+- name: Compare whether a workflow with the given name already exists and has the same definition file, variables and properties
+  zmf_workflow:
+    action: "compare"
+    zmf_host: "sample.ibm.com"
+    workflow_name: "ansible_sample_workflow_SY1"
+    workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
+    workflow_host: "SY1"
+
+- name: Create a workflow if it does not exist, and start it
+  zmf_workflow:
+    action: "start"
+    zmf_host: "sample.ibm.com"
+    workflow_name: "ansible_sample_workflow_SY1"
+    workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
+    workflow_host: "SY1"
+
+- name: Check the status of a workflow
+  zmf_workflow:
+    action: "check"
+    zmf_host: "sample.ibm.com"
+    workflow_name: "ansible_sample_workflow_SY1"
+
+- name: Delete a workflow if it exists
+  zmf_workflow:
+    action: "delete"
+    zmf_host: "sample.ibm.com"
+    workflow_name: "ansible_sample_workflow_SY1"
 '''
 
-RETURN = '''
+RETURN = r'''
 changed:
     description:
-        - (action compare) Always be false.
-        - (action start) Indicate whether the workflow instance is created and started.
-        - (action check) Always be false.
-        - (action delete) Indicate whether the workflow instance is deleted.
+        - Indicates if any change is made during the module operation.
+        - If `action=compare/check`, always return false.
+        - If `action=start` and the workflow is started, return true.
+        - If `action=delete` and the workflow is deleted, return true.
     returned: always
     type: bool
 message:
     description:
-        - (action compare) Indicate whether the workflow instance does not exist, or exists with same or different definition file, variables and properties.
-        - (action start) Indicate whether the workflow instance is started.
-        - (action check) Indicate whether the workflow instance is completed, is not completed, or is still in progress.
-        - (action delete) Indicate whether the workflow instance does not exist or is deleted.
-    returned: success
+        - The output message generated by the module.
+        - If `action=compare`, indicate whether a workflow with the given name does not exist,
+          or exists with same or different definition file, variables and properties.
+        - If `action=compare`, indicate whether the workflow is started.
+        - If `action=check`, indicate whether the workflow is completed, is not completed, or is still in progress.
+        - If `action=delete`, indicate whether the workflow to be deleted does not exist or is deleted.
+    returned: on success
     type: str
-exist_workflow_key:
-    description:
-        - (action compare) Key for the existing workflow instance.
-    returned: success
-    type: str
-same_workflow_instance:
-    description:
-        - (action compare) Indicate whether the existing workflow instance has the same or different definition file, variables and properties.
-    returned: success
-    type: bool
-workflow_completed:
-    description:
-        - (action compare) Indicate whether the existing workflow instance has been completed.
-    returned: success
-    type: bool
+    sample:
+        - Workflow instance named: ansible_sample_workflow_SY1 with same definition file, variables and properties is found.
+        - Workflow instance named: ansible_sample_workflow_SY1 with different definition file is found.
+        - Workflow instance named: ansible_sample_workflow_SY1 is started, you can use check action to check its final status.
+        - Workflow instance named: ansible_sample_workflow_SY1 is still in progress.
+        - Workflow instance named: ansible_sample_workflow_SY1 is completed.
+        - Workflow instance named: ansible_sample_workflow_SY1 does not exist.
+        - Workflow instance named: ansible_sample_workflow_SY1 is deleted.
 workflow_key:
-    description:
-        - (action start) Key for the started workflow instance.
-    returned: success
+    description: Generated key to uniquely identify the existing or started workflow.
+    returned: on success when `action=compare/start`
     type: str
+    sample:
+        - 2535b19e-a8c3-4a52-9d77-e30bb920f912
+same_workflow_instance:
+    description: Indicate whether the existing workflow has the same or different definition file, variables and properties.
+    returned: on success when `action=compare`
+    type: bool
 waiting:
-    description:
-        - (action check) Indicate whether it needs to wait and check again because the workflow instance is still in progress.
-    returned: success
+    description: Indicate whether it needs to wait and check again because the workflow is still in progress.
+    returned: on success when `action=check`
     type: bool
 completed:
-    description:
-        - (action check) Indicate whether the workflow instance is completed.
-    returned: success
+    description: Indicate whether the workflow is completed.
+    returned: on success when `action=compare/check`
     type: bool
 deleted:
-    description:
-        - (action delete) Indicate whether the workflow instance is deleted.
-    returned: success
+    description: Indicate whether the workflow is deleted.
+    returned: on success when `action=deleted`
     type: bool
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-try:
-    from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_util import get_connect_argument_spec
-except ImportError:
-    def get_connect_argument_spec():
-        return dict()
-try:
-    from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_api import get_request_argument_spec
-except ImportError:
-    def get_request_argument_spec():
-        return dict()
-try:
-    from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_util import get_connect_session
-except ImportError:
-    get_connect_session = None
-try:
-    from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_api import call_workflow_api
-except ImportError:
-    call_workflow_api = None
-try:
-    from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_util import cmp_list
-except ImportError:
-    def cmp_list(list1, list2):
-        return True
+from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_util import (
+    get_connect_argument_spec,
+    get_connect_session,
+    cmp_list
+)
+from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_api import (
+    get_request_argument_spec,
+    call_workflow_api
+)
 import json
 
 
 def get_next_step_name(module, current_step_number, response_retrieveP):
     """
-    Return the next step name
+    Return the next step name.
     :param AnsibleModule module: the ansible module
     :param str current_step_number: the current step number
     :param dict response_retrieveP: the response of the workflow API to retrieve the properties of a z/OSMF workflow instance
@@ -324,17 +395,17 @@ def get_next_step_name(module, current_step_number, response_retrieveP):
 
 def is_same_workflow_instance(module, argument_spec_mapping, response_retrieveP, response_retrieveD):
     """
-    Compare two workflow instances to see whether they have same definition files, variables and properties
+    Compare two workflow instances to see whether they have same definition files, variables and properties.
     :param AnsibleModule module: the ansible module
     :param dict[str, dict] argument_spec_mapping: the mapping between arguments of ansible module and params of all workflow APIs
     :param dict response_retrieveP: the response of the workflow API to retrieve the properties of a z/OSMF workflow instance
     :param dict response_retrieveD: the response of the workflow API to retrieve the contents of a z/OSMF workflow definition from a z/OS system
-    :returns: True/False if the given two workflow instances have same/different definition files, None if cannot compare since no definition file is supplied
+    :returns: True/False if the given two workflow instances have same/different definition files, None if cannot compare since no definition file is supplied.
     :returns: True/False if the given two workflow instances have same/different variables, None if cannot compare since no definition file is supplied to get
-              default value or cannot get the content of supplied var file
-    :returns: True/False if the given two workflow instances have same/different properties
-    :returns: diff_name of the different variable or property
-    :returns: diff_value of the different variable or property
+              default value or cannot get the content of supplied var file.
+    :returns: True/False if the given two workflow instances have same/different properties.
+    :returns: diff_name of the different variable or property.
+    :returns: diff_value of the different variable or property.
     :rtype: (bool, bool, bool, str, str)
     """
     sameD = True
@@ -355,15 +426,15 @@ def is_same_workflow_instance(module, argument_spec_mapping, response_retrieveP,
     else:
         sameD = None
     # compare variables
-    if (module.params['zos_workflow_resolve_global_conflict_by_using'] is not None
-            and module.params['zos_workflow_resolve_global_conflict_by_using'].strip().lower() == 'input'):
+    if (module.params['workflow_resolve_global_conflict_by_using'] is not None
+            and module.params['workflow_resolve_global_conflict_by_using'].strip().lower() == 'input'):
         conflict_by_input = True
-    if (module.params['zos_workflow_vars_file'] is not None
-            and module.params['zos_workflow_vars_file'].strip() != ''):
+    if (module.params['workflow_vars_file'] is not None
+            and module.params['workflow_vars_file'].strip() != ''):
         input_file_defined = True
-    if (module.params['zos_workflow_vars'] is not None
-            and len(module.params['zos_workflow_vars']) > 0):
-        module_vars = module.params['zos_workflow_vars']
+    if (module.params['workflow_vars'] is not None
+            and len(module.params['workflow_vars']) > 0):
+        module_vars = module.params['workflow_vars']
         for k, v in module_vars.items():
             if v is None or str(v).strip() == '':
                 module_vars.pop(k)
@@ -420,12 +491,12 @@ def is_same_workflow_instance(module, argument_spec_mapping, response_retrieveP,
     for k, v in module.params.items():
         if k in argument_spec_mapping and argument_spec_mapping[k]['name'] in response_retrieveP:
             res_v = response_retrieveP[argument_spec_mapping[k]['name']]
-            if k == 'zos_workflow_host':
+            if k == 'workflow_host':
                 if res_v.find('(') > -1 and res_v.find(')') > -1:
                     res_v = res_v[res_v.index('(') + 1:res_v.rindex(')')]
                 elif res_v.find('.') > -1:
                     res_v = res_v[res_v.rindex('.') + 1:]
-            elif k == 'zos_workflow_owner' and (v is None or str(v).strip() == ''):
+            elif k == 'workflow_owner' and (v is None or str(v).strip() == ''):
                 v = module.params['zmf_user']
             elif v is None and 'default' in argument_spec_mapping[k]:
                 v = argument_spec_mapping[k]['default']
@@ -437,21 +508,21 @@ def is_same_workflow_instance(module, argument_spec_mapping, response_retrieveP,
 
 def action_compare(module, argument_spec_mapping):
     """
-    Indicate whether the workflow instance specified by zos_workflow_name already exists
-    If the workflow instance already exists, indicate whether they have same definition files, variables and properties
-    Return the message to indicate whether the workflow instance does not exist, or exists with same or different definition file, variables and properties
-    Return the exist_workflow_key of the existing workflow instance
-    Return the same_workflow_instance flag to indicate whether the existing workflow instance has same or different definition file, variables and properties
-    Return the workflow_completed flag to indicate whether the existing workflow instance with same definition file, variables and properties has been completed
+    Indicate whether the workflow instance specified by workflow_name already exists.
+    If the workflow instance already exists, indicate whether they have same definition files, variables and properties.
+    Return the message to indicate whether the workflow instance does not exist, or exists with same or different definition file, variables and properties.
+    Return the workflow_key of the existing workflow instance.
+    Return the same_workflow_instance flag to indicate whether the existing workflow instance has same or different definition file, variables and properties.
+    Return the completed flag to indicate whether the existing workflow instance with same definition file, variables and properties has been completed.
     :param AnsibleModule module: the ansible module
     :param dict[str, dict] argument_spec_mapping: the mapping between arguments of ansible module and params of all workflow APIs
     """
     workflow_key = ''
     compare_result = dict(
         changed=False,
-        exist_workflow_key='',
+        workflow_key='',
         same_workflow_instance=False,
-        workflow_completed=False,
+        completed=False,
         message=''
     )
     # create session
@@ -462,53 +533,53 @@ def action_compare(module, argument_spec_mapping):
         if 'workflows' in response_list and len(response_list['workflows']) > 0:
             workflow_key = response_list['workflows'][0]['workflowKey']
         else:
-            compare_result['message'] = 'No workflow instance named: ' + module.params['zos_workflow_name'] + ' is found.'
+            compare_result['message'] = 'No workflow instance named: ' + module.params['workflow_name'] + ' is found.'
             module.exit_json(**compare_result)
     else:
-        module.fail_json(msg='Failed to find workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_list)
+        module.fail_json(msg='Failed to find workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_list)
     # step2 - compare the properties and definition files
     response_retrieveP = call_workflow_api(module, session, 'retrieveProperties', workflow_key)
     if isinstance(response_retrieveP, str):
         module.fail_json(
-            msg='Failed to get properties of workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_retrieveP
+            msg='Failed to get properties of workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_retrieveP
         )
     response_retrieveD = dict()
-    if module.params['zos_workflow_file'] is not None and module.params['zos_workflow_file'].strip() != '':
+    if module.params['workflow_file'] is not None and module.params['workflow_file'].strip() != '':
         response_retrieveD = call_workflow_api(module, session, 'retrieveDefinition', workflow_key)
         if isinstance(response_retrieveD, str):
             module.fail_json(
-                msg='Failed to get definition file of workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_retrieveD
+                msg='Failed to get definition file of workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_retrieveD
             )
     (sameD, sameV, sameP, diff_name, diff_value) = is_same_workflow_instance(module, argument_spec_mapping, response_retrieveP, response_retrieveD)
     if sameD is False:
-        compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' with different definition file is found.'
+        compare_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' with different definition file is found.'
     elif sameV is False:
-        compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' with different variable: ' \
+        compare_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' with different variable: ' \
             + diff_name + ' = ' + str(diff_value) + ' is found.'
     elif sameP is False:
-        compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' with different property: ' \
+        compare_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' with different property: ' \
             + diff_name + ' = ' + str(diff_value) + ' is found.'
     elif sameD is None or sameV is None:
         compare_result['same_workflow_instance'] = True
-        compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] \
-            + ' is found. While it could not be compared since the argument: zos_workflow_file is required,' \
-            + ' and please supply variables by the argument: zos_workflow_vars rather than the argument: zos_workflow_vars_file.'
+        compare_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] \
+            + ' is found. While it could not be compared since the argument: workflow_file is required,' \
+            + ' and please supply variables by the argument: workflow_vars rather than the argument: workflow_vars_file.'
     else:
         compare_result['same_workflow_instance'] = True
-        compare_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] \
+        compare_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] \
             + ' with same definition file, variables and properties is found.'
     if compare_result['same_workflow_instance'] is not False and response_retrieveP['statusName'] == 'complete':
-        compare_result['workflow_completed'] = True
-    compare_result['exist_workflow_key'] = workflow_key
+        compare_result['completed'] = True
+    compare_result['workflow_key'] = workflow_key
     module.exit_json(**compare_result)
 
 
 def action_start(module):
     """
-    Start the workflow instance specified by zos_workflow_key
-    If zos_workflow_key is not supplied, create the workflow instance specified by zos_workflow_name if not exist and then start it
-    Return the message to indicate the workflow instance is started
-    Return the workflow_key of the started workflow instance
+    Start the workflow instance specified by workflow_key.
+    If workflow_key is not supplied, create the workflow instance specified by workflow_name if not exist and then start it.
+    Return the message to indicate the workflow instance is started.
+    Return the workflow_key of the started workflow instance.
     :param AnsibleModule module: the ansible module
     """
     workflow_key = ''
@@ -521,19 +592,19 @@ def action_start(module):
     # create session
     session = get_connect_session(module)
     # decide if start by name or key
-    if module.params['zos_workflow_key'] is not None and module.params['zos_workflow_key'].strip() != '':
-        workflow_key = module.params['zos_workflow_key']
+    if module.params['workflow_key'] is not None and module.params['workflow_key'].strip() != '':
+        workflow_key = module.params['workflow_key']
         start_by_key = True
     # step1 - find workflow instance by name
     if workflow_key == '':
-        if module.params['zos_workflow_name'] is None or module.params['zos_workflow_name'].strip() == '':
-            module.fail_json(msg='A valid argument of either zos_workflow_name or zos_workflow_key is required.')
+        if module.params['workflow_name'] is None or module.params['workflow_name'].strip() == '':
+            module.fail_json(msg='A valid argument of either workflow_name or workflow_key is required.')
         response_list = call_workflow_api(module, session, 'list', workflow_key)
         if isinstance(response_list, dict):
             if 'workflows' in response_list and len(response_list['workflows']) > 0:
                 workflow_key = response_list['workflows'][0]['workflowKey']
         else:
-            module.fail_json(msg='Failed to find workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_list)
+            module.fail_json(msg='Failed to find workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_list)
     # step2 - create workflow instance if needed
     if workflow_key == '':
         response_create = call_workflow_api(module, session, 'create', workflow_key)
@@ -541,9 +612,9 @@ def action_start(module):
             if 'workflowKey' in response_create and response_create['workflowKey'] != '':
                 workflow_key = response_create['workflowKey']
             else:
-                module.fail_json(msg='Failed to create workflow instance named: ' + module.params['zos_workflow_name'] + '.')
+                module.fail_json(msg='Failed to create workflow instance named: ' + module.params['workflow_name'] + '.')
         else:
-            module.fail_json(msg='Failed to create workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_create)
+            module.fail_json(msg='Failed to create workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_create)
     # step3 - start workflow instance
     response_start = call_workflow_api(module, session, 'start', workflow_key)
     if isinstance(response_start, dict):
@@ -552,7 +623,7 @@ def action_start(module):
         if start_by_key is True:
             start_result['message'] = 'Workflow instance with key: ' + workflow_key + ' is started, you can use check action to check its final status.'
         else:
-            start_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] \
+            start_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] \
                 + ' is started, you can use check action to check its final status.'
         module.exit_json(**start_result)
     else:
@@ -560,24 +631,23 @@ def action_start(module):
         next_step_message = ''
         if response_start.find('IZUWF5007E') > 0:
             next_step_message = ' You can manually complete this step in z/OSMF Workflows task,' \
-                + ' and start this workflow instance again with next step name specified in argument: zos_workflow_step_name.'
+                + ' and start this workflow instance again with next step name specified in argument: workflow_step_name.'
         if start_by_key is True:
             module.fail_json(
                 msg='Failed to start workflow instance with key: ' + workflow_key + ' ---- ' + response_start + next_step_message
             )
         else:
             module.fail_json(
-                changed=True,
-                msg='Failed to start workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_start + next_step_message
+                msg='Failed to start workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_start + next_step_message
             )
 
 
 def action_check(module):
     """
-    Check status of the workflow instance specified by zos_workflow_key
-    If zos_workflow_key is not supplied, check status of the workflow instance specified by zos_workflow_name
-    Return the message to indicate whether the workflow instance is completed, is not completed, or is still in progress
-    Return the waiting flag to indicate whether it needs to wait and check again since the workflow instance is still in progress
+    Check status of the workflow instance specified by workflow_key.
+    If workflow_key is not supplied, check status of the workflow instance specified by workflow_name.
+    Return the message to indicate whether the workflow instance is completed, is not completed, or is still in progress.
+    Return the waiting flag to indicate whether it needs to wait and check again since the workflow instance is still in progress.
     :param AnsibleModule module: the ansible module
     """
     workflow_key = ''
@@ -592,21 +662,21 @@ def action_check(module):
     # create session
     session = get_connect_session(module)
     # decide if check by name or key
-    if module.params['zos_workflow_key'] is not None and module.params['zos_workflow_key'].strip() != '':
-        workflow_key = module.params['zos_workflow_key']
+    if module.params['workflow_key'] is not None and module.params['workflow_key'].strip() != '':
+        workflow_key = module.params['workflow_key']
         check_by_key = True
     # step1 - find workflow instance by name if needed
     if workflow_key == '':
-        if module.params['zos_workflow_name'] is None or module.params['zos_workflow_name'].strip() == '':
-            module.fail_json(msg='A valid argument of either zos_workflow_name or zos_workflow_key is required.')
+        if module.params['workflow_name'] is None or module.params['workflow_name'].strip() == '':
+            module.fail_json(msg='A valid argument of either workflow_name or workflow_key is required.')
         response_list = call_workflow_api(module, session, 'list', workflow_key)
         if isinstance(response_list, dict):
             if 'workflows' in response_list and len(response_list['workflows']) > 0:
                 workflow_key = response_list['workflows'][0]['workflowKey']
             else:
-                module.fail_json(msg='No workflow instance named: ' + module.params['zos_workflow_name'] + ' is found.')
+                module.fail_json(msg='No workflow instance named: ' + module.params['workflow_name'] + ' is found.')
         else:
-            module.fail_json(msg='Failed to find workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_list)
+            module.fail_json(msg='Failed to find workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_list)
     # step2 - get workflow properties
     response_retrieveP = call_workflow_api(module, session, 'retrieveProperties', workflow_key)
     if isinstance(response_retrieveP, dict):
@@ -616,7 +686,7 @@ def action_check(module):
                 if check_by_key is True:
                     check_result['message'] = 'Workflow instance with key: ' + workflow_key + ' is still in progress.'
                 else:
-                    check_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' is still in progress.'
+                    check_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' is still in progress.'
                 module.exit_json(**check_result)
             elif status == 'complete':
                 check_result['waiting'] = False
@@ -624,7 +694,7 @@ def action_check(module):
                 if check_by_key is True:
                     check_result['message'] = 'Workflow instance with key: ' + workflow_key + ' is completed.'
                 else:
-                    check_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' is completed.'
+                    check_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' is completed.'
                 module.exit_json(**check_result)
             else:
                 step_status = response_retrieveP['automationStatus']
@@ -633,7 +703,7 @@ def action_check(module):
                     if check_by_key is True:
                         check_result['message'] = 'Workflow instance with key: ' + workflow_key + ' is not completed: No step is started.'
                     else:
-                        check_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' is not completed: No step is started.'
+                        check_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' is not completed: No step is started.'
                 else:
                     current_step_message = ''
                     next_step_message = ''
@@ -645,33 +715,33 @@ def action_check(module):
                         if next_step_name != '':
                             next_step_message = ' You can manually complete this step in z/OSMF Workflows task,' \
                                 + ' and start this workflow instance again with next step name: ' \
-                                + next_step_name + ' specified in argument: zos_workflow_step_name.'
+                                + next_step_name + ' specified in argument: workflow_step_name.'
                     if step_status['messageID'] == 'IZUWF0162I':
                         next_step_message = ' While one or more steps may be skipped.'
                     if check_by_key is True:
                         check_result['message'] = 'Workflow instance with key: ' + workflow_key + ' is not completed: ' \
                             + current_step_message + step_status['messageText'] + next_step_message
                     else:
-                        check_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' is not completed: ' \
+                        check_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' is not completed: ' \
                             + current_step_message + step_status['messageText'] + next_step_message
                 module.exit_json(**check_result)
         else:
             if check_by_key is True:
                 module.fail_json(msg='Failed to get properties of workflow instance with key: ' + workflow_key + '.')
             else:
-                module.fail_json(msg='Failed to get properties of workflow instance named: ' + module.params['zos_workflow_name'] + '.')
+                module.fail_json(msg='Failed to get properties of workflow instance named: ' + module.params['workflow_name'] + '.')
     else:
         if check_by_key is True:
             module.fail_json(msg='Failed to get properties of workflow instance with key: ' + workflow_key + ' ---- ' + response_retrieveP)
         else:
-            module.fail_json(msg='Failed to get properties of workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_retrieveP)
+            module.fail_json(msg='Failed to get properties of workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_retrieveP)
 
 
 def action_delete(module):
     """
-    Delete the workflow instance specified by zos_workflow_key
-    If zos_workflow_key is not supplied, delete the workflow instance specified by zos_workflow_name
-    Return the message to indicate whether the workflow instance does not exist or is deleted
+    Delete the workflow instance specified by workflow_key.
+    If workflow_key is not supplied, delete the workflow instance specified by workflow_name.
+    Return the message to indicate whether the workflow instance does not exist or is deleted.
     :param AnsibleModule module: the ansible module
     """
     workflow_key = ''
@@ -684,22 +754,22 @@ def action_delete(module):
     # create session
     session = get_connect_session(module)
     # decide if delete by name or key
-    if module.params['zos_workflow_key'] is not None and module.params['zos_workflow_key'].strip() != '':
-        workflow_key = module.params['zos_workflow_key']
+    if module.params['workflow_key'] is not None and module.params['workflow_key'].strip() != '':
+        workflow_key = module.params['workflow_key']
         delete_by_key = True
     # step1 - find workflow instance by name if needed
     if workflow_key == '':
-        if module.params['zos_workflow_name'] is None or module.params['zos_workflow_name'].strip() == '':
-            module.fail_json(msg='A valid argument of either zos_workflow_name or zos_workflow_key is required.')
+        if module.params['workflow_name'] is None or module.params['workflow_name'].strip() == '':
+            module.fail_json(msg='A valid argument of either workflow_name or workflow_key is required.')
         response_list = call_workflow_api(module, session, 'list', workflow_key)
         if isinstance(response_list, dict):
             if 'workflows' in response_list and len(response_list['workflows']) > 0:
                 workflow_key = response_list['workflows'][0]['workflowKey']
             else:
-                delete_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' does not exist.'
+                delete_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' does not exist.'
                 module.exit_json(**delete_result)
         else:
-            module.fail_json(msg='Failed to find workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_list)
+            module.fail_json(msg='Failed to find workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_list)
     # step2 - delete workflow instance
     response_delete = call_workflow_api(module, session, 'delete', workflow_key)
     if isinstance(response_delete, dict):
@@ -708,43 +778,41 @@ def action_delete(module):
         if delete_by_key is True:
             delete_result['message'] = 'Workflow instance with key: ' + workflow_key + ' is deleted.'
         else:
-            delete_result['message'] = 'Workflow instance named: ' + module.params['zos_workflow_name'] + ' is deleted.'
+            delete_result['message'] = 'Workflow instance named: ' + module.params['workflow_name'] + ' is deleted.'
         module.exit_json(**delete_result)
     else:
         if delete_by_key is True:
             module.fail_json(msg='Failed to delete workflow instance with key: ' + workflow_key + ' ---- ' + response_delete)
         else:
-            module.fail_json(msg='Failed to delete workflow instance named: ' + module.params['zos_workflow_name'] + ' ---- ' + response_delete)
+            module.fail_json(msg='Failed to delete workflow instance named: ' + module.params['workflow_name'] + ' ---- ' + response_delete)
 
 
 def main():
     argument_spec = dict()
+    connect_argument_spec = get_connect_argument_spec()
     (argument_spec_mapping, request_argument_spec) = get_request_argument_spec()
-    argument_spec.update(get_connect_argument_spec())
+    argument_spec.update(connect_argument_spec)
     argument_spec.update(request_argument_spec)
     argument_spec.update(
         action=dict(required=True, type='str', choices=['compare', 'start', 'check', 'delete']),
-        zos_workflow_key=dict(required=False, type='str'))
+        workflow_key=dict(required=False, type='str'))
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=False
     )
-    # validation for import from module_utils
-    if get_connect_session is None or call_workflow_api is None:
-        module.fail_json(msg='ImportError: cannot import from ibm.ibm_zos_zosmf.plugins.module_utils')
     # validation for action
-    if module.params['action'].strip().lower() == 'compare':
-        if module.params['zos_workflow_name'] is None or module.params['zos_workflow_name'].strip() == '':
-            module.fail_json(msg='Missing required argument or invalid argument: zos_workflow_name')
+    if module.params['action'] == 'compare':
+        if module.params['workflow_name'] is None or module.params['workflow_name'].strip() == '':
+            module.fail_json(msg='Missing required argument or invalid argument: workflow_name.')
         action_compare(module, argument_spec_mapping)
-    elif module.params['action'].strip().lower() == 'start':
+    elif module.params['action'] == 'start':
         action_start(module)
-    elif module.params['action'].strip().lower() == 'check':
+    elif module.params['action'] == 'check':
         action_check(module)
-    elif module.params['action'].strip().lower() == 'delete':
+    elif module.params['action'] == 'delete':
         action_delete(module)
     else:
-        module.fail_json(msg='Wrong action')
+        module.fail_json(msg='Wrong action.')
 
 
 if __name__ == '__main__':

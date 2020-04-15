@@ -4,16 +4,18 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+import json
+import traceback
 try:
     import requests
-except ImportError:
+except Exception:
     requests = None
-import json
+    LIB_IMP_ERR = traceback.format_exc()
 
 
 def get_connect_argument_spec():
     """
-    Return the arguments of ansible module used for session setup
+    Return the arguments of ansible module used for session setup.
     :rtype: dict[str, dict]
     """
     return dict(
@@ -28,12 +30,12 @@ def get_connect_argument_spec():
 
 def get_connect_session(module):
     """
-    Return the connection session
+    Return the connection session.
     :param AnsibleModule module: the ansible module
     :rtype: Session
     """
     if requests is None:
-        module.fail_json(msg='ImportError: cannot import requests')
+        module.fail_json(msg='Missing required lib: requests.', exception=LIB_IMP_ERR)
     session = requests.Session()
     crt = module.params['zmf_crt']
     key = module.params['zmf_key']
@@ -51,7 +53,7 @@ def get_connect_session(module):
 
 def __get_request_headers():
     """
-    Return the request headers for calling workflow APIs
+    Return the request headers for calling workflow APIs.
     :rtype: dict[str, str]
     """
     return {'X-CSRF-ZOSMF-HEADER': 'TEST'}
@@ -59,7 +61,7 @@ def __get_request_headers():
 
 def handle_request(module, session, method, url, params=None, rcode=200, timeout=30):
     """
-    Return the response or error message of HTTP request
+    Return the response or error message of HTTP request.
     :param AnsibleModule module: the ansible module
     :param Session session: the current connection session
     :param str method: the method of HTTP request
@@ -79,7 +81,7 @@ def handle_request(module, session, method, url, params=None, rcode=200, timeout
         elif method == 'delete':
             response = session.delete(url, headers=__get_request_headers(), verify=False, timeout=timeout)
     except Exception as ex:
-        module.fail_json(msg='HTTP request error: ' + str(ex))
+        module.fail_json(msg='HTTP request error: ' + repr(ex))
     else:
         response_code = response.status_code
         if response.content:
@@ -97,10 +99,10 @@ def handle_request(module, session, method, url, params=None, rcode=200, timeout
 
 def cmp_list(list1, list2):
     """
-    Recursively compare the given lists
+    Recursively compare the given lists.
     :param list list1: the given list
     :param list list2: the given list
-    :returns: True if the given lists are same
+    :returns: True if the given lists are same.
     :rtype: bool
     """
     if len(list1) != len(list2):
@@ -128,10 +130,10 @@ def cmp_list(list1, list2):
 
 def cmp_dict(dict1, dict2):
     """
-    Recursively compare the given dicts
+    Recursively compare the given dicts.
     :param dict dict1: the given dict
     :param dict dict2: the given dict
-    :returns: True if the given dicts are same
+    :returns: True if the given dicts are same.
     :rtype: bool
     """
     if len(dict1) != len(dict2):
