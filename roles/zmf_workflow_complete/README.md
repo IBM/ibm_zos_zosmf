@@ -1,5 +1,5 @@
-# Ansible role: complete_workflow
-The collection [ibm_zos_zosmf](../../README.md) provides an [Ansible role](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html), which is referred to as `complete_workflow`. This role is used for completing a z/OS workflow, either forcibly or idempotently.
+# Ansible role: zmf_workflow_complete
+The collection [ibm_zos_zosmf](../../README.md) provides an [Ansible role](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html), which is referred to as `zmf_workflow_complete`. This role is used for completing a z/OS workflow, either forcibly or idempotently.
 
 
 ## Role variables
@@ -17,10 +17,10 @@ The following variables are defined by role. For the default values, see [defaul
 - `complete_check_delay` - The interval time between periodic checks of the workflow status.
 
 ### Defined by module
-To see the variables that are defined by the module `workflow`, use the [ansible-doc](https://docs.ansible.com/ansible/latest/cli/ansible-doc.html) command:
+To see the variables that are defined by the module `zmf_workflow`, use the [ansible-doc](https://docs.ansible.com/ansible/latest/cli/ansible-doc.html) command:
 
 ```
-ansible-doc ibm.ibm_zos_zosmf.workflow
+ansible-doc ibm.ibm_zos_zosmf.zmf_workflow
 ```
 
 
@@ -33,11 +33,11 @@ None
 
 
 ## Usage
-For a sample playbook, see [sample_role_complete_workflow.yml](../../examples/sample_role_complete_workflow.yml) in the directory [examples](../../examples/README.md).
+For a sample playbook, see [sample_role_workflow_complete.yml](../../playbooks/sample_role_workflow_complete.yml) in the directory [playbooks](../../playbooks/README.md).
 
 
 ## Test
-For a test playbook, see [test_role_complete_workflow.yml](../../tests/workflow/test_role_complete_workflow.yml) in the directory [tests/workflow](../../tests/workflow/README.md).
+For a test playbook, see [test_role_workflow_complete.yml](../../tests/workflow/test_role_workflow_complete.yml) in the directory [tests/workflow](../../tests/workflow/README.md).
 
 
 ## Copyright
