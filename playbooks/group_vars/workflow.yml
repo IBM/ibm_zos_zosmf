@@ -5,8 +5,8 @@
 # The value for property zmf_user is your username of z/OSMF.
 # The value for property zmf_password is the password of your username of z/OSMF.
 
-zmf_host: sample.ibm.com
-zmf_port: 443
+zmf_host: your.host.name
+zmf_port: port_number
 
 # `zmf_user` and `zmf_password` are prompted to input when running a playbook
 # zmf_user:

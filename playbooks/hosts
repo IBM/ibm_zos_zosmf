@@ -1,13 +1,9 @@
 # Copyright (c) IBM Corporation 2020
 
-# defines a group of z/OS systems
-[zsystems]
-SY1 ansible_host=hostname_of_zos_system
+# this group is used in sample_role_complete_workflow.yml
+[workflow]
+SYS1
 
-# this group is used in sample_role_workflow_*.yml
-[workflow:children]
-zsystems
-
-# this group is used in sample_role_cpm_*.yml
-[cpm:children]
-zsystems
+# this group is used in sample_cpm_*.yml
+[cpm]
+CPM1 zmf_host=your.host.name zmf_port=port_number
