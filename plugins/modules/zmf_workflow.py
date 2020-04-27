@@ -13,13 +13,13 @@ ANSIBLE_METADATA = {
     'supported_by': 'community'
 }
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 ---
 module: zmf_workflow
 short_description: Ansible module for running z/OS workflows
 description:
     - Ansible module for running z/OS workflows by issuing z/OSMF workflow RESTful services.
-    - This module supports the following final states for a workflow: existed, started, deleted and check.
+    - This module supports to compare, start, delete and check a workflow.
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
@@ -254,9 +254,9 @@ options:
         default: null
 requirements:
     - requests >= 2.23.0
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Compare whether a workflow with the given name already exists and has the same definition file, variables and properties
   zmf_workflow:
     state: "existed"
@@ -284,9 +284,9 @@ EXAMPLES = r'''
     state: "check"
     zmf_host: "sample.ibm.com"
     workflow_name: "ansible_sample_workflow_SY1"
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 changed:
     description:
         - Indicates if any change is made during the module operation.
@@ -306,19 +306,18 @@ message:
     returned: on success
     type: str
     sample:
-        - Workflow instance named: ansible_sample_workflow_SY1 with same definition file, variables and properties is found.
-        - Workflow instance named: ansible_sample_workflow_SY1 with different definition file is found.
-        - Workflow instance named: ansible_sample_workflow_SY1 is started, you can use state=check to check its final status.
-        - Workflow instance named: ansible_sample_workflow_SY1 is still in progress.
-        - Workflow instance named: ansible_sample_workflow_SY1 is completed.
-        - Workflow instance named: ansible_sample_workflow_SY1 is deleted.
-        - Workflow instance named: ansible_sample_workflow_SY1 does not exist.
+        sample1: "Workflow instance named: ansible_sample_workflow_SY1 with same definition file, variables and properties is found."
+        sample2: "Workflow instance named: ansible_sample_workflow_SY1 with different definition file is found."
+        sample3: "Workflow instance named: ansible_sample_workflow_SY1 is started, you can use state=check to check its final status."
+        sample4: "Workflow instance named: ansible_sample_workflow_SY1 is still in progress."
+        sample5: "Workflow instance named: ansible_sample_workflow_SY1 is completed"
+        sample6: "Workflow instance named: ansible_sample_workflow_SY1 is deleted."
+        sample7: "Workflow instance named: ansible_sample_workflow_SY1 does not exist."
 workflow_key:
     description: Generated key to uniquely identify the existing or started workflow.
     returned: on success when `state=existed/started`
     type: str
-    sample:
-        - 2535b19e-a8c3-4a52-9d77-e30bb920f912
+    sample: "2535b19e-a8c3-4a52-9d77-e30bb920f912"
 same_workflow_instance:
     description: Indicate whether the existing workflow has the same or different definition file, variables and properties.
     returned: on success when `state=existed`
@@ -335,7 +334,7 @@ deleted:
     description: Indicate whether the workflow is deleted.
     returned: on success when `state=deleted`
     type: bool
-'''
+"""
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_workflow_util import (
