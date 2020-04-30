@@ -18,6 +18,15 @@ If you would like to fix a bug, please [raise an issue](https://github.com/ibm/i
 ## Merge approval
 The project maintainers use LGTM (Looks Good To Me) in comments on the code review to indicate acceptance. A change requires LGTMs from two of the maintainers of each component affected. Please refer to [MAINTAINERS.md](MAINTAINERS.md) for a list of the maintainers
  
+## Branch description
+|Branch|Base|Description|
+|------|----|-----------|
+|master |	   |This is stable code that is [semantic](https://semver.org/) versioned that requires a pull request to merge into master.     |
+|dev    |master|This is the development code that keeps developers in synch that has undegone a review and pull request that can be unstable.|
+|feature|dev   |This is a temporary branch with feature code that is actively being developed thus unstable.                                 |
+|release-vX.Y.Z|dev|This is a temporary release branch that following the [semantic](https://semver.org/) version that stabilized the release code, allowing for bugfix's to be made without the risk of feature code slipping into the release.|
+|bugfix	|release-vX.Y.Z|This is a temporary branch with fixes for a release branch. The bugfix branch will be merged into the release branch and cherry-picked into the dev branch.|
+|hotfix	|master|This is a temporary branch with a production code fix that should be merged into master and cherry-picked into dev and release branches.|
 
 ## Legal
 Each source file must include a license header for [GPL License 3.0](https://opensource.org/licenses/GPL-3.0) or [Apache License 2.0](https://opensource.org/licenses/Apache-2.0):
