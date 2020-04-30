@@ -1,5 +1,5 @@
 # Operate z/OS workflows
-The collection provides a module `zmf_workflow` and a role [zmf_workflow_complete](../roles/zmf_workflow_complete/README.md) for working with z/OS workflows. The module uses z/OSMF workflow RESTful services to operate a workflow, based on the different parameters it receives. The module provides the following functions: compare, start, check and delete. The role is used for completing a workflow, either forcibly or idempotently. 
+The collection provides a module `zmf_workflow` and a role [zmf_workflow_complete](../roles/zmf_workflow_complete/README.md) for working with z/OS workflows. The module uses z/OSMF workflow RESTful services to operate a workflow, based on the different parameters it receives. The module provides the following final states: existed, started, deleted and check. The role is used for completing a workflow, either forcibly or idempotently. 
 
 **NOTE**:
 - `delegate_to` - The **"delegate_to: localhost"** statement is required for using the module in your playbook task. This statement is hard-coded within the role. The statement causes the module to run locally in control node. With this setting in effect, it is not necessary for you to set up an SSH connection and install Python on the target z/OS systems. Instead, the module creates HTTPS connections with the z/OSMF server.
@@ -14,11 +14,11 @@ The collection provides a module `zmf_workflow` and a role [zmf_workflow_complet
 
 
 ## Modules
-- `zmf_workflow` - This module supports the following actions for working with z/OS workflows:
-  - `compare` - Indicate whether a workflow instance with the given name already exists in the z/OSMF server and has the same definition file, variables and properties.
-  - `start` - Create the workflow instance if it does not exist in the z/OSMF server and start it on each of the target z/OS systems.
+- `zmf_workflow` - This module supports the following final states for working with z/OS workflows:
+  - `existed` - Indicate whether a workflow instance with the given name already exists in the z/OSMF server and has the same definition file, variables and properties.
+  - `started` - Create the workflow instance if it does not exist in the z/OSMF server and start it on each of the target z/OS systems.
+  - `deleted` - Delete the workflow instance from the z/OSMF server.
   - `check` - Check the status of the workflow instance in the z/OSMF server.
-  - `delete` - Delete the workflow instance from the z/OSMF server.
 
 ### Module documentation
 For information about the modules, use the [ansible-doc](https://docs.ansible.com/ansible/latest/cli/ansible-doc.html) command:

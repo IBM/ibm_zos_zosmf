@@ -4,7 +4,7 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_util import handle_request
+from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_workflow_util import handle_request
 import json
 import re
 
@@ -227,7 +227,7 @@ def call_workflow_api(module, session, api, workflow_key):
     zmf_api = __get_workflow_api_argument_spec(api)
     zmf_api_url = __get_workflow_api_url(module, zmf_api['url'], workflow_key)
     zmf_api_params = __get_workflow_api_params(module, zmf_api['args'])
-    if (module.params['action'].strip().lower() == 'compare' or module.params['action'].strip().lower() == 'delete') and api == 'list':
+    if (module.params['state'] == 'existed' or module.params['state'] == 'deleted') and api == 'list':
         v = zmf_api_params['workflowName']
         zmf_api_params.clear()
         zmf_api_params['workflowName'] = v

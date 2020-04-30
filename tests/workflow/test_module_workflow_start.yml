@@ -1,6 +1,6 @@
 # Copyright (c) IBM Corporation 2020 
 
-- name: test module zmf_workflow with action "start"
+- name: test module zmf_workflow with state "started"
   hosts: sysplex1
   gather_facts: no
   vars_prompt:
@@ -12,7 +12,7 @@
       private: yes
   tasks:
   - ibm.ibm_zos_zosmf.zmf_workflow:
-      action: "start"
+      state: "started"
       zmf_host: "{{ zmf_host }}"
       # zmf_port: "{{ zmf_port }}"
       # zmf_crt: "{{ zmf_crt }}"
