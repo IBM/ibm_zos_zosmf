@@ -9,5 +9,6 @@ SY1 ansible_host=hostname_of_zos_system
 zsystems
 
 # this group is used in sample_cpm_*.yml
-[cpm:children]
-zsystems
+[cpm]
+zosmf1 zmf_host=zosmf1.ibm.com zmf_port=443
+zosmf2 zmf_host=zosmf2.pok.ibm.com zmf_port=443

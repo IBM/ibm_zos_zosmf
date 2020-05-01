@@ -21,9 +21,9 @@ Information about the z/OSMF server must be configured in the `vars` file, such 
         - [complete_workflow](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.2/docs/README_workflow.md#Roles)
 - [Provision and manage z/OS software instances](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.2/docs/README_cpm.md)
     - roles:
-        - [provision_software_service](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.2/docs/README_cpm.md#Roles-Specification)
-        - [manage_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.2/docs/README_cpm.md#Roles-Specification)
-        - [remove_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.2/docs/README_cpm.md#Roles-Specification)
+        - [zmf_cpm_provision_software_service](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.2/docs/README_cpm.md#Roles-Specification)
+        - [zmf_cpm_manage_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.2/docs/README_cpm.md#Roles-Specification)
+        - [zmf_cpm_remove_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.2/docs/README_cpm.md#Roles-Specification)
 
 
 ## Installation
@@ -76,7 +76,7 @@ For local build and installation, you can clone the Git repository, build the co
     ```
 
     The example output looks like this:
-    
+
     ```
     Process install dependency map
     Starting collection install process

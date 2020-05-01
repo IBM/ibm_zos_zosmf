@@ -1,0 +1,7 @@
+# Copyright (c) IBM Corporation 2020
+
+instance_record_dir: "/tmp" # The value for property instance_record_dir identifies the file path in local system where the provision result (in json) will be stored
+
+api_polling_retry_count: 30 # The value for property api_polling_retry_count identifies max times of status polling before task fail and exit
+
+api_polling_interval_seconds: 10 # The value for property api_polling_interval_seconds identifies interval in seconds between each api_polling_retry_count polling

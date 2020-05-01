@@ -16,4 +16,4 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial `ibm_zos_zosmf` collection
 - add modules: `workflow`
-- add roles: `complete_workflow`, `provision_software_service`, `manage_software_instance`, `remove_software_instance`
+- add roles: `complete_workflow`, `zmf_cpm_provision_software_service`, `zmf_cpm_manage_software_instance`, `zmf_cpm_remove_software_instance`

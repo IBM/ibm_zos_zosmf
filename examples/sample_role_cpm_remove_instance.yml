@@ -1,6 +1,6 @@
 # Copyright (c) IBM Corporation 2020
 
-- name: test role for remove_software_instance
+- name: test role for zmf_cpm_remove_software_instance
   hosts: cpm # use to match group_vars/cpm.yml
   gather_facts: no
   collections:
@@ -15,6 +15,6 @@
       private: yes
   tasks:
     - include_role:
-        name: remove_software_instance
+        name: zmf_cpm_remove_software_instance
       vars:
         instance_info_json_path: "<full-instance-json-file-path>"
