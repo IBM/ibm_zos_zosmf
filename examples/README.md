@@ -117,6 +117,8 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
             domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
             tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
             systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+            zmf_body: '{"domain-name":"{{ domain_name }}", "tenant-name":"{{ tenant_name }}", "systems-nicknames":"{{ systems_nicknames }}"}' # The value for zmf_body which defines the variables you will use when provisioning the template
+
    ```
 
 ### [sample_role_cpm_remove_instance.yml](sample_role_cpm_remove_instance.yml)
