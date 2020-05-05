@@ -59,7 +59,6 @@
     return_content: yes
   register: full_instance_json
   delegate_to: localhost
-  when: file_creation|default(true)
 
 - name: Update instance information
   block:
