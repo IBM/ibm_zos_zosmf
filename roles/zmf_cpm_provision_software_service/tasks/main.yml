@@ -4,6 +4,10 @@
 ---
 # tasks file for zmf_cpm_provision_software_service
 
+- name: Instance record directory
+  include_tasks: instance_dir_util.yml
+  run_once: true
+
 - name: Provision template
   uri:
     url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/psc/{{ cpm_template_name }}/actions/run"
@@ -25,12 +29,12 @@
 - name: Write instance information to disk
   copy:
     content: "{{ provision_results.json | to_nice_json(indent=2) }}"
-    dest: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+    dest: "{{ instance_record_dir }}/{{ inventory_hostname }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
   delegate_to: localhost
 
 - name: Display instance record file path
   debug:
-    msg: "Instance record saved at: {{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+    msg: "Instance record saved at: {{ instance_record_dir }}/{{ inventory_hostname }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
 
 ##############################################################################
 # Verify workflow step status, requires the following variables:
@@ -63,15 +67,15 @@
     - name: Update fully provisioned instance information to local
       copy:
         content: '{ "registry-info" : {{ full_instance_json.json| to_nice_json(indent=2) }}}'
-        dest: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+        dest: "{{ instance_record_dir }}/{{ inventory_hostname }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
       delegate_to: localhost
 
     - name: Set variable for instance json file path
       set_fact:
         zosmf_instance_info: "{{ full_instance_json.json }}"
-        instance_info_json_path: "{{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+        instance_info_json_path: "{{ instance_record_dir }}/{{ inventory_hostname }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
 
 - name: Display instance record file path
   debug:
-    msg: "Instance record saved at: {{ instance_record_dir }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
+    msg: "Instance record saved at: {{ instance_record_dir }}/{{ inventory_hostname }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
   run_once: true
