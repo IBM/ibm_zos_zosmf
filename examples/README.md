@@ -78,7 +78,7 @@ This sample playbook shows how to perform instance action on a provisioned insta
 
    ```yaml
    - name: sample of managing software instance
-   hosts: cpm # use to match group_vars/cpm.yml
+   hosts: zosmf1 # use to match group_vars/cpm.yml
    gather_facts: no
    collections:
       - ibm.ibm_zos_zosmf
@@ -95,7 +95,7 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
 
    ```yaml
    - name: test role for zmf_cpm_provision_software_service
-   hosts: cpm # use to match group_vars/cpm.yml
+   hosts: zosmf1 # use to match group_vars/cpm.yml
    gather_facts: no
    collections:
       - ibm.ibm_zos_zosmf
@@ -136,7 +136,7 @@ This sample playbook shows how to install a web application on a provisioned ins
 
    ```yaml
    - name: Sample for provisioning CICS region and deploying application
-   hosts: cpm # use to match group_vars/cpm.yml
+   hosts: zosmf1 # use to match group_vars/cpm.yml
    gather_facts: no
    collections:
       - ibm.ibm_zos_zosmf

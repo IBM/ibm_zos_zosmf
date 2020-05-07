@@ -10,5 +10,5 @@ zsystems
 
 # this group is used in sample_cpm_*.yml
 [cpm]
-zosmf1 zmf_host=zosmf1.ibm.com zmf_port=443
+zosmf1 zmf_host=pev065.pok.ibm.com zmf_port=443
 zosmf2 zmf_host=zosmf2.pok.ibm.com zmf_port=443

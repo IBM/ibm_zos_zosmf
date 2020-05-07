@@ -2,7 +2,7 @@
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 ---
-# tasks file for zmf_cpm_zmf_cpm_provision_software_service
+# tasks file for zmf_cpm_provision_software_service
 
 - name: Provision template
   uri:
