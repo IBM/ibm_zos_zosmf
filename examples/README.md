@@ -87,7 +87,7 @@ This sample playbook shows how to perform instance specific action on a provisio
 
    ```yaml
    - name: sample of managing software instance
-   hosts: zosmf1 # need to match group_vars/host_vars/zosmf1.yml and hosts inventory file
+   hosts: zosmf1 # need to match host nick name specified in hosts inventory file
    gather_facts: no
    collections:
       - ibm.ibm_zos_zosmf
@@ -112,7 +112,7 @@ This sample playbook shows how to provision an instance in z/OSMF CP&M:
 
    ```yaml
    - name: test role for zmf_cpm_provision_software_service
-   hosts: zosmf1 # need to match group_vars/host_vars/zosmf1.yml and hosts inventory file
+   hosts: zosmf1 # need to match host nick name specified in hosts inventory file
    gather_facts: no
    collections:
       - ibm.ibm_zos_zosmf
@@ -142,7 +142,7 @@ This sample playbook shows how to remove the deprovisioned instance in z/OSMF CP
 
    ```yaml
    - name: sample of managing software instance
-   hosts: zosmf1 # need to match group_vars/host_vars/zosmf1.yml and hosts inventory file
+   hosts: zosmf1 # need to match host nick name specified in hosts inventory file
    gather_facts: no
    collections:
       - ibm.ibm_zos_zosmf
@@ -166,7 +166,7 @@ This sample playbook shows how to install a web application on a provisioned CIC
 
    ```yaml
    - name: Sample for provisioning CICS region and deploying application
-   hosts: zosmf1 # use to match group_vars/cpm.yml
+   hosts: zosmf1 # need to match host nick name specified in hosts inventory file
    gather_facts: no
    collections:
       - ibm.ibm_zos_zosmf

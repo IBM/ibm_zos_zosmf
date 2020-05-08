@@ -1,7 +1,7 @@
 # Copyright (c) IBM Corporation 2020
 
 - name: test role for zmf_cpm_remove_software_instance
-  hosts: zosmf1 # use to match group_vars/cpm.yml
+  hosts: zosmf1 # need to match host nick name specified in hosts inventory file
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
