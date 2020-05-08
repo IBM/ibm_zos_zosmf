@@ -48,7 +48,9 @@ You can supply group variables in either the inventory file or the separate vari
 
    **NOTE**: This is an easy example to use username and password for authenticating with z/OSMF server. Actually, client-certificate authorization is recommended. You can use `zmf_crt` and `zmf_key` to specify the certificate chain file and key file to be used for HTTPS client authentication.
 
-- [zosmf1.yml](group_vars/host_vars/zosmf1.yml) contains variables for z/OSMF host 'zosmf1' in `cpm` group:
+### Host vars
+You can supply host specific variables in either the inventory file or the sepeare host specific variable file. T[host_vars](host_vars/) directory contains some example variables files matching the example host names used in the sample "hosts" inventory.
+- [zosmf1.yml](host_vars/zosmf1.yml) contains variables for z/OSMF host 'zosmf1' in `cpm` group:
   - `instance_record_dir` - File path in local system where the provision result (in json) will be stored.
   - `api_polling_retry_count` - Max times of status polling before task fail and exit.
   - `api_polling_interval_seconds` - Interval in seconds between each `api_polling_retry_count` polling.
