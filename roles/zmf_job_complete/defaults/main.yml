@@ -1,0 +1,6 @@
+# Copyright (c) IBM Corporation 2020 
+
+complete_check_times: 2
+complete_check_delay: 5
+job_search_output_insensitive: True
+job_search_output_maxreturnsize: 100

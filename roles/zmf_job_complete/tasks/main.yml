@@ -1,0 +1,170 @@
+# Copyright (c) IBM Corporation 2020 
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+- block:
+    - name: Validate arguments # <TODO -- password/cert>
+      set_fact:
+        job_search_rc: "{{ job_search_rc | default('CC 0000') }}"
+        job_search_logic: "{{ job_search_logic | default('AND') }}"
+        final_result: {}
+    - fail:
+        msg: "Invalid argument: 'job_search_logic'. The value must be one of: AND, OR"
+      when:
+        - job_search_logic != "AND"
+        - job_search_logic != "OR"
+
+- block:
+    - name: # <TODO -- Submit job>
+      set_fact:
+        final_result: "{{ final_result | combine({ 'job_name': job_name, 'job_id': job_id }) }}"
+        job_url: "{{ job_url }}" # TODO
+        job_files_url: "{{ job_files_url }}" # TODO
+
+- block:
+    - name: Query and match the return code of the submitted job
+      uri:
+        url: "{{ job_url }}"
+        method: GET
+        return_content: yes
+        headers:
+          X-IBM-Target-System: "{{ inventory_hostname }}"
+          X-CSRF-ZOSMF-HEADER: "TEST"
+        user: "{{ zmf_user }}"
+        password: "{{ zmf_password }}"
+        client_cert: "{{ zmf_crt }}"
+        client_key: "{{ zmf_key }}"
+        force_basic_auth: yes
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: status_result
+      failed_when: no
+      until: ('json' in status_result) and ('status' in status_result.json) and (status_result.json.status == 'OUTPUT')
+      retries: "{{ complete_check_times }}"
+      delay: "{{ complete_check_delay }}"
+    
+    - name: Handle request error if needed
+      include_tasks: handle_request_error.yml
+      vars:
+        expect_rcode: 200
+        result: "{{ status_result }}"
+    
+    - block:
+        - set_fact:
+            final_result: "{{ final_result | combine({ 'msg': 'Job is in input processing or still running: status=' ~ status_result.json.status }) }}"
+        - fail:
+            msg: "{{ final_result }}"
+      when:
+        - status_result.status == 200
+        - status_result.json.status != 'OUTPUT'
+
+    - name: Match the return code of the submitted job
+      set_fact:
+        job_matched_retcode: "{{ status_result.json.retcode | regex_search(job_search_rc, multiline=True, ignorecase=True) }}"
+        final_result: "{{ final_result | combine({ 'job_retcode': status_result.json.retcode }) }}"
+
+    - block:
+        - set_fact:
+            final_result: "{{ final_result | combine({ 'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+        - fail:
+            msg: "{{ final_result }}"
+      when:
+        - job_search_logic == 'AND'
+        - job_matched_retcode == ""
+
+- block:
+    - name: Query and match the contents in spool files of the submitted job if 'job_search_output' is defined
+      uri:
+        url: "{{ job_files_url }}"
+        method: GET
+        return_content: yes
+        headers:
+          X-IBM-Target-System: "{{ inventory_hostname }}"
+          X-CSRF-ZOSMF-HEADER: "TEST"
+        user: "{{ zmf_user }}"
+        password: "{{ zmf_password }}"
+        client_cert: "{{ zmf_crt }}"
+        client_key: "{{ zmf_key }}"
+        force_basic_auth: yes
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: files_result
+      failed_when: no
+
+    - name: Handle request error if needed
+      include_tasks: handle_request_error.yml
+      vars:
+        expect_rcode: 200
+        result: "{{ files_result }}"
+
+    - name: Match the contents in spool files of the submitted job if 'job_search_output' is defined
+      set_fact:
+        job_matched_contents: {}
+
+    - include_tasks: query_each_spool_file.yml
+      when: (job_search_output_ddname is undefined) or (job_search_output_ddname == []) or (file_item.ddname in job_search_output_ddname)
+      loop: "{{ files_result.json }}"
+      loop_control:
+        label: "{{ file_item.ddname }}"
+        loop_var: file_item
+    
+    - set_fact:
+        final_result: "{{ final_result | combine({ 'job_matched_contents': job_matched_contents }) }}"
+
+    - block:
+        - set_fact:
+            final_result: "{{ final_result | combine({ 'msg': 'Job is not completed. The return code is matched but no matched output content is found.' }) }}"
+        - fail:
+            msg: "{{ final_result }}"
+      when: 
+        - job_search_logic == 'AND'
+        - job_matched_contents == {}
+    
+    - block:
+        - set_fact:
+            final_result: "{{ final_result | combine({ 'msg': 'Job is not completed. The return code is mismatched and no matched output content is found.' }) }}"
+        - fail:
+            msg: "{{ final_result }}"
+      when: 
+        - job_search_logic == 'OR'
+        - job_matched_retcode == ""
+        - job_matched_contents == {}
+
+    - block:
+        - set_fact:
+            final_result: "{{ final_result | combine({ 'msg': 'Job is completed successfully. Either the return code is matched or the matched output contents are found.' }) }}"
+      when: 
+        - job_search_logic == 'OR'
+        - (job_matched_retcode != "" and job_matched_contents == {}) or (job_matched_retcode == "" and job_matched_contents != {})
+
+    - block:
+        - set_fact:
+            final_result: "{{ final_result | combine({ 'msg': 'Job is completed successfully. The return code is matched and the matched output contents are found.' }) }}"
+      when: 
+        - job_matched_retcode != ""
+        - job_matched_contents != {}
+  when: job_search_output is not undefined
+
+
+- block:
+    - name: Check and return the final result if 'job_search_output' is not defined
+      set_fact:
+        final_result: "{{ final_result | combine({ 'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+    - fail:
+        msg: "{{ final_result }}"
+  when: 
+    - job_search_output is undefined
+    - job_matched_retcode == ""
+
+- block:
+    - name: Check and return the final result if 'job_search_output' is not defined
+      set_fact:
+        final_result: "{{ final_result | combine({ 'msg': 'Job is completed successfully. The return code is matched.' }) }}"
+  when: 
+    - job_search_output is undefined
+    - job_matched_retcode != ""
+
+- name: Check and return the final result
+  debug: var=final_result

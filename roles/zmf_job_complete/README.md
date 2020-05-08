@@ -23,13 +23,22 @@ The following variables are defined by role. For the default values, see [defaul
 - job_user_correlator
 - job_symbols
     `{k1: v1, k2: v2}`
-- job_expect_rc
-- job_expect_output
-- job_expect_output_ddname
-- job_expect_logic
-  - AND
+
+- job_search_rc
+  - string/regex (default='CC 0000')
+- job_search_output
+  - string/regex
+- job_search_output_ddname
+  - array
+- job_search_output_insensitive
+  - True (default)
+  - False
+- job_search_output_maxreturnsize
+  - int (default=100)
+- job_search_logic
+  - AND (default)
   - OR
-- ~~job_expect~~
+- ~~job_search~~
 - `complete_check_times` - The maximum number of time that is used for periodic checks of the workflow status.
 - `complete_check_delay` - The interval time between periodic checks of the workflow status.
 
