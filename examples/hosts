@@ -8,7 +8,9 @@ SY1 ansible_host=hostname_of_zos_system
 [workflow:children]
 zsystems
 
-# this group is used in sample_cpm_*.yml
+# this group is used in sample_cpm_*.yml. If hostname is changed
+# here, please create "host_name".yml file under host_vars and specifiy
+# host specific variables as shown in example zosmf1.yml
 [cpm]
-zosmf1 zmf_host=pev065.pok.ibm.com zmf_port=443
-zosmf2 zmf_host=zosmf2.pok.ibm.com zmf_port=443
+zosmf1 zmf_host=zosmf1.ibm.com zmf_port=443
+zosmf2 zmf_host=zosmf2.ibm.com zmf_port=443

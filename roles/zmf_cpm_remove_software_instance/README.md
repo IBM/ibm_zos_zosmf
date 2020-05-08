@@ -6,11 +6,11 @@ The collection [ibm_zos_zosmf](../../README.md) provides an [Ansible role](https
 
 The variables used by the role are listed below:
 
-- zmf_host: z/OSMF host name
-- zmf_port: z/OSMF port number
-- zmf_user: z/OSMF username
-- zmf_password: z/OSMF password
-- instance_info_json_path: Path to the json file that holds provisioned instance information. Specify the file name that is generated when zmf_cpm_provision_software_service role was performed.
+- zmf_host: z/OSMF host name, specified via inventory file
+- zmf_port: z/OSMF port number, specified via inventory file
+- zmf_user: z/OSMF username, prompted when playbook is run
+- zmf_password: z/OSMF password, prompted when playbook is run
+- instance_info_json_path: Path to the json file that holds provisioned instance information. Specify the file name that is generated when `zmf_cpm_provision_software_service` role was performed.
 
 ## Requirements
 
