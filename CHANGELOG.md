@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - changed role names: `zmf_cpm_provision_software_service`, `zmf_cpm_manage_software_instance`, `zmf_cpm_remove_software_instance`
 
+## [v1.0.3](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.3) - 2020-04-02
+### Fixed
+- cleanup ansible_lint checks
+- cleanup sanity test checks
+
 ## [v1.0.2](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.2) - 2020-03-30
 ### Fixed
 - cleanup ansible_lint checks
