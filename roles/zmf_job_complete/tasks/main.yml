@@ -6,11 +6,14 @@
   block:
     - set_fact:
         job_search_rc: "{{ job_search_rc | default('CC 0000') }}"
-        job_search_logic: "{{ job_search_logic | default('AND') }}"
+        job_search_logic: "{{ job_search_logic | default('AND') | upper}}"
+        job_jcl_location: "{{ job_jcl_location | upper}}"
+        job_internal_reader_mode: "{{ job_internal_reader_mode | upper }}"
         user: "{{ zmf_user | default() }}" 
         password: "{{ zmf_password | default() }}"
         crt: "{{ zmf_crt | default() }}"
         key: "{{ zmf_key | default() }}"
+        request_headers: {}
         final_result: {}
 
     - fail:
@@ -28,10 +31,9 @@
       fail:
         msg: 'Please define optional variable: job_jcl_location as one of below values: local, dataseet, uss'
       when: 
-        - job_jcl_location is defined
-        - job_jcl_location != "local"
-        - job_jcl_location != "dataset"
-        - job_jcl_location != "uss"
+        - job_jcl_location != "LOCAL"
+        - job_jcl_location != "DATASET"
+        - job_jcl_location != "USS"
 
 - name: Preparae JCL 
   block:
@@ -39,13 +41,13 @@
       set_fact: 
         request_body_format: "raw"
         request_body: "{{ lookup('file', job_jcl_src) }}"
-      when: job_jcl_location is not defined or job_jcl_location == "local"
+      when: job_jcl_location == "LOCAL"
 
     - name: Use data set {{ job_jcl_src }} on {{ inventory_hostname }} as the JCL
       set_fact: 
         request_body_format: "json"
         data_set: "//'{{ job_jcl_src | trim }}'"
-      when: job_jcl_location is defined and job_jcl_location == "dataset"
+      when: job_jcl_location == "DATASET"
 
     - set_fact:
         request_body: '{ "file": "{{ data_set }}" }'
@@ -55,13 +57,13 @@
       set_fact: 
         request_body_format: "json"
         request_body: "{ 'file': '{{ job_jcl_src | trim }}' }"
-      when: job_jcl_location is defined and job_jcl_location == "uss"
+      when: job_jcl_location == "USS"
 
 - name: Prepare headers
   block:
     - name: Set CSRF header
       set_fact:
-        request_headers: "{{ request_headers | default({}) | combine({ 'X-CSRF-ZOSMF-HEADER': 'JOB' }) }}"
+        request_headers: "{{ request_headers | combine({ 'X-CSRF-ZOSMF-HEADER': 'JOB' }) }}"
 
     - name: Set target system as {{ inventory_hostname }}
       set_fact: 
@@ -97,15 +99,13 @@
         request_headers: "{{ request_headers | combine({ 'Content-Type': 'text/plain' }) }}"
       when: 
         - request_body_format == "raw" 
-        - job_internal_reader_mode is not defined or job_internal_reader_mode == "TEXT"
+        - job_internal_reader_mode == "TEXT"
 
     - name: Set Content-Type to "application/octet-stream"
       set_fact:
         request_headers: "{{ request_headers | combine({ 'Content-Type': 'application/octet-stream' }) }}"
       when: 
         - request_body_format == "raw"
-        # TODO: ignore case
-        - job_internal_reader_mode is defined
         - job_internal_reader_mode == "BINARY" or job_internal_reader_mode == "RECORD"
     
     - name: Set user-correlator to {{ job_user_correlator }}
@@ -117,7 +117,7 @@
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-IBM-JCL-Symbol-' ~ item.key: item.value}) }}"
       loop: "{{ job_jcl_symbols | dict2items }}"
-      when: job_jcl_symbols is defined and job_jcl_symbols != "" and item.key != ""
+      when: job_jcl_symbols != "" and item.key != ""
 
 - name: Submit job to {{ inventory_hostname }}
   block:
