@@ -15,12 +15,6 @@
         key: "{{ zmf_key | default() }}"
         request_headers: {}
         final_result: {}
-
-    - fail:
-        msg: "Invalid argument: 'job_search_logic'. The value must be one of: AND, OR"
-      when:
-        - job_search_logic != "AND"
-        - job_search_logic != "OR"
     
     - name: Fail if mandantory variable - job_jcl_src is not defined 
       fail:
@@ -35,7 +29,21 @@
         - job_jcl_location != "DATASET"
         - job_jcl_location != "USS"
 
-- name: Preparae JCL 
+    - name: Fail if optional variable - either zmf_user/zmf_password or zmf_crt/zmf_key are required
+      fail:
+        msg: "Please define either zmf_user/zmf_password or zmf_crt/zmf_key."
+      when:
+        - user == "" or password == ""
+        - crt == "" or key == ""
+
+    - name: Fail if optional variable - job_search_logic is defined with other values than "AND", "OR"
+      fail:
+        msg: "Please define optional variable: job_search_logic as one of below values: AND, OR"
+      when:
+        - job_search_logic != "AND"
+        - job_search_logic != "OR"
+
+- name: Prepare JCL 
   block:
     - name: Use local file {{ job_jcl_src }} as the JCL
       set_fact: 
@@ -138,7 +146,8 @@
         status_code: "201"
       delegate_to: localhost
       register: submit_result
-    
+      failed_when: no
+
     - name: Handle request error if needed
       include_tasks: handle_request_error.yml
       vars:
@@ -212,10 +221,10 @@
         headers:
           X-IBM-Target-System: "{{ inventory_hostname }}"
           X-CSRF-ZOSMF-HEADER: "TEST"
-        user: "{{ zmf_user }}"
-        password: "{{ zmf_password }}"
-        client_cert: "{{ zmf_crt }}"
-        client_key: "{{ zmf_key }}"
+        user: "{{ user }}"
+        password: "{{ password }}"
+        client_cert: "{{ crt }}"
+        client_key: "{{ key }}"
         force_basic_auth: yes
         status_code: "200"
         validate_certs: no

@@ -9,10 +9,10 @@
     headers:
       X-IBM-Target-System: "{{ inventory_hostname }}"
       X-CSRF-ZOSMF-HEADER: "TEST"
-    user: "{{ zmf_user }}"
-    password: "{{ zmf_password }}"
-    client_cert: "{{ zmf_crt }}"
-    client_key: "{{ zmf_key }}"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    client_cert: "{{ crt }}"
+    client_key: "{{ key }}"
     force_basic_auth: yes
     status_code: "200"
     validate_certs: no
@@ -26,4 +26,12 @@
     result: "{{ record_result }}"
 
 - set_fact:
-    job_matched_contents: "{{ job_matched_contents | combine({ file_item.ddname: record_result.content }) }}"
+    matched_list: "{{ record_result.content | regex_findall('.*\n') }}"
+    matched_list_parse: []
+
+- set_fact:
+    matched_list_parse: "{{ matched_list_parse | union([ item | regex_replace('\n', '') ]) }}"
+  loop: "{{ matched_list }}"
+- debug: var=matched_list_parse
+- set_fact:
+    job_matched_contents: "{{ job_matched_contents | combine({ file_item.ddname: matched_list_parse }) }}"
