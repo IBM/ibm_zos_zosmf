@@ -7,7 +7,7 @@ The available role variables are described as follows.
 
 The following variables are defined by role. For the default values, see [defaults/main.yml](defaults/main.yml).
 
-- job_jcl_path
+- job_jcl_src
 - job_jcl_location
   - LOCAL(default)
   - DATASET

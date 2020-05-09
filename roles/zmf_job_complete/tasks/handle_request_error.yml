@@ -2,19 +2,23 @@
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 ---
-- fail:
-    msg: "HTTP Error {{ result.status }}: category={{ result.json.category }}, rc={{ result.json.rc }}, reason={{ result.json.reason }}, message={{ result.json.message }}"
+- name: Fail when HTTP error {{ result.status }}
+  fail:
+    msg: "HTTP Error {{ result.status }}: category={{ result.json.category }}, rc={{ result.json.rc }}, \
+          reason={{ result.json.reason }}, message={{ result.json.message }}"
   when:
     - result.status != expect_rcode
     - ('json' in result) and ('message' in result.json)
 
-- fail:
+- name: Fail when HTTP error {{ result.status }}
+  fail:
     msg: "HTTP Error {{ result.status }}: {{ result.content }}"
   when:
     - result.status != expect_rcode
-    - result.content != ""
+    - result.content != empty_str
 
-- fail:
+- name: Fail when HTTP error {{ result.status }}
+  fail:
     msg: "HTTP Error {{ result.status }}: {{ result.msg }}"
   when:
     - result.status != expect_rcode

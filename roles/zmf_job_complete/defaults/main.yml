@@ -1,8 +1,9 @@
 # Copyright (c) IBM Corporation 2020 
 job_jcl_location: 'LOCAL'
-job_jcl_symbols: {}
 job_internal_reader_mode: 'TEXT'
-complete_check_times: 2
-complete_check_delay: 5
+job_search_logic: 'AND'
+job_search_rc: 'CC 0000'
 job_search_output_insensitive: True
 job_search_output_maxreturnsize: 100
+complete_check_times: 10
+complete_check_delay: 5

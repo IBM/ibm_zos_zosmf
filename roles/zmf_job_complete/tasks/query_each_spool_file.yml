@@ -2,8 +2,10 @@
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 ---
-- uri:
-    url: "{{ file_item['records-url'] }}?mode=text&research={{ job_search_output | urlencode }}&insensitive={{ job_search_output_insensitive }}&maxreturnsize={{ job_search_output_maxreturnsize }}"
+- name: Send https request to query the contents of a job spool file
+  uri:
+    url: "{{ file_item['records-url'] }}?mode=text&research={{ job_search_output | urlencode }}\
+          &insensitive={{ job_search_output_insensitive }}&maxreturnsize={{ job_search_output_maxreturnsize }}"
     method: GET
     return_content: yes
     headers:
@@ -25,13 +27,16 @@
     expect_rcode: 200
     result: "{{ record_result }}"
 
-- set_fact:
+- name: Parse the matched contents
+  set_fact:
     matched_list: "{{ record_result.content | regex_findall('.*\n') }}"
     matched_list_parse: []
 
-- set_fact:
+- name: Parse the matched contents
+  set_fact:
     matched_list_parse: "{{ matched_list_parse | union([ item | regex_replace('\n', '') ]) }}"
   loop: "{{ matched_list }}"
-- debug: var=matched_list_parse
-- set_fact:
+
+- name: Parse the matched contents
+  set_fact:
     job_matched_contents: "{{ job_matched_contents | combine({ file_item.ddname: matched_list_parse }) }}"
