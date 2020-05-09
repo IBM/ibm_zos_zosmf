@@ -7,38 +7,42 @@ The available role variables are described as follows.
 
 The following variables are defined by role. For the default values, see [defaults/main.yml](defaults/main.yml).
 
-- *job_jcl_path:
-- job_jcl_location:
-  - **local**
-  - data_set
+- job_jcl_path
+- job_jcl_location
+  - LOCAL(default)
+  - DATASET
+  - USS
 - job_internal_reader_class
 - job_internal_reader_recfm
-  - F
-  - v  
 - job_internal_reader_lrecl
 - job_interanl_reader_mode
-  - TEXT
+  - TEXT(default)
   - BINARY
   - RECORD
 - job_user_correlator
 - job_symbols
-    `{k1: v1, k2: v2}`
-
+    dictionary
+    ```json
+    {
+      "symbol1": "value1",
+      "symbol2": "value2"
+    }
+    ```
 - job_search_rc
-  - string/regex (default='CC 0000')
+    string/regex (default='CC 0000')
 - job_search_output
-  - string/regex
+    string/regex
 - job_search_output_ddname
-  - array
+    array
+    `["JESMSGLG","JESJCL"]`
 - job_search_output_insensitive
   - True (default)
   - False
 - job_search_output_maxreturnsize
-  - int (default=100)
+    int (default=100)
 - job_search_logic
   - AND (default)
   - OR
-- ~~job_search~~
 - `complete_check_times` - The maximum number of time that is used for periodic checks of the workflow status.
 - `complete_check_delay` - The interval time between periodic checks of the workflow status.
 
