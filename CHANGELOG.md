@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v1.0.3](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.3) - 2020-05-10
+### Fixed
+- changed role names: `zmf_cpm_provision_software_service`, `zmf_cpm_manage_software_instance`, `zmf_cpm_remove_software_instance`
+
 ## [v1.0.3](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.3) - 2020-04-02
 ### Fixed
 - cleanup ansible_lint checks
@@ -21,4 +25,4 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial `ibm_zos_zosmf` collection
 - add modules: `workflow`
-- add roles: `complete_workflow`, `provision_software_service`, `manage_software_instance`, `remove_software_instance`
+- add roles: `complete_workflow`, `zmf_cpm_provision_software_service`, `zmf_cpm_manage_software_instance`, `zmf_cpm_remove_software_instance`

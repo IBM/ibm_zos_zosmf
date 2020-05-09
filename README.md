@@ -10,7 +10,9 @@ The collection intends to allow Ansible to drive z/OS operation and configuratio
 ### Configure the target z/OS systems and z/OSMF server
 The target z/OS systems should be configured as the target hosts (managed nodes) in your playbook. It is not necessary for a z/OSMF server to be installed on every target z/OS system. However, a z/OSMF server must be installed and active on *at least one* z/OS system in the same sysplex.
 
-Information about the z/OSMF server must be configured in the `vars` file, such as the hostname, port number, and authentication info. Either username and password or client-certificate authorization can be used for authenticating with the z/OSMF server.  If both methods are specified, the system attempts to use client-certificate authentication.
+For workflow related role, information about the z/OSMF server must be configured in the `vars` file, such as the hostname, port number, and authentication info. Either username and password or client-certificate authorization can be used for authenticating with the z/OSMF server.  If both methods are specified, the system attempts to use client-certificate authentication.
+
+For Cloud Provisioning and Management related roles, information about z/OSMF server must be configured in the inventory 'hosts' file, such as hostname, port number. The authentication information to connect to the z/OSMF is provided when running playbook or it will be prompted during playbook run.
 
 
 ## Contents
@@ -21,9 +23,15 @@ Information about the z/OSMF server must be configured in the `vars` file, such 
         - [complete_workflow](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md#Roles)
 - [Provision and manage z/OS software instances](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md)
     - roles:
+<<<<<<< HEAD
+        - [zmf_cpm_provision_software_service](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
+        - [zmf_cpm_manage_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
+        - [zmf_cpm_remove_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
+=======
         - [provision_software_service](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
         - [manage_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
         - [remove_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
+>>>>>>> master
 
 
 ## Installation
@@ -76,7 +84,7 @@ For local build and installation, you can clone the Git repository, build the co
     ```
 
     The example output looks like this:
-    
+
     ```
     Process install dependency map
     Starting collection install process

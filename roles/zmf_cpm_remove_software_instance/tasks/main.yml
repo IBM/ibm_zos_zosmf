@@ -2,7 +2,7 @@
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 ---
-# tasks file for renove_software_instance
+# tasks file for zmf_cpm_remove_software_instance
 
 - name: Read from json file path
   set_fact:
@@ -22,7 +22,7 @@
     status_code: 204, 404
     validate_certs: no
     body_format: json
-    body: '{}'
+    body: "{}"
   delegate_to: localhost
 
 - name: Clean instance record file

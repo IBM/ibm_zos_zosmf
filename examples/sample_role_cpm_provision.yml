@@ -1,7 +1,7 @@
 # Copyright (c) IBM Corporation 2020
 
-- name: test role for provision_software_service
-  hosts: cpm # use to match group_vars/cpm.yml
+- name: test role for zmf_cpm_provision_software_service
+  hosts: zosmf1 # need to match host nick name specified in hosts inventory file
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
@@ -17,7 +17,7 @@
       private: yes
   tasks:
     - include_role:
-        name: provision_software_service
+        name: zmf_cpm_provision_software_service
       vars:
         cpm_template_name: "<fill-me-template-name>"   # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
         domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
