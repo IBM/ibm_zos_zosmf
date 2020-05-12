@@ -5,10 +5,12 @@
 # The value for property zmf_user is your username of z/OSMF.
 # The value for property zmf_password is the password of your username of z/OSMF.
 
-zmf_host: sample.ibm.com
-zmf_port: 443
-zmf_user: user1
-zmf_password: password1
+zmf_host: your.host.name
+zmf_port: port_number
+
+# `zmf_user` and `zmf_password` are prompted to input when running a playbook
+# zmf_user:
+# zmf_password:
 
 # Client certificate is supported by specifying the location of client certificate and key files on control node via zmf_crt and zmf_key.
 # If below variables are specified, then the module and role will use client certificate to login instead of using username/password even those variables are specified.

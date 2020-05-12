@@ -40,13 +40,11 @@ zosmf1 zmf_host=hostname_of_zos_system zmf_port=zosmf_port
 ### Group vars
 You can supply group variables in either the inventory file or the separate variable file. This directory contains some example variable files in the directory [group_vars](group_vars/).
 
-- [all.yml](group_vars/all.yml) contains the variables for all groups of the target z/OS systems:
+- [workflow.yml](group_vars/workflow.yml) contains the variables for system group `workflow`:
    - `zmf_host` - Hostname of the z/OSMF server.
    - `zmf_port` - Port number of the z/OSMF server.
-   - `zmf_user` - User name to be used for authenticating with z/OSMF server (see note).
-   - `zmf_password` - Password to be used for authenticating with z/OSMF server (see note).
 
-   **NOTE**: This is an easy example to use username and password for authenticating with z/OSMF server. Actually, client-certificate authorization is recommended. You can use `zmf_crt` and `zmf_key` to specify the certificate chain file and key file to be used for HTTPS client authentication.
+   **NOTE**: This is an easy example to use username and password for authenticating with z/OSMF server. `zmf_user` and `zmf_password` are prompted to input when running a playbook. Actually, client-certificate authorization is recommended. You can use `zmf_crt` and `zmf_key` to specify the certificate chain file and key file to be used for HTTPS client authentication.
 
 ### Host vars
 You can supply host specific variables in either the inventory file or the seperare host specific variable file. T[host_vars](host_vars/) directory contains some example variables files matching the example host names used in the sample "hosts" inventory.
@@ -59,20 +57,20 @@ You can supply host specific variables in either the inventory file or the seper
 ## Sample playbooks
 The sections that follow explain how to use the sample playbooks.
 
-### [sample_role_complete_workflow.yml](sample_role_complete_workflow.yml)
-This sample playbook shows how to invoke role [complete_workflow](../roles/complete_workflow/README.md) to complete a z/OS workflow on the target z/OS systems via z/OSMF. To run the sample playbook, below preparation works are required:
+### [sample_role_workflow_complete.yml](sample_role_workflow_complete.yml)
+This sample playbook shows how to invoke role [zmf_workflow_complete](../roles/zmf_workflow_complete/README.md) to complete a z/OS workflow on the target z/OS systems via z/OSMF. To run the sample playbook, below preparation works are required:
 
-- In this sample playbook, the workflow definition file [workflow_sample_automation_steps.xml](files/workflow_sample_automation_steps.xml) is used to create the workflow instance. You need to manually upload it to the z/OS file system. For example, you can upload it to the directory `/var/zosmf/workflow_def/`. Then modify the value of variable `zos_workflow_file` in the sample playbook to refer to the location of the workflow definition file.
+- In this sample playbook, the workflow definition file [workflow_sample_automation_steps.xml](files/workflow_sample_automation_steps.xml) is used to create the workflow instance. You need to manually upload it to the z/OS file system. For example, you can upload it to the directory `/var/zosmf/workflow_def/`. Then modify the value of variable `workflow_file` in the sample playbook to refer to the location of the workflow definition file.
 
    ```yaml
    tasks:
    - include_role:
-         name: complete_workflow
+         name: zmf_workflow_complete
       vars:
          force_complete: False
-         zos_workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}"
+         workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}"
          # modify the location of the workflow definition file on the z/OS file system
-         zos_workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
+         workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
    ```
 
 - In the inventory file, the nickname `SY1` for the target z/OS system, which is configured as managed node, is used to create the workflow instance. You can modify it to refer to your own z/OS system. You need to ensure the z/OS system `SY1` or your own z/OS system is configured in z/OSMF **Systems** task.
@@ -203,8 +201,8 @@ This sample playbook shows how to install a web application on a provisioned CIC
 
 
 ## Run the playbooks
-The sample playbooks must be run from the directory `examples` of the installed collection. For example:
-`~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/examples/`
+The sample playbooks must be run from the directory `playbooks` of the installed collection. For example:
+`~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/`
 
 You can use the [ansible-playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) command to run the sample playbooks as follows:
 

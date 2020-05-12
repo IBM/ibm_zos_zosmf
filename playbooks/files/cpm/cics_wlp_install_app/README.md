@@ -24,10 +24,10 @@ None
 
 ## Usage
 
-Please refer to directory [examples](../../examples/README.md) for various example playbooks.
+Please refer to directory [playbooks](../../playbooks/README.md) for various example playbooks.
 
 ## Examples
 
-Please refer to the test playbook [sample_role_deploy_cics_application.yml](../../../sample_role_deploy_cics_application.yml) in the directory [/examples](../../../README.md).
+Please refer to the test playbook [sample_role_deploy_cics_application.yml](../../../sample_role_deploy_cics_application.yml) in the directory [/playbooks](../../../README.md).
 
 ## Copyright

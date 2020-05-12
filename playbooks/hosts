@@ -1,0 +1,9 @@
+# Copyright (c) IBM Corporation 2020
+
+# this group is used in sample_role_complete_workflow.yml
+[workflow]
+SYS1
+
+# this group is used in sample_cpm_*.yml
+[cpm]
+CPM1 zmf_host=your.host.name zmf_port=port_number

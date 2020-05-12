@@ -2,8 +2,6 @@
 
 zmf_host: pev090.pok.ibm.com
 zmf_port: 443
-zmf_user: user1
-zmf_password: password1
 zmf_crt: ./user1-pev090.crt
 zmf_key: ./user1-pev090.key
 

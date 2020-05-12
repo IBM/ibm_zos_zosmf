@@ -1,0 +1,27 @@
+# Copyright (c) IBM Corporation 2020 
+
+# This sample playbook demonstrates using role `zmf_workflow_complete` to complete a z/OS workflow.
+# Example:
+# ansible-playbook -i hosts sample_role_workflow_complete.yml
+
+- name: sample of completing a z/OS workflow
+  hosts: workflow
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username (skip if zmf_crt and zmf_key are supplied)"
+      private: no
+    - name: zmf_password
+      prompt: "Enter your zOSMF password (skip if zmf_crt and zmf_key are supplied)"
+      private: yes
+  tasks:
+    # create and start a workflow, then check the status
+    - include_role:
+        name: zmf_workflow_complete
+      vars:
+        force_complete: False
+        workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}"
+        workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
+    - debug: var=result

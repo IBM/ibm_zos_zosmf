@@ -6,16 +6,16 @@ The collection [ibm_zos_zosmf](../../README.md) provides a directory of [Ansible
 The sections that follow explain how to use the test playbooks. 
 
 ### Test modules
-- [test_module_compare.yml](test_module_compare.yml) - Determine whether the workflow instance already exists and includes the same definition file, variables and properties.
+- [test_module_workflow_compare.yml](test_module_workflow_compare.yml) - Determine whether a workflow instance with the given name already exists and includes the same definition file, variables and properties.
 
-- [test_module_start.yml](test_module_start.yml) - Create the workflow instance if it does not exist and start it.
+- [test_module_workflow_start.yml](test_module_workflow_start.yml) - Create the workflow instance if it does not exist and start it.
 
-- [test_module_check.yml](test_module_check.yml) - Check the status of the workflow instance.
+- [test_module_workflow_check.yml](test_module_workflow_check.yml) - Check the status of the workflow instance.
 
-- [test_module_delete.yml](test_module_delete.yml) - Delete the workflow instance.
+- [test_module_workflow_delete.yml](test_module_workflow_delete.yml) - Delete the workflow instance.
 
 ### Test roles
-- [test_role_complete_workflow.yml](test_role_complete_workflow.yml) - Complete the workflow instance forcibly or idempotently:
+- [test_role_workflow_complete.yml](test_role_workflow_complete.yml) - Complete the workflow instance forcibly or idempotently:
   - `forcibly (force_complete: True)` - Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.
   - `idempotently (force_complete: False)` - Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.
 
@@ -85,8 +85,6 @@ You can supply group variables in either the inventory file or the separate vari
 ```
 zmf_host: XXXXXXXX
 zmf_port: XXXXXXXX
-zmf_user: XXXXXXXX
-zmf_password: XXXXXXXX
 zmf_crt: XXXXXXXX
 zmf_key: XXXXXXXX
 variables: {XXXXXXXX}
@@ -94,13 +92,11 @@ variables: {XXXXXXXX}
 
 - `zmf_host` - Hostname of the z/OSMF server. This value is required.
 - `zmf_port` - Port number of the z/OSMF server.
-- `zmf_user` - User name to be used for authenticating with z/OSMF server (see note).
-- `zmf_password` - Password to be used for authenticating with z/OSMF server (see note).
 - `zmf_crt` - Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication (see note).
 - `zmf_key` - Location of the PEM-formatted file with your private key to be used for HTTPS client authentication (see note). 
 - `variables` - Values of one or more workflow variables (in JSON format).
 
-**NOTE**: You must specify an authentication method - either `zmf_user` and `zmf_password` or `zmf_crt` and `zmf_key`. If both methods are specified, `zmf_crt` and `zmf_key` is used.
+**NOTE**: `zmf_user` and `zmf_password` are prompted to input when running a playbook. You must specify an authentication method - either `zmf_user` and `zmf_password` or `zmf_crt` and `zmf_key`. If both methods are specified, `zmf_crt` and `zmf_key` is used.
 
 
 ## Run the playbooks
@@ -110,11 +106,11 @@ The test playbooks must be run from the directory `tests/workflow` of the instal
 You can use the [ansible-playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html) command to run the test playbooks as follows:
 
 ```
-ansible-playbook test_module_compare.yml
-ansible-playbook test_module_start.yml
-ansible-playbook test_module_check.yml
-ansible-playbook test_module_delete.yml
-ansible-playbook test_role_complete_workflow.yml
+ansible-playbook test_module_workflow_compare.yml
+ansible-playbook test_module_workflow_start.yml
+ansible-playbook test_module_workflow_check.yml
+ansible-playbook test_module_workflow_delete.yml
+ansible-playbook test_role_workflow_complete.yml
 ```
 
 

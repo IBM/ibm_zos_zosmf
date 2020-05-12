@@ -33,7 +33,10 @@ tags:
   - z
   - zos
   - z_os
+  - mvs
+  - zos_management_facility
   - zosmf
+  - ibm_zos_zosmf
   - workflow
   - cpm
   - cloud_provisioning
