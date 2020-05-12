@@ -21,4 +21,4 @@
     group: root
     owner: root
   connection: local
-  when: target_dir.stat.exists == false
+  when: not target_dir.stat.exists

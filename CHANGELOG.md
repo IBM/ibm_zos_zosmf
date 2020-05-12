@@ -1,9 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [v1.0.3](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.3) - 2020-05-10
+## [v2.0.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.0) - 2020-05-20
+### Added
+- add roles: `zmf_job_complete`
+### Refined
+- refine and rename module `workflow` to `zmf_workflow`
+- rename role `complete_workflow` to `zmf_workflow_complete`
+- rename role `provision_software_service` to `zmf_cpm_provision_software_service`
+- rename role `manage_software_instance` to `zmf_cpm_manage_software_instance`
+- rename role `remove_software_instance` to `zmf_cpm_remove_software_instance`
 ### Fixed
-- changed role names: `zmf_cpm_provision_software_service`, `zmf_cpm_manage_software_instance`, `zmf_cpm_remove_software_instance`
+- cleanup sanity test checks
+- add tags
 
 ## [v1.0.3](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.3) - 2020-04-02
 ### Fixed
@@ -25,4 +34,4 @@ All notable changes to this project will be documented in this file.
 ### Added
 - initial `ibm_zos_zosmf` collection
 - add modules: `workflow`
-- add roles: `complete_workflow`, `zmf_cpm_provision_software_service`, `zmf_cpm_manage_software_instance`, `zmf_cpm_remove_software_instance`
+- add roles: `complete_workflow`, `provision_software_service`, `manage_software_instance`, `remove_software_instance`

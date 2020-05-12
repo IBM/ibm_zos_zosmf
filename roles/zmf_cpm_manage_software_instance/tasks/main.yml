@@ -51,7 +51,7 @@
       retries: "{{ api_polling_retry_count }}"
       delay: "{{ api_polling_interval_seconds }}"
 
-    - name: "Display privision failure information"
+    - name: "Display provision failure information"
       fail:
         msg: "Action <{{ instance_action_name }}> progress status: {{ action_status_result.json.state }} "
       when: action_status_result.json.state == "failed"

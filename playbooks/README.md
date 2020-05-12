@@ -21,24 +21,23 @@ collections_paths = ../../../../../collections
 This directory contains an example Ansible inventory [hosts](hosts), which is used to manage the target z/OS systems (managed nodes). Information is specified in the following format:
 
 ```yml
-[zsystems]
-SY1 ansible_host=hostname_of_zos_system
+[workflow]
+SY1
 [cpm]
 zosmf1 zmf_host=hostname_of_zos_system zmf_port=zosmf_port
 ```
 
-- `SY1` - Nickname for the target z/OS system. You can modify it to refer to your own z/OS system.
-- `ansible_host` - Hostname of the target z/OS system. You can modify it to refer to your own z/OS system, for example: `ansible_host=pev076.pok.ibm.com`
+- `workflow` - host grouping for z/OSMF Workflows
+   - `SY1` - Nickname for the target z/OS system. You can modify it to refer to your own z/OS system.
 - `cpm` - host grouping for Cloud Provisioning & Management
-- `zosmf1` - Host nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in "Group vars".
-- `zmf_host` - Hostname of the target z/OS system where z/OSMF is running. You need to specify the correct host name to reach out to z/OSMF end point, for example: `zmf_host=pev076.pok.ibm.com`
-- `zmf_port` - Port number associated with the z/OSMF server on the target z/OS system. You need to specify the correct port number to reach out to z/OSMF end point, for example: `zmf_port=443`
-
+   - `zosmf1` - Host nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in "Group vars".
+   - `zmf_host` - Hostname of the target z/OS system where z/OSMF is running. You need to specify the correct host name to reach out to z/OSMF end point, for example: `zmf_host=pev076.pok.ibm.com`
+   - `zmf_port` - Port number associated with the z/OSMF server on the target z/OS system. You need to specify the correct port number to reach out to z/OSMF end point, for example: `zmf_port=443`
 
 *Reference Link:* [How to build your inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#intro-inventory)
 
 ### Group vars
-You can supply group variables in either the inventory file or the separate variable file. This directory contains some example variable files in the directory [group_vars](group_vars/).
+You can supply group variables in either the inventory file or the separate group specific variable file. This directory contains some example variable files in the directory [group_vars](group_vars/).
 
 - [workflow.yml](group_vars/workflow.yml) contains the variables for system group `workflow`:
    - `zmf_host` - Hostname of the z/OSMF server.
@@ -47,8 +46,9 @@ You can supply group variables in either the inventory file or the separate vari
    **NOTE**: This is an easy example to use username and password for authenticating with z/OSMF server. `zmf_user` and `zmf_password` are prompted to input when running a playbook. Actually, client-certificate authorization is recommended. You can use `zmf_crt` and `zmf_key` to specify the certificate chain file and key file to be used for HTTPS client authentication.
 
 ### Host vars
-You can supply host specific variables in either the inventory file or the seperare host specific variable file. T[host_vars](host_vars/) directory contains some example variables files matching the example host names used in the sample "hosts" inventory.
-- [zosmf1.yml](host_vars/zosmf1.yml) contains variables for z/OSMF host 'zosmf1' in `cpm` group:
+You can supply host variables in either the inventory file or the separate host specific variable file. This directory contains some example variables files in the directory [host_vars](host_vars/) matching the example host names used in the sample inventory [hosts](hosts).
+
+- [zosmf1.yml](host_vars/zosmf1.yml) contains variables for z/OSMF host 'zosmf1' in system group `cpm`:
   - `instance_record_dir` - File path in local system where the provision result (in json) will be stored.
   - `api_polling_retry_count` - Max times of status polling before task fail and exit.
   - `api_polling_interval_seconds` - Interval in seconds between each `api_polling_retry_count` polling.
@@ -76,8 +76,8 @@ This sample playbook shows how to invoke role [zmf_workflow_complete](../roles/z
 - In the inventory file, the nickname `SY1` for the target z/OS system, which is configured as managed node, is used to create the workflow instance. You can modify it to refer to your own z/OS system. You need to ensure the z/OS system `SY1` or your own z/OS system is configured in z/OSMF **Systems** task.
 
    ```
-   [zsystems]
-   SY1 ansible_host=hostname_of_zos_system
+   [workflow]
+   SY1
    ```
 
 ### [sample_role_cpm_manage_instance.yml](sample_role_cpm_manage_instance.yml)
@@ -197,7 +197,7 @@ This sample playbook shows how to install a web application on a provisioned CIC
         application_path: "{{ application_path_input }}" # The local absolute file path to the application binary file
    ```
 
-**NOTE**: For CP&M roles, the 'hosts' inventory file needs to be updated to identify the target z/OSMF end points.
+**NOTE**: For CP&M roles, the inventory file needs to be updated to identify the target z/OSMF end points.
 
 
 ## Run the playbooks

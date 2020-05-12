@@ -22,9 +22,9 @@ The project maintainers use LGTM (Looks Good To Me) in comments on the code revi
 |Branch|Base|Description|
 |------|----|-----------|
 |master |	   |This is stable code that is [semantic](https://semver.org/) versioned that requires a pull request to merge into master.     |
-|dev    |master|This is the development code that keeps developers in synch that has undegone a review and pull request that can be unstable.|
+|dev    |master|This is the development code that keeps developers in synch that has undergone a review and pull request that can be unstable.|
 |feature|dev   |This is a temporary branch with feature code that is actively being developed thus unstable.                                 |
-|release-vX.Y.Z|dev|This is a temporary release branch that following the [semantic](https://semver.org/) version that stabilized the release code, allowing for bugfix's to be made without the risk of feature code slipping into the release.|
+|release-vX.Y.Z|dev|This is a temporary release branch that following the [semantic](https://semver.org/) version that stabilized the release code, allowing for bugfix to be made without the risk of feature code slipping into the release.|
 |bugfix	|release-vX.Y.Z|This is a temporary branch with fixes for a release branch. The bugfix branch will be merged into the release branch and cherry-picked into the dev branch.|
 |hotfix	|master|This is a temporary branch with a production code fix that should be merged into master and cherry-picked into dev and release branches.|
 

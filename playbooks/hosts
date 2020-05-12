@@ -1,9 +1,11 @@
 # Copyright (c) IBM Corporation 2020
 
-# this group is used in sample_role_complete_workflow.yml
+# this group is used in sample_role_workflow_*.yml
 [workflow]
-SYS1
+SY1
 
-# this group is used in sample_cpm_*.yml
+# this group is used in sample_role_cpm_*.yml
+# If hostname is changed here, please create "host_name".yml file under host_vars and specify host specific variables as shown in example zosmf1.yml
 [cpm]
-CPM1 zmf_host=your.host.name zmf_port=port_number
+zosmf1 zmf_host=zosmf1.ibm.com zmf_port=443
+zosmf2 zmf_host=zosmf2.ibm.com zmf_port=443
