@@ -1,7 +1,13 @@
 # Copyright (c) IBM Corporation 2020
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
-from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_util import handle_request
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+
+try:
+    from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.workflow_util import handle_request
+except ImportError:
+    handle_request = None
 import json
 import re
 
@@ -24,7 +30,7 @@ def __get_workflow_apis():
         # list the z/OSMF workflow instances for a system or sysplex
         list=dict(
             method='get',
-            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/'+version+'/workflows',
+            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/' + version + '/workflows',
             args=dict(
                 workflowName=dict(required=False, type='str', nickname='zos_workflow_name'),
                 category=dict(
@@ -41,7 +47,7 @@ def __get_workflow_apis():
         # retrieve the contents of a z/OSMF workflow definition from a z/OS system
         retrieveDefinition=dict(
             method='get',
-            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/'+version+'/workflowDefinition',
+            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/' + version + '/workflowDefinition',
             args=dict(
                 definitionFilePath=dict(required=True, type='str', nickname='zos_workflow_file'),
                 workflowDefinitionFileSystem=dict(required=False, type='str', nickname='zos_workflow_file_system'),
@@ -52,7 +58,7 @@ def __get_workflow_apis():
         # retrieve the properties of a z/OSMF workflow instance
         retrieveProperties=dict(
             method='get',
-            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/'+version+'/workflows/{workflowKey}',
+            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/' + version + '/workflows/{workflowKey}',
             args=dict(
                 returnData=dict(required=False, type='str', default='steps,variables', nickname='')
             ),
@@ -61,7 +67,7 @@ def __get_workflow_apis():
         # create a z/OSMF workflow instance on a z/OS system
         create=dict(
             method='post',
-            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/'+version+'/workflows',
+            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/' + version + '/workflows',
             args=dict(
                 workflowName=dict(required=True, type='str', nickname='zos_workflow_name'),
                 workflowDefinitionFile=dict(required=True, type='str', nickname='zos_workflow_file'),
@@ -89,7 +95,7 @@ def __get_workflow_apis():
         # start a z/OSMF workflow instance on a z/OS system
         start=dict(
             method='put',
-            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/'+version+'/workflows/{workflowKey}/operations/start',
+            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/' + version + '/workflows/{workflowKey}/operations/start',
             args=dict(
                 resolveConflictByUsing=dict(
                     required=False, type='str', default='outputFileValue', nickname='zos_workflow_resolve_conflict_by_using',
@@ -104,7 +110,7 @@ def __get_workflow_apis():
         # remove a z/OSMF workflow instance from a z/OS system
         delete=dict(
             method='delete',
-            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/'+version+'/workflows/{workflowKey}',
+            url='https://{zmf_host}:{zmf_port}/zosmf/workflow/rest/' + version + '/workflows/{workflowKey}',
             args=dict(),
             ok_rcode=204
         )
@@ -143,11 +149,11 @@ def __get_workflow_api_url(module, url, key):
             if key is None or key.strip() == '':
                 module.fail_json(msg='Missing required argument or invalid argument: zos_workflow_key.')
             else:
-                url = re.sub('{'+x+'}', key.strip(), url)
+                url = re.sub('{' + x + '}', key.strip(), url)
         elif x == 'zmf_port' and module.params[x] == '':
-            url = re.sub(':{'+x+'}', module.params[x], url)
+            url = re.sub(':{' + x + '}', module.params[x], url)
         else:
-            url = re.sub('{'+x+'}', module.params[x].strip(), url)
+            url = re.sub('{' + x + '}', module.params[x].strip(), url)
     return url
 
 
@@ -204,9 +210,9 @@ def __parse_dict_vars(module, dict_vars):
     """
     list_vars = []
     for k, v in dict_vars.items():
-        if type(v) == dict:
+        if isinstance(v, dict):
             module.fail_json(msg='Invalid argument: zos_workflow_vars. Only string type or array type is accepted for each variable.')
-        elif type(v) == list:
+        elif isinstance(v, list):
             v = json.dumps(v)
         list_vars.append({'name': k, 'value': v})
     return list_vars
@@ -221,6 +227,8 @@ def call_workflow_api(module, session, api, key):
     :param str key: the key of workflow instance
     :rtype: dict or str
     """
+    if handle_request is None:
+        module.fail_json(msg='ImportError: cannot import from ibm.ibm_zos_zosmf.plugins.module_utils')
     zmf_api = __get_workflow_api_argument_spec(api)
     zmf_api_url = __get_workflow_api_url(module, zmf_api['url'], key)
     zmf_api_params = __get_workflow_api_params(module, zmf_api['args'])
@@ -244,6 +252,8 @@ def get_request_argument_spec():
         for kk, vv in v['args'].items():
             if vv['nickname'] != '':
                 argument_spec[vv['nickname']] = dict(required=False, type=vv['type'])
+                if 'choices' in vv:
+                    argument_spec[vv['nickname']].update(choices=vv['choices'])
                 if 'default' in vv:
                     mapping[vv['nickname']] = dict(name=kk, default=vv['default'])
                 else:

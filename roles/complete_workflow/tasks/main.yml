@@ -18,14 +18,13 @@
     zos_workflow_file_system: "{{ zos_workflow_file_system | default() }}"
     zos_workflow_vars_file: "{{ zos_workflow_vars_file | default() }}"
     zos_workflow_vars: "{{ zos_workflow_vars | default({}) }}"
-    zos_workflow_resolve_global_conflict_by_using: "{{ zos_workflow_resolve_global_conflict_by_using | default() }}"
+    zos_workflow_resolve_global_conflict_by_using: "{{ zos_workflow_resolve_global_conflict_by_using | default('global') }}"
     zos_workflow_comments: "{{ zos_workflow_comments | default() }}"
     zos_workflow_assign_to_owner: "{{ zos_workflow_assign_to_owner | default(True) }}"
-    zos_workflow_access_type: "{{ zos_workflow_access_type | default() }}"
+    zos_workflow_access_type: "{{ zos_workflow_access_type | default('Public') }}"
     zos_workflow_account_info: "{{ zos_workflow_account_info | default() }}"
     zos_workflow_job_statement: "{{ zos_workflow_job_statement | default() }}"
     zos_workflow_delete_completed_jobs: "{{ zos_workflow_delete_completed_jobs | default(False) }}"
-    zos_workflow_category: "{{ zos_workflow_category | default() }}"
     zos_workflow_vender: "{{ zos_workflow_vender | default() }}"
   delegate_to: localhost
   register: compare_result
@@ -49,7 +48,7 @@
 - name: Reset exist_workflow_key if the existing workflow instance is deleted
   set_fact:
     compare_result: {'exist_workflow_key':'', 'workflow_completed':false}
-  when: (not force_complete) and (delete_result.deleted)
+  when: ('skipped' not in delete_result) and (delete_result.deleted)
 
 - name: Create the workflow instance if not exist and start it
   ibm.ibm_zos_zosmf.workflow:
@@ -67,21 +66,21 @@
     zos_workflow_file_system: "{{ zos_workflow_file_system | default() }}"
     zos_workflow_vars_file: "{{ zos_workflow_vars_file | default() }}"
     zos_workflow_vars: "{{ zos_workflow_vars | default({}) }}"
-    zos_workflow_resolve_global_conflict_by_using: "{{ zos_workflow_resolve_global_conflict_by_using | default() }}"
+    zos_workflow_resolve_global_conflict_by_using: "{{ zos_workflow_resolve_global_conflict_by_using | default('global') }}"
     zos_workflow_comments: "{{ zos_workflow_comments | default() }}"
     zos_workflow_assign_to_owner: "{{ zos_workflow_assign_to_owner | default(True) }}"
-    zos_workflow_access_type: "{{ zos_workflow_access_type | default() }}"
+    zos_workflow_access_type: "{{ zos_workflow_access_type | default('Public') }}"
     zos_workflow_account_info: "{{ zos_workflow_account_info | default() }}"
     zos_workflow_job_statement: "{{ zos_workflow_job_statement | default() }}"
     zos_workflow_delete_completed_jobs: "{{ zos_workflow_delete_completed_jobs | default(False) }}"
-    zos_workflow_resolve_conflict_by_using: "{{ zos_workflow_resolve_conflict_by_using | default() }}"
+    zos_workflow_resolve_conflict_by_using: "{{ zos_workflow_resolve_conflict_by_using | default('outputFileValue') }}"
     zos_workflow_step_name: "{{ zos_workflow_step_name | default() }}"
     zos_workflow_perform_subsequent: "{{ zos_workflow_perform_subsequent | default(True) }}"
     zos_workflow_notification_url: "{{ zos_workflow_notification_url | default() }}"
     zos_workflow_key: "{{ compare_result.exist_workflow_key | default() }}"
   delegate_to: localhost
   register: start_result
-  when: (force_complete) or ('workflow_completed' not in compare_result or not compare_result.workflow_completed)
+  when: (force_complete) or ('workflow_completed' not in compare_result) or (not compare_result.workflow_completed)
 
 - name: Periodically check status of the workflow instance and return final result
   ibm.ibm_zos_zosmf.workflow:
