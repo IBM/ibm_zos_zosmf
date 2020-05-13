@@ -18,7 +18,5 @@
   file:
     path: "{{ instance_record_dir }}/{{ inventory_hostname }}"
     state: directory
-    group: root
-    owner: root
   connection: local
   when: not target_dir.stat.exists
