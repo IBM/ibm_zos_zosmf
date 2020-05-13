@@ -7,7 +7,7 @@
     - name: Prepare work
       set_fact:
         job_jcl_location: "{{ job_jcl_location | upper }}"
-        job_internal_reader_mode: "{{ job_internal_reader_mode | upper }}"
+        job_internal_reader_mode: "{{ job_internal_reader_mode | dafault() | upper }}"
         job_jcl_symbols: "{{ job_jcl_symbols | default({}) }}"
         user: "{{ zmf_user | default() }}"
         password: "{{ zmf_password | default() }}"
@@ -102,7 +102,7 @@
         request_headers: "{{ request_headers | combine({ 'Content-Type': 'text/plain' }) }}"
       when:
         - request_body_format == "raw"
-        - job_internal_reader_mode == "TEXT"
+        - job_internal_reader_mode == "TEXT" or job_internal_reader_mode == ""
 
     - name: Set Content-Type to "application/octet-stream"
       set_fact:
