@@ -8,7 +8,7 @@
       set_fact:
         job_search_logic: "{{ job_search_logic | upper }}"
         job_jcl_location: "{{ job_jcl_location | upper }}"
-        job_internal_reader_mode: "{{ job_internal_reader_mode | upper }}"
+        job_internal_reader_mode: "{{ job_internal_reader_mode | dafault() | upper }}"
         job_jcl_symbols: "{{ job_jcl_symbols | default({}) }}"
         user: "{{ zmf_user | default() }}"
         password: "{{ zmf_password | default() }}"
