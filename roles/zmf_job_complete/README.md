@@ -46,22 +46,5 @@ The following variables are defined by role. For the default values, see [defaul
 - `complete_check_times` - The maximum number of time that is used for periodic checks of the workflow status.
 - `complete_check_delay` - The interval time between periodic checks of the workflow status.
 
-
-## Requirements
-See the section [Requirements](../../docs/README_workflow.md#Requirements). 
-
-
-## Dependencies
-None
-
-
-## Usage
-For a sample playbook, see [sample_role_workflow_complete.yml](../../playbooks/sample_role_workflow_complete.yml) in the directory [playbooks](../../playbooks/README.md).
-
-
-## Test
-For a test playbook, see [test_role_workflow_complete.yml](../../tests/workflow/test_role_workflow_complete.yml) in the directory [tests/workflow](../../tests/workflow/README.md).
-
-
 ## Copyright
-© Copyright IBM Corporation 2020.
+© Copyright IBM Corporation 2020

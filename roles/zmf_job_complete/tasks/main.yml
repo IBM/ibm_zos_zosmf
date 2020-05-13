@@ -6,7 +6,6 @@
   block:
     - name: Prepare work
       set_fact:
-        job_search_logic: "{{ job_search_logic | upper }}"
         job_jcl_location: "{{ job_jcl_location | upper }}"
         job_internal_reader_mode: "{{ job_internal_reader_mode | upper }}"
         job_jcl_symbols: "{{ job_jcl_symbols | default({}) }}"
@@ -18,14 +17,14 @@
         final_result: {}
         empty_str: ""
 
-    - name: Fail if mandantory variable - job_jcl_src is not defined
+    - name: Fail if mandatory variable - job_jcl_src is not defined
       fail:
         msg: 'Please define the mandatory variable: job_jcl_src'
       when: job_jcl_src is undefined or job_jcl_src == empty_str
 
     - name: Fail if optional variable - job_jcl_location is defined with other values than "local", "dataset", "uss"
       fail:
-        msg: 'Please define optional variable: job_jcl_location as one of below values: local, dataseet, uss'
+        msg: 'Please define optional variable: job_jcl_location as one of below values: local, dataset, uss'
       when:
         - job_jcl_location != "LOCAL"
         - job_jcl_location != "DATASET"
@@ -37,13 +36,6 @@
       when:
         - user == empty_str or password == empty_str
         - crt == empty_str or key == empty_str
-
-    - name: Fail if optional variable - job_search_logic is defined with other values than "AND", "OR"
-      fail:
-        msg: "Please define optional variable: job_search_logic as one of below values: AND, OR"
-      when:
-        - job_search_logic != "AND"
-        - job_search_logic != "OR"
 
 - name: Prepare JCL
   block:
@@ -95,10 +87,10 @@
         request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Lrecl': job_internal_reader_lrecl | trim }) }}"
       when: job_internal_reader_lrecl is defined and job_internal_reader_lrecl != empty_str
 
-    - name: Set X-IBM-Intrdr-Mode to {{ job_interanl_reader_mode }}
+    - name: Set X-IBM-Intrdr-Mode to {{ job_internal_reader_mode }}
       set_fact:
-        request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Mode': job_interanl_reader_mode | trim }) }}"
-      when: job_interanl_reader_mode is defined and job_interanl_reader_mode != empty_str
+        request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Mode': job_internal_reader_mode | trim }) }}"
+      when: job_internal_reader_mode is defined and job_internal_reader_mode != empty_str
 
     - name: Set Content-Type to "application/json"
       set_fact:
@@ -221,114 +213,15 @@
           fail:
             msg: "{{ final_result }}"
       when:
-        - job_search_logic == 'AND'
         - job_matched_retcode == empty_str
 
-- block:
-    - name: Query and match the contents in spool files of the submitted job if 'job_search_output' is defined
-      uri:
-        url: "{{ job_files_url }}"
-        method: GET
-        return_content: yes
-        headers:
-          X-IBM-Target-System: "{{ inventory_hostname }}"
-          X-CSRF-ZOSMF-HEADER: "TEST"
-        user: "{{ user }}"
-        password: "{{ password }}"
-        client_cert: "{{ crt }}"
-        client_key: "{{ key }}"
-        force_basic_auth: yes
-        status_code: "200"
-        validate_certs: no
-      delegate_to: localhost
-      register: files_result
-      failed_when: no
-
-    - name: Handle request error if needed
-      include_tasks: handle_request_error.yml
-      vars:
-        expect_rcode: 200
-        result: "{{ files_result }}"
-
-    - name: Match the contents in spool files of the submitted job if 'job_search_output' is defined
-      set_fact:
-        job_matched_contents: {}
-
-    - include_tasks: query_each_spool_file.yml
-      when: (job_search_output_ddname is undefined) or (job_search_output_ddname == []) or (file_item.ddname in job_search_output_ddname)
-      loop: "{{ files_result.json }}"
-      loop_control:
-        label: "{{ file_item.ddname }}"
-        loop_var: file_item
-
-    - name: Update final result
-      set_fact:
-        final_result: "{{ final_result | combine({ 'job_matched_contents': job_matched_contents }) }}"
-
     - block:
         - name: Update final result
           set_fact:
             final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is not completed. The return code is matched but no matched output content is found.' }) }}"
-        - name: Fail if no matched output content is found
-          fail:
-            msg: "{{ final_result }}"
-      when:
-        - job_search_logic == 'AND'
-        - job_matched_contents == {}
-
-    - block:
-        - name: Update final result
-          set_fact:
-            final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is not completed. The return code is mismatched and no matched output content is found.' }) }}"
-        - name: Fail if the return code is mismatched and no matched output content is found
-          fail:
-            msg: "{{ final_result }}"
-      when:
-        - job_search_logic == 'OR'
-        - job_matched_retcode == empty_str
-        - job_matched_contents == {}
-
-    - block:
-        - name: Update final result
-          set_fact:
-            final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is completed successfully. Either the return code is matched or the matched output contents are found.' }) }}"
-      when:
-        - job_search_logic == 'OR'
-        - (job_matched_retcode != empty_str and job_matched_contents == {}) or (job_matched_retcode == empty_str and job_matched_contents != {})
-
-    - block:
-        - name: Update final result
-          set_fact:
-            final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is completed successfully. The return code is matched and the matched output contents are found.' }) }}"
+                           'msg': 'Job is completed successfully. The return code is matched.' }) }}"
       when:
         - job_matched_retcode != empty_str
-        - job_matched_contents != {}
-  when: job_search_output is not undefined
-
-- block:
-    - name: Check and return the final result if 'job_search_output' is not defined
-      set_fact:
-        final_result: "{{ final_result | combine({ \
-                       'msg': 'Job is not completed. The return code is mismatched.' }) }}"
-    - name: Fail if the return code is mismatched
-      fail:
-        msg: "{{ final_result }}"
-  when:
-    - job_search_output is undefined
-    - job_matched_retcode == empty_str
-
-- block:
-    - name: Check and return the final result if 'job_search_output' is not defined
-      set_fact:
-        final_result: "{{ final_result | combine({ \
-                       'msg': 'Job is completed successfully. The return code is matched.' }) }}"
-  when:
-    - job_search_output is undefined
-    - job_matched_retcode != empty_str
 
 - name: Check and return the final result
   debug: var=final_result
