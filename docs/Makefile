@@ -22,6 +22,9 @@ clean:
 	rm -rf build
 	echo "Deleted directory build/"
 
+	rm -rf source/_build
+	echo "Deleted directory source/_build/"
+
 	rm -rf source/modules
 	echo "Deleted directory source/modules"
 	echo "Completed HTML text generation, run 'make ibm_zos_zosmf'"

@@ -2,4 +2,5 @@
 .vscode
 *.tar.gz
 docs/build/
-*.bat
+docs/source/_build/
+tests/output/

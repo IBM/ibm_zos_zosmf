@@ -26,7 +26,7 @@ copyright = '2020, IBM'
 author = 'IBM'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.3'
+release = '2.0.0'
 
 
 # -- General configuration ---------------------------------------------------

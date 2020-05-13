@@ -2,7 +2,7 @@
 {# Copyright (c) IBM Corporation 2020                                       #}
 {# ------------------------------------------------------------------------ #}
 
-:github_url: https://www.github.com/IBM/ibm_zos_zosmf/blob/master/plugins/modules/{{ module }}.py
+:github_url: https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/{{ module }}.py
 
 .. _{{ module }}_module:
 
@@ -156,10 +156,12 @@ See Also
   {{ "  " * level }}| **type**: {{ _type }}
 {%     if _sample %}
 {%       if _type != 'str' and _type != 'int' %}
+
   {{ "  " * level }}**sample**: ::
 
                   {{ _sample | tojson }}
 {%       else %}
+
   {{ "  " * level }}**sample**: ::
 
 {%         if _sample.sample1 %}

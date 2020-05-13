@@ -1,101 +1,19 @@
-# IBM z/OS Management Facility Ansible collection
-The IBM z/OS Management Facility (z/OSMF) Ansible collection, referred to as `ibm_zos_zosmf`, consists of modules and roles that you can use with z/OS.
+# IBM z/OS Management Facility Collection
+
+**IBM z/OS Management Facility (z/OSMF) Collection**, referred to as **ibm_zos_zosmf**, consists of modules and roles that you can use with z/OS.
+
+**IBM z/OSMF collection** intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, Cloud Provisioning and Management services etc.
 
 
-## Technical overview
-The sections that follow explain how to configure and use the `ibm_zos_zosmf` collection.
+## Features
 
-The collection intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services etc.
+**IBM z/OSMF collection** includes [modules](https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/), [roles](https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/roles/), [sample playbooks](https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/) and `ansible-doc` to automate tasks on z/OS.
 
-### Configure the target z/OS systems and z/OSMF server
-The target z/OS systems should be configured as the target hosts (managed nodes) in your playbook. It is not necessary for a z/OSMF server to be installed on every target z/OS system. However, a z/OSMF server must be installed and active on *at least one* z/OS system in the same sysplex.
-
-For workflow related role, information about the z/OSMF server must be configured in the `vars` file, such as the hostname, port number, and authentication info. Either username and password or client-certificate authorization can be used for authenticating with the z/OSMF server.  If both methods are specified, the system attempts to use client-certificate authentication.
-
-For Cloud Provisioning and Management related roles, information about z/OSMF server must be configured in the inventory `hosts` file, such as hostname, port number. The authentication information to connect to the z/OSMF is provided when running playbook or it will be prompted during playbook run.
-
-
-## Contents
-- [Operate z/OS workflows](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md)
-    - modules:
-        - [zmf_workflow](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md#Modules)
-    - roles:
-        - [zmf_workflow_complete](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_workflow.md#Roles)
-- [Provision and manage z/OS software instances](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md)
-    - roles:
-        - [zmf_cpm_provision_software_service](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
-        - [zmf_cpm_manage_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
-        - [zmf_cpm_remove_software_instance](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/docs/README_cpm.md#Roles-Specification)
-
-
-## Installation
-The collection is distributed through [Ansible Galaxy](https://galaxy.ansible.com/). You can use the [ansible-galaxy](https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html) command to install the collection on your control node, as follows:
-
-```
-ansible-galaxy collection install ibm.ibm_zos_zosmf
-```
-
-By default, the collection is installed in `~/.ansible/collections`. The output looks like this:
-
-```
-Process install dependency map
-Starting collection install process
-Installing 'ibm.ibm_zos_zosmf:1.0.3' to '~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf'
-```
-
-To specify the installation path, include the `-p` option with [ansible-galaxy](https://docs.ansible.com/ansible/latest/cli/ansible-galaxy.html) command:
-
-```
-ansible-galaxy collection install ibm.ibm_zos_zosmf -p /myAnsible/collections
-```
-
-### Local build and installation
-For local build and installation, you can clone the Git repository, build the collection archive, and install the locally built collection without Galaxy.
-
-1.  Clone the Git repository:
-
-    ```
-    git clone git@github.com:ibm/ibm_zos_zosmf.git
-    ```
-
-2.  Run a local build inside the collection:
-
-    ```
-    cd ibm_zos_zosmf
-    ansible-galaxy collection build
-    ```
-
-    The example output looks like this:
-
-    ```
-    Created collection for ibm.ibm_zos_zosmf at /Users/user/git/ibm/ibm_zos_zosmf/ibm-ibm_zos_zosmf-1.0.3.tar.gz
-    ```
-
-3.  Install the locally built collection:
-
-    ```
-    ansible-galaxy collection install ibm-ibm_zos_zosmf-1.0.3.tar.gz
-    ```
-
-    The example output looks like this:
-
-    ```
-    Process install dependency map
-    Starting collection install process
-    Installing 'ibm.ibm_zos_zosmf:1.0.3' to '~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf'
-    ```
-
-
-## Usage
-The collection provides various sample playbooks to demonstrate the use of modules and roles in the directory [playbooks](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/playbooks/README.md).
-
-
-## Contributions
-See the section [Contributing In General](https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/CONTRIBUTING.md).
+For guides and reference, see [Docs Site](https://ibm.github.io/ibm_zos_zosmf/index.html).
 
 
 ## Copyright
-© Copyright IBM Corporation 2020.
+© Copyright IBM Corporation 2020
 
 
 ## License
@@ -103,4 +21,4 @@ Some portions of the collection are licensed under [GNU General Public License, 
 
 
 ## Author Information
-This collection is maintained by the IBM z/OSMF development team. For more information about z/OSMF, see the following website: https://ibm.github.io/zOSMF/
+**IBM z/OSMF collection** is maintained by the IBM z/OSMF development team. For more information about z/OSMF， see [IBM z/OSMF One Stop Hub](https://ibm.github.io/zOSMF/).

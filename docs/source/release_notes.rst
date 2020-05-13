@@ -5,81 +5,91 @@
 Releases
 ========
 
+Version 2.0.0
+-------------
+
+`v2.0.0`_
+
+Added
+  * add roles: `zmf_job_complete`
+
+Refined
+  * refine and rename module `workflow` to `zmf_workflow`
+  * rename role `complete_workflow` to `zmf_workflow_complete`
+  * rename role `provision_software_service` to `zmf_cpm_provision_software_service`
+  * rename role `manage_software_instance` to `zmf_cpm_manage_software_instance`
+  * rename role `remove_software_instance` to `zmf_cpm_remove_software_instance`
+
+Fixed
+  * cleanup sanity test checks
+  * add tags
+
+Availability
+  * Galaxy
+  * github
+
+Version 1.0.3
+-------------
+
+`v1.0.3`_
+
+Fixed
+  * cleanup ansible_lint checks
+  * cleanup sanity test checks
+
+Availability
+  * Galaxy
+  * github
+
+Version 1.0.2
+-------------
+
+`v1.0.2`_
+
+Fixed
+  * cleanup ansible_lint checks
+  * fix bug for cmp roles: instance variable is not correctly parsed in the role
+
+Availability
+  * Galaxy
+  * github
+
+Version 1.0.1
+-------------
+
+`v1.0.1`_
+
+Fixed
+  * cleanup ansible_lint checks
+  * fix README links on Galaxy webpage
+  * add tags
+
+Availability
+  * Galaxy
+  * github
+
 Version 1.0.0
 -------------
-Notes
-   * Update recommended
-   * Security vulnerabilities fixed
-   * Improved test, security and injection coverage
-   * Module zos_data_set catalog support added
-   * Documentation updates
 
-Availability
-  * Automation Hub
-  * Galaxy
-  * github
+`v1.0.0`_
 
-Reference
-  * Supported by IBM Z Open Automation Utilities: 1.0.1 (PTF UI66957 or later)
-
-Version 0.0.4
--------------
-
-Notes
-  * Update recommended
-  * Includes fixes to modules zos_job_output and zos_job_submit
-  * Improved buffer utilization
-  * Optimized JSON response
-  * Functional test cases for all modules
-  * Updated document references
+Added
+  * initial **ibm_zos_zosmf** collection
+  * add modules: `workflow`
+  * add roles: `complete_workflow`, `provision_software_service`, `manage_software_instance`, `remove_software_instance`
 
 Availability
   * Galaxy
   * github
 
-Reference:
-  * Supported by IBM Z Open Automation Utilities: 1.0.1 (PTF UI66957 or later)
 
-Version 0.0.3
--------------
-Notes
-  * Update recommended
-  * Includes updates to README.md for a malformed URL and product direction
-  * Includes fixes for zos_data_set module
-
-Availability
-  * Galaxy
-  * github
-
-Reference
-  * Supported by IBM Z Open Automation Utilities: 1.0.1 (PTF UI66957 or later)
-
-Version 0.0.2
--------------
-Notes
-  * Update not required
-  * Includes updates to the REAMDE  and included docs
-
-Availability
-  * Galaxy
-  * github
-
-Reference
-  * Supported by IBM Z Open Automation Utilities: 1.0.1 (PTF UI66957 or later)
-
-Version 0.0.1
--------------
-Notes
-  * Initial beta release of IBM Z core collection, referred to as ibm_zos_core
-    which is part of the broader offering
-    Red Hat® Ansible Certified Content for IBM Z. ibm_zos_core.
-
-Availability
-  * Galaxy
-  * github
-
-Reference
-  * Supported by IBM Z Open Automation Utilities: 1.0.1 (PTF UI66957 or later)
-
-
-
+.. _v1.0.0:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.0
+.. _v1.0.1:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.1
+.. _v1.0.2:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.2
+.. _v1.0.3:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.3
+.. _v2.0.0:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.0
