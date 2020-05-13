@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Playbooks &mdash; IBM z/OSMF Collection 1.0.3 documentation</title>
+  <title>Playbooks &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing" href="community_guides.html" />
-    <link rel="prev" title="Roles" href="roles.html" /> 
+    <link rel="prev" title="zmf_job_complete" href="roles/README_zmf_job_complete.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -182,13 +182,13 @@
 <p>An <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html#playbooks-intro">Ansible Playbook</a> consists of organized instructions that define work for a managed node (hosts) to be managed with Ansible.</p>
 <div class="section" id="playbook-documentation">
 <h2>Playbook Documentation<a class="headerlink" href="#playbook-documentation" title="Permalink to this headline">¶</a></h2>
-<p><strong>IBM z/OSMF collection</strong> provides a <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/">playbooks directory</a>, which contains various sample playbooks to demonstrate the use of modules and roles.</p>
+<p><strong>IBM z/OSMF collection</strong> provides a <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/">playbooks directory</a>, which contains various sample playbooks to demonstrate the use of modules and roles.</p>
 <p>You can find the playbook content that is included with the collection where the collection was installed, please refer back to the section <a class="reference external" href="installation.html">Installation</a> to obtain the installation path for the collection. In the following examples, this document will refer to the installation path as <code class="docutils literal notranslate"><span class="pre">~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf</span></code>.</p>
 </div>
 <div class="section" id="ansible-config">
 <h2>Ansible Config<a class="headerlink" href="#ansible-config" title="Permalink to this headline">¶</a></h2>
 <p>Ansible config file <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> can override nearly all <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> configurations.</p>
-<p>Included in the <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/">playbooks directory</a> is a sample <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/ansible.cfg">ansible.cfg</a> that with little modification can supplement <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>.</p>
+<p>Included in the <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/">playbooks directory</a> is a sample <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/ansible.cfg">ansible.cfg</a> that with little modification can supplement <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>.</p>
 <p>You can modify the following configuration statement to refer to your own installation path for the collection:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">collections_paths = ../../../../../collections</span>
 </pre></div>
@@ -198,7 +198,7 @@
 <div class="section" id="inventory">
 <h2>Inventory<a class="headerlink" href="#inventory" title="Permalink to this headline">¶</a></h2>
 <p>Ansible works with multiple managed nodes (hosts) at the same time, using a list or group of lists know as an <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html">inventory</a>. Once the inventory is defined, you can use <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#intro-patterns">patterns</a> to select the hosts, or groups, you want Ansible to run against.</p>
-<p>Included in the <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/">playbooks directory</a> is a sample inventory file <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/hosts">hosts</a> that with little modification can be used to manage the target z/OS systems. This inventory file should be included when running the sample playbook.</p>
+<p>Included in the <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/">playbooks directory</a> is a sample inventory file <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/hosts">hosts</a> that with little modification can be used to manage the target z/OS systems. This inventory file should be included when running the sample playbook.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">[</span><span class="nv">zsystems</span><span class="p p-Indicator">]</span>
 <span class="l l-Scalar l-Scalar-Plain">SY1 ansible_host=hostname_of_zos_system</span>
 </pre></div>
@@ -212,9 +212,9 @@
 <h2>Group Vars<a class="headerlink" href="#group-vars" title="Permalink to this headline">¶</a></h2>
 <p>You can supply group variables in either the inventory file or the separate variable file. Storing separate host
 and group variables files may help you organize your variable values more easily.</p>
-<p>Included in the <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/">playbooks directory</a> is some sample variables files in the directory <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/group_vars/">group_vars</a>.</p>
+<p>Included in the <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/">playbooks directory</a> is some sample variables files in the directory <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/">group_vars</a>.</p>
 <ul>
-<li><p><a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/group_vars/workflow.yml">workflow.yml</a>: It contains the variables for system group <code class="docutils literal notranslate"><span class="pre">workflow</span></code>:</p>
+<li><p><a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/workflow.yml">workflow.yml</a>: It contains the variables for system group <code class="docutils literal notranslate"><span class="pre">workflow</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">zmf_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.host.name</span>
 <span class="nt">zmf_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">port_number</span>
 <span class="c1"># zmf_user:</span>
@@ -232,7 +232,7 @@ and group variables files may help you organize your variable values more easily
 <p>This is an easy example to use username and password for authenticating with z/OSMF server. <code class="docutils literal notranslate"><span class="pre">zmf_user</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_password</span></code> will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use <code class="docutils literal notranslate"><span class="pre">zmf_crt</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_key</span></code> to specify the certificate chain file and key file to be used for HTTPS client authentication.</p>
 </div>
 </li>
-<li><p><a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/group_vars/cpm.yml">cpm.yml</a>: It contains the variables for system group <code class="docutils literal notranslate"><span class="pre">cpm</span></code>:</p>
+<li><p><a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/cpm.yml">cpm.yml</a>: It contains the variables for system group <code class="docutils literal notranslate"><span class="pre">cpm</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">instance_record_dir</span><span class="p">:</span> <span class="s">&quot;/tmp&quot;</span>
 <span class="nt">api_polling_retry_count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30</span>
 <span class="nt">api_polling_interval_seconds</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
@@ -249,18 +249,18 @@ and group variables files may help you organize your variable values more easily
 <div class="section" id="sample-playbooks">
 <h2>Sample Playbooks<a class="headerlink" href="#sample-playbooks" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_workflow_complete.yml">sample_role_workflow_complete.yml</a>: This sample playbook shows how to complete a z/OS workflow on the target z/OS systems via z/OSMF. To run the sample playbook, below preparation works are required:</p>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_workflow_complete.yml">sample_role_workflow_complete.yml</a>: This sample playbook shows how to complete a z/OS workflow on the target z/OS systems via z/OSMF. To run the sample playbook, below preparation works are required:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li><p>In this sample playbook, the workflow definition file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/files/workflow_sample_automation_steps.xml">workflow_sample_automation_steps.xml</a> is used to create the workflow instance. You need to manually upload it to the z/OS file system. For example, you can upload it to the directory <code class="docutils literal notranslate"><span class="pre">/var/zosmf/workflow_def/</span></code>. Then modify the value of variable <code class="docutils literal notranslate"><span class="pre">workflow_file</span></code> in the sample playbook to refer to the location of the workflow definition file.</p></li>
+<li><p>In this sample playbook, the workflow definition file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/workflow_sample_automation_steps.xml">workflow_sample_automation_steps.xml</a> is used to create the workflow instance. You need to manually upload it to the z/OS file system. For example, you can upload it to the directory <code class="docutils literal notranslate"><span class="pre">/var/zosmf/workflow_def/</span></code>. Then modify the value of variable <code class="docutils literal notranslate"><span class="pre">workflow_file</span></code> in the sample playbook to refer to the location of the workflow definition file.</p></li>
 <li><p>In the inventory file, the nickname <code class="docutils literal notranslate"><span class="pre">SY1</span></code> for the target z/OS system, which is configured as managed node, is used to create the workflow instance. You can modify it to refer to your own z/OS system. You need to ensure the z/OS system <code class="docutils literal notranslate"><span class="pre">SY1</span></code> or your own z/OS system is configured in z/OSMF <strong>Systems</strong> task.</p></li>
 </ol>
 </div></blockquote>
 </li>
-<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_cpm_manage_instance.yml">sample_role_cpm_manage_instance.yml</a>: This sample playbook shows how to perform instance action on a provisioned instance in z/OSMF CP&amp;M.</p></li>
-<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_cpm_provision.yml">sample_role_cpm_provision.yml</a>: This sample playbook shows how to provision an instance in z/OSMF CP&amp;M.</p></li>
-<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_cpm_remove_instance.yml">sample_role_cpm_remove_instance.yml</a>: This sample playbook shows how to remove the deprovisioned instance in z/OSMF CP&amp;M.</p></li>
-<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_deploy_cics_application.yml">sample_role_deploy_cics_application.yml</a>: This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&amp;M. Please copy <code class="docutils literal notranslate"><span class="pre">files/role_cics_wlp_install_app</span></code> directory to roles directory before using this example.</p></li>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_manage_instance.yml">sample_role_cpm_manage_instance.yml</a>: This sample playbook shows how to perform instance action on a provisioned instance in z/OSMF CP&amp;M.</p></li>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_provision.yml">sample_role_cpm_provision.yml</a>: This sample playbook shows how to provision an instance in z/OSMF CP&amp;M.</p></li>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_remove_instance.yml">sample_role_cpm_remove_instance.yml</a>: This sample playbook shows how to remove the deprovisioned instance in z/OSMF CP&amp;M.</p></li>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_deploy_cics_application.yml">sample_role_deploy_cics_application.yml</a>: This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&amp;M. Please copy <code class="docutils literal notranslate"><span class="pre">files/role_cics_wlp_install_app</span></code> directory to roles directory before using this example.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -271,7 +271,7 @@ and group variables files may help you organize your variable values more easily
 </div>
 <div class="section" id="run-the-playbooks">
 <h2>Run the Playbooks<a class="headerlink" href="#run-the-playbooks" title="Permalink to this headline">¶</a></h2>
-<p>The sample playbooks must be run from the <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/">playbooks directory</a> of the installed collection: <code class="docutils literal notranslate"><span class="pre">~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/</span></code></p>
+<p>The sample playbooks must be run from the <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/">playbooks directory</a> of the installed collection: <code class="docutils literal notranslate"><span class="pre">~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/</span></code></p>
 <p>You can use the <a class="reference external" href="https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html">ansible-playbook</a> command to run the sample playbooks as follows:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ ansible-playbook <span class="o">[</span>-i hosts<span class="o">]</span> sample_role_*.yml <span class="o">[</span>-e <span class="nv">zmf_user</span><span class="o">=</span>&lt;username&gt; -e <span class="nv">zmf_password</span><span class="o">=</span>&lt;password&gt;<span class="o">]</span>
 </pre></div>
@@ -291,7 +291,7 @@ and group variables files may help you organize your variable values more easily
         <a href="community_guides.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="roles.html" class="btn btn-neutral float-left" title="Roles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="roles/README_zmf_job_complete.html" class="btn btn-neutral float-left" title="zmf_job_complete" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

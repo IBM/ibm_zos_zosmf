@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>IBM z/OS Management Facility Collection &mdash; IBM z/OSMF Collection 1.0.3 documentation</title>
+  <title>IBM z/OS Management Facility Collection &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
   
 
   
@@ -171,11 +171,11 @@
   <div class="section" id="ibm-z-os-management-facility-collection">
 <h1>IBM z/OS Management Facility Collection<a class="headerlink" href="#ibm-z-os-management-facility-collection" title="Permalink to this headline">¶</a></h1>
 <p><strong>IBM z/OS Management Facility (z/OSMF) Collection</strong>, referred to as <strong>ibm_zos_zosmf</strong>, consists of modules and roles that you can use with z/OS.</p>
-<p><strong>IBM z/OSMF collection</strong> intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services etc.</p>
+<p><strong>IBM z/OSMF collection</strong> intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, Cloud Provisioning and Management services etc.</p>
 </div>
 <div class="section" id="features">
 <h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
-<p><strong>IBM z/OSMF collection</strong> includes <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/">modules</a>, <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/">roles</a>, <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">sample playbooks</a> and ansible-doc to automate tasks on z/OS.</p>
+<p><strong>IBM z/OSMF collection</strong> includes <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/">modules</a>, <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/roles/">roles</a>, <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/">sample playbooks</a> and <code class="docutils literal notranslate"><span class="pre">ansible-doc</span></code> to automate tasks on z/OS.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
@@ -187,15 +187,23 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#access-collection">Access Collection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#contents">Contents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="workflow.html">Operate z/OS Workflows</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="workflow.html#modules">Modules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="workflow.html#roles">Roles</a></li>
-<li class="toctree-l4"><a class="reference internal" href="workflow.html#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README_workflow.html">Operate z/OS Workflows</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="README_workflow.html#modules">Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_workflow.html#roles">Roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_workflow.html#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_workflow.html#sample-playbooks">Sample Playbooks</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="cpm.html">Provision and Manage z/OS Softwares</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="cpm.html#roles">Roles</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cpm.html#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README_cpm.html">Provision and Manage z/OS Software Instances</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="README_cpm.html#roles">Roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_cpm.html#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_cpm.html#sample-playbooks">Sample Playbooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="README_job.html">Operate z/OS Jobs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="README_job.html#roles">Roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_job.html#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_job.html#sample-playbooks">Sample Playbooks</a></li>
 </ul>
 </li>
 </ul>
@@ -216,7 +224,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="roles.html">Roles</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="roles.html#role-reference">Role Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roles.html#role-reference">Role Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_workflow_complete.html">zmf_workflow_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_cpm_remove_software_instance.html">zmf_cpm_remove_software_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_job_complete.html">zmf_job_complete</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="playbooks.html">Playbooks</a><ul>

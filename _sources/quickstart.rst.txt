@@ -42,8 +42,10 @@ Contents
    :maxdepth: 3
    :glob:
 
-   workflow
-   cpm
+   README_workflow
+   README_cpm
+   README_job
+
 
 
 .. _Installation:

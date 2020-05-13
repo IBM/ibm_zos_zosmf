@@ -120,11 +120,11 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
 .. _Ansible Playbook:
    https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html#playbooks-intro
 .. _playbooks directory:
-   https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/
 .. _Installation:
    installation.html
 .. _ansible.cfg:
-   https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/ansible.cfg
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/ansible.cfg
 .. _Ansible Configuration Settings:
    https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-configuration-settings-locations
 .. _inventory:
@@ -132,24 +132,24 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
 .. _patterns:
    https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#intro-patterns
 .. _hosts:
-   https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/hosts
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/hosts
 .. _group_vars:
-   https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/group_vars/
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/
 .. _workflow.yml:
-   https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/group_vars/workflow.yml
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/workflow.yml
 .. _cpm.yml:
-   https://github.com/ansible-collections/ibm_zos_core/tree/master/playbooks/group_vars/cpm.yml
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/cpm.yml
 .. _sample_role_workflow_complete.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_workflow_complete.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_workflow_complete.yml
 .. _workflow_sample_automation_steps.xml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/files/workflow_sample_automation_steps.xml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/workflow_sample_automation_steps.xml
 .. _sample_role_cpm_manage_instance.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_cpm_manage_instance.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_manage_instance.yml
 .. _sample_role_cpm_provision.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_cpm_provision.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_provision.yml
 .. _sample_role_cpm_remove_instance.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_cpm_remove_instance.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_remove_instance.yml
 .. _sample_role_deploy_cics_application.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_deploy_cics_application.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_deploy_cics_application.yml
 .. _ansible-playbook:
    https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Requirements &mdash; IBM z/OSMF Collection 1.0.3 documentation</title>
+  <title>Requirements &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
   
 
   
@@ -190,11 +190,11 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">Requests</span> <span class="pre">library</span> <span class="pre">for</span> <span class="pre">Python</span></code> is required only when using:</p>
+<li><p><strong>Requests library for Python</strong> is required only when using z/OSMF Workflows related modules and roles:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>modules: <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/zmf_workflow.py">zmf_workflow</a></p></li>
-<li><p>roles: <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/zmf_workflow_complete/">zmf_workflow_complete</a></p></li>
+<li><p>module: <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/zmf_workflow.py">zmf_workflow</a></p></li>
+<li><p>role: <a class="reference external" href="roles/README_zmf_workflow_complete.html">zmf_workflow_complete</a></p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -210,10 +210,12 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">Cloud</span> <span class="pre">Provisioning</span> <span class="pre">&amp;</span> <span class="pre">Management</span></code> is required only when using:</p>
+<li><p><strong>Cloud Provisioning &amp; Management</strong> is required only when using z/OSMF CP&amp;M related roles:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>roles: <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/provision_software_service/">provision_software_service</a>, <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/manage_software_instance/">manage_software_instance</a>, <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/remove_software_instance/">remove_software_instance</a></p></li>
+<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a></p></li>
+<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a></p></li>
+<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_remove_software_instance.html">zmf_cpm_remove_software_instance</a></p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -227,7 +229,20 @@
 <div class="section" id="z-osmf-on-z-os">
 <h2>z/OSMF on z/OS<a class="headerlink" href="#z-osmf-on-z-os" title="Permalink to this headline">¶</a></h2>
 <p>The target z/OS systems should be configured as the target hosts (managed nodes) in your playbook. It is not necessary for a z/OSMF server to be installed on every target z/OS system. However, a z/OSMF server must be installed and active on <em>at least one</em> z/OS system in the same sysplex. For the configuration of z/OSMF server, see <a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3.izua300/abstract.html">IBM z/OSMF Configuration Guide</a>.</p>
-<p>Information about the z/OSMF server must be configured in the <cite>vars</cite> file, such as the hostname, port number, and authentication info. Either username and password or client-certificate authorization can be used for authenticating with the z/OSMF server.  If both methods are specified, the system attempts to use client-certificate authentication.</p>
+<p>Information about the z/OSMF server must be configured in the inventory <code class="docutils literal notranslate"><span class="pre">hosts</span></code> file or in the <code class="docutils literal notranslate"><span class="pre">vars</span></code> file, such as the hostname, port number, and authentication information. The authentication information to connect to the z/OSMF server is provided when running playbook or it will be prompted during playbook run.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li><p>For below roles, either username and password or client-certificate authorization can be used for authenticating with the z/OSMF server.  If both methods are specified, the system attempts to use client-certificate authentication.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>role: <a class="reference external" href="roles/README_zmf_workflow_complete.html">zmf_workflow_complete</a></p></li>
+<li><p>role: <a class="reference external" href="roles/README_zmf_job_complete.html">zmf_job_complete</a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
 </div>
 </div>
 

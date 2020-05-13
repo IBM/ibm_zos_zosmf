@@ -7,11 +7,11 @@ IBM z/OS Management Facility Collection
 
 **IBM z/OS Management Facility (z/OSMF) Collection**, referred to as **ibm_zos_zosmf**, consists of modules and roles that you can use with z/OS.
 
-**IBM z/OSMF collection** intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services etc.
+**IBM z/OSMF collection** intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, Cloud Provisioning and Management services etc.
 
 .. **IBM z/OS Management Facility (z/OSMF) collection**, referred to as **ibm_zos_zosmf**, is part of the broader offering **Red Hat® Ansible Certified Content for IBM Z**. 
 
-.. **IBM z/OSMF collection** consists of modules and roles that you can use with z/OS, it intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services etc.
+.. **IBM z/OSMF collection** consists of modules and roles that you can use with z/OS, it intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, Cloud Provisioning and Management services etc.
 
 .. Red Hat Ansible Certified Content for IBM Z
 .. ===========================================
@@ -23,7 +23,7 @@ IBM z/OS Management Facility Collection
 Features
 ========
 
-**IBM z/OSMF collection** includes `modules`_, `roles`_, `sample playbooks`_ and ansible-doc to automate tasks on z/OS.
+**IBM z/OSMF collection** includes `modules`_, `roles`_, `sample playbooks`_ and ``ansible-doc`` to automate tasks on z/OS.
 
 .. toctree::
    :maxdepth: 4
@@ -75,11 +75,11 @@ Author Information
 
 
 .. _modules:
-    https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/
+    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/
 .. _roles:
-    https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/
+    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/roles/
 .. _sample playbooks:
-    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/
+    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/
 .. _GNU General Public License, Version 3.0:
     https://opensource.org/licenses/GPL-3.0
 .. _Apache License, Version 2.0:

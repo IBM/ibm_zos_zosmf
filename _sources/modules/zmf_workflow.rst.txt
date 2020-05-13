@@ -1,5 +1,5 @@
 
-:github_url: https://www.github.com/IBM/ibm_zos_zosmf/blob/workflow/plugins/modules/zmf_workflow.py
+:github_url: https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/zmf_workflow.py
 
 .. _zmf_workflow_module:
 
@@ -473,6 +473,7 @@ Return Values
 
         | **returned**: on success 
         | **type**: str
+
         **sample**: ::
 
                   "Workflow instance named: ansible_sample_workflow_SY1 with same definition file, variables and properties is found."
@@ -499,6 +500,7 @@ Return Values
 
         | **returned**: on success when `state=existed/started` 
         | **type**: str
+
         **sample**: ::
 
                   "2535b19e-a8c3-4a52-9d77-e30bb920f912"
