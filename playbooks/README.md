@@ -12,7 +12,7 @@ This directory contains an example Ansible config [ansible.cfg](ansible.cfg), wh
 You can modify the following configuration statement to refer to your own installation path for the collection:
 
 ```
-collections_paths = ../../../../../collections
+collections_paths = ~/.ansible/collections:/usr/share/ansible/collections
 ```
 
 *Reference Link:* [Ansible configuration settings](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-configuration-settings-locations)
