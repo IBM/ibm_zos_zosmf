@@ -5,7 +5,7 @@
 Operate z/OS Workflows
 ======================
 
-**IBM z/OSMF collection** provides capabilities to work with z/OS workflows using Ansible playbooks. There is a module as well as a role provided to interact with z/OSMF Workflows. The module uses z/OSMF workflow RESTful services to operate a workflow, based on the different parameters it receives. The module provides the following final states: existed, started, deleted and check. The role is used for completing a workflow, either forcibly or idempotently. 
+**IBM z/OSMF collection** provides capabilities to work with z/OS workflows using Ansible playbooks. There is a module as well as a role provided to interact with z/OSMF Workflows. The module uses z/OSMF workflow RESTful services to operate workflows, based on the different parameters it receives. The module provides the following final states: existed, started, deleted and check. The role is used for completing a workflow, either forcibly or idempotently.
 
 .. note::
    
@@ -23,13 +23,13 @@ Modules
 * `zmf_workflow`_:
    
    This module supports the following final states for working with z/OS workflows:
-  
+
    * **existed**: Indicate whether a workflow instance with the given name already exists in the z/OSMF server and has the same definition file, variables and properties.
-  
+
    * **started**: Create the workflow instance if it does not exist in the z/OSMF server and start it on each of the target z/OS systems.
-  
+
    * **deleted**: Delete the workflow instance from the z/OSMF server.
-  
+
    * **check**: Check the status of the workflow instance in the z/OSMF server.
 
 Roles
@@ -40,7 +40,7 @@ Roles
    This role is used for completing a z/OS workflow, either forcibly or idempotently:
 
    * **forcibly (force_complete: True)**: Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.
-   
+
    * **idempotently (force_complete: False)**: Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.
 
 Requirements
@@ -59,6 +59,6 @@ See the section `Playbooks`_.
 .. _zmf_workflow_complete:
    roles/README_zmf_workflow_complete.html
 .. _Requirements:
-   requirements.html
+   requirements_workflow.html
 .. _Playbooks:
    playbooks.html

@@ -12,6 +12,7 @@ Version 2.0.0
 
 Added
   * add roles: `zmf_job_complete`
+  * support a doc site for collection
 
 Refined
   * refine and rename module `workflow` to `zmf_workflow`

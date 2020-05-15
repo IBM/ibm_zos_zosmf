@@ -40,6 +40,6 @@ See the section `Playbooks`_.
 .. _zmf_cpm_remove_software_instance:
    roles/README_zmf_cpm_remove_software_instance.html
 .. _Requirements:
-   requirements.html
+   requirements_cpm.html
 .. _Playbooks:
    playbooks.html

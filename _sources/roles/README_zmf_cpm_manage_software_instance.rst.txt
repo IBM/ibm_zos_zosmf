@@ -79,12 +79,12 @@ See the section `Requirements`_.
 Sample Playbooks
 ----------------
 
-See the section `Playbooks`_.
+See the sample playbook in section `Playbooks`_.
 
 
 .. _zmf_cpm_provision_software_service:
    README_zmf_cpm_provision_software_service.html
 .. _Requirements:
-   requirements.html
+   ../requirements_cpm.html
 .. _Playbooks:
-   playbooks.html
+   ../playbooks/sample_role_cpm_manage_instance.html

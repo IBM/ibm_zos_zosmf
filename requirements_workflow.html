@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Requirements &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
+  <title>Requirements - Operate z/OS Workflows &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Requirements - Operate z/OS Workflows" href="requirements_workflow.html" />
-    <link rel="prev" title="Contributing" href="community_guides.html" /> 
+    <link rel="next" title="Requirements - Provision and Manage z/OS Software Instances" href="requirements_cpm.html" />
+    <link rel="prev" title="Requirements" href="requirements.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -98,10 +98,10 @@
 </ul>
 <p class="caption"><span class="caption-text">Requirements</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Requirements</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#overall-requirements">Overall Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#specific-requirements">Specific Requirements</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="requirements_workflow.html">Requirements - Operate z/OS Workflows</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="requirements.html">Requirements</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html#overall-requirements">Overall Requirements</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="requirements.html#specific-requirements">Specific Requirements</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Requirements - Operate z/OS Workflows</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_cpm.html">Requirements - Provision and Manage z/OS Software Instances</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_job.html">Requirements - Operate z/OS Jobs</a></li>
 </ul>
@@ -157,14 +157,16 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Requirements</li>
+          <li><a href="requirements.html">Requirements</a> &raquo;</li>
+        
+      <li>Requirements - Operate z/OS Workflows</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/requirements.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/requirements_workflow.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -178,42 +180,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="requirements">
-<h1>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h1>
-<p><strong>Control node</strong> is any machine with Ansible installed. From the control node, you can run commands and playbooks from a laptop, desktop, or server machine. However, you cannot run <strong>IBM z/OSMF collection</strong> on a Windows machine.</p>
-<p><strong>Managed node</strong> is often referred to as a target node, or host, and is the node that is managed by Ansible. Ansible does not need to be installed on a managed node.</p>
-<div class="section" id="overall-requirements">
-<h2>Overall Requirements<a class="headerlink" href="#overall-requirements" title="Permalink to this headline">¶</a></h2>
-<p>To use this collection, the following nodes require specific versions of software:</p>
+  <div class="section" id="requirements-operate-z-os-workflows">
+<h1>Requirements - Operate z/OS Workflows<a class="headerlink" href="#requirements-operate-z-os-workflows" title="Permalink to this headline">¶</a></h1>
+<p>To use the modules and roles which supplied to interact with <strong>z/OSMF Workflows</strong> in your playbook, besides the <a class="reference external" href="requirements.html">Overall Requirements</a>, the following nodes require specific versions of software:</p>
 <p><strong>Control Node</strong>:</p>
+<ul>
+<li><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/">Requests library for Python</a>: 2.23 or later</p>
+<blockquote>
+<div><p>It is required when using:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html">Ansible</a>: 2.9 or later</p></li>
-<li><p><a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3/en/homepage.html">Python</a>: 2.7 or later</p></li>
+<li><p>module: <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/zmf_workflow.py">zmf_workflow</a></p></li>
+<li><p>role: <a class="reference external" href="roles/README_zmf_workflow_complete.html">zmf_workflow_complete</a></p></li>
 </ul>
-<p><strong>Managed Node</strong>:</p>
-<ul>
-<li><p><a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3/en/homepage.html">z/OS</a>: V02.03.00 or later</p>
-<blockquote>
-<div><p>The target z/OS systems should be configured as the target hosts (managed nodes) in your playbook. It is not necessary to set up an SSH connection and install Python on the target z/OS systems. Instead, the modules and roles in this collection will create HTTPS connections with the z/OSMF server. Therefore <code class="docutils literal notranslate"><span class="pre">delegate_to:</span> <span class="pre">localhost</span></code> statement is required for using the modules in your playbook task. This statement is hard-coded within the roles.</p>
-</div></blockquote>
-</li>
-<li><p><a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3.izua300/abstract.html">z/OS Management Facility</a>: V02.03.00 or later</p>
-<blockquote>
-<div><p>The z/OSMF server must be installed and active on <strong>at least one</strong> z/OS system in the same sysplex. Information about the z/OSMF server must be configured in the inventory <code class="docutils literal notranslate"><span class="pre">hosts</span></code> file or in the <code class="docutils literal notranslate"><span class="pre">vars</span></code> file, such as the hostname, port number, and authentication info. The authentication info to connect to the z/OSMF server is provided when running playbook or it will be prompted during playbook run.</p>
 </div></blockquote>
 </li>
 </ul>
-</div>
-<div class="section" id="specific-requirements">
-<h2>Specific Requirements<a class="headerlink" href="#specific-requirements" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="requirements_workflow.html">Requirements - Operate z/OS Workflows</a></li>
-<li class="toctree-l1"><a class="reference internal" href="requirements_cpm.html">Requirements - Provision and Manage z/OS Software Instances</a></li>
-<li class="toctree-l1"><a class="reference internal" href="requirements_job.html">Requirements - Operate z/OS Jobs</a></li>
-</ul>
-</div>
-</div>
 </div>
 
 
@@ -224,10 +205,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="requirements_workflow.html" class="btn btn-neutral float-right" title="Requirements - Operate z/OS Workflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="requirements_cpm.html" class="btn btn-neutral float-right" title="Requirements - Provision and Manage z/OS Software Instances" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="community_guides.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="requirements.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

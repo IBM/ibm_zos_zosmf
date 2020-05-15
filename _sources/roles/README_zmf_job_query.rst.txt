@@ -2,12 +2,12 @@
 .. Copyright (c) IBM Corporation 2020                                        .
 .. ...........................................................................
 
-zmf_job_complete
-================
+zmf_job_query
+=============
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_complete**, to submit a job to run on z/OS, and check its return code.
+**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query the status of a job, and check its return code.
 
-.. **IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_complete**, to submit a job to run on z/OS, check its return code and specific contents in spool files.
+.. **IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query the status of a job, check its return code and specific contents in spool files.
 
 Role Variables
 --------------
@@ -60,101 +60,17 @@ zmf_key
   | **required**: False
   | **type**: str
 
-job_jcl_src
-  Specifies the detail location of file or data set containing the JCL.
-
-  * When *job_jcl_location=LOCAL*, this variable should be the absolute path of the JCL file on control node. For example: ``/tmp/job1.jcl``.
-
-  * When *job_jcl_location=DATASET*, this variable should be the full name of the data set or the member. For example: ``USER.TEST.JCLLIB`` or ``USER.TEST.JCLLIB(JCL1)``.
-
-  * When *job_jcl_location=USS*, this variable should be the absolute path of the JCL file in USS file system on managed z/OS node. For example: ``/var/data/jcl/job1.jcl``.
+job_name
+  Job name that identifies the job for which status is requested.
 
   | **required**: True
   | **type**: str
 
-job_jcl_location
-  An option to specify the location of the JCL to be submitted.
-  
-  * **LOCAL**: Specifies that the JCL residents in local, the role will try to load the JCL file from control node.
+job_id
+  Job ID that identifies the job for which status is requested. The value of this variable is folded to uppercase and cannot exceed eight characters. 
 
-  * **DATASET**: Specifies that the JCL is contained in a data set or s data set member on managed z/OS node. Note that the specified data set must be cataloged
-
-  * **USS**: Specifies that the JCL residents in USS file system on managed z/OS node.
-
-  | **required**: False
+  | **required**: True
   | **type**: str
-  | **default**: LOCAL
-  | **choices**: LOCAL, DATASET, USS
-
-job_internal_reader_class
-  A single character that specifies the internal reader class to define the default message class (MSGCLASS) for the job.
-
-  | **required**: False
-  | **type**: str
-  | **default**: A
-
-job_internal_reader_recfm
-  A single character that specifies the internal reader record format: ``F`` or ``V``.  
-  
-  * When submitting a job from a data set, you can omit this header. Otherwise, this value must match the record format of the data set.
-  
-  * When not submitting a job from a data set, if you omit this header or specify a value other than ``F`` or ``V``, the default of ``F`` is used.
-
-  | **required**: False
-  | **type**: str
-  
-job_internal_reader_lrecl
-  An integer value that specifies the internal reader logical record length (LRECL).
-  
-  * When submitting a job from a data set, you can omit this header. Otherwise, this value must match the LRECL of the data set.
-  
-  * When not submitting a job from a data set, if you omit this header or specify a non-integer value, the default of 80 is used.
-
-  | **required**: False
-  | **type**: int
-
-job_internal_reader_mode
-  A keyword that specifies the format of the input job.
-
-  * **RECORD**: When submitting a job from a data set, you can ether omit this variable or set it to ``RECORD``.
-  
-  * **TEXT**: When not submitting a job from a data set, ``TEXT`` is default value.
-  
-  * **BINARY**: When set this variable to ``BINARY``, *job_internal_reader_lrecl* must be omitted or set to ``F``.
-
-  | **required**: False
-  | **type**: str
-  | **choices**: RECORD, TEXT, BINARY
-
-job_user_correlator
-  Specifies the user portion of the job correlator. 
-  
-  In z/OS, a job correlator can be used to associate each job with a unique 64-character value. The correlator provides you with a means to query a job in the system and track it through execution.  
-  A job correlator consists of a 31-byte system-defined portion and a colon character ``:``, followed by a 32-byte user portion. 
-  
-  This value is 1 – 32 characters in length, where the first character must be uppercase alphabetic (A-Z) or special ($, #, @). The remaining characters (up to 31) can be any combination of uppercase alphabetic, numeric (0-9), or special. Blank characters are not supported.
-
-  | **required**: False
-  | **type**: str
-  
-job_symbols
-  This variable is a dictionary which specifies the name and value for JCL symbols.
-
-  A symbol name is 1 – 8 characters, where the first character must be uppercase alphabetic (A-Z) or special ($, #, @). The remaining characters (up to 7) can be any combination of uppercase alphabetic, numeric (0-9), or special.
-
-  A symbol value is limited to 255 characters. Multiple symbol names and values can be specified, up to a limit of 128.
-
-  For example:
-
-  .. code-block:: sh
-     
-     {
-       "symbol1": "value1",
-       "symbol2": "value2"
-     }
-
-  | **required**: False
-  | **type**: dict
 
 .. job_search_logic
 ..   Specifies the logic between the check of the job return code and job output. This variable only take effects when *job_search_output* is defined.

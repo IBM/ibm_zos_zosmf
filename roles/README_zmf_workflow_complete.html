@@ -101,6 +101,7 @@
 <li class="toctree-l3"><a class="reference internal" href="README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="README_zmf_cpm_remove_software_instance.html">zmf_cpm_remove_software_instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="README_zmf_job_complete.html">zmf_job_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README_zmf_job_query.html">zmf_job_query</a></li>
 </ul>
 </li>
 </ul>
@@ -237,8 +238,8 @@
 </dd>
 <dt>force_complete</dt><dd><p>Specify whether to complete the workflow instance forcibly or idempotently.</p>
 <ul class="simple">
-<li><p><strong>forcibly (force_complete: True)</strong>: Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p></li>
-<li><p><strong>idempotently (force_complete: False)</strong>: Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p></li>
+<li><p><strong>Forcibly (force_complete=True)</strong>: Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p></li>
+<li><p><strong>Idempotently (force_complete=False)</strong>: Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p></li>
 </ul>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
@@ -397,11 +398,11 @@
 </div>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
-<p>See the section <a class="reference external" href="requirements.html">Requirements</a>.</p>
+<p>See the section <a class="reference external" href="../requirements_workflow.html">Requirements</a>.</p>
 </div>
 <div class="section" id="sample-playbooks">
 <h2>Sample Playbooks<a class="headerlink" href="#sample-playbooks" title="Permalink to this headline">¶</a></h2>
-<p>See the section <a class="reference external" href="playbooks.html">Playbooks</a>.</p>
+<p>See the sample playbook in section <a class="reference external" href="../playbooks/sample_role_workflow_complete.html">Playbooks</a>.</p>
 </div>
 </div>
 
