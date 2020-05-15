@@ -2,7 +2,7 @@
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 ---
-- name: Send https request to query the contents of a job spool file
+- name: Query the contents of each spool file - Send https request
   uri:
     url: "{{ file_item['records-url'] }}?mode=text&research={{ job_search_output | urlencode }}\
           &insensitive={{ job_search_output_insensitive }}&maxreturnsize={{ job_search_output_maxreturnsize }}"
@@ -26,17 +26,17 @@
     expect_rcode: 200
     result: "{{ record_result }}"
 
-- name: Parse the matched contents
+- name: Query the contents of each spool file - Parse the matched contents - Step 1 Turn into list
   set_fact:
     matched_list: "{{ record_result.content | regex_findall('.*\n') }}"
     matched_list_parse: []
 
-- name: Parse the matched contents
+- name: Query the contents of each spool file - Parse the matched contents - Step 2 Remove '\n'
   set_fact:
     matched_list_parse: "{{ matched_list_parse | union([ item | regex_replace('\n', '') ]) }}"
     job_matched_contents_found: True
   loop: "{{ matched_list }}"
 
-- name: Parse the matched contents
+- name: Query the contents of each spool file - Parse the matched contents - Step 3 Combine into job_matched_contents
   set_fact:
     job_matched_contents: "{{ job_matched_contents | combine({ file_item.ddname: matched_list_parse }) }}"

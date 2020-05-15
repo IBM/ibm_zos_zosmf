@@ -2,9 +2,9 @@
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 ---
-- name: Validate arguments
+- name: Validate variables
   block:
-    - name: Prepare work
+    - name: Validate variables
       set_fact:
         job_jcl_location_upper: "{{ job_jcl_location | upper }}"
         job_internal_reader_mode_upper: "{{ job_internal_reader_mode | default() | upper }}"
@@ -17,20 +17,20 @@
         final_result: {}
         empty_str: ""
 
-    - name: Fail if mandatory variable - job_jcl_src is not defined
+    - name: Validate variables - Fail if the mandatory variable job_jcl_src is not defined
       fail:
         msg: 'Please define the mandatory variable: job_jcl_src'
       when: job_jcl_src is undefined or job_jcl_src == empty_str
 
-    - name: Fail if optional variable - job_jcl_location is defined with other values than "LOCAL", "DATASET", "USS"
+    - name: Validate variables - Fail if the optional variable job_jcl_location is defined with other values than "LOCAL", "DATASET", "USS"
       fail:
-        msg: 'Please define optional variable: job_jcl_location as one of below values: LOCAL, DATASET, USS'
+        msg: 'Please define the optional variable: job_jcl_location as one of below values: LOCAL, DATASET, USS'
       when:
         - job_jcl_location_upper != "LOCAL"
         - job_jcl_location_upper != "DATASET"
         - job_jcl_location_upper != "USS"
 
-    - name: Fail if optional variable - either zmf_user/zmf_password or zmf_crt/zmf_key are required
+    - name: Validate variables - Fail if either zmf_user/zmf_password or zmf_crt/zmf_key are not defined
       fail:
         msg: "Please define either zmf_user/zmf_password or zmf_crt/zmf_key."
       when:
@@ -39,24 +39,24 @@
 
 - name: Prepare JCL
   block:
-    - name: Use local file {{ job_jcl_src }} as the JCL
+    - name: Prepare JCL - Use local file {{ job_jcl_src }} as the JCL
       set_fact:
         request_body_format: "raw"
         request_body: "{{ lookup('file', job_jcl_src) }}"
       when: job_jcl_location_upper == "LOCAL"
 
-    - name: Use data set {{ job_jcl_src }} on {{ inventory_hostname }} as the JCL
+    - name: Prepare JCL - Use data set {{ job_jcl_src }} on {{ inventory_hostname }} as the JCL
       set_fact:
         request_body_format: "json"
         data_set: "//'{{ job_jcl_src | trim }}'"
       when: job_jcl_location_upper == "DATASET"
 
-    - name: Set data set
+    - name: Prepare JCL - Use data set {{ job_jcl_src }} on {{ inventory_hostname }} as the JCL - Set data set
       set_fact:
         request_body: '{ "file": "{{ data_set }}" }'
       when: data_set is defined
 
-    - name: Use uss file {{ job_jcl_src }} on {{ inventory_hostname }} as the JCL
+    - name: Prepare JCL - Use uss file {{ job_jcl_src }} on {{ inventory_hostname }} as the JCL
       set_fact:
         request_body_format: "json"
         request_body: "{ 'file': '{{ job_jcl_src | trim }}' }"
@@ -64,55 +64,55 @@
 
 - name: Prepare headers
   block:
-    - name: Set CSRF header
+    - name: Prepare headers - Set CSRF header
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-CSRF-ZOSMF-HEADER': 'JOB' }) }}"
 
-    - name: Set X-IBM-Intrdr-Class to {{ job_internal_reader_class }}
+    - name: Prepare headers -  Set X-IBM-Intrdr-Class to {{ job_internal_reader_class }} if job_internal_reader_class is defined
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Class': job_internal_reader_class | trim}) }}"
       when: job_internal_reader_class is defined and job_internal_reader_class != empty_str
 
-    - name: Set X-IBM-Intrdr-Recfm to {{ job_internal_reader_recfm }}
+    - name: Prepare headers - Set X-IBM-Intrdr-Recfm to {{ job_internal_reader_recfm }} if job_internal_reader_recfm is defined
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Recfm': job_internal_reader_recfm | trim }) }}"
       when: job_internal_reader_recfm is defined and job_internal_reader_recfm != empty_str
 
-    - name: Set X-IBM-Intrdr-Lrecl to {{ job_internal_reader_lrecl }}
+    - name: Prepare headers - Set X-IBM-Intrdr-Lrecl to {{ job_internal_reader_lrecl }} if job_internal_reader_lrecl is defined
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Lrecl': job_internal_reader_lrecl | trim }) }}"
       when: job_internal_reader_lrecl is defined and job_internal_reader_lrecl != empty_str
 
-    - name: Set X-IBM-Intrdr-Mode to {{ job_internal_reader_mode_upper }}
+    - name: Prepare headers - Set X-IBM-Intrdr-Mode to {{ job_internal_reader_mode_upper }} if job_internal_reader_mode is defined
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Mode': job_internal_reader_mode_upper | trim }) }}"
       when: job_internal_reader_mode_upper is defined and job_internal_reader_mode_upper != empty_str
 
-    - name: Set Content-Type to "application/json"
+    - name: Prepare headers - Set Content-Type to "application/json" if use data set or uss file as JCL
       set_fact:
         request_headers: "{{ request_headers | combine({ 'Content-Type': 'application/json' }) }}"
       when: request_body_format == "json"
 
-    - name: Set Content-Type to "text/plain"
+    - name: Prepare headers - Set Content-Type to "text/plain" if use local file as JCL and job_internal_reader_mode is set to TEXT or is omitted
       set_fact:
         request_headers: "{{ request_headers | combine({ 'Content-Type': 'text/plain' }) }}"
       when:
         - request_body_format == "raw"
-        - job_internal_reader_mode_upper == "TEXT" or job_internal_reader_mode_upper == ""
+        - job_internal_reader_mode_upper == "TEXT" or job_internal_reader_mode_upper == empty_str
 
-    - name: Set Content-Type to "application/octet-stream"
+    - name: Prepare headers - Set Content-Type to "application/octet-stream" if use local file as JCL and job_internal_reader_mode is set to BINARY or RECORD
       set_fact:
         request_headers: "{{ request_headers | combine({ 'Content-Type': 'application/octet-stream' }) }}"
       when:
         - request_body_format == "raw"
         - job_internal_reader_mode_upper == "BINARY" or job_internal_reader_mode_upper == "RECORD"
 
-    - name: Set user-correlator to {{ job_user_correlator }}
+    - name: Prepare headers - Set user-correlator to {{ job_user_correlator }} if job_user_correlator is defined
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-IBM-User-Correlator': job_user_correlator | trim }) }}"
       when: job_user_correlator is defined and job_user_correlator != empty_str
 
-    - name: Set JCL symbols
+    - name: Prepare headers - Set JCL symbols if job_jcl_symbols is defined
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-IBM-JCL-Symbol-' ~ item.key: item.value}) }}"
       loop: "{{ job_jcl_symbols | dict2items }}"
@@ -120,7 +120,7 @@
 
 - name: Submit job to {{ inventory_hostname }}
   block:
-    - name: Send https request to submit the job
+    - name: Submit job to {{ inventory_hostname }} - Send https request
       uri:
         url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restjobs/jobs"
         method: PUT
@@ -139,13 +139,13 @@
       register: submit_result
       failed_when: no
 
-    - name: Handle request error if needed
+    - name: Submit job to {{ inventory_hostname }} - Handle request error
       include_tasks: handle_request_error.yml
       vars:
         expect_rcode: 201
         result: "{{ submit_result }}"
 
-    - name: Set job information
+    - name: Submit job to {{ inventory_hostname }} - Retrieve job information and update final_result
       set_fact:
         final_result: "{{ final_result | combine({ \
                        'job_name': submit_result.json.jobname, \
@@ -154,8 +154,9 @@
         job_url: "{{ submit_result.json.url }}"
         job_files_url: "{{ submit_result.json['files-url'] }}"
 
-- block:
-    - name: Query and match the return code of the submitted job
+- name: Query and match the return code
+  block:
+    - name: Query and match the return code - Send https request
       uri:
         url: "{{ job_url }}"
         method: GET
@@ -176,57 +177,57 @@
       retries: "{{ complete_check_times }}"
       delay: "{{ complete_check_delay }}"
 
-    - name: Handle request error if needed
+    - name: Query and match the return code - Handle request error
       include_tasks: handle_request_error.yml
       vars:
         expect_rcode: 200
         result: "{{ status_result }}"
 
     - block:
-        - name: Update final result
+        - name: Query and match the return code - Retrieve job information and update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
                            'msg': 'Job is in input processing or still running: status=' ~ status_result.json.status }) }}"
-        - name: Fail if the submitted job is in input processing or still running
+        - name: Query and match the return code - Fail if the submitted job is in input processing or still running
           fail:
             msg: "{{ final_result }}"
       when:
         - status_result.status == 200
         - status_result.json.status != 'OUTPUT'
 
-    - name: Check the return code of the submitted job
+    - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn'
       set_fact:
         job_matched_rc_str: "{{ status_result.json.retcode | regex_search('^CC') }}"
         final_result: "{{ final_result | combine({ 'job_retcode': status_result.json.retcode }) }}"
 
     - block:
-        - name: Update final result
+        - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn' - Update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
                            'msg': 'Job is not completed. The return code is mismatched.' }) }}"
-        - name: Fail if the return code is not "CC nnnn"
+        - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn' - Fail if the return code is not "CC nnnn"
           fail:
             msg: "{{ final_result }}"
       when:
         - job_matched_rc_str == empty_str
 
-    - name: Match the return code by job_max_rc
+    - name: Query and match the return code - Check the return code - Step 2 match job_max_rc
       set_fact:
         job_matched_rc_int: "{{ status_result.json.retcode | replace('CC ', '') }}"
 
     - block:
-        - name: Update final result
+        - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
                            'msg': 'Job is not completed. The return code is mismatched.' }) }}"
-        - name: Fail if the return code is mismatched
+        - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Fail if the return code is mismatched
           fail:
             msg: "{{ final_result }}"
       when:
         - job_matched_rc_int|int > job_max_rc|int
 
     - block:
-        - name: Update final result
+        - name: Update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
                            'msg': 'Job is completed successfully. The return code is matched.' }) }}"
@@ -234,5 +235,5 @@
         - job_matched_rc_str != empty_str
         - job_matched_rc_int|int <= job_max_rc|int
 
-- name: Check and return the final result
+- name: Return final_result
   debug: var=final_result
