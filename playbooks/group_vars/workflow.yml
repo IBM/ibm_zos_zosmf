@@ -2,12 +2,12 @@
 
 # The value for property zmf_host is the hostname of the system on which z/OSMF server is running on.
 # The value for property zmf_port is the port number of z/OSMF server.
-# The value for property zmf_user is your username of z/OSMF.
-# The value for property zmf_password is the password of your username of z/OSMF.
 
 zmf_host: your.host.name
 zmf_port: port_number
 
+# The value for property zmf_user is your username of z/OSMF.
+# The value for property zmf_password is the password of your username of z/OSMF.
 # `zmf_user` and `zmf_password` are prompted to input when running a playbook
 # zmf_user:
 # zmf_password:

@@ -61,9 +61,9 @@ zmf_key
 force_complete
   Specify whether to complete the workflow instance forcibly or idempotently.
 
-  * **forcibly (force_complete: True)**: Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.
+  * **Forcibly (force_complete=True)**: Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.
    
-  * **idempotently (force_complete: False)**: Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.
+  * **Idempotently (force_complete=False)**: Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.
 
   | **required**: False
   | **type**: bool
