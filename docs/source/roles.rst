@@ -21,3 +21,4 @@ Role Reference
    roles/README_zmf_cpm_manage_software_instance
    roles/README_zmf_cpm_remove_software_instance
    roles/README_zmf_job_complete
+   roles/README_zmf_job_query

@@ -244,10 +244,10 @@ See the section `Requirements`_.
 Sample Playbooks
 ----------------
 
-See the section `Playbooks`_.
+See the sample playbook in section `Playbooks`_.
 
 
 .. _Requirements:
-   requirements.html
+   ../requirements_workflow.html
 .. _Playbooks:
-   playbooks.html
+   ../playbooks/sample_role_workflow_complete.html

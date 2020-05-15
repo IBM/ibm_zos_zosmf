@@ -25,7 +25,7 @@ You can modify the following configuration statement to refer to your own instal
 
 .. code-block:: yaml
 
-   collections_paths = ../../../../../collections
+   collections_paths = ~/.ansible/collections:/usr/share/ansible/collections
 
 For more information about available configurations for ``ansible.cfg``, see `Ansible Configuration Settings`_.
 
@@ -38,70 +38,134 @@ Included in the `playbooks directory`_ is a sample inventory file `hosts`_ that 
 
 .. code-block:: yaml
 
-   [zsystems]
-   SY1 ansible_host=hostname_of_zos_system
+   [workflow]
+   SY1
+   SY2
 
-* **SY1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system.
-* **ansible_host**: The value of this property is the hostname of the target z/OS system. You can modify it to refer to your own z/OS system, for example: ``ansible_host=pev076.pok.ibm.com``.
+   [cpm]
+   zosmf1 zmf_host=zosmf1.ibm.com zmf_port=443
+   zosmf2 zmf_host=zosmf2.ibm.com zmf_port=443
+
+   [job]
+   SY1 zmf_host=zosmf1.ibm.com zmf_port=443
+   SY2 zmf_host=zosmf2.ibm.com zmf_port=443
+
+* **workflow**: Host grouping for z/OSMF Workflows.
+
+   * **SY1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in **z/OSMF Systems** plugin.
+
+* **cpm**: Host grouping for Cloud Provisioning & Management (CP&M).
+
+   * **zosmf1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in `Host Vars`_.
+
+   * **zmf_host**: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: ``zmf_host=pev076.pok.ibm.com``.
+
+   * **zmf_port**: The value of this property identifies the port number of z/OSMF server.
+
+* **job**: Host grouping for z/OSMF Jobs.
+
+   * **SY1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in `Host Vars`_.
+
+   * **zmf_host**: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: ``zmf_host=pev076.pok.ibm.com``.
+
+   * **zmf_port**: The value of this property identifies the port number of z/OSMF server.
+
+Host Vars
+---------
+
+You can supply host variables in either the inventory file or the separate variable file. Storing separate host and group variables files may help you organize your variable values more easily.
+
+Included in the `playbooks directory`_ is some sample variables files in the directory `host_vars`_.
+
+* `zosmf1.yml`_: It contains the variables for host ``zosmf1`` in group ``cpm``:
+
+   .. code-block:: yaml
+
+      instance_record_dir: "/tmp"
+      api_polling_retry_count: 50
+      api_polling_interval_seconds: 10
+
+   * **instance_record_dir**: The value of this property identifies the file path in local system where the provision result (in json) will be stored.
+     
+   * **api_polling_retry_count**: The value of this property identifies max times of status polling before task fail and exit.
+
+   * **api_polling_interval_seconds**: The value of this property identifies interval in seconds between each *api_polling_retry_count* polling.
+
+* `SY1.yml`_: It contains the variables for host ``SY1`` in group ``job``:
+
+   .. code-block:: yaml
+
+      # zmf_user:
+      # zmf_password:
+      # zmf_crt:
+      # zmf_key:
+      job_name: TESTSPOL
+      job_id: JOB00000
+
+
+   * **zmf_user**: The value of this property identifies the username to be used for authenticating with z/OSMF server.
+
+   * **zmf_password**: The value of this property identifies the password to be used for authenticating with z/OSMF server.
+
+   * **zmf_crt**: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.
+
+   * **zmf_key**: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.
+
+   * **job_name**: The value of this property identifies the job name to be used for query job status in role ``zmf_job_query``.
+  
+   * **job_id**: The value of this property identifies the job ID to be used for query job status in role ``zmf_job_query``.
+
+   .. note::
+     
+      This is an easy example to use username and password for authenticating with z/OSMF server. ``zmf_user`` and ``zmf_password`` will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use ``zmf_crt`` and ``zmf_key`` to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.
 
 Group Vars
 ----------
 
-You can supply group variables in either the inventory file or the separate variable file. Storing separate host
-and group variables files may help you organize your variable values more easily. 
+You can supply group variables in either the inventory file or the separate variable file. Storing separate host and group variables files may help you organize your variable values more easily.
 
 Included in the `playbooks directory`_ is some sample variables files in the directory `group_vars`_.
 
 * `workflow.yml`_: It contains the variables for system group ``workflow``:
 
-  .. code-block:: yaml
+   .. code-block:: yaml
   
-     zmf_host: your.host.name
-     zmf_port: port_number
-     # zmf_user:
-     # zmf_password:
-     # zmf_crt:
-     # zmf_key:
+      zmf_host: your.host.name
+      zmf_port: port_number
+      # zmf_user:
+      # zmf_password:
+      # zmf_crt:
+      # zmf_key:
 
-  * **zmf_host**: Hostname of the z/OSMF server, for example: ``zmf_host: pev076.pok.ibm.com``
-  * **zmf_port**: Port number of the z/OSMF server, for example: ``zmf_port: 443``
+   * **zmf_host**: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: ``zmf_host=pev076.pok.ibm.com``.
 
-  .. note::
+   * **zmf_port**: The value of this property identifies the port number of z/OSMF server.
+
+   * **zmf_user**: The value of this property identifies the username to be used for authenticating with z/OSMF server.
+
+   * **zmf_password**: The value of this property identifies the password to be used for authenticating with z/OSMF server.
+
+   * **zmf_crt**: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.
+
+   * **zmf_key**: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.
+
+   .. note::
      
-     This is an easy example to use username and password for authenticating with z/OSMF server. ``zmf_user`` and ``zmf_password`` will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use ``zmf_crt`` and ``zmf_key`` to specify the certificate chain file and key file to be used for HTTPS client authentication.
-
-* `cpm.yml`_: It contains the variables for system group ``cpm``:
-
-  .. code-block:: yaml
-
-     instance_record_dir: "/tmp"
-     api_polling_retry_count: 30
-     api_polling_interval_seconds: 10
-
-  * **instance_record_dir**: File path in local system where the provision result (in json) will be stored.
-  * **api_polling_retry_count**: Max times of status polling before task fail and exit.
-  * **api_polling_interval_seconds**: Interval in seconds between each ``api_polling_retry_count`` polling.
+      This is an easy example to use username and password for authenticating with z/OSMF server. ``zmf_user`` and ``zmf_password`` will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use ``zmf_crt`` and ``zmf_key`` to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.
 
 Sample Playbooks
 ----------------
 
-* `sample_role_workflow_complete.yml`_: This sample playbook shows how to complete a z/OS workflow on the target z/OS systems via z/OSMF. To run the sample playbook, below preparation works are required:
-   
-   1. In this sample playbook, the workflow definition file `workflow_sample_automation_steps.xml`_ is used to create the workflow instance. You need to manually upload it to the z/OS file system. For example, you can upload it to the directory ``/var/zosmf/workflow_def/``. Then modify the value of variable ``workflow_file`` in the sample playbook to refer to the location of the workflow definition file.
-   
-   2. In the inventory file, the nickname ``SY1`` for the target z/OS system, which is configured as managed node, is used to create the workflow instance. You can modify it to refer to your own z/OS system. You need to ensure the z/OS system ``SY1`` or your own z/OS system is configured in z/OSMF **Systems** task.
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-* `sample_role_cpm_manage_instance.yml`_: This sample playbook shows how to perform instance action on a provisioned instance in z/OSMF CP&M.
-
-* `sample_role_cpm_provision.yml`_: This sample playbook shows how to provision an instance in z/OSMF CP&M.
-
-* `sample_role_cpm_remove_instance.yml`_: This sample playbook shows how to remove the deprovisioned instance in z/OSMF CP&M.
-
-* `sample_role_deploy_cics_application.yml`_: This sample playbook shows how to install a web application on a provisioned instance in z/OSMF CP&M. Please copy ``files/role_cics_wlp_install_app`` directory to roles directory before using this example.
-
-.. note::
-   
-   * For CP&M roles, the inventory file is merely a placeholder for retrieving cpm group variables, you shouldn't need to modify the inventory file or change the host to something else other than ``cpm``.
+   playbooks/sample_role_workflow_complete
+   playbooks/sample_role_cpm_manage_instance
+   playbooks/sample_role_cpm_provision
+   playbooks/sample_role_cpm_remove_instance
+   playbooks/sample_role_deploy_cics_application
+   playbooks/sample_role_job_complete
 
 Run the Playbooks
 -----------------
@@ -131,25 +195,19 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
    https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
 .. _patterns:
    https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#intro-patterns
+.. _Host Vars:
+   #host-vars
 .. _hosts:
    https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/hosts
+.. _host_vars:
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/host_vars/
 .. _group_vars:
    https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/
 .. _workflow.yml:
    https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/workflow.yml
-.. _cpm.yml:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/cpm.yml
-.. _sample_role_workflow_complete.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_workflow_complete.yml
-.. _workflow_sample_automation_steps.xml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/workflow_sample_automation_steps.xml
-.. _sample_role_cpm_manage_instance.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_manage_instance.yml
-.. _sample_role_cpm_provision.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_provision.yml
-.. _sample_role_cpm_remove_instance.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_remove_instance.yml
-.. _sample_role_deploy_cics_application.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_deploy_cics_application.yml
+.. _zosmf1.yml:
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/host_vars/zosmf1.yml
+.. _SY1.yml:
+   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/host_vars/SY1.yml
 .. _ansible-playbook:
    https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html

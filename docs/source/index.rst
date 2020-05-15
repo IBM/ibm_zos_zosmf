@@ -47,7 +47,7 @@ Features
    community_guides
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
    :caption: Requirements
 
    requirements
