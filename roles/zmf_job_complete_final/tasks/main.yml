@@ -1,0 +1,362 @@
+# Copyright (c) IBM Corporation 2020 
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+- name: Validate arguments
+  block:
+    - name: Prepare work
+      set_fact:
+        job_search_logic_upper: "{{ job_search_logic | upper }}"
+        job_jcl_location_upper: "{{ job_jcl_location | upper }}"
+        job_internal_reader_mode_upper: "{{ job_internal_reader_mode | default() | upper }}"
+        job_jcl_symbols: "{{ job_jcl_symbols | default({}) }}"
+        user: "{{ zmf_user | default() }}"
+        password: "{{ zmf_password | default() }}"
+        crt: "{{ zmf_crt | default() }}"
+        key: "{{ zmf_key | default() }}"
+        request_headers: {}
+        final_result: {}
+        empty_str: ""
+
+    - name: Fail if mandatory variable - job_jcl_src is not defined
+      fail:
+        msg: 'Please define the mandatory variable: job_jcl_src'
+      when: job_jcl_src is undefined or job_jcl_src == empty_str
+
+    - name: Fail if optional variable - job_jcl_location is defined with other values than "LOCAL", "DATASET", "USS"
+      fail:
+        msg: 'Please define optional variable: job_jcl_location as one of below values: LOCAL, DATASET, USS'
+      when:
+        - job_jcl_location_upper != "LOCAL"
+        - job_jcl_location_upper != "DATASET"
+        - job_jcl_location_upper != "USS"
+
+    - name: Fail if optional variable - either zmf_user/zmf_password or zmf_crt/zmf_key are required
+      fail:
+        msg: "Please define either zmf_user/zmf_password or zmf_crt/zmf_key."
+      when:
+        - user == empty_str or password == empty_str
+        - crt == empty_str or key == empty_str
+
+    - name: Fail if optional variable - job_search_logic is defined with other values than "AND", "OR"
+      fail:
+        msg: "Please define optional variable: job_search_logic as one of below values: AND, OR"
+      when:
+        - job_search_logic_upper != "AND"
+        - job_search_logic_upper != "OR"
+
+- name: Prepare JCL
+  block:
+    - name: Use local file {{ job_jcl_src }} as the JCL
+      set_fact:
+        request_body_format: "raw"
+        request_body: "{{ lookup('file', job_jcl_src) }}"
+      when: job_jcl_location_upper == "LOCAL"
+
+    - name: Use data set {{ job_jcl_src }} on {{ inventory_hostname }} as the JCL
+      set_fact:
+        request_body_format: "json"
+        data_set: "//'{{ job_jcl_src | trim }}'"
+      when: job_jcl_location_upper == "DATASET"
+
+    - name: Set data set
+      set_fact:
+        request_body: '{ "file": "{{ data_set }}" }'
+      when: data_set is defined
+
+    - name: Use uss file {{ job_jcl_src }} on {{ inventory_hostname }} as the JCL
+      set_fact:
+        request_body_format: "json"
+        request_body: "{ 'file': '{{ job_jcl_src | trim }}' }"
+      when: job_jcl_location_upper == "USS"
+
+- name: Prepare headers
+  block:
+    - name: Set CSRF header
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'X-CSRF-ZOSMF-HEADER': 'JOB' }) }}"
+
+    - name: Set X-IBM-Intrdr-Class to {{ job_internal_reader_class }}
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Class': job_internal_reader_class | trim}) }}"
+      when: job_internal_reader_class is defined and job_internal_reader_class != empty_str
+
+    - name: Set X-IBM-Intrdr-Recfm to {{ job_internal_reader_recfm }}
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Recfm': job_internal_reader_recfm | trim }) }}"
+      when: job_internal_reader_recfm is defined and job_internal_reader_recfm != empty_str
+
+    - name: Set X-IBM-Intrdr-Lrecl to {{ job_internal_reader_lrecl }}
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Lrecl': job_internal_reader_lrecl | trim }) }}"
+      when: job_internal_reader_lrecl is defined and job_internal_reader_lrecl != empty_str
+
+    - name: Set X-IBM-Intrdr-Mode to {{ job_internal_reader_mode_upper }}
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Mode': job_internal_reader_mode_upper | trim }) }}"
+      when: job_internal_reader_mode_upper is defined and job_internal_reader_mode_upper != empty_str
+
+    - name: Set Content-Type to "application/json"
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'Content-Type': 'application/json' }) }}"
+      when: request_body_format == "json"
+
+    - name: Set Content-Type to "text/plain"
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'Content-Type': 'text/plain' }) }}"
+      when:
+        - request_body_format == "raw"
+        - job_internal_reader_mode_upper == "TEXT" or job_internal_reader_mode_upper == ""
+
+    - name: Set Content-Type to "application/octet-stream"
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'Content-Type': 'application/octet-stream' }) }}"
+      when:
+        - request_body_format == "raw"
+        - job_internal_reader_mode_upper == "BINARY" or job_internal_reader_mode_upper == "RECORD"
+
+    - name: Set user-correlator to {{ job_user_correlator }}
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'X-IBM-User-Correlator': job_user_correlator | trim }) }}"
+      when: job_user_correlator is defined and job_user_correlator != empty_str
+
+    - name: Set JCL symbols
+      set_fact:
+        request_headers: "{{ request_headers | combine({ 'X-IBM-JCL-Symbol-' ~ item.key: item.value}) }}"
+      loop: "{{ job_jcl_symbols | dict2items }}"
+      when: job_jcl_symbols != {} and item.key != empty_str
+
+- name: Submit job to {{ inventory_hostname }}
+  block:
+    - name: Send https request to submit the job
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restjobs/jobs"
+        method: PUT
+        user: "{{ user }}"
+        password: "{{ password }}"
+        client_cert: "{{ crt }}"
+        client_key: "{{ key }}"
+        validate_certs: no
+        force_basic_auth: yes
+        headers: "{{ request_headers }}"
+        body: "{{ request_body }}"
+        body_format: "{{ request_body_format }}"
+        return_content: yes
+        status_code: "201"
+      delegate_to: localhost
+      register: submit_result
+      failed_when: no
+
+    - name: Handle request error if needed
+      include_tasks: handle_request_error.yml
+      vars:
+        expect_rcode: 201
+        result: "{{ submit_result }}"
+
+    - name: Set job information
+      set_fact:
+        final_result: "{{ final_result | combine({ \
+                       'job_name': submit_result.json.jobname, \
+                       'job_id': submit_result.json.jobid, \
+                       'job_correlator': submit_result.json['job-correlator'] }) }}"
+        job_url: "{{ submit_result.json.url }}"
+        job_files_url: "{{ submit_result.json['files-url'] }}"
+
+- block:
+    - name: Query and match the return code of the submitted job
+      uri:
+        url: "{{ job_url }}"
+        method: GET
+        return_content: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "TEST"
+        user: "{{ user }}"
+        password: "{{ password }}"
+        client_cert: "{{ crt }}"
+        client_key: "{{ key }}"
+        force_basic_auth: yes
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: status_result
+      failed_when: no
+      until: ('json' in status_result) and ('status' in status_result.json) and (status_result.json.status == 'OUTPUT')
+      retries: "{{ complete_check_times }}"
+      delay: "{{ complete_check_delay }}"
+
+    - name: Handle request error if needed
+      include_tasks: handle_request_error.yml
+      vars:
+        expect_rcode: 200
+        result: "{{ status_result }}"
+
+    - block:
+        - name: Update final result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is in input processing or still running: status=' ~ status_result.json.status }) }}"
+        - name: Fail if the submitted job is in input processing or still running
+          fail:
+            msg: "{{ final_result }}"
+      when:
+        - status_result.status == 200
+        - status_result.json.status != 'OUTPUT'
+
+    - name: Check the return code of the submitted job
+      set_fact:
+        job_matched_rc_str: "{{ status_result.json.retcode | regex_search('^CC') }}"
+        final_result: "{{ final_result | combine({ 'job_retcode': status_result.json.retcode }) }}"
+
+    - block:
+        - name: Update final result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+        - name: Fail if the return code is not "CC nnnn"
+          fail:
+            msg: "{{ final_result }}"
+      when:
+        - job_search_logic_upper == 'AND'
+        - job_matched_rc_str == empty_str
+    
+    - block:
+        - name: Match the return code by job_max_rc
+          set_fact:
+            job_matched_rc_int: "{{ status_result.json.retcode | replace('CC ', '') }}"
+        
+        - block:
+            - name: Update final result
+              set_fact:
+                final_result: "{{ final_result | combine({ \
+                              'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+            - name: Fail if the return code is mismatched
+              fail:
+                msg: "{{ final_result }}"
+          when:
+            - job_search_logic_upper == 'AND'
+            - job_matched_rc_int|int > job_max_rc|int
+      when:
+        - job_matched_rc_str != empty_str
+
+- block:
+    - name: Query and match the contents in spool files of the submitted job if 'job_search_output' is defined
+      uri:
+        url: "{{ job_files_url }}"
+        method: GET
+        return_content: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "TEST"
+        user: "{{ user }}"
+        password: "{{ password }}"
+        client_cert: "{{ crt }}"
+        client_key: "{{ key }}"
+        force_basic_auth: yes
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: files_result
+      failed_when: no
+
+    - name: Handle request error if needed
+      include_tasks: handle_request_error.yml
+      vars:
+        expect_rcode: 200
+        result: "{{ files_result }}"
+
+    - name: Match the contents in spool files of the submitted job if 'job_search_output' is defined
+      set_fact:
+        job_matched_contents: {}
+        job_matched_contents_found: False
+
+    - include_tasks: query_each_spool_file.yml
+      when: (job_search_output_ddname is undefined) or (job_search_output_ddname == []) or (file_item.ddname in job_search_output_ddname)
+      loop: "{{ files_result.json }}"
+      loop_control:
+        label: "{{ file_item.ddname }}"
+        loop_var: file_item
+
+    - name: Update final result
+      set_fact:
+        final_result: "{{ final_result | combine({ 'job_matched_contents': job_matched_contents }) }}"
+        
+    - block:
+        - name: Update final result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is not completed. The return code is matched but no matched output content is found.' }) }}"
+        - name: Fail if no matched output content is found
+          fail:
+            msg: "{{ final_result }}"
+      when:
+        - job_search_logic_upper == 'AND'
+        - not job_matched_contents_found
+
+    - block:
+        - name: Update final result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is not completed. The return code is mismatched and no matched output content is found.' }) }}"
+        - name: Fail if the return code is mismatched and no matched output content is found
+          fail:
+            msg: "{{ final_result }}"
+      when:
+        - job_search_logic_upper == 'OR'
+        - (job_matched_rc_str == empty_str) or (job_matched_rc_int|int > job_max_rc|int)
+        - not job_matched_contents_found
+
+    - block:
+        - name: Update final result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is completed successfully. The return code is matched although no matched output content is found.' }) }}"
+      when:
+        - job_search_logic_upper == 'OR'
+        - job_matched_rc_str != empty_str
+        - job_matched_rc_int|int <= job_max_rc|int
+        - not job_matched_contents_found
+
+    - block:
+        - name: Update final result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is completed successfully. The matched output contents are found although the return code is mismatched.' }) }}"
+      when:
+        - job_search_logic_upper == 'OR'
+        - (job_matched_rc_str == empty_str) or (job_matched_rc_int|int > job_max_rc|int)
+        - job_matched_contents_found
+
+    - block:
+        - name: Update final result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is completed successfully. The return code is matched and the matched output contents are found.' }) }}"
+      when:
+        - job_matched_rc_str != empty_str
+        - job_matched_rc_int|int <= job_max_rc|int
+        - job_matched_contents_found
+  when: job_search_output is not undefined
+
+- block:
+    - name: Check and return the final result if 'job_search_output' is not defined
+      set_fact:
+        final_result: "{{ final_result | combine({ \
+                       'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+    - name: Fail if the return code is mismatched
+      fail:
+        msg: "{{ final_result }}"
+  when:
+    - job_search_output is undefined
+    - (job_matched_rc_str == empty_str) or (job_matched_rc_int|int > job_max_rc|int)
+
+- block:
+    - name: Check and return the final result if 'job_search_output' is not defined
+      set_fact:
+        final_result: "{{ final_result | combine({ \
+                       'msg': 'Job is completed successfully. The return code is matched.' }) }}"
+  when:
+    - job_search_output is undefined
+    - job_matched_rc_str != empty_str
+    - job_matched_rc_int|int <= job_max_rc|int
+
+- name: Check and return the final result
+  debug: var=final_result

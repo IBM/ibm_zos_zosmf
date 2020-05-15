@@ -1,0 +1,42 @@
+# Copyright (c) IBM Corporation 2020 
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+- name: Send https request to query the contents of a job spool file
+  uri:
+    url: "{{ file_item['records-url'] }}?mode=text&research={{ job_search_output | urlencode }}\
+          &insensitive={{ job_search_output_insensitive }}&maxreturnsize={{ job_search_output_maxreturnsize }}"
+    method: GET
+    return_content: yes
+    headers:
+      X-CSRF-ZOSMF-HEADER: "TEST"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    client_cert: "{{ crt }}"
+    client_key: "{{ key }}"
+    force_basic_auth: yes
+    status_code: "200"
+    validate_certs: no
+  delegate_to: localhost
+  register: record_result
+  failed_when: no
+
+- include_tasks: handle_request_error.yml
+  vars:
+    expect_rcode: 200
+    result: "{{ record_result }}"
+
+- name: Parse the matched contents
+  set_fact:
+    matched_list: "{{ record_result.content | regex_findall('.*\n') }}"
+    matched_list_parse: []
+
+- name: Parse the matched contents
+  set_fact:
+    matched_list_parse: "{{ matched_list_parse | union([ item | regex_replace('\n', '') ]) }}"
+    job_matched_contents_found: True
+  loop: "{{ matched_list }}"
+
+- name: Parse the matched contents
+  set_fact:
+    job_matched_contents: "{{ job_matched_contents | combine({ file_item.ddname: matched_list_parse }) }}"
