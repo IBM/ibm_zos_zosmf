@@ -21,7 +21,6 @@
     - include_role:
         name: zmf_workflow_complete
       vars:
-        force_complete: False
         workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}"
         workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
     - debug: var=result

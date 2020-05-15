@@ -3,6 +3,7 @@
 # this group is used in sample_role_workflow_*.yml
 [workflow]
 SY1
+SY2
 
 # this group is used in sample_role_cpm_*.yml
 # If hostname is changed here, please create "host_name".yml file under host_vars and specify host specific variables as shown in example zosmf1.yml
