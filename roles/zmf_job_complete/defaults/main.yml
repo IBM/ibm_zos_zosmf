@@ -1,5 +1,5 @@
 # Copyright (c) IBM Corporation 2020 
 job_jcl_location: 'LOCAL'
-job_search_rc: 'CC 0000'
+job_max_rc: 0
 complete_check_times: 10
 complete_check_delay: 5
