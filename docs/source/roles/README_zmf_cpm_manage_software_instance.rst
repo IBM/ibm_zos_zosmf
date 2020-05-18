@@ -5,7 +5,7 @@
 zmf_cpm_manage_software_instance
 =================================
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_cpm_manage_software_instance**, to manage a provisioned instance of z/OS middleware/software. Various management such as starting or stopping the instance can be performed using this role. When software service instance is not required any more, it can be deprovisioned using this role.
+**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_cpm_manage_software_instance**, to manage a provisioned instance of z/OS middleware/software. Various management such as starting or stopping the instance can be performed using this role. When software service instance is not required any more, it can be deprovisioned using this role.
 
 Role Variables
 --------------
@@ -23,13 +23,14 @@ zmf_port
   | **type**: str
 
 zmf_user
-  z/OSMF username, prompted when playbook is run.
+  z/OSMF username, prompted when playbook is run or can be specified on playbook run command.
+
 
   | **required**: True
   | **type**: str
 
 zmf_password
-  z/OSMF password, prompted when playbook is run.
+  z/OSMF password, prompted when playbook is run or can be specified on playbook run command.
 
   | **required**: True
   | **type**: str
@@ -55,7 +56,7 @@ api_polling_retry_count
   
   This variable is specified in host specific variables file in *host_vars* directory.
 
-  | **required**: False
+  | **required**: True
   | **type**: int
 
 api_polling_interval_seconds
@@ -63,7 +64,7 @@ api_polling_interval_seconds
   
   This variable is specified in host specific variables file in *host_vars* directory.
 
-  | **required**: False
+  | **required**: True
   | **type**: int
 
 Dependencies
