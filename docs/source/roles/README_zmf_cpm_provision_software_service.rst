@@ -5,7 +5,7 @@
 zmf_cpm_provision_software_service
 ==================================
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_cpm_provision_software_service**, to provision a z/OS middleware/software service using Cloud Provisioning & Management (CP&M) template.
+**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_cpm_provision_software_service**, to provision a z/OS middleware/software service using Cloud Provisioning & Management (CP&M) template.
 
 Role Variables
 --------------
