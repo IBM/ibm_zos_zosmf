@@ -51,13 +51,13 @@ instance_info_json_path
 cpm_template_name
   Template name, i.e. software service to be provisioned.
 
-  | **required**: False
+  | **required**: True
   | **type**: str
 
 domain_name
   Cloud domain name associated with the template.
 
-  | **required**: False
+  | **required**: True
   | **type**: str
 
 tenant_name
@@ -65,7 +65,7 @@ tenant_name
   
   This variable is required if *zmf_user* is associated with multiple CP&M tenants.
 
-  | **required**: False
+  | **required**: True
   | **type**: str
 
 systems_nicknames
@@ -81,7 +81,7 @@ api_polling_retry_count
   
   This variable is specified in host specific variables file in *host_vars* directory.
 
-  | **required**: False
+  | **required**: True
   | **type**: int
 
 api_polling_interval_seconds
@@ -89,7 +89,7 @@ api_polling_interval_seconds
   
   This variable is specified in host specific variables file in *host_vars* directory.
 
-  | **required**: False
+  | **required**: True
   | **type**: int
 
 Dependencies
