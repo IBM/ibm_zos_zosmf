@@ -41,6 +41,7 @@ instance_record_dir
 
   | **required**: True
   | **type**: str
+  | **default**: default value set in host_vars file is /tmp
 
 instance_info_json_path
   Path to the file that holds provisioned instance information, `zmf_cpm_provision_software_service`_ role will automatically generate this variable in the format of ``<instance_record_dir>/<template_name>-<instance external_name>.json``
@@ -83,6 +84,7 @@ api_polling_retry_count
 
   | **required**: True
   | **type**: int
+  | **default**: default value set in host_vars file is 50
 
 api_polling_interval_seconds
   Interval time for each polling request in seconds. 
@@ -91,6 +93,7 @@ api_polling_interval_seconds
 
   | **required**: True
   | **type**: int
+  | **default**: default value set in host_vars file is 10
 
 Dependencies
 ------------
