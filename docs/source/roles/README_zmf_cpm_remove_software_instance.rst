@@ -5,7 +5,7 @@
 zmf_cpm_remove_software_instance
 ================================
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_cpm_remove_software_instance**, to remove a deprovisioned instance of z/OS middleware/software.
+**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_cpm_remove_software_instance**, to remove a deprovisioned instance of z/OS middleware/software.
 
 Role Variables
 --------------
