@@ -1,0 +1,4 @@
+# Copyright (c) IBM Corporation 2020 
+job_max_rc: 0
+complete_check_times: 10
+complete_check_delay: 5

@@ -1,0 +1,112 @@
+# Copyright (c) IBM Corporation 2020 
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+- name: Validate variables
+  block:
+    - name: Validate variables
+      set_fact:
+        user: "{{ zmf_user | default() }}"
+        password: "{{ zmf_password | default() }}"
+        crt: "{{ zmf_crt | default() }}"
+        key: "{{ zmf_key | default() }}"
+        final_result: {}
+        empty_str: ""
+
+    - name: Validate variables - Fail if either zmf_user/zmf_password or zmf_crt/zmf_key are not defined
+      fail:
+        msg: "Please define either zmf_user/zmf_password or zmf_crt/zmf_key."
+      when:
+        - user == empty_str or password == empty_str
+        - crt == empty_str or key == empty_str
+
+    - name: Validate variables - Fail if ethier of variable job_name or job_id is not defined
+      fail:
+        msg: 'Please define the mandatory variable: job_name and job_id'
+      when: >
+        not (job_name is defined and job_name is not none and job_name != empty_str) or
+        not (job_id is defined and job_id is not none and job_id != empty_str)
+
+- name: Query and match the return code
+  block:
+    - name: Query and match the return code - Send https request
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restjobs/jobs/{{ job_name | upper }}/{{ job_id | upper }}"
+        method: GET
+        return_content: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+        user: "{{ user }}"
+        password: "{{ password }}"
+        client_cert: "{{ crt }}"
+        client_key: "{{ key }}"
+        force_basic_auth: yes
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: status_result
+      failed_when: no
+      until: (status_result.status != 200) or ('json' in status_result) and ('status' in status_result.json) and (status_result.json.status == 'OUTPUT')
+      retries: "{{ complete_check_times }}"
+      delay: "{{ complete_check_delay }}"
+
+    - name: Query and match the return code - Handle request error
+      include_tasks: handle_request_error.yml
+      vars:
+        expect_rcode: 200
+        result: "{{ status_result }}"
+
+    - block:
+        - name: Query and match the return code - Retrieve job information and update final_result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is in input processing or still running: status=' ~ status_result.json.status }) }}"
+        - name: Query and match the return code - Fail if the submitted job is in input processing or still running
+          fail:
+            msg: "{{ final_result }}"
+      when:
+        - status_result.status == 200
+        - status_result.json.status != 'OUTPUT'
+
+    - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn'
+      set_fact:
+        job_matched_rc_str: "{{ status_result.json.retcode | regex_search('^CC') }}"
+        final_result: "{{ final_result | combine({ 'job_retcode': status_result.json.retcode }) }}"
+
+    - block:
+        - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn' - Update final_result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+        - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn' - Fail if the return code is not "CC nnnn"
+          fail:
+            msg: "{{ final_result }}"
+      when:
+        - job_matched_rc_str == empty_str
+
+    - name: Query and match the return code - Check the return code - Step 2 match job_max_rc
+      set_fact:
+        job_matched_rc_int: "{{ status_result.json.retcode | replace('CC ', '') }}"
+
+    - block:
+        - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Update final_result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+        - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Fail if the return code is mismatched
+          fail:
+            msg: "{{ final_result }}"
+      when:
+        - job_matched_rc_int|int > job_max_rc|int
+
+    - block:
+        - name: Update final_result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is completed successfully. The return code is matched.' }) }}"
+      when:
+        - job_matched_rc_str != empty_str
+        - job_matched_rc_int|int <= job_max_rc|int
+
+- name: Return final_result
+  debug: var=final_result
