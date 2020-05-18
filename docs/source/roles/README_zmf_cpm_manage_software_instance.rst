@@ -58,6 +58,7 @@ api_polling_retry_count
 
   | **required**: True
   | **type**: int
+  | **default**: default value set in host_vars file is 50
 
 api_polling_interval_seconds
   Interval time for each polling request in seconds. 
@@ -66,6 +67,7 @@ api_polling_interval_seconds
 
   | **required**: True
   | **type**: int
+  | **default**: default value set in host_vars file is 10
 
 Dependencies
 ------------
