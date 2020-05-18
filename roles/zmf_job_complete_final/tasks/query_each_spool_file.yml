@@ -33,7 +33,7 @@
 
 - name: Query the contents of each spool file - Parse the matched contents - Step 2 Remove '\n'
   set_fact:
-    matched_list_parse: "{{ matched_list_parse | union([ item | regex_replace('\n', '') ]) }}"
+    matched_list_parse: "{{ matched_list_parse + [item | regex_replace('\n', '')] }}"
     job_matched_contents_found: True
   loop: "{{ matched_list }}"
 
