@@ -21,7 +21,7 @@ The sections that follow explain how to use the test playbooks.
 
 
 ## Configuration and setup
-Before setup, obtain the installation path for the collection, see the section [Installation](../../README.md#Installation).
+Before setup, obtain the installation path for the collection, see the section [Installation](https://ibm.github.io/ibm_zos_zosmf/installation.html).
 
 ### Local test
 For local test, you can build the collection archive, and install the locally built collection into `tests/workflow/collections`.
