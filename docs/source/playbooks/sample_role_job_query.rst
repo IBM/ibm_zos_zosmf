@@ -2,16 +2,16 @@
 .. Copyright (c) IBM Corporation 2020                                        .
 .. ...........................................................................
 
-sample_role_job_complete
-========================
+sample_role_job_query
+=====================
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This `sample playbook`_ shows how to submit a job to run on the target z/OS systems via z/OSMF.
+This `sample playbook`_ shows how to query a job running on the target z/OS systems via z/OSMF.
 
 .. code-block:: yaml
 
-   - name: sample of submitting a job to run on z/OS and check its return code
+   - name: sample of querying a job running on z/OS and check its return code
      hosts: job
      gather_facts: no
      collections:
@@ -25,10 +25,10 @@ This `sample playbook`_ shows how to submit a job to run on the target z/OS syst
          private: yes
      tasks:
        - include_role:
-           name: zmf_job_complete
+           name: zmf_job_query
          vars:
-           job_jcl_src: "files/job_sample_jcl.jcl" # The location of file or data set containing the JCL
-           # job_jcl_location: 'LOCAL' # The type of location of the JCL to be submitted. Default is LOCAL
+           job_name: "JCLSAMP1" # The name of the job for which status is requested
+           job_id: "JOB00000" # The ID of the job for which status is requested
            # job_max_rc: 0 # The maximum return code for the job that should be allowed without failing the role. Default is 0
            # complete_check_times: 10 # The maximum number of time that is used for periodic checks of the job status. Default is 10
            # complete_check_delay: 5 # The interval time between periodic checks of the job status. Default is 5
@@ -37,14 +37,14 @@ This `sample playbook`_ shows how to submit a job to run on the target z/OS syst
 
   To run the sample playbook, the inventory file `hosts`_ needs to be updated to identify the target z/OSMF end points.
 
-For more details about role variables, see `zmf_job_complete`_.
+For more details about role variables, see `zmf_job_query`_.
 
 
 .. _Playbook Documentation:
    ../playbooks.html
 .. _sample playbook:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_job_complete.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_job_query.yml
 .. _hosts:
    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts
-.. _zmf_job_complete:
-   ../roles/README_zmf_job_complete.html
+.. _zmf_job_query:
+   ../roles/README_zmf_job_query.html

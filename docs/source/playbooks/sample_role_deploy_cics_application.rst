@@ -7,7 +7,7 @@ sample_role_deploy_cics_application
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This sample playbook shows how to install a web application on a provisioned CICS instance in z/OSMF Cloud Provisioning & Management (CP&M).
+This `sample playbook`_ shows how to install a web application on a provisioned CICS instance in z/OSMF Cloud Provisioning & Management (CP&M).
 
 Before run the sample playbook, please copy role `role_cics_wlp_install_app`_ in ``playbooks/files/cpm/`` directory to ``roles/`` directory.
 
@@ -50,12 +50,16 @@ Before run the sample playbook, please copy role `role_cics_wlp_install_app`_ in
 
   For CP&M roles, the inventory file `hosts`_ needs to be updated to identify the target z/OSMF end points.
 
+For more details about role variables, see `zmf_cpm_provision_software_service`_ and `role_cics_wlp_install_app`_.
+
 
 .. _Playbook Documentation:
    ../playbooks.html
-.. _sample_role_deploy_cics_application.yml:
+.. _sample playbook:
    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_deploy_cics_application.yml
 .. _role_cics_wlp_install_app:
    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/cpm/cics_wlp_install_app/
 .. _hosts:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/hosts
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts
+.. _zmf_cpm_provision_software_service:
+   ../roles/README_zmf_cpm_provision_software_service.html

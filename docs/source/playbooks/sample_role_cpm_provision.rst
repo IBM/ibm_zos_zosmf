@@ -7,7 +7,7 @@ sample_role_cpm_provision
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This sample playbook shows how to provision an instance in z/OSMF Cloud Provisioning & Management (CP&M).
+This `sample playbook`_ shows how to provision an instance in z/OSMF Cloud Provisioning & Management (CP&M).
 
 .. code-block:: yaml
 
@@ -38,10 +38,14 @@ This sample playbook shows how to provision an instance in z/OSMF Cloud Provisio
 
   For CP&M roles, the inventory file `hosts`_ needs to be updated to identify the target z/OSMF end points.
   
+For more details about role variables, see `zmf_cpm_provision_software_service`_.
+
 
 .. _Playbook Documentation:
    ../playbooks.html
-.. _sample_role_cpm_provision.yml:
+.. _sample playbook:
    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_provision.yml
 .. _hosts:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/hosts
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts
+.. _zmf_cpm_provision_software_service:
+   ../roles/README_zmf_cpm_provision_software_service.html

@@ -22,6 +22,6 @@ To use the modules and roles which supplied to interact with **z/OSMF Workflows*
 .. _Requests library for Python:
    https://requests.readthedocs.io/en/latest/
 .. _zmf_workflow:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/zmf_workflow.py
+   modules/zmf_workflow.html
 .. _zmf_workflow_complete:
    roles/README_zmf_workflow_complete.html

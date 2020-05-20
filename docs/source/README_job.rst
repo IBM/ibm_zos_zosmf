@@ -18,7 +18,9 @@ Roles
 
 * `zmf_job_query`_:
 
-   This role can be used to query the status of a job, and check its return code.
+   This role can be used to query a job running on z/OS, and check its return code.
+
+..   This role can be used to query a job running on z/OS, check its return code after the job is completed, and check the specific output contents in spool files.
 
 Requirements
 ------------

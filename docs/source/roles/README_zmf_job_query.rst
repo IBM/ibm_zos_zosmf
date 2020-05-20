@@ -5,9 +5,9 @@
 zmf_job_query
 =============
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query the status of a job, and check its return code.
+**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, and check its return code.
 
-.. **IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query the status of a job, check its return code and specific contents in spool files.
+.. **IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, check its return code and specific contents in spool files.
 
 Role Variables
 --------------
@@ -87,13 +87,22 @@ job_id
 job_max_rc
   An integer value that specifies the maximum return code for the job that should be allowed without failing the role.
 
-  * When *job_search_logic=AND*, the role will fail if the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
-  
-  * When *job_search_logic=OR*, the role will continue to check the job output if *job_search_output* is defined, even the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
+  The role will fail if the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
 
   | **required**: False
   | **type**: int
   | **default**: 0
+
+.. job_max_rc
+..   An integer value that specifies the maximum return code for the job that should be allowed without failing the role.
+
+..   * When *job_search_logic=AND*, the role will fail if the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
+  
+..   * When *job_search_logic=OR*, the role will continue to check the job output if *job_search_output* is defined, even the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
+
+..   | **required**: False
+..   | **type**: int
+..   | **default**: 0
 
 .. job_search_output
 ..   A string or a regular expression specifies the matched part of job output that should be allowed without failing the role.
@@ -162,4 +171,4 @@ See the sample playbook in section `Playbooks`_.
 .. _Requirements:
    ../requirements_job.html
 .. _Playbooks:
-   ../playbooks/sample_role_job_complete.html
+   ../playbooks/sample_role_job_query.html

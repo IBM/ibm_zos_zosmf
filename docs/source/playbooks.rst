@@ -99,7 +99,7 @@ Included in the `playbooks directory`_ is some sample variables files in the dir
       # zmf_password:
       # zmf_crt:
       # zmf_key:
-      job_name: TESTSPOL
+      job_name: JCLSAMP1
       job_id: JOB00000
 
 
@@ -111,9 +111,9 @@ Included in the `playbooks directory`_ is some sample variables files in the dir
 
    * **zmf_key**: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.
 
-   * **job_name**: The value of this property identifies the job name to be used for query job status in role ``zmf_job_query``.
+   * **job_name**: The value of this property identifies the job name to be used for role ``zmf_job_query`` to query a job running on different z/OS.
   
-   * **job_id**: The value of this property identifies the job ID to be used for query job status in role ``zmf_job_query``.
+   * **job_id**: The value of this property identifies the job ID to be used for role ``zmf_job_query`` to query a job running on different z/OS.
 
    .. note::
      
@@ -126,7 +126,7 @@ You can supply group variables in either the inventory file or the separate vari
 
 Included in the `playbooks directory`_ is some sample variables files in the directory `group_vars`_.
 
-* `workflow.yml`_: It contains the variables for system group ``workflow``:
+* `workflow.yml`_: It contains the variables for group ``workflow``:
 
    .. code-block:: yaml
   
@@ -166,6 +166,7 @@ Sample Playbooks
    playbooks/sample_role_cpm_remove_instance
    playbooks/sample_role_deploy_cics_application
    playbooks/sample_role_job_complete
+   playbooks/sample_role_job_query
 
 Run the Playbooks
 -----------------
@@ -184,11 +185,11 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
 .. _Ansible Playbook:
    https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html#playbooks-intro
 .. _playbooks directory:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/
 .. _Installation:
    installation.html
 .. _ansible.cfg:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/ansible.cfg
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/ansible.cfg
 .. _Ansible Configuration Settings:
    https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-configuration-settings-locations
 .. _inventory:
@@ -198,16 +199,16 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
 .. _Host Vars:
    #host-vars
 .. _hosts:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/hosts
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts
 .. _host_vars:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/host_vars/
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/host_vars/
 .. _group_vars:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/group_vars/
 .. _workflow.yml:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/group_vars/workflow.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/group_vars/workflow.yml
 .. _zosmf1.yml:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/host_vars/zosmf1.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/host_vars/zosmf1.yml
 .. _SY1.yml:
-   https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/host_vars/SY1.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/host_vars/SY1.yml
 .. _ansible-playbook:
    https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html
