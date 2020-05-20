@@ -20,7 +20,7 @@
         - user == empty_str or password == empty_str
         - crt == empty_str or key == empty_str
 
-    - name: Validate variables - Fail if ethier of variable job_name or job_id is not defined
+    - name: Validate variables - Fail if the mandatory variable job_name or job_id is not defined
       fail:
         msg: 'Please define the mandatory variable: job_name and job_id'
       when: >
@@ -56,8 +56,15 @@
         expect_rcode: 200
         result: "{{ status_result }}"
 
+    - name: Query and match the return code - Retrieve job information and update final_result
+      set_fact:
+        final_result: "{{ final_result | combine({ \
+                       'job_name': status_result.json.jobname, \
+                       'job_id': status_result.json.jobid, \
+                       'job_correlator': status_result.json['job-correlator'] }) }}"
+
     - block:
-        - name: Query and match the return code - Retrieve job information and update final_result
+        - name: Query and match the return code - Check the job status
           set_fact:
             final_result: "{{ final_result | combine({ \
                            'msg': 'Job is in input processing or still running: status=' ~ status_result.json.status }) }}"
@@ -77,7 +84,7 @@
         - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn' - Update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+                           'msg': 'Job is found but not completed. The return code is mismatched.' }) }}"
         - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn' - Fail if the return code is not "CC nnnn"
           fail:
             msg: "{{ final_result }}"
@@ -92,7 +99,7 @@
         - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+                           'msg': 'Job is found but not completed. The return code is mismatched.' }) }}"
         - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Fail if the return code is mismatched
           fail:
             msg: "{{ final_result }}"
@@ -103,7 +110,7 @@
         - name: Update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is completed successfully. The return code is matched.' }) }}"
+                           'msg': 'Job is found and completed successfully. The return code is matched.' }) }}"
       when:
         - job_matched_rc_str != empty_str
         - job_matched_rc_int|int <= job_max_rc|int
