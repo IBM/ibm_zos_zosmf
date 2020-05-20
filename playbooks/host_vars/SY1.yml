@@ -11,6 +11,6 @@
 # zmf_crt:
 # zmf_key:
 
-# Used for role `zmf_job_query`
+# Used for role `zmf_job_query` if you want to query a job running on different z/OS
 # job_name:
 # job_id:
