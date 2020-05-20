@@ -162,7 +162,7 @@
         method: GET
         return_content: yes
         headers:
-          X-CSRF-ZOSMF-HEADER: "TEST"
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
         user: "{{ user }}"
         password: "{{ password }}"
         client_cert: "{{ crt }}"
