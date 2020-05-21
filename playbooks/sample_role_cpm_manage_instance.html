@@ -102,6 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_remove_instance.html">sample_role_cpm_remove_instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_job_complete.html">sample_role_job_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_role_job_query.html">sample_role_job_query</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#run-the-playbooks">Run the Playbooks</a></li>
@@ -191,7 +192,7 @@
   <div class="section" id="sample-role-cpm-manage-instance">
 <h1>sample_role_cpm_manage_instance<a class="headerlink" href="#sample-role-cpm-manage-instance" title="Permalink to this headline">¶</a></h1>
 <p>For configuration and setup, see <a class="reference external" href="../playbooks.html">Playbook Documentation</a>.</p>
-<p>This sample playbook shows how to perform instance specific action on a provisioned instance in z/OSMF Cloud Provisioning &amp; Management (CP&amp;M).</p>
+<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_cpm_manage_instance.yml">sample playbook</a> shows how to perform instance specific action on a provisioned instance in z/OSMF Cloud Provisioning &amp; Management (CP&amp;M).</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of managing software instance</span>
   <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zosmf1</span>
   <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
@@ -214,8 +215,9 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For CP&amp;M roles, the inventory file <a class="reference external" href="https://github.com/ansible-collections/ibm_zos_core/tree/release-v2.0.0/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OSMF end points.</p>
+<p>For CP&amp;M roles, the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OSMF end points.</p>
 </div>
+<p>For more details about role variables, see <a class="reference external" href="../roles/README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a>.</p>
 </div>
 
 

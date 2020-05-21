@@ -326,10 +326,7 @@ A job correlator consists of a 31-byte system-defined portion and a colon charac
 </dl>
 <dl>
 <dt>job_max_rc</dt><dd><p>An integer value that specifies the maximum return code for the job that should be allowed without failing the role.</p>
-<ul class="simple">
-<li><p>When <em>job_search_logic=AND</em>, the role will fail if the return code doesn’t match <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">nnnn</span></code> where nnnn is small or equal to the maximum return code.</p></li>
-<li><p>When <em>job_search_logic=OR</em>, the role will continue to check the job output if <em>job_search_output</em> is defined, even the return code doesn’t match <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">nnnn</span></code> where nnnn is small or equal to the maximum return code.</p></li>
-</ul>
+<p>The role will fail if the return code doesn’t match <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">nnnn</span></code> where nnnn is small or equal to the maximum return code.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: int</div>

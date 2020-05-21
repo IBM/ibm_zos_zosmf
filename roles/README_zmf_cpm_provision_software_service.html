@@ -190,7 +190,7 @@
             
   <div class="section" id="zmf-cpm-provision-software-service">
 <h1>zmf_cpm_provision_software_service<a class="headerlink" href="#zmf-cpm-provision-software-service" title="Permalink to this headline">¶</a></h1>
-<p><strong>IBM z/OSMF collection</strong> provides provides an Ansible role, referred to as <strong>zmf_cpm_provision_software_service</strong>, to provision a z/OS middleware/software service using Cloud Provisioning &amp; Management (CP&amp;M) template.</p>
+<p><strong>IBM z/OSMF collection</strong> provides an Ansible role, referred to as <strong>zmf_cpm_provision_software_service</strong>, to provision a z/OS middleware/software service using Cloud Provisioning &amp; Management (CP&amp;M) template.</p>
 <div class="section" id="role-variables">
 <h2>Role Variables<a class="headerlink" href="#role-variables" title="Permalink to this headline">¶</a></h2>
 <dl>
@@ -223,6 +223,7 @@
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>default</strong>: default value set in host_vars file is /tmp</div>
 </div>
 </dd>
 <dt>instance_info_json_path</dt><dd><p>Path to the file that holds provisioned instance information, <a class="reference external" href="README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a> role will automatically generate this variable in the format of <code class="docutils literal notranslate"><span class="pre">&lt;instance_record_dir&gt;/&lt;template_name&gt;-&lt;instance</span> <span class="pre">external_name&gt;.json</span></code></p>
@@ -233,20 +234,20 @@
 </dd>
 <dt>cpm_template_name</dt><dd><p>Template name, i.e. software service to be provisioned.</p>
 <div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>domain_name</dt><dd><p>Cloud domain name associated with the template.</p>
 <div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>tenant_name</dt><dd><p>Identifies the CP&amp;M Tenant name associated with the user that is driving this role.</p>
 <p>This variable is required if <em>zmf_user</em> is associated with multiple CP&amp;M tenants.</p>
 <div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
@@ -260,15 +261,17 @@
 <dt>api_polling_retry_count</dt><dd><p>Total retries number before role exit with failure waiting on instance action to complete.</p>
 <p>This variable is specified in host specific variables file in <em>host_vars</em> directory.</p>
 <div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: default value set in host_vars file is 50</div>
 </div>
 </dd>
 <dt>api_polling_interval_seconds</dt><dd><p>Interval time for each polling request in seconds.</p>
 <p>This variable is specified in host specific variables file in <em>host_vars</em> directory.</p>
 <div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: default value set in host_vars file is 10</div>
 </div>
 </dd>
 </dl>

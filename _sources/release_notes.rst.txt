@@ -11,7 +11,7 @@ Version 2.0.0
 `v2.0.0`_
 
 Added
-  * add roles: `zmf_job_complete`
+  * add roles: `zmf_job_complete`, `zmf_job_query`
   * support a doc site for collection
 
 Refined

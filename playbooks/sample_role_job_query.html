@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sample_role_deploy_cics_application &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
+  <title>sample_role_job_query &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sample_role_job_complete" href="sample_role_job_complete.html" />
-    <link rel="prev" title="sample_role_cpm_remove_instance" href="sample_role_cpm_remove_instance.html" /> 
+    <link rel="next" title="Contributing" href="../community_guides.html" />
+    <link rel="prev" title="sample_role_job_complete" href="sample_role_job_complete.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,9 +100,9 @@
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_manage_instance.html">sample_role_cpm_manage_instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_provision.html">sample_role_cpm_provision</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_remove_instance.html">sample_role_cpm_remove_instance</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sample_role_deploy_cics_application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_job_complete.html">sample_role_job_complete</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sample_role_job_query.html">sample_role_job_query</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sample_role_job_query</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#run-the-playbooks">Run the Playbooks</a></li>
@@ -168,14 +168,14 @@
         
           <li><a href="../playbooks.html">Playbooks</a> &raquo;</li>
         
-      <li>sample_role_deploy_cics_application</li>
+      <li>sample_role_job_query</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/playbooks/sample_role_deploy_cics_application.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/playbooks/sample_role_job_query.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -189,50 +189,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sample-role-deploy-cics-application">
-<h1>sample_role_deploy_cics_application<a class="headerlink" href="#sample-role-deploy-cics-application" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="sample-role-job-query">
+<h1>sample_role_job_query<a class="headerlink" href="#sample-role-job-query" title="Permalink to this headline">¶</a></h1>
 <p>For configuration and setup, see <a class="reference external" href="../playbooks.html">Playbook Documentation</a>.</p>
-<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_deploy_cics_application.yml">sample playbook</a> shows how to install a web application on a provisioned CICS instance in z/OSMF Cloud Provisioning &amp; Management (CP&amp;M).</p>
-<p>Before run the sample playbook, please copy role <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/cpm/cics_wlp_install_app/">role_cics_wlp_install_app</a> in <code class="docutils literal notranslate"><span class="pre">playbooks/files/cpm/</span></code> directory to <code class="docutils literal notranslate"><span class="pre">roles/</span></code> directory.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of provisioning CICS region and deploying application</span>
-  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zosmf1</span>
+<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_job_query.yml">sample playbook</a> shows how to query a job running on the target z/OS systems via z/OSMF.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of querying a job running on z/OS and check its return code</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">job</span>
   <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
   <span class="nt">collections</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ibm.ibm_zos_zosmf</span>
-  <span class="nt">vars</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">instance_info_json_path</span> <span class="c1"># will store instance json information globally thru the playbook</span>
   <span class="nt">vars_prompt</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_user</span>
-      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">zOSMF</span><span class="nv"> </span><span class="s">username&quot;</span>
+      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">zOSMF</span><span class="nv"> </span><span class="s">username</span><span class="nv"> </span><span class="s">(skip</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">zmf_crt</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">zmf_key</span><span class="nv"> </span><span class="s">are</span><span class="nv"> </span><span class="s">supplied)&quot;</span>
       <span class="nt">private</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_password</span>
-      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">zOSMF</span><span class="nv"> </span><span class="s">password&quot;</span>
+      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">zOSMF</span><span class="nv"> </span><span class="s">password</span><span class="nv"> </span><span class="s">(skip</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">zmf_crt</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">zmf_key</span><span class="nv"> </span><span class="s">are</span><span class="nv"> </span><span class="s">supplied)&quot;</span>
       <span class="nt">private</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">application_path_input</span>
-      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">application</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">full</span><span class="nv"> </span><span class="s">path&quot;</span>
-      <span class="nt">private</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
   <span class="nt">tasks</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="nt">include_role</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_cpm_provision_software_service</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_job_query</span>
       <span class="nt">vars</span><span class="p">:</span>
-        <span class="nt">cpm_template_name</span><span class="p">:</span> <span class="s">&quot;&lt;fill-me-template-name&gt;&quot;</span> <span class="c1"># The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning &amp; Management</span>
-        <span class="nt">domain_name</span><span class="p">:</span> <span class="s">&quot;&lt;domain-name&gt;&quot;</span> <span class="c1"># The value for property domain_name which identifies CP&amp;M domain in which specified template is defined</span>
-        <span class="nt">tenant_name</span><span class="p">:</span> <span class="s">&quot;&lt;tenant-name&gt;&quot;</span> <span class="c1"># The value for optional property tenant_name which identifies CP&amp;M tenant that is associated with the zmf_user that is provisioning the template</span>
-        <span class="nt">systems_nicknames</span><span class="p">:</span> <span class="s">&quot;&lt;system-name&gt;&quot;</span> <span class="c1"># The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned</span>
-    <span class="p p-Indicator">-</span> <span class="nt">include_role</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cics_wlp_install_app</span>
-      <span class="nt">vars</span><span class="p">:</span>
-        <span class="nt">instance_info_json</span><span class="p">:</span> <span class="s">&quot;{{lookup(&#39;file&#39;,</span><span class="nv"> </span><span class="s">instance_info_json_path)}}&quot;</span> <span class="c1"># Path of the instance json file contains cics public variables</span>
-        <span class="nt">app_root_uri</span><span class="p">:</span> <span class="s">&quot;/CloudTestServlet&quot;</span> <span class="c1"># The URI path to access the application once upload</span>
-        <span class="nt">app_file_name</span><span class="p">:</span> <span class="s">&quot;CloudTestServlet.war&quot;</span> <span class="c1"># The file name that the application file will be written to the USS file system in z/OS</span>
-        <span class="nt">application_path</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">application_path_input</span><span class="nv"> </span><span class="s">}}&quot;</span> <span class="c1"># The local absolute file path to the application binary file</span>
+        <span class="nt">job_name</span><span class="p">:</span> <span class="s">&quot;JCLSAMP1&quot;</span> <span class="c1"># The name of the job for which status is requested</span>
+        <span class="nt">job_id</span><span class="p">:</span> <span class="s">&quot;JOB00000&quot;</span> <span class="c1"># The ID of the job for which status is requested</span>
+        <span class="c1"># job_max_rc: 0 # The maximum return code for the job that should be allowed without failing the role. Default is 0</span>
+        <span class="c1"># complete_check_times: 10 # The maximum number of time that is used for periodic checks of the job status. Default is 10</span>
+        <span class="c1"># complete_check_delay: 5 # The interval time between periodic checks of the job status. Default is 5</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For CP&amp;M roles, the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OSMF end points.</p>
+<p>To run the sample playbook, the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OSMF end points.</p>
 </div>
-<p>For more details about role variables, see <a class="reference external" href="../roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a> and <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/cpm/cics_wlp_install_app/">role_cics_wlp_install_app</a>.</p>
+<p>For more details about role variables, see <a class="reference external" href="../roles/README_zmf_job_query.html">zmf_job_query</a>.</p>
 </div>
 
 
@@ -243,10 +231,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sample_role_job_complete.html" class="btn btn-neutral float-right" title="sample_role_job_complete" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../community_guides.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sample_role_cpm_remove_instance.html" class="btn btn-neutral float-left" title="sample_role_cpm_remove_instance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sample_role_job_complete.html" class="btn btn-neutral float-left" title="sample_role_job_complete" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

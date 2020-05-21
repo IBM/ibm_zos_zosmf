@@ -190,7 +190,7 @@
             
   <div class="section" id="zmf-cpm-manage-software-instance">
 <h1>zmf_cpm_manage_software_instance<a class="headerlink" href="#zmf-cpm-manage-software-instance" title="Permalink to this headline">¶</a></h1>
-<p><strong>IBM z/OSMF collection</strong> provides provides an Ansible role, referred to as <strong>zmf_cpm_manage_software_instance</strong>, to manage a provisioned instance of z/OS middleware/software. Various management such as starting or stopping the instance can be performed using this role. When software service instance is not required any more, it can be deprovisioned using this role.</p>
+<p><strong>IBM z/OSMF collection</strong> provides an Ansible role, referred to as <strong>zmf_cpm_manage_software_instance</strong>, to manage a provisioned instance of z/OS middleware/software. Various management such as starting or stopping the instance can be performed using this role. When software service instance is not required any more, it can be deprovisioned using this role.</p>
 <div class="section" id="role-variables">
 <h2>Role Variables<a class="headerlink" href="#role-variables" title="Permalink to this headline">¶</a></h2>
 <dl>
@@ -206,13 +206,13 @@
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
-<dt>zmf_user</dt><dd><p>z/OSMF username, prompted when playbook is run.</p>
+<dt>zmf_user</dt><dd><p>z/OSMF username, prompted when playbook is run or can be specified on playbook run command.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
-<dt>zmf_password</dt><dd><p>z/OSMF password, prompted when playbook is run.</p>
+<dt>zmf_password</dt><dd><p>z/OSMF password, prompted when playbook is run or can be specified on playbook run command.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -235,15 +235,17 @@
 <dt>api_polling_retry_count</dt><dd><p>Total retries number before role exit with failure waiting on instance action to complete.</p>
 <p>This variable is specified in host specific variables file in <em>host_vars</em> directory.</p>
 <div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: default value set in host_vars file is 50</div>
 </div>
 </dd>
 <dt>api_polling_interval_seconds</dt><dd><p>Interval time for each polling request in seconds.</p>
 <p>This variable is specified in host specific variables file in <em>host_vars</em> directory.</p>
 <div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: default value set in host_vars file is 10</div>
 </div>
 </dd>
 </dl>

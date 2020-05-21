@@ -5,7 +5,7 @@
 zmf_cpm_provision_software_service
 ==================================
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_cpm_provision_software_service**, to provision a z/OS middleware/software service using Cloud Provisioning & Management (CP&M) template.
+**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_cpm_provision_software_service**, to provision a z/OS middleware/software service using Cloud Provisioning & Management (CP&M) template.
 
 Role Variables
 --------------
@@ -41,6 +41,7 @@ instance_record_dir
 
   | **required**: True
   | **type**: str
+  | **default**: default value set in host_vars file is /tmp
 
 instance_info_json_path
   Path to the file that holds provisioned instance information, `zmf_cpm_provision_software_service`_ role will automatically generate this variable in the format of ``<instance_record_dir>/<template_name>-<instance external_name>.json``
@@ -51,13 +52,13 @@ instance_info_json_path
 cpm_template_name
   Template name, i.e. software service to be provisioned.
 
-  | **required**: False
+  | **required**: True
   | **type**: str
 
 domain_name
   Cloud domain name associated with the template.
 
-  | **required**: False
+  | **required**: True
   | **type**: str
 
 tenant_name
@@ -65,7 +66,7 @@ tenant_name
   
   This variable is required if *zmf_user* is associated with multiple CP&M tenants.
 
-  | **required**: False
+  | **required**: True
   | **type**: str
 
 systems_nicknames
@@ -81,16 +82,18 @@ api_polling_retry_count
   
   This variable is specified in host specific variables file in *host_vars* directory.
 
-  | **required**: False
+  | **required**: True
   | **type**: int
+  | **default**: default value set in host_vars file is 50
 
 api_polling_interval_seconds
   Interval time for each polling request in seconds. 
   
   This variable is specified in host specific variables file in *host_vars* directory.
 
-  | **required**: False
+  | **required**: True
   | **type**: int
+  | **default**: default value set in host_vars file is 10
 
 Dependencies
 ------------

@@ -16,11 +16,14 @@ To use the modules and roles which supplied to interact with **z/OS jobs REST se
    It is required when using:
 
    * role: `zmf_job_complete`_
+   * role: `zmf_job_query`_
 
 
 .. _Overall Requirements:
    requirements.html
 .. _zmf_job_complete:
    roles/README_zmf_job_complete.html
+.. _zmf_job_query:
+   roles/README_zmf_job_query.html
 .. _z/OS Management Facility:
    https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3.izua300/abstract.html

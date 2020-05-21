@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributing" href="../community_guides.html" />
+    <link rel="next" title="sample_role_job_query" href="sample_role_job_query.html" />
     <link rel="prev" title="sample_role_deploy_cics_application" href="sample_role_deploy_cics_application.html" /> 
 </head>
 
@@ -102,6 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_remove_instance.html">sample_role_cpm_remove_instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sample_role_job_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_role_job_query.html">sample_role_job_query</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#run-the-playbooks">Run the Playbooks</a></li>
@@ -191,8 +192,8 @@
   <div class="section" id="sample-role-job-complete">
 <h1>sample_role_job_complete<a class="headerlink" href="#sample-role-job-complete" title="Permalink to this headline">¶</a></h1>
 <p>For configuration and setup, see <a class="reference external" href="../playbooks.html">Playbook Documentation</a>.</p>
-<p>This sample playbook shows how to submit a job to run on the target z/OS systems via z/OSMF.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of submitting a job to run on z/OS</span>
+<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_job_complete.yml">sample playbook</a> shows how to submit a job to run on the target z/OS systems via z/OSMF.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of submitting a job to run on z/OS and check its return code</span>
   <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">job</span>
   <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
   <span class="nt">collections</span><span class="p">:</span>
@@ -208,9 +209,18 @@
     <span class="p p-Indicator">-</span> <span class="nt">include_role</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_job_complete</span>
       <span class="nt">vars</span><span class="p">:</span>
-        <span class="nt">job_jcl_src</span><span class="p">:</span> <span class="s">&quot;files/job_sample_jcl.jcl&quot;</span> <span class="c1"># The detail location of file or data set containing the JCL</span>
+        <span class="nt">job_jcl_src</span><span class="p">:</span> <span class="s">&quot;files/job_sample_jcl.jcl&quot;</span> <span class="c1"># The location of file or data set containing the JCL</span>
+        <span class="c1"># job_jcl_location: &#39;LOCAL&#39; # The type of location of the JCL to be submitted. Default is LOCAL</span>
+        <span class="c1"># job_max_rc: 0 # The maximum return code for the job that should be allowed without failing the role. Default is 0</span>
+        <span class="c1"># complete_check_times: 10 # The maximum number of time that is used for periodic checks of the job status. Default is 10</span>
+        <span class="c1"># complete_check_delay: 5 # The interval time between periodic checks of the job status. Default is 5</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To run the sample playbook, the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OSMF end points.</p>
+</div>
+<p>For more details about role variables, see <a class="reference external" href="../roles/README_zmf_job_complete.html">zmf_job_complete</a>.</p>
 </div>
 
 
@@ -221,7 +231,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../community_guides.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sample_role_job_query.html" class="btn btn-neutral float-right" title="sample_role_job_query" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="sample_role_deploy_cics_application.html" class="btn btn-neutral float-left" title="sample_role_deploy_cics_application" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
