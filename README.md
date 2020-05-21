@@ -7,7 +7,7 @@
 
 ## Features
 
-**IBM z/OSMF collection** includes [modules](https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/), [roles](https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/roles/), [sample playbooks](https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/) and `ansible-doc` to automate tasks on z/OS.
+**IBM z/OSMF collection** includes [modules](https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/), [roles](https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/), [sample playbooks](https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/) and `ansible-doc` to automate tasks on z/OS.
 
 For guides and reference, see [Docs Site](https://ibm.github.io/ibm_zos_zosmf/index.html).
 
