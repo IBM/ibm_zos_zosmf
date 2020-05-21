@@ -1,9 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [v2.0.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.0) - 2020-05-20
+## [v2.0.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.0) - 2020-05-21
 ### Added
-- add roles: `zmf_job_complete`
+- add roles: `zmf_job_complete`, `zmf_job_query`
+- support a doc site for collection
 ### Refined
 - refine and rename module `workflow` to `zmf_workflow`
 - rename role `complete_workflow` to `zmf_workflow_complete`
