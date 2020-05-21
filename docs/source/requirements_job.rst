@@ -11,7 +11,7 @@ To use the modules and roles which supplied to interact with **z/OS jobs REST se
 
 * `z/OS Management Facility`_: V02.03.00 or later
 
-   The z/OSMF server must be installed and active on **each** z/OS system.
+   The z/OSMF server must be installed and active on **each** managed z/OS system.
 
    It is required when using:
 
