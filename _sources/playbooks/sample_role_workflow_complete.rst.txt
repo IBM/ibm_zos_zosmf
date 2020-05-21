@@ -48,10 +48,10 @@ For more details about role variables, see `zmf_workflow_complete`_.
 .. _Playbook Documentation:
    ../playbooks.html
 .. _sample playbook:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_workflow_complete.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_workflow_complete.yml
 .. _workflow_sample_automation_steps.xml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/workflow_sample_automation_steps.xml
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/files/workflow_sample_automation_steps.xml
 .. _hosts:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts
 .. _zmf_workflow_complete:
    ../roles/README_zmf_workflow_complete.html

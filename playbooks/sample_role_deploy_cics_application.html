@@ -192,8 +192,8 @@
   <div class="section" id="sample-role-deploy-cics-application">
 <h1>sample_role_deploy_cics_application<a class="headerlink" href="#sample-role-deploy-cics-application" title="Permalink to this headline">¶</a></h1>
 <p>For configuration and setup, see <a class="reference external" href="../playbooks.html">Playbook Documentation</a>.</p>
-<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_deploy_cics_application.yml">sample playbook</a> shows how to install a web application on a provisioned CICS instance in z/OSMF Cloud Provisioning &amp; Management (CP&amp;M).</p>
-<p>Before run the sample playbook, please copy role <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/cpm/cics_wlp_install_app/">role_cics_wlp_install_app</a> in <code class="docutils literal notranslate"><span class="pre">playbooks/files/cpm/</span></code> directory to <code class="docutils literal notranslate"><span class="pre">roles/</span></code> directory.</p>
+<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_deploy_cics_application.yml">sample playbook</a> shows how to install a web application on a provisioned CICS instance in z/OSMF Cloud Provisioning &amp; Management (CP&amp;M).</p>
+<p>Before run the sample playbook, please copy role <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/files/cpm/cics_wlp_install_app/">role_cics_wlp_install_app</a> in <code class="docutils literal notranslate"><span class="pre">playbooks/files/cpm/</span></code> directory to <code class="docutils literal notranslate"><span class="pre">roles/</span></code> directory.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of provisioning CICS region and deploying application</span>
   <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zosmf1</span>
   <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
@@ -230,9 +230,9 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For CP&amp;M roles, the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OSMF end points.</p>
+<p>For CP&amp;M roles, the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OSMF end points.</p>
 </div>
-<p>For more details about role variables, see <a class="reference external" href="../roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a> and <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/cpm/cics_wlp_install_app/">role_cics_wlp_install_app</a>.</p>
+<p>For more details about role variables, see <a class="reference external" href="../roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a> and <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/files/cpm/cics_wlp_install_app/">role_cics_wlp_install_app</a>.</p>
 </div>
 
 

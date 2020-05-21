@@ -1,5 +1,5 @@
 
-:github_url: https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/zmf_workflow.py
+:github_url: https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/zmf_workflow.py
 
 .. _zmf_workflow_module:
 

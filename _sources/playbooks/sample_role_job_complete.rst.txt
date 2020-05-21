@@ -43,8 +43,8 @@ For more details about role variables, see `zmf_job_complete`_.
 .. _Playbook Documentation:
    ../playbooks.html
 .. _sample playbook:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_job_complete.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_job_complete.yml
 .. _hosts:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts
 .. _zmf_job_complete:
    ../roles/README_zmf_job_complete.html

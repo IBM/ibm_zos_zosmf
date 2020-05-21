@@ -56,10 +56,10 @@ For more details about role variables, see `zmf_cpm_provision_software_service`_
 .. _Playbook Documentation:
    ../playbooks.html
 .. _sample playbook:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/sample_role_deploy_cics_application.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_deploy_cics_application.yml
 .. _role_cics_wlp_install_app:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/files/cpm/cics_wlp_install_app/
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/files/cpm/cics_wlp_install_app/
 .. _hosts:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts
 .. _zmf_cpm_provision_software_service:
    ../roles/README_zmf_cpm_provision_software_service.html

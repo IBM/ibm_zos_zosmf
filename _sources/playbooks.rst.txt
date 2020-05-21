@@ -185,11 +185,11 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
 .. _Ansible Playbook:
    https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html#playbooks-intro
 .. _playbooks directory:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/
 .. _Installation:
    installation.html
 .. _ansible.cfg:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/ansible.cfg
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/ansible.cfg
 .. _Ansible Configuration Settings:
    https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-configuration-settings-locations
 .. _inventory:
@@ -199,16 +199,16 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
 .. _Host Vars:
    #host-vars
 .. _hosts:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/hosts
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts
 .. _host_vars:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/host_vars/
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/
 .. _group_vars:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/group_vars/
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/
 .. _workflow.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/group_vars/workflow.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/workflow.yml
 .. _zosmf1.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/host_vars/zosmf1.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/zosmf1.yml
 .. _SY1.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/host_vars/SY1.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/SY1.yml
 .. _ansible-playbook:
    https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html
