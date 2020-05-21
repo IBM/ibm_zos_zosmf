@@ -6,6 +6,7 @@
   block:
     - name: Validate variables - Initialize variables
       set_fact:
+        job_search_logic_upper: "{{ job_search_logic | upper }}"
         job_jcl_location_upper: "{{ job_jcl_location | upper }}"
         job_internal_reader_mode_upper: "{{ job_internal_reader_mode | default() | upper }}"
         job_jcl_symbols: "{{ job_jcl_symbols | default({}) }}"
@@ -36,6 +37,13 @@
       when:
         - user == empty_str or password == empty_str
         - crt == empty_str or key == empty_str
+
+    - name: Validate variables - Fail if optional variable job_search_logic is defined with other values than "AND", "OR"
+      fail:
+        msg: "Please define the optional variable job_search_logic as one of below values: AND, OR"
+      when:
+        - job_search_logic_upper != "AND"
+        - job_search_logic_upper != "OR"
 
 - name: Prepare JCL
   block:
@@ -209,31 +217,148 @@
           fail:
             msg: "{{ final_result }}"
       when:
+        - job_search_logic_upper == 'AND'
         - job_matched_rc_str == empty_str
 
-    - name: Query and match the return code - Check the return code - Step 2 match job_max_rc
+    - block:
+        - name: Query and match the return code - Check the return code - Step 2 match job_max_rc
+          set_fact:
+            job_matched_rc_int: "{{ status_result.json.retcode | replace('CC ', '') }}"
+
+        - block:
+            - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Update final_result
+              set_fact:
+                final_result: "{{ final_result | combine({ \
+                              'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+            - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Fail if the return code is mismatched
+              fail:
+                msg: "{{ final_result }}"
+          when:
+            - job_search_logic_upper == 'AND'
+            - job_matched_rc_int|int > job_max_rc|int
+      when:
+        - job_matched_rc_str != empty_str
+
+- name: Query and match the contents in spool file if job_search_output is defined
+  block:
+    - name: Query and match the contents in spool file - Send https request if job_search_output is defined
+      uri:
+        url: "{{ job_files_url }}"
+        method: GET
+        return_content: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+        user: "{{ user }}"
+        password: "{{ password }}"
+        client_cert: "{{ crt }}"
+        client_key: "{{ key }}"
+        force_basic_auth: yes
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: files_result
+      failed_when: no
+
+    - name: Query and match the contents in spool file - Handle request error
+      include_tasks: handle_request_error.yml
+      vars:
+        expect_rcode: 200
+        result: "{{ files_result }}"
+
+    - name: Query and match the contents in spool file - Prepare for query each spool file
       set_fact:
-        job_matched_rc_int: "{{ status_result.json.retcode | replace('CC ', '') }}"
+        job_matched_contents: {}
+        job_matched_contents_found: False
+
+    - include_tasks: query_each_spool_file.yml
+      when: (job_search_output_ddname is undefined) or (job_search_output_ddname == []) or (file_item.ddname in job_search_output_ddname)
+      loop: "{{ files_result.json }}"
+      loop_control:
+        label: "{{ file_item.ddname }}"
+        loop_var: file_item
+
+    - name: Query and match the contents in spool file - Retrieve job information and update final_result
+      set_fact:
+        final_result: "{{ final_result | combine({ 'job_matched_contents': job_matched_contents }) }}"
 
     - block:
-        - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Update final_result
+        - name: Check and return final_result if job_search_output is defined - Update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is not completed. The return code is mismatched.' }) }}"
-        - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Fail if the return code is mismatched
+                           'msg': 'Job is not completed. The return code is matched but no matched output content is found.' }) }}"
+        - name: Check and return final_result if job_search_output is defined - Fail if no matched output content is found
           fail:
             msg: "{{ final_result }}"
       when:
-        - job_matched_rc_int|int > job_max_rc|int
+        - job_search_logic_upper == 'AND'
+        - not job_matched_contents_found
 
     - block:
-        - name: Update final_result
+        - name: Check and return final_result if job_search_output is defined - Update final_result
           set_fact:
             final_result: "{{ final_result | combine({ \
-                           'msg': 'Job is completed successfully. The return code is matched.' }) }}"
+                           'msg': 'Job is not completed. The return code is mismatched and no matched output content is found.' }) }}"
+        - name: Check and return final_result if job_search_output is defined - Fail if the return code is mismatched and no matched output content is found
+          fail:
+            msg: "{{ final_result }}"
+      when:
+        - job_search_logic_upper == 'OR'
+        - (job_matched_rc_str == empty_str) or (job_matched_rc_int|int > job_max_rc|int)
+        - not job_matched_contents_found
+
+    - block:
+        - name: Check and return final_result if job_search_output is defined - Update final_result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is completed successfully. The return code is matched although no matched output content is found.' }) }}"
+      when:
+        - job_search_logic_upper == 'OR'
+        - job_matched_rc_str != empty_str
+        - job_matched_rc_int|int <= job_max_rc|int
+        - not job_matched_contents_found
+
+    - block:
+        - name: Check and return final_result if job_search_output is defined - Update final_result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is completed successfully. The matched output contents are found although the return code is mismatched.' }) }}"
+      when:
+        - job_search_logic_upper == 'OR'
+        - (job_matched_rc_str == empty_str) or (job_matched_rc_int|int > job_max_rc|int)
+        - job_matched_contents_found
+
+    - block:
+        - name: Check and return final_result if job_search_output is defined - Update final_result
+          set_fact:
+            final_result: "{{ final_result | combine({ \
+                           'msg': 'Job is completed successfully. The return code is matched and the matched output contents are found.' }) }}"
       when:
         - job_matched_rc_str != empty_str
         - job_matched_rc_int|int <= job_max_rc|int
+        - job_matched_contents_found
+  when: job_search_output is not undefined
+
+- block:
+    - name: Check and return final_result if job_search_output is not defined - Update final_result
+      set_fact:
+        final_result: "{{ final_result | combine({ \
+                       'msg': 'Job is not completed. The return code is mismatched.' }) }}"
+    - name: Check and return final_result if job_search_output is not defined - Fail if the return code is mismatched
+      fail:
+        msg: "{{ final_result }}"
+  when:
+    - job_search_output is undefined
+    - (job_matched_rc_str == empty_str) or (job_matched_rc_int|int > job_max_rc|int)
+
+- block:
+    - name: Check and return final_result result if 'job_search_output' is not defined - Update final_result
+      set_fact:
+        final_result: "{{ final_result | combine({ \
+                       'msg': 'Job is completed successfully. The return code is matched.' }) }}"
+  when:
+    - job_search_output is undefined
+    - job_matched_rc_str != empty_str
+    - job_matched_rc_int|int <= job_max_rc|int
 
 - name: Return final_result
   debug: var=final_result
