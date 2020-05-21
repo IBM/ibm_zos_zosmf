@@ -1,8 +1,0 @@
-# Copyright (c) IBM Corporation 2020 
-job_jcl_location: 'LOCAL'
-job_search_logic: 'AND'
-job_max_rc: 0
-job_search_output_insensitive: True
-job_search_output_maxreturnsize: 1
-complete_check_times: 10
-complete_check_delay: 5
