@@ -3,4 +3,4 @@
 //SYSPRINT DD SYSOUT=*                                  
 //SYSTSPRT DD SYSOUT=*                                  
 //SYSTSIN  DD *                                         
- LG IZUADMIN
+ RL ZMFAPLA BBNBASE.ZOSMF.WORKLOAD_MANAGEMENT.WORKLOAD_MANAGEMENT.INSTALL
