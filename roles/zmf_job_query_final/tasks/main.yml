@@ -4,7 +4,7 @@
 ---
 - name: Validate variables
   block:
-    - name: Validate variables
+    - name: Validate variables - Initialize variables
       set_fact:
         job_search_logic_upper: "{{ job_search_logic | upper }}"
         user: "{{ zmf_user | default() }}"

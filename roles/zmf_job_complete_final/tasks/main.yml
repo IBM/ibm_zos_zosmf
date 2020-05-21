@@ -4,7 +4,7 @@
 ---
 - name: Validate variables
   block:
-    - name: Validate variables
+    - name: Validate variables - Initialize variables
       set_fact:
         job_search_logic_upper: "{{ job_search_logic | upper }}"
         job_jcl_location_upper: "{{ job_jcl_location | upper }}"
@@ -76,7 +76,7 @@
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-CSRF-ZOSMF-HEADER': 'JOB' }) }}"
 
-    - name: Prepare headers -  Set X-IBM-Intrdr-Class to {{ job_internal_reader_class }} if job_internal_reader_class is defined
+    - name: Prepare headers - Set X-IBM-Intrdr-Class to {{ job_internal_reader_class }} if job_internal_reader_class is defined
       set_fact:
         request_headers: "{{ request_headers | combine({ 'X-IBM-Intrdr-Class': job_internal_reader_class | trim}) }}"
       when: job_internal_reader_class is defined and job_internal_reader_class != empty_str
