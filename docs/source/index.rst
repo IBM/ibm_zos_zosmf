@@ -75,11 +75,11 @@ Author Information
 
 
 .. _modules:
-    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/plugins/modules/
+    https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/
 .. _roles:
-    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/roles/
+    https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/
 .. _sample playbooks:
-    https://github.com/IBM/ibm_zos_zosmf/tree/release-v2.0.0/playbooks/
+    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/
 .. _GNU General Public License, Version 3.0:
     https://opensource.org/licenses/GPL-3.0
 .. _Apache License, Version 2.0:

@@ -234,7 +234,7 @@ workflow_notification_url
 Dependencies
 ------------
 
-None
+* module: `zmf_workflow`_
 
 Requirements
 ------------
@@ -247,6 +247,8 @@ Sample Playbooks
 See the sample playbook in section `Playbooks`_.
 
 
+.. _zmf_workflow:
+   ../modules/zmf_workflow.html
 .. _Requirements:
    ../requirements_workflow.html
 .. _Playbooks:
