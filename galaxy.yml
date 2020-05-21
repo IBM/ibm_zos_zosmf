@@ -7,7 +7,7 @@ namespace: ibm
 name: ibm_zos_zosmf
 
 # The collection version
-version: 1.0.3
+version: 2.0.0
 
 # Collection README file
 readme: README.md
@@ -48,10 +48,10 @@ tags:
   - was
 
 # The URL of the originating SCM repository
-repository: https://www.github.com/IBM/ibm_zos_zosmf
+repository: https://github.com/IBM/ibm_zos_zosmf
 
 # The URL to any online docs
-documentation: https://github.com/IBM/ibm_zos_zosmf/blob/release-v1.0.3/README.md
+documentation: https://ibm.github.io/ibm_zos_zosmf/index.html
 
 # The URL to the collection issue tracker
-issues: https://www.github.com/IBM/ibm_zos_zosmf/issues
+issues: https://github.com/IBM/ibm_zos_zosmf/issues
