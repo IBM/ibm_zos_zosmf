@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v2.0.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.1) - 2020-05-29
+### Added
+- support to search job output for roles: `zmf_job_complete`, `zmf_job_query`
+
 ## [v2.0.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.0) - 2020-05-21
 ### Added
 - add roles: `zmf_job_complete`, `zmf_job_query`
