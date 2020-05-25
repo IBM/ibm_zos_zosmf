@@ -11,7 +11,7 @@ This `sample playbook`_ shows how to submit a job to run on the target z/OS syst
 
 .. code-block:: yaml
 
-   - name: sample of submitting a job to run on z/OS and check its return code
+   - name: sample of submitting a job to run on z/OS, check its return code and specific contents in spool files
      hosts: job
      gather_facts: no
      collections:
@@ -29,9 +29,14 @@ This `sample playbook`_ shows how to submit a job to run on the target z/OS syst
          vars:
            job_jcl_src: "files/job_sample_jcl.jcl" # The location of file or data set containing the JCL
            # job_jcl_location: 'LOCAL' # The type of location of the JCL to be submitted. Default is LOCAL
+           # job_search_logic: 'AND' # The logic between the check of the job return code and job output. Default is AND
            # job_max_rc: 0 # The maximum return code for the job that should be allowed without failing the role. Default is 0
            # complete_check_times: 10 # The maximum number of time that is used for periodic checks of the job status. Default is 10
            # complete_check_delay: 5 # The interval time between periodic checks of the job status. Default is 5
+           job_search_output: "JCLSAMP1 STARTED" # A string or a regular expression specifies the matched part of job output that should be allowed without failing the role.
+           job_search_output_ddname: ["JESMSGLG"] # The list of spool files in which the match work will be done.
+           # job_search_output_insensitive: True # Whether the comparison of job_search_output is case insensitive. Default is True
+           # job_search_output_maxreturnsize: 1 # How many lines of contents from the first matched line in spool file will be returned when job_search_output is matched in job_search_output_ddname. Default is 1
 
 .. note::
 

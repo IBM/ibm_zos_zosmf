@@ -5,9 +5,7 @@
 zmf_job_query
 =============
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, and check its return code.
-
-.. **IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, check its return code and specific contents in spool files.
+**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, check its return code and specific contents in spool files.
 
 Role Variables
 --------------
@@ -72,71 +70,62 @@ job_id
   | **required**: True
   | **type**: str
 
-.. job_search_logic
-..   Specifies the logic between the check of the job return code and job output. This variable only take effects when *job_search_output* is defined.
+job_search_logic
+  Specifies the logic between the check of the job return code and job output. This variable only take effects when *job_search_output* is defined.
   
-..   * **AND**: The role will succeed only when both the return code is matched with *job_max_rc* and the job output is matched with *job_search_output*. If the return code doesn't match with *job_max_rc*, the role will fail and the remaining tasks to check the job output will be bypassed.
+  * **AND**: The role will succeed only when both the return code is matched with *job_max_rc* and the job output is matched with *job_search_output*. If the return code doesn't match with *job_max_rc*, the role will fail and the remaining tasks to check the job output will be bypassed.
   
-..   * **OR**: the role will succeed if either the return code is match with *job_max_rc*, or the job output is matched with *job_search_output*. Both tasks to check the return code and job output will no be bypassed no matter wether it is mismatched.
+  * **OR**: the role will succeed if either the return code is match with *job_max_rc*, or the job output is matched with *job_search_output*. Both tasks to check the return code and job output will no be bypassed no matter wether it is mismatched.
 
-..   | **required**: False
-..   | **type**: str
-..   | **default**: AND
-..   | **choices**: AND, OR
+  | **required**: False
+  | **type**: str
+  | **default**: AND
+  | **choices**: AND, OR
 
 job_max_rc
   An integer value that specifies the maximum return code for the job that should be allowed without failing the role.
 
-  The role will fail if the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
+  * When *job_search_logic=AND*, the role will fail if the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
+  
+  * When *job_search_logic=OR*, the role will continue to check the job output if *job_search_output* is defined, even the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
 
   | **required**: False
   | **type**: int
   | **default**: 0
 
-.. job_max_rc
-..   An integer value that specifies the maximum return code for the job that should be allowed without failing the role.
-
-..   * When *job_search_logic=AND*, the role will fail if the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
+job_search_output
+  A string or a regular expression specifies the matched part of job output that should be allowed without failing the role.
   
-..   * When *job_search_logic=OR*, the role will continue to check the job output if *job_search_output* is defined, even the return code doesn't match ``CC nnnn`` where nnnn is small or equal to the maximum return code.
-
-..   | **required**: False
-..   | **type**: int
-..   | **default**: 0
-
-.. job_search_output
-..   A string or a regular expression specifies the matched part of job output that should be allowed without failing the role.
+  Use *job_search_output_ddname* to specify the spool file list in which you want to do the match work.
   
-..   Use *job_search_output_ddname* to specify the spool file list in which you want to do the match work.
+  * When *job_search_logic=AND*, the role will fail if no matched output content is found.
+
+  * When *job_search_logic=OR*, the role will succeed if either the return code is small or equal to the maximum return code, or the matched output contents are found.
+
+  | **required**: False
+  | **type**: str
+
+job_search_output_ddname
+  A list specifies the list of spool files in which the match work will be done. For example: ``["JESMSGLG", "JESJCL"]``. 
   
-..   * When *job_search_logic=AND*, the role will fail if no matched output content is found.
+  This variable only take effects when *job_search_output* is defined. The spool files listed in this variable will be compared with *job_search_output*. If this variable is omitted, all spool files will be compared with *job_search_output*.
 
-..   * When *job_search_logic=OR*, the role will succeed if either the return code is small or equal to the maximum return code, or the matched output contents are found.
+  | **required**: False
+  | **type**: list
 
-..   | **required**: False
-..   | **type**: str
+job_search_output_insensitive
+  Specifies whether the comparison of *job_search_output* is case insensitive. This variable only take effects when *job_search_output* is defined.
 
-.. job_search_output_ddname
-..   A list specifies the list of spool files in which the match work will be done. For example: ``["JESMSGLG", "JESJCL"]``. 
-  
-..   This variable only take effects when *job_search_output* is defined. The spool files listed in this variable will be compared with *job_search_output*. If this variable is omitted, all spool files will be compared with *job_search_output*.
+  | **required**: False
+  | **type**: bool
+  | **default**: True
 
-..   | **required**: False
-..   | **type**: list
+job_search_output_maxreturnsize
+  An integer specifies how many lines of contents from the first matched line in spool file will be returned when *job_search_output* is matched in *job_search_output_ddname*.
 
-.. job_search_output_insensitive
-..   Specifies whether the comparison of *job_search_output* is case insensitive. This variable only take effects when *job_search_output* is defined.
-
-..   | **required**: False
-..   | **type**: bool
-..   | **default**: True
-
-.. job_search_output_maxreturnsize
-..   An integer specifies how many lines of contents from the first matched line in spool file will be returned when *job_search_output* is matched in *job_search_output_ddname*.
-
-..   | **required**: False
-..   | **type**: int
-..   | **default**: 1
+  | **required**: False
+  | **type**: int
+  | **default**: 1
 
 complete_check_times
   The maximum number of time that is used for periodic checks of the job status.

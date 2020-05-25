@@ -5,6 +5,18 @@
 Releases
 ========
 
+Version 2.0.1
+-------------
+
+`v2.0.1`_
+
+Added
+  * support to search job output for roles: `zmf_job_complete`, `zmf_job_query`
+
+Availability
+  * Galaxy
+  * github
+
 Version 2.0.0
 -------------
 
@@ -94,3 +106,5 @@ Availability
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v1.0.3
 .. _v2.0.0:
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.0
+.. _v2.0.1:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.1
