@@ -8,6 +8,7 @@ SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 view:
 	open build/html/index.html
@@ -34,6 +35,14 @@ ibm_zos_zosmf:
 	mkdir -p source/modules
 	ansible-doc-extractor --template templates/module.rst.j2 source/modules ../plugins/modules/*.py
 	echo "Completed restructured text generation, run 'make html'"
+
+html:
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo "Completed HTML generation, run 'make html-all'"
+
+html-all:
+	@sphinx-versioning -l "$(ROOT_DIR)"/source/conf.py build  "$(ROOT_DIR)"/source/ "$(ROOT_DIR)"/build/html
+	@echo "Completed HTML generation for git repository branches and/or tags, run 'make view'"
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
