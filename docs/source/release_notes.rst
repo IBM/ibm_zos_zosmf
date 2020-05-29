@@ -17,6 +17,9 @@ Availability
   * Galaxy
   * github
 
+Reference
+  * Supported by z/OSMF APAR PH23046 (PTF UI69412 for V2R3, PTF UI69413 for V2R4)
+
 Version 2.0.0
 -------------
 

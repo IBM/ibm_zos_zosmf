@@ -4,7 +4,7 @@
 # Example:
 # ansible-playbook -i hosts sample_role_job_complete.yml
 
-- name: sample of submitting a job to run on z/OS, check its return code and specific contents in spool files
+- name: sample of submitting a job to run on z/OS, check its return code and user specified content from spool files
   hosts: job
   gather_facts: no
   collections:

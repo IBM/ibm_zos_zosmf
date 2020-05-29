@@ -11,7 +11,7 @@ This `sample playbook`_ shows how to submit a job to run on the target z/OS syst
 
 .. code-block:: yaml
 
-   - name: sample of submitting a job to run on z/OS, check its return code and specific contents in spool files
+   - name: sample of submitting a job to run on z/OS, check its return code and user specified content from spool files
      hosts: job
      gather_facts: no
      collections:

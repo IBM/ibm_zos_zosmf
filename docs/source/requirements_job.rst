@@ -18,6 +18,10 @@ To use the modules and roles which supplied to interact with **z/OS jobs REST se
    * role: `zmf_job_complete`_
    * role: `zmf_job_query`_
 
+   .. note::
+
+      * To use the search job output function (by variable `job_search_output`) for roles: `zmf_job_complete`_ and `zmf_job_query`_, it also requires: **z/OSMF APAR PH23046 (PTF UI69412 for V2R3, PTF UI69413 for V2R4)**
+
 
 .. _Overall Requirements:
    requirements.html
