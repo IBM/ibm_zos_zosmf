@@ -16,7 +16,7 @@ Module Reference
    :maxdepth: 1
    :glob:
 
-   modules/*
+   modules/zmf_workflow
 
 Module Documentation
 --------------------
