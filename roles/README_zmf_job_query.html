@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_job_query &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
+  <title>zmf_job_query &mdash; IBM z/OSMF Collection 2.0.1 documentation</title>
   
 
   
@@ -33,6 +33,7 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Playbooks" href="../playbooks.html" />
@@ -174,7 +175,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/roles/README_zmf_job_query.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.0.1/docs/source/roles/README_zmf_job_query.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -188,9 +189,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="zmf-job-query">
+  
+
+
+
+
+
+<div class="section" id="zmf-job-query">
 <h1>zmf_job_query<a class="headerlink" href="#zmf-job-query" title="Permalink to this headline">¶</a></h1>
-<p><strong>IBM z/OSMF collection</strong> provides provides an Ansible role, referred to as <strong>zmf_job_query</strong>, to query a job running on z/OS, and check its return code.</p>
+<p><strong>IBM z/OSMF collection</strong> provides provides an Ansible role, referred to as <strong>zmf_job_query</strong>, to query a job running on z/OS, check its return code and user specified content from spool files.</p>
 <div class="section" id="role-variables">
 <h2>Role Variables<a class="headerlink" href="#role-variables" title="Permalink to this headline">¶</a></h2>
 <dl>
@@ -248,18 +255,61 @@
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
-</dl>
-<dl>
+<dt>job_search_logic</dt><dd><p>Specifies the logic between the check of the job return code and job output. This variable only take effects when <em>job_search_output</em> is defined.</p>
+<ul class="simple">
+<li><p><strong>AND</strong>: The role will succeed only when both the return code is matched with <em>job_max_rc</em> and the job output is matched with <em>job_search_output</em>. If the return code doesn’t match with <em>job_max_rc</em>, the role will fail and the remaining tasks to check the job output will be bypassed.</p></li>
+<li><p><strong>OR</strong>: the role will succeed if either the return code is match with <em>job_max_rc</em>, or the job output is matched with <em>job_search_output</em>. Both tasks to check the return code and job output will no be bypassed no matter wether it is mismatched.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>default</strong>: AND</div>
+<div class="line"><strong>choices</strong>: AND, OR</div>
+</div>
+</dd>
 <dt>job_max_rc</dt><dd><p>An integer value that specifies the maximum return code for the job that should be allowed without failing the role.</p>
-<p>The role will fail if the return code doesn’t match <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">nnnn</span></code> where nnnn is small or equal to the maximum return code.</p>
+<ul class="simple">
+<li><p>When <em>job_search_logic=AND</em>, the role will fail if the return code doesn’t match <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">nnnn</span></code> where nnnn is small or equal to the maximum return code.</p></li>
+<li><p>When <em>job_search_logic=OR</em>, the role will continue to check the job output if <em>job_search_output</em> is defined, even the return code doesn’t match <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">nnnn</span></code> where nnnn is small or equal to the maximum return code.</p></li>
+</ul>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: int</div>
 <div class="line"><strong>default</strong>: 0</div>
 </div>
 </dd>
-</dl>
-<dl>
+<dt>job_search_output</dt><dd><p>A string or a regular expression specifies the matched part of job output that should be allowed without failing the role.</p>
+<p>Use <em>job_search_output_ddname</em> to specify the spool file list in which you want to do the match work.</p>
+<ul class="simple">
+<li><p>When <em>job_search_logic=AND</em>, the role will fail if no matched output content is found.</p></li>
+<li><p>When <em>job_search_logic=OR</em>, the role will succeed if either the return code is small or equal to the maximum return code, or the matched output contents are found.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>job_search_output_ddname</dt><dd><p>A list specifies the list of spool files in which the match work will be done. For example: <code class="docutils literal notranslate"><span class="pre">[&quot;JESMSGLG&quot;,</span> <span class="pre">&quot;JESJCL&quot;]</span></code>.</p>
+<p>This variable only take effects when <em>job_search_output</em> is defined. The spool files listed in this variable will be compared with <em>job_search_output</em>. If this variable is omitted, all spool files will be compared with <em>job_search_output</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: list</div>
+</div>
+</dd>
+<dt>job_search_output_insensitive</dt><dd><p>Specifies whether the comparison of <em>job_search_output</em> is case insensitive. This variable only take effects when <em>job_search_output</em> is defined.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: True</div>
+</div>
+</dd>
+<dt>job_search_output_maxreturnsize</dt><dd><p>An integer specifies how many lines of contents from the first matched line in spool file will be returned when <em>job_search_output</em> is matched in <em>job_search_output_ddname</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: 1</div>
+</div>
+</dd>
 <dt>complete_check_times</dt><dd><p>The maximum number of time that is used for periodic checks of the job status.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
@@ -325,6 +375,20 @@
 
   </div>
   
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v2.0.1
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../v2.0.1/roles/README_zmf_job_query.html">v2.0.1</a></dd>
+            <dd><a href="../v2.0.0/roles/README_zmf_job_query.html">v2.0.0</a></dd>
+        </dl>
+    </div>
+</div>
 
 
   <script type="text/javascript">

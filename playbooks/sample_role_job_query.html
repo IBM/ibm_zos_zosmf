@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sample_role_job_query &mdash; IBM z/OSMF Collection 2.0.0 documentation</title>
+  <title>sample_role_job_query &mdash; IBM z/OSMF Collection 2.0.1 documentation</title>
   
 
   
@@ -33,6 +33,7 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contributing" href="../community_guides.html" />
@@ -175,7 +176,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/playbooks/sample_role_job_query.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.0.1/docs/source/playbooks/sample_role_job_query.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -189,11 +190,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sample-role-job-query">
+  
+
+
+
+
+
+<div class="section" id="sample-role-job-query">
 <h1>sample_role_job_query<a class="headerlink" href="#sample-role-job-query" title="Permalink to this headline">¶</a></h1>
 <p>For configuration and setup, see <a class="reference external" href="../playbooks.html">Playbook Documentation</a>.</p>
 <p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_job_query.yml">sample playbook</a> shows how to query a job running on the target z/OS systems via z/OSMF.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of querying a job running on z/OS and check its return code</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of querying a job running on z/OS, check its return code and user specified content from spool files</span>
   <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">job</span>
   <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
   <span class="nt">collections</span><span class="p">:</span>
@@ -210,10 +217,15 @@
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_job_query</span>
       <span class="nt">vars</span><span class="p">:</span>
         <span class="nt">job_name</span><span class="p">:</span> <span class="s">&quot;JCLSAMP1&quot;</span> <span class="c1"># The name of the job for which status is requested</span>
-        <span class="nt">job_id</span><span class="p">:</span> <span class="s">&quot;JOB00000&quot;</span> <span class="c1"># The ID of the job for which status is requested</span>
+        <span class="nt">job_id</span><span class="p">:</span> <span class="s">&quot;JOB00000&quot;</span> <span class="c1"># The ID of the job for which status is requested. This variable should be specified in host specific variables file in host_vars directory since the same job running on different z/OS has different job ID</span>
+        <span class="c1"># job_search_logic: &#39;AND&#39; # The logic between the check of the job return code and job output. Default is AND</span>
         <span class="c1"># job_max_rc: 0 # The maximum return code for the job that should be allowed without failing the role. Default is 0</span>
         <span class="c1"># complete_check_times: 10 # The maximum number of time that is used for periodic checks of the job status. Default is 10</span>
         <span class="c1"># complete_check_delay: 5 # The interval time between periodic checks of the job status. Default is 5</span>
+        <span class="nt">job_search_output</span><span class="p">:</span> <span class="s">&quot;JCLSAMP1</span><span class="nv"> </span><span class="s">STARTED&quot;</span> <span class="c1"># A string or a regular expression specifies the matched part of job output that should be allowed without failing the role.</span>
+        <span class="nt">job_search_output_ddname</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;JESMSGLG&quot;</span><span class="p p-Indicator">]</span> <span class="c1"># The list of spool files in which the match work will be done.</span>
+        <span class="c1"># job_search_output_insensitive: True # Whether the comparison of job_search_output is case insensitive. Default is True</span>
+        <span class="c1"># job_search_output_maxreturnsize: 1 # How many lines of contents from the first matched line in spool file will be returned when job_search_output is matched in job_search_output_ddname. Default is 1</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -258,6 +270,20 @@
 
   </div>
   
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v2.0.1
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../v2.0.1/playbooks/sample_role_job_query.html">v2.0.1</a></dd>
+            <dd><a href="../v2.0.0/playbooks/sample_role_job_query.html">v2.0.0</a></dd>
+        </dl>
+    </div>
+</div>
 
 
   <script type="text/javascript">
