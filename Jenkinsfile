@@ -26,10 +26,10 @@ pipeline {
                     }
 	    }
             steps {
-                echo 'Hello, Test4'
+                echo 'Hello, Test5'
                 echo 'run playbook'
 		sh 'pwd'
-                sh '/usr/local/binansible-playbook sample_role_job_complete.yml'
+                sh '/usr/local/bin/ansible-playbook sample_role_job_complete.yml'
             }
         }
     }
