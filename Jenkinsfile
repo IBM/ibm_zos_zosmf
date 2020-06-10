@@ -26,9 +26,9 @@ pipeline {
                     }
 	    }
             steps {
-                echo 'Hello, Test12'
+                echo 'Hello, Test13'
 		sh 'pwd'
-		sh 'sed -i '' 's/zosmf1.ibm.com/pev211.pok.ibm.com/g' /Users/strangepear2019/ansible_20200609/workspace/feature/0/CICD/playbooks/hosts'
+		sh 'sed -i '' 's/zosmf1.ibm.com/pev211.pok.ibm.com/g' ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks//hosts'
                 sh '/usr/local/bin/ansible-playbook ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/sample_role_job_complete.yml'
             }
         }
