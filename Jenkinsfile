@@ -26,9 +26,10 @@ pipeline {
                     }
 	    }
             steps {
-                echo 'Hello, Test14'
+                echo 'Hello, Test15'
+		sh "cd ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks"
 		sh 'pwd'
-		sh (script: 'sed -i '' 's/zosmf1.ibm.com/pev211.pok.ibm.com/g' ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks//hosts', returnStdout:false)
+		sh "sed -i '' 's/zosmf1.ibm.com/pev211.pok.ibm.com/g' ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/hosts"
                 sh '/usr/local/bin/ansible-playbook ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/sample_role_job_complete.yml'
             }
         }
