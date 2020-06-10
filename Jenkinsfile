@@ -14,7 +14,6 @@ pipeline {
 		sh '/usr/local/bin/ansible --version' 
                 /** sh 'git clone git@github.ibm.com:lqibj/zmf-ansible.git' 
                 sh '/usr/local/bin/ansible-galaxy collection build' */
-                sh 'cd ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks'
             }
         }
 
@@ -26,8 +25,9 @@ pipeline {
                     }
 	    }
             steps {
-                echo 'Hello, Test6'
+                echo 'Hello, Test7'
                 echo 'run playbook'
+                sh 'cd ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks'
 		sh 'pwd'
                 sh '/usr/local/bin/ansible-playbook sample_role_job_complete.yml'
             }
