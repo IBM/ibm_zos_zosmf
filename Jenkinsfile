@@ -25,11 +25,11 @@ pipeline {
                     }
 	    }
             steps {
-                echo 'Hello, Test7'
+                echo 'Hello, Test8'
                 echo 'run playbook'
                 sh 'cd ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks'
 		sh 'pwd'
-                sh '/usr/local/bin/ansible-playbook sample_role_job_complete.yml'
+                sh '/usr/local/bin/ansible-playbook ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbookssample_role_job_complete.yml'
             }
         }
     }
