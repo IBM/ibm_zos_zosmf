@@ -28,11 +28,11 @@ pipeline {
 
             steps {
 		echo 'sanity test'
-		dir("~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf") {
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf") {
                      sh "pwd"
+	             sh '/usr/local/bin/ansible-test sanity'
                 }
-		sh '/usr/local/bin/ansible-test sanity'
-		echo 'Jobapi BVT test19'
+		echo 'Jobapi BVT test20'
 		sh "sed -i '' 's/zosmf1.ibm.com/pev211.pok.ibm.com/g' ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/hosts"
                 sh '/usr/local/bin/ansible-playbook ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/sample_role_job_complete.yml'
             }
