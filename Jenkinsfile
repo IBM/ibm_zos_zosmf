@@ -25,13 +25,14 @@ pipeline {
                    customWorkspace "workspace/${env.BRANCH_NAME}"
                     }
 	    }
-            dir("~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf") {
-                sh "pwd"
-            }
+
             steps {
-		echo 'sanity test'  
+		echo 'sanity test'
+		dir("~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf") {
+                     sh "pwd"
+                }
 		sh '/usr/local/bin/ansible-test sanity'
-		echo 'Jobapi BVT test18'
+		echo 'Jobapi BVT test19'
 		sh "sed -i '' 's/zosmf1.ibm.com/pev211.pok.ibm.com/g' ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/hosts"
                 sh '/usr/local/bin/ansible-playbook ~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/sample_role_job_complete.yml'
             }
