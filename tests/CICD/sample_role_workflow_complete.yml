@@ -1,0 +1,21 @@
+# Copyright (c) IBM Corporation 2020 
+
+# This sample playbook demonstrates using role `zmf_workflow_complete` to complete a z/OS workflow.
+# Example:
+# ansible-playbook -i hosts sample_role_workflow_complete.yml
+
+- name: sample of completing a z/OS workflow
+  hosts: workflow
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  tasks:
+    - include_role:
+        name: zmf_workflow_complete
+      vars:
+        workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}" # The name of the workflow
+        workflow_file: "/global/zosmf/IZUDFLT0/data/workflow_sample_automation_steps.xml" # The location of the workflow definition file
+        # force_complete: False # Whether to complete the workflow instance forcibly or idempotently. Default is False
+        # complete_check_times: 10 # The maximum number of time that is used for periodic checks of the workflow status, Default is 10
+        # complete_check_delay: 5 # The interval time between periodic checks of the workflow status. Default is 5
+    - debug: var=result
