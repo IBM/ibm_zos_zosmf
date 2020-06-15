@@ -11,10 +11,13 @@ pipeline {
 	    }
             steps {
                 echo 'Hello, build'
-		sh '/usr/local/bin/ansible --version' 
-                sh 'git clone -b dev git@github.com:IBM/ibm_zos_zosmf.git'
 		sh "pwd"
-		dir("/Users/strangepear2019/ansible_20200609/ibm_zos_zosmf") {
+		sh '/usr/local/bin/ansible --version' 
+		dir("/Users/strangepear2019/ansible_20200609") {
+                        sh "pwd"
+			sh 'git clone -b dev git@github.com:IBM/ibm_zos_zosmf.git'
+		}
+		dir("/Users/strangepear2019/ansible_20200609/ibm_zos_zosmf") {   
 			sh "pwd"
 			sh '/usr/local/bin/ansible-galaxy collection build'
 			sh "pwd"
@@ -55,11 +58,11 @@ pipeline {
                     sh 'sed -i "" "s/SY1.*/P00 zmf_host=pkstp00.pok.stglabs.ibm.com zmf_port=1035/" hosts'
                     sh 'sed -i "" "s/SY2.*/P03 zmf_host=pkstp03.pok.stglabs.ibm.com zmf_port=1035/" hosts'
 		}
-		echo 'Jobapi BVT test30'
+		echo 'Jobapi BVT test31'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD") {
 			sh '/usr/local/bin/ansible-playbook sample_role_job_complete.yml'
 		}
-		echo 'Workflow BVT test30'
+		echo 'Workflow BVT test31'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD") {
 			sh '/usr/local/bin/ansible-playbook sample_role_workflow_complete.yml'
 		}
