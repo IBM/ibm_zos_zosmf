@@ -58,11 +58,11 @@ pipeline {
                     sh 'sed -i "" "s/SY1.*/P00 zmf_host=pkstp00.pok.stglabs.ibm.com zmf_port=1035/" hosts'
                     sh 'sed -i "" "s/SY2.*/P03 zmf_host=pkstp03.pok.stglabs.ibm.com zmf_port=1035/" hosts'
 		}
-		echo 'Jobapi BVT test32'
+		echo 'Jobapi BVT test33'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD") {
 			sh '/usr/local/bin/ansible-playbook -i /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/hosts job_complete_test1.yml'
 		}
-		echo 'Workflow BVT test32'
+		echo 'Workflow BVT test33'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD") {
 			sh '/usr/local/bin/ansible-playbook -i /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/hosts sample_role_workflow_complete.yml'
 		}
