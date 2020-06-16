@@ -62,12 +62,12 @@ pipeline {
 		}
 		echo 'Jobapi BVT'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
-			sh '/usr/local/bin/ansible-playbook job_complete_test1.yml'
-			sh '/usr/local/bin/ansible-playbook sample_role_job_complete.yml'
+			sh '/usr/local/bin/ansible-playbook job_complete_CICDtest1.yml'
+			sh '/usr/local/bin/ansible-playbook job_complete_CICDtest2.yml'
 		}
 		echo 'Workflow BVT'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
-			sh '/usr/local/bin/ansible-playbook sample_role_workflow_complete.yml'
+			sh '/usr/local/bin/ansible-playbook workflow_complete_CICDtest1.yml'
 		}
 		echo 'CICD test successfully!'
             }
