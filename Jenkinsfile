@@ -51,24 +51,25 @@ pipeline {
 		     sh '/usr/local/bin/ansible-lint roles/zmf_cpm_provision_software_service'
 		     sh '/usr/local/bin/ansible-lint roles/zmf_cpm_remove_software_instance'
                 }
-		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/group_vars") {
-			sh "rm -rf *"
-			sh "ls -l"
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars") {
 			sh "cp -p /Users/strangepear2019/ansible-tmp/p00.yml /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars/p00.yml" 
 			sh "cp -p /Users/strangepear2019/ansible-tmp/p03.yml /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars/p03.yml"
+			sh "ls -l"
 		}
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
                     sh 'sed -i "" "s/SY1.*/P00 zmf_host=pkstp00.pok.stglabs.ibm.com zmf_port=1035/" hosts'
                     sh 'sed -i "" "s/SY2.*/P03 zmf_host=pkstp03.pok.stglabs.ibm.com zmf_port=1035/" hosts'
 		}
-		echo 'Jobapi BVT test35'
-		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD") {
+		echo 'Jobapi BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook job_complete_test1.yml'
+			sh '/usr/local/bin/ansible-playbook sample_role_job_complete.yml'
 		}
-		echo 'Workflow BVT test35'
-		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD") {
+		echo 'Workflow BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook sample_role_workflow_complete.yml'
 		}
+		echo 'CICD test successfully!'
             }
         }
     }
