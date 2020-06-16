@@ -16,8 +16,9 @@
         # job_jcl_src: "/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/files/job_sample_jcl.jcl" # The location of file or data set containing the JCL
         job_jcl_src: "DEBUG26.SVT.JOBS(TESTJOBA)"
         job_jcl_location: "DATASET"
+        job_user_correlator: "AB"
         # job_jcl_location: 'LOCAL' # The type of location of the JCL to be submitted. Default is LOCAL
-        # job_search_logic: 'AND' # The logic between the check of the job return code and job output. Default is AND
+        job_search_logic: 'AND' # The logic between the check of the job return code and job output. Default is AND
         job_max_rc: 0 # The maximum return code for the job that should be allowed without failing the role. Default is 0
         # complete_check_times: 10 # The maximum number of time that is used for periodic checks of the job status. Default is 10
         # complete_check_delay: 5 # The interval time between periodic checks of the job status. Default is 5
