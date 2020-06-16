@@ -13,7 +13,7 @@
     - include_role:
         name: zmf_workflow_complete
       vars:
-        workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}" # The name of the workflow
+        workflow_name: "ansible_CICDtest_{{ inventory_hostname }}" # The name of the workflow
         workflow_file: "/global/zosmf/IZUDFLT0/data/workflow_sample_automation_steps.xml" # The location of the workflow definition file
         # force_complete: False # Whether to complete the workflow instance forcibly or idempotently. Default is False
         # complete_check_times: 10 # The maximum number of time that is used for periodic checks of the workflow status, Default is 10
