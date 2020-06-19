@@ -1,0 +1,36 @@
+# Copyright (c) IBM Corporation 2020 
+
+# This sample playbook demonstrates using module `zmf_console_command` to issue a command by using a system console.
+# Example:
+# ansible-playbook -i hosts sample_module_console_command.yml
+
+- name: sample of issuing a command by using a system console
+  hosts: console
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username (skip if zmf_crt and zmf_key are supplied)"
+      private: no
+    - name: zmf_password
+      prompt: "Enter your zOSMF password (skip if zmf_crt and zmf_key are supplied)"
+      private: yes
+  tasks:
+    - zmf_console_command:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        # zmf_crt: "{{ zmf_crt }}"
+        # zmf_key: "{{ zmf_key }}"
+        console_cmd: "d a,l"
+        console_system: "{{ inventory_hostname }}"
+        # console_name: "defcn"
+        # console_cmdresponse_keyword: "jes"
+        # console_cmdresponse_reg: "N"
+        # console_broadcastmsg_keyword: "cim"
+        # console_broadcastmsg_reg: "N"
+        # console_broadcastmsg_detect_timeout: 30
+        # console_cmdresponse_retrieve_times: 1
+      register: result
+      delegate_to: localhost
+    - debug: var=result
