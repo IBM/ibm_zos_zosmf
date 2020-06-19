@@ -337,7 +337,7 @@ deleted:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_workflow_util import (
+from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import (
     get_connect_argument_spec,
     get_connect_session,
     cmp_list

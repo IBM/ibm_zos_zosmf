@@ -4,7 +4,7 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_workflow_util import handle_request
+from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import handle_request
 import json
 import re
 

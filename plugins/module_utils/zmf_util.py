@@ -53,13 +53,13 @@ def get_connect_session(module):
 
 def __get_request_headers():
     """
-    Return the request headers for calling workflow APIs.
+    Return the request headers for calling z/OSMF APIs.
     :rtype: dict[str, str]
     """
-    return {'X-CSRF-ZOSMF-HEADER': 'TEST'}
+    return {'X-CSRF-ZOSMF-HEADER': 'ZOSMF'}
 
 
-def handle_request(module, session, method, url, params=None, rcode=200, timeout=30):
+def handle_request(module, session, method, url, params=None, rcode=200, header=None, timeout=30):
     """
     Return the response or error message of HTTP request.
     :param AnsibleModule module: the ansible module
@@ -69,17 +69,21 @@ def handle_request(module, session, method, url, params=None, rcode=200, timeout
     :param dict params: the params of HTTP request
     :param int rcode: the expected return code of HTTP request
     :param int timeout: the timeout of HTTP request
+    :param dict header: the header of HTTP request
     :rtype: dict or str
     """
+    headers = __get_request_headers()
+    if header is not None:
+        headers.update(header)
     try:
         if method == 'get':
-            response = session.get(url, params=params, headers=__get_request_headers(), verify=False, timeout=timeout)
+            response = session.get(url, params=params, headers=headers, verify=False, timeout=timeout)
         elif method == 'put':
-            response = session.put(url, data=json.dumps(params), headers=__get_request_headers(), verify=False, timeout=timeout)
+            response = session.put(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
         elif method == 'post':
-            response = session.post(url, data=json.dumps(params), headers=__get_request_headers(), verify=False, timeout=timeout)
+            response = session.post(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
         elif method == 'delete':
-            response = session.delete(url, headers=__get_request_headers(), verify=False, timeout=timeout)
+            response = session.delete(url, headers=headers, verify=False, timeout=timeout)
     except Exception as ex:
         module.fail_json(msg='HTTP request error: ' + repr(ex))
     else:
@@ -93,6 +97,11 @@ def handle_request(module, session, method, url, params=None, rcode=200, timeout
         else:
             if 'messageText' in response_content:
                 return 'HTTP request error: ' + str(response_code) + ' : ' + response_content['messageText']
+            elif 'errorMsg' in response_content:
+                return 'HTTP request error: ' + str(response_code) + ' : ' + response_content['errorMsg']
+            elif 'return-code' in response_content:
+                return 'HTTP request error: ' + str(response_code) + ' : return-code=' \
+                    + str(response_content['return-code']) + ' reason-code=' + str(response_content['reason-code']) + ' reason=' + response_content['reason']
             else:
                 return 'HTTP request error: ' + str(response_code)
 
