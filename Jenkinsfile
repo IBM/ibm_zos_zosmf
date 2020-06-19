@@ -6,7 +6,7 @@ pipeline {
             agent {
                node {
                    label 'zmf-ansible-configuration'
-                   /* customWorkspace "workspace/${env.BRANCH_NAME}" */
+                   customWorkspace "workspace/${env.BRANCH_NAME}"
                     }
 	    }
             steps {
@@ -35,7 +35,7 @@ pipeline {
             agent {
                node {
                    label 'zmf-ansible-configuration'
-                   /* customWorkspace "workspace/${env.BRANCH_NAME}" */
+                   customWorkspace "workspace/${env.BRANCH_NAME}"
                     }
 	    }
 
