@@ -1,28 +1,51 @@
+#!groovy
+
+def remoteWorkspace = ''
+
 pipeline {
-    agent none
-    
-    stages {
-        stage('Build') {
-            agent {
-               node {
-                   label 'zmf-ansible-configuration'
-                   customWorkspace "workspace/${env.BRANCH_NAME}"
-                    }
-	    }
-            steps {
-                echo 'Hello, build'
+	agent none
+	
+	options {
+		// Skip checking out code from source control by default in the agent directive
+		skipDefaultCheckout()
+		// Disallow concurrent executions of the Pipeline
+		disableConcurrentBuilds()
+		// only keep 15 builds to prevent disk usage from growing out of control
+		buildDiscarder(
+			logRotator(
+				daysToKeepStr: '15',
+				numToKeepStr: '15',
+			)
+		)
+   
+	}
+	
+	stages {
+		stage('Build') {
+			agent {
+				node {
+					label 'zmf-ansible-configuration'
+					customWorkspace "workspace/${env.BRANCH_NAME}"
+				}
+			}
+	steps {
+		echo 'Hello, build'
 		sh "pwd"
 		sh '/usr/local/bin/ansible --version'
 		dir("/Users/strangepear2019/.ansible") {
 			sh "pwd"
 			sh "rm -rf *"
 		}	
-		dir("/Users/strangepear2019/ansible_20200609") {
-                        sh "pwd"
-			sh "rm -rf *"	
-			sh 'git clone -b dev git@github.com:IBM/ibm_zos_zosmf.git'
+		
+		checkout scm
+		
+		script {
+			remoteWorkspace = env.WORKSPACE
 		}
-		dir("/Users/strangepear2019/ansible_20200609/ibm_zos_zosmf") {   
+		
+		echo "Remote workspace is ${remoteWorkspace}"
+		
+		dir("${remoteWorkspace}") {   
 			sh "pwd"
 			sh '/usr/local/bin/ansible-galaxy collection build'
 			sh "pwd"
