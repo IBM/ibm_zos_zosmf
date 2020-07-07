@@ -12,7 +12,7 @@ This `sample playbook`_ shows how to provision an instance in z/OSMF Cloud Provi
 .. code-block:: yaml
 
    - name: sample of provisioning software instance
-     hosts: zosmf1
+     hosts: cpmHost1
      gather_facts: no
      collections:
        - ibm.ibm_zos_zosmf

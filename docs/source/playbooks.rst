@@ -39,36 +39,44 @@ Included in the `playbooks directory`_ is a sample inventory file `hosts`_ that 
 .. code-block:: yaml
 
    [workflow]
-   SY1
-   SY2
+   workflowHost1
+   workflowHost2
 
    [cpm]
-   zosmf1 zmf_host=zosmf1.ibm.com zmf_port=443
-   zosmf2 zmf_host=zosmf2.ibm.com zmf_port=443
+   cpmHost1 zmf_host=zosmf1.ibm.com zmf_port=443
+   cpmHost2 zmf_host=zosmf2.ibm.com zmf_port=443
 
    [job]
-   SY1 zmf_host=zosmf1.ibm.com zmf_port=443
-   SY2 zmf_host=zosmf2.ibm.com zmf_port=443
+   jobHost1 zmf_host=zosmf1.ibm.com zmf_port=443
+   jobHost2 zmf_host=zosmf2.ibm.com zmf_port=443
+
+   [console]
+   consoleHost1
+   consoleHost2
 
 * **workflow**: Host grouping for z/OSMF Workflows.
 
-   * **SY1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in **z/OSMF Systems** plugin.
+   * **workflowHost1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in **z/OSMF Systems** plugin.
 
 * **cpm**: Host grouping for Cloud Provisioning & Management (CP&M).
 
-   * **zosmf1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in `Host Vars`_.
+   * **cpmHost1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in `Host Vars`_.
 
    * **zmf_host**: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: ``zmf_host=pev076.pok.ibm.com``.
 
    * **zmf_port**: The value of this property identifies the port number of z/OSMF server.
 
-* **job**: Host grouping for z/OSMF Jobs.
+* **job**: Host grouping for z/OS Jobs.
 
-   * **SY1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in `Host Vars`_.
+   * **jobHost1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in `Host Vars`_.
 
    * **zmf_host**: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: ``zmf_host=pev076.pok.ibm.com``.
 
    * **zmf_port**: The value of this property identifies the port number of z/OSMF server.
+
+* **console**: Host grouping for z/OS Consoles.
+
+   * **consoleHost1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in **z/OSMF Systems** plugin.
 
 Host Vars
 ---------
@@ -77,7 +85,7 @@ You can supply host variables in either the inventory file or the separate varia
 
 Included in the `playbooks directory`_ is some sample variables files in the directory `host_vars`_.
 
-* `zosmf1.yml`_: It contains the variables for host ``zosmf1`` in group ``cpm``:
+* `cpmHost1.yml`_: It contains the variables for host ``cpmHost1`` in group ``cpm``:
 
    .. code-block:: yaml
 
@@ -91,7 +99,7 @@ Included in the `playbooks directory`_ is some sample variables files in the dir
 
    * **api_polling_interval_seconds**: The value of this property identifies interval in seconds between each *api_polling_retry_count* polling.
 
-* `SY1.yml`_: It contains the variables for host ``SY1`` in group ``job``:
+* `jobHost1.yml`_: It contains the variables for host ``jobHost1`` in group ``job``:
 
    .. code-block:: yaml
 
@@ -149,9 +157,32 @@ Included in the `playbooks directory`_ is some sample variables files in the dir
 
    * **zmf_key**: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.
 
-   .. note::
-     
-      This is an easy example to use username and password for authenticating with z/OSMF server. ``zmf_user`` and ``zmf_password`` will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use ``zmf_crt`` and ``zmf_key`` to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.
+* `console.yml`_: It contains the variables for group ``console``:
+
+   .. code-block:: yaml
+  
+      zmf_host: your.host.name
+      zmf_port: port_number
+      # zmf_user:
+      # zmf_password:
+      # zmf_crt:
+      # zmf_key:
+
+   * **zmf_host**: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: ``zmf_host=pev076.pok.ibm.com``.
+
+   * **zmf_port**: The value of this property identifies the port number of z/OSMF server.
+
+   * **zmf_user**: The value of this property identifies the username to be used for authenticating with z/OSMF server.
+
+   * **zmf_password**: The value of this property identifies the password to be used for authenticating with z/OSMF server.
+
+   * **zmf_crt**: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.
+
+   * **zmf_key**: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.
+
+.. note::
+   
+   This is an easy example to use username and password for authenticating with z/OSMF server. ``zmf_user`` and ``zmf_password`` will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use ``zmf_crt`` and ``zmf_key`` to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.
 
 Sample Playbooks
 ----------------
@@ -167,6 +198,7 @@ Sample Playbooks
    playbooks/sample_role_deploy_cics_application
    playbooks/sample_role_job_complete
    playbooks/sample_role_job_query
+   playbooks/sample_module_console_command
 
 Run the Playbooks
 -----------------
@@ -206,9 +238,11 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/
 .. _workflow.yml:
    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/workflow.yml
-.. _zosmf1.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/zosmf1.yml
-.. _SY1.yml:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/SY1.yml
+.. _console.yml:
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/console.yml
+.. _cpmHost1.yml:
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/cpmHost1.yml
+.. _jobHost1.yml:
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/jobHost1.yml
 .. _ansible-playbook:
    https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html

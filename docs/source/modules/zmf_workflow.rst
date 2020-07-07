@@ -4,8 +4,8 @@
 .. _zmf_workflow_module:
 
 
-zmf_workflow -- Ansible module for running z/OS workflows
-=========================================================
+zmf_workflow -- Operate z/OS workflows
+======================================
 
 
 
@@ -16,7 +16,7 @@ zmf_workflow -- Ansible module for running z/OS workflows
 
 Synopsis
 --------
-- Ansible module for running z/OS workflows by issuing z/OSMF workflow RESTful services.
+- Operate z/OS workflows by issuing z/OSMF workflow RESTful services.
 - This module supports to compare, start, delete and check a workflow.
 
 
@@ -153,7 +153,11 @@ workflow_file_system
  
      
 workflow_host
-  Nickname of the system on which the workflow is to be performed.
+  Nickname of the target z/OS system on which the workflow is to be performed.
+
+  The target z/OS system should be configured as managed node.
+
+  This variable should be specified as ``{{ inventory_hostname }}``, and its value should be specified in the inventory file.
 
   For more information, see the documentation for the z/OSMF workflow REST services.
 
@@ -413,9 +417,9 @@ Examples
      zmf_workflow:
        state: "started"
        zmf_host: "sample.ibm.com"
-       workflow_name: "ansible_sample_workflow_SY1"
+       workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}"
        workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
-       workflow_host: "SY1"
+       workflow_host: "{{ inventory_hostname }}"
 
    - name: Delete a workflow if it exists
      zmf_workflow:

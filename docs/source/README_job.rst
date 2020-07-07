@@ -5,7 +5,7 @@
 Operate z/OS Jobs
 =================
 
-**IBM z/OSMF collection** provides capabilities to work with batch jobs on a z/OS system using Ansible playbooks. There are three roles provided to interact with z/OS jobs REST services. These roles drive z/OSMF jobs RESTful services to operate batch jobs.
+**IBM z/OSMF collection** provides capabilities to work with batch jobs on a z/OS system using Ansible playbooks. There are three roles provided to interact with z/OS jobs REST services. These roles drive z/OS jobs RESTful services to operate batch jobs.
 
 Roles
 -----

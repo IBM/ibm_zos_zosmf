@@ -12,7 +12,7 @@ This `sample playbook`_ shows how to remove the deprovisioned instance in z/OSMF
 .. code-block:: yaml
 
    - name: sample of removing software instance
-     hosts: zosmf1
+     hosts: cpmHost1
      gather_facts: no
      collections:
        - ibm.ibm_zos_zosmf
