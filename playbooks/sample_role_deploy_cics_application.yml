@@ -5,7 +5,7 @@
 # ansible-playbook -i hosts sample_role_deploy_cics_application.yml
 
 - name: Sample for provisioning CICS region and deploying application
-  hosts: zosmf1 # need to match host nick name specified in hosts inventory file
+  hosts: cpmHost1 # need to match host nick name specified in hosts inventory file
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
