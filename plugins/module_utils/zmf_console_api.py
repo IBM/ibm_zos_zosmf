@@ -11,7 +11,7 @@ import re
 
 def __get_console_apis():
     """
-    Return the details of all z/OSMF console services APIs.
+    Return the details of all z/OS console services APIs.
     :rtype: dict[str, dict]
     """
     return dict(
@@ -68,12 +68,11 @@ def __get_console_api_argument_spec(api):
         return console_apis[api]
 
 
-def __get_console_api_url(module, url, console_name, response_key=None, detection_key=None):
+def __get_console_api_url(module, url, response_key=None, detection_key=None):
     """
     Return the parsed URL of the specific console API.
     :param AnsibleModule module: the ansible module
     :param str url: the initial URL of API
-    :param str console_name: the name of the EMCS console
     :param str response_key: the response key that can be used to retrieve the command response
     :param str detection_key: the detection key that can be used to retrieve the detect result for broadcast messages
     :rtype: str
@@ -83,10 +82,11 @@ def __get_console_api_url(module, url, console_name, response_key=None, detectio
         module.params['zmf_port'] = ''
     else:
         module.params['zmf_port'] = str(module.params['zmf_port']).strip()
+    if module.params['console_name'] is None or module.params['console_name'].strip() == '':
+        module.params['console_name'] = 'defcn'
     matchObj = re.findall('{(.+?)}', url)
     for x in matchObj:
-        if ((x == 'console_name' and (console_name is None or console_name.strip() == ''))
-                or (x == 'detection_key' and (detection_key is None or detection_key.strip() == ''))
+        if ((x == 'detection_key' and (detection_key is None or detection_key.strip() == ''))
                 or (x == 'response_key' and (response_key is None or response_key.strip() == ''))):
             module.fail_json(msg='Missing required argument or invalid argument: ' + x + '.')
         if x == 'zmf_port' and module.params[x] == '':
@@ -131,24 +131,27 @@ def __get_console_api_params(module, args):
     return params
 
 
-def call_console_api(module, session, api, console_name, response_key=None, detection_key=None):
+def call_console_api(module, session, api, response_key=None, detection_key=None):
     """
     Return the response or error message of the specific console API.
     :param AnsibleModule module: the ansible module
     :param Session session: the current connection session
     :param str api: the name of API
-    :param str console_name: the name of the EMCS console
     :param str response_key: the response key that can be used to retrieve the command response
     :param str detection_key: the detection key that can be used to retrieve the detect result for broadcast messages
     :rtype: dict or str
     """
     zmf_api = __get_console_api_argument_spec(api)
-    zmf_api_url = __get_console_api_url(module, zmf_api['url'], console_name, response_key, detection_key)
+    zmf_api_url = __get_console_api_url(module, zmf_api['url'], response_key, detection_key)
     zmf_api_params = __get_console_api_params(module, zmf_api['args'])
-    if 'header' in zmf_api:
-        return handle_request(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, zmf_api['ok_rcode'], zmf_api['header'])
+    if 'detect-time' in zmf_api_params and int(zmf_api_params['detect-time']) >= 30:
+        timeout = int(zmf_api_params['detect-time']) + 5
     else:
-        return handle_request(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, zmf_api['ok_rcode'])
+        timeout = 30
+    if 'header' in zmf_api:
+        return handle_request(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, zmf_api['ok_rcode'], zmf_api['header'], timeout)
+    else:
+        return handle_request(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, zmf_api['ok_rcode'], None, timeout)
 
 
 def get_request_argument_spec():
