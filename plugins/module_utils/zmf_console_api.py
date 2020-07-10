@@ -128,6 +128,10 @@ def __get_console_api_params(module, args):
             module.fail_json(msg='Missing required argument or invalid argument: ' + v['nickname'] + '.')
         elif 'default' in v:
             params[k] = v['default']
+    if 'solKeyReg' in params and params['solKeyReg'] == 'N':
+        params.pop('solKeyReg')
+    if 'unsolKeyReg' in params and params['unsolKeyReg'] == 'N':
+        params.pop('unsolKeyReg')
     return params
 
 
