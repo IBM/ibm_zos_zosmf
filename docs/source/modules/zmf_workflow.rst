@@ -155,9 +155,7 @@ workflow_file_system
 workflow_host
   Nickname of the target z/OS system on which the workflow is to be performed.
 
-  The target z/OS system should be configured as managed node.
-
-  This variable should be specified as ``{{ inventory_hostname }}``, and its value should be specified in the inventory file.
+  This variable should be specified as ``{{ inventory_hostname }}``, and its value should be specified in the inventory file as a managed node.
 
   For more information, see the documentation for the z/OSMF workflow REST services.
 

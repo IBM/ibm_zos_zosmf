@@ -31,9 +31,9 @@ This `sample playbook`_ shows how to issue MVS command by using a system console
            zmf_password: "{{ zmf_password }}"
            console_cmd: "start pegasus"
            console_system: "{{ inventory_hostname }}"
-           # console_cmdresponse_keyword: "SLP registration initiated"
+           # console_cmdresponse_keyword: "SLP registration initiated" # The keyword that you want to detect in the command response. The module will fail if no specified keywords are detected in neither the command response nor broadcast messages
            # console_cmdresponse_reg: "N" # Whether console_cmdresponse_keyword represents a regular expression. Default is 'N'
-           # console_broadcastmsg_keyword: "started CIM server"
+           # console_broadcastmsg_keyword: "started CIM server" # The keyword that you want to detect in broadcast messages. The module will fail if no specified keywords are detected in neither the command response nor broadcast messages
            # console_broadcastmsg_reg: "N" # Whether console_broadcastmsg_keyword represents a regular expression. Default is 'N'
            # console_broadcastmsg_detect_timeout: 30 # How long, in seconds, the console attempts to detect the value of console_broadcastmsg_keyword in the broadcast messages. Default is 30
            # console_cmdresponse_retrieve_times: 1 # How many times the console attempts to retrieve the command response. Default is 1
@@ -44,9 +44,13 @@ This `sample playbook`_ shows how to issue MVS command by using a system console
 .. note::
 
   To run the sample playbook, below preparation works are required:
-   
+  
+  * ``delegate_to: localhost`` statement is required for using this module to avoid setting up an SSH connection and install Python on the target z/OS systems.
+
   * In the inventory file `hosts`_, the nickname ``consoleHost1`` for the target z/OS system, which is configured as managed node, indicates the system in the same sysplex that the command is routed to. You can modify it to refer to your own z/OS system. You need to ensure the z/OS system ``consoleHost1`` or your own z/OS system is configured in **z/OSMF Systems** plugin.
 
+  * In the inventory file `hosts`_, each z/OS managed node typically needs to specify its serving z/OSMF via variable ``zmf_host`` and ``zmf_port``. For z/OS managed nodes in the same sysplex, it's recommended to specify the same serving z/OSMF host since z/OSMF is sysplex scope typically. Otherwise if you have different serving z/OSMF specified for multiple z/OS managed nodes which are in the same sysplex, you need to specify the variable ``console_name`` in host specific variable file under host_vars directory so that each z/OS managed node uses an unique console name.
+  
 For more details about module variables, see `zmf_console_command`_.
 
 

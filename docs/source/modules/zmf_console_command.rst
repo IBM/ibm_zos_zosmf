@@ -117,7 +117,9 @@ console_cmdresponse_reg
 console_cmdresponse_retrieve_times
   Specifies how many times the console attempts to retrieve the command response.
 
-  If the command response contains a large volume of messages, which will not arrive within a certain time interval, you might retrieve again several times to ensure that all messages related to the command are retrieved.
+  If the command response contains a large volume of messages, it will not arrive within a certain time interval.
+
+  In this case you might retrieve again several times to ensure that all messages related to the command are retrieved.
 
   For more information, see the documentation for the z/OS console REST services.
 
@@ -146,9 +148,7 @@ console_name
 console_system
   Nickname of the target z/OS system in the same sysplex that the command is routed to.
 
-  The target z/OS system should be configured as managed node.
-
-  This variable should be specified as ``{{ inventory_hostname }}``, and its value should be specified in the inventory file.
+  This variable should be specified as ``{{ inventory_hostname }}``, and its value should be specified in the inventory file as a managed node.
 
   For more information, see the documentation for the z/OS console REST services.
 
@@ -292,11 +292,11 @@ Return Values
 
         **sample**: ::
 
-                  "The command is successful."
+                  "The command is issued successfully."
 
-                  "The command is successful. The specified keyword is detected in the command response."
+                  "The command is issued successfully. The specified keyword is detected in the command response."
 
-                  "The command is successful. The specified keyword is detected in broadcast messages."
+                  "The command is issued successfully. The specified keyword is detected in broadcast messages."
 
 
 

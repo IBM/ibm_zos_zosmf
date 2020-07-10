@@ -76,8 +76,7 @@ options:
     console_system:
         description:
             - Nickname of the target z/OS system in the same sysplex that the command is routed to.
-            - The target z/OS system should be configured as managed node.
-            - This variable should be specified as C({{ inventory_hostname }}), and its value should be specified in the inventory file.
+            - This variable should be specified as C({{ inventory_hostname }}), and its value should be specified in the inventory file as a managed node.
             - For more information, see the documentation for the z/OS console REST services.
         required: true
         type: str
@@ -182,9 +181,9 @@ message:
     returned: on success
     type: str
     sample:
-        sample1: "The command is successful."
-        sample2: "The command is successful. The specified keyword is detected in the command response."
-        sample3: "The command is successful. The specified keyword is detected in broadcast messages."
+        sample1: "The command is issued successfully."
+        sample2: "The command is issued successfully. The specified keyword is detected in the command response."
+        sample3: "The command is issued successfully. The specified keyword is detected in broadcast messages."
 cmd_response:
     description: The command response.
     returned: on success
@@ -262,16 +261,19 @@ def issue_command(module):
     # step1 - issue a command
     response_issue = call_console_api(module, session, 'issue')
     if isinstance(response_issue, dict):
-        cmd_response = response_issue['cmd-response']
-        # handle route issue
-        if 'IEE618I' in cmd_response:
-            module.fail_json(msg='Failed to issue the command ---- IEE618I ROUTE COMMAND REJECTED, INVALID SYSTEM NAME.')
-        elif 'IEE345I' in cmd_response:
-            module.fail_json(msg='Failed to issue the command ---- IEE345I ROUTE AUTHORITY INVALID, FAILED BY SECURITY PRODUCT.')
+        if 'cmd-response' in response_issue:
+            cmd_response = response_issue['cmd-response']
+            # handle route issue
+            if 'IEE618I' in cmd_response:
+                module.fail_json(msg='Failed to issue the command ---- IEE618I ROUTE COMMAND REJECTED, INVALID SYSTEM NAME.')
+            elif 'IEE345I' in cmd_response:
+                module.fail_json(msg='Failed to issue the command ---- IEE345I ROUTE AUTHORITY INVALID, FAILED BY SECURITY PRODUCT.')
+            else:
+                issue_result['changed'] = True
+                response_key = response_issue['cmd-response-key']
+                cmd_response = format_message(cmd_response)
         else:
-            issue_result['changed'] = True
-            response_key = response_issue['cmd-response-key']
-            cmd_response = format_message(cmd_response)
+            module.fail_json(msg='Failed to issue the command ---- No response is returned.')
     else:
         module.fail_json(msg='Failed to issue the command ---- ' + response_issue)
     # step2 - detect keyword
@@ -289,7 +291,7 @@ def issue_command(module):
     while check_times > 0:
         response_getResponse = call_console_api(module, session, 'getResponse', response_key)
         if isinstance(response_getResponse, dict):
-            if response_getResponse['cmd-response'] is not None and response_getResponse['cmd-response'].strip() != '':
+            if 'cmd-response' in response_getResponse and response_getResponse['cmd-response'].strip() != '':
                 # detect again
                 if 'cmdresponse_keyword_detected' in issue_result and issue_result['cmdresponse_keyword_detected'] is False:
                     if (module.params['console_cmdresponse_reg'] == 'Y'
@@ -306,13 +308,16 @@ def issue_command(module):
     issue_result['cmd_response'] = cmd_response
     # step4 - decide if detect fails or not
     if 'cmdresponse_keyword_detected' not in issue_result and 'broadcastmsg_keyword_detected' not in issue_result:
-        issue_result['message'] = 'The command is successful.'
+        issue_result['message'] = 'The command is issued successfully.'
     elif 'cmdresponse_keyword_detected' in issue_result and issue_result['cmdresponse_keyword_detected'] is True:
-        issue_result['message'] = 'The command is successful. The specified keyword is detected in the command response.'
+        issue_result['message'] = 'The command is issued successfully. The specified keyword is detected in the command response.'
     elif 'broadcastmsg_keyword_detected' in issue_result and issue_result['broadcastmsg_keyword_detected'] is True:
-        issue_result['message'] = 'The command is successful. The specified keyword is detected in broadcast messages.'
+        issue_result['message'] = 'The command is issued successfully. The specified keyword is detected in broadcast messages.'
     else:
-        module.fail_json(msg='The command is failed. No specified keywords are detected in neither the command response nor broadcast messages.')
+        module.fail_json(
+            cmd_response=cmd_response,
+            msg='The command is issued successfully. But no specified keywords are detected in neither the command response nor broadcast messages.'
+        )
     module.exit_json(**issue_result)
 
 
