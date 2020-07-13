@@ -90,6 +90,10 @@ pipeline {
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook workflow_complete_CICDtest1.yml'
 		}
+		echo 'console BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook console_CICDtest1.yml'
+		}
 		echo 'CICD test successfully!'
             }
         }
