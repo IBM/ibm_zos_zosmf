@@ -42,12 +42,9 @@ pipeline {
 		
 		script {
 			remoteWorkspace = env.WORKSPACE
-		}
-		
-		echo "Remote workspace is ${remoteWorkspace}"
-		
-		dir("${remoteWorkspace}") {   
-			sh "pwd"
+			
+			echo "Remote workspace is ${remoteWorkspace}"
+			
 			if (exists) {
 				echo 'ibm-ibm_zos_zosmf-2.1.0.tar.gz existed'
 				sh "rm ibm-ibm_zos_zosmf-2.1.0.tar.gz"
@@ -55,6 +52,9 @@ pipeline {
 			} else {
 				sh '/usr/local/bin/ansible-galaxy collection build'
 			}
+		}
+		
+		dir("${remoteWorkspace}") {   
 			sh "pwd"
 			sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.1.0.tar.gz'
 		}
