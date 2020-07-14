@@ -1,5 +1,5 @@
 def remoteWorkspace = ''
-def exists = fileExists 'ibm-ibm_zos_zosmf-2.1.0.tar.gz'
+def exists = fileExists '${remoteWorkspace}/ibm-ibm_zos_zosmf-2.1.0.tar.gz'
 
 pipeline {
 	agent none
@@ -47,7 +47,9 @@ pipeline {
 		dir("${remoteWorkspace}") {   
 			sh "pwd"
 			if (exists) {
-    				echo 'ibm-ibm_zos_zosmf-2.1.0.tar.gz existed'
+				echo 'ibm-ibm_zos_zosmf-2.1.0.tar.gz existed'
+				sh "rm ibm-ibm_zos_zosmf-2.1.0.tar.gz"
+				sh '/usr/local/bin/ansible-galaxy collection build'
 			} else {
 				sh '/usr/local/bin/ansible-galaxy collection build'
 			}
