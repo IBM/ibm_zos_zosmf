@@ -1,3 +1,5 @@
+#!groovy
+
 def remoteWorkspace = ''
 def exists = fileExists '${remoteWorkspace}/ibm-ibm_zos_zosmf-2.1.0.tar.gz'
 
