@@ -39,6 +39,7 @@ Specific Requirements
    requirements_workflow
    requirements_cpm
    requirements_job
+   requirements_console
 
 
 .. _Ansible:

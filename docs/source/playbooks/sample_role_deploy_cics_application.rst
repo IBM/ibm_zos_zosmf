@@ -14,7 +14,7 @@ Before run the sample playbook, please copy role `role_cics_wlp_install_app`_ in
 .. code-block:: yaml
 
    - name: sample of provisioning CICS region and deploying application
-     hosts: zosmf1
+     hosts: cpmHost1
      gather_facts: no
      collections:
        - ibm.ibm_zos_zosmf

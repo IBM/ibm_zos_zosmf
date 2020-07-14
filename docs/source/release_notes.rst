@@ -5,6 +5,21 @@
 Releases
 ========
 
+Version 2.1.0
+-------------
+
+`v2.1.0`_
+
+Added
+  * add modules: `zmf_console_command`
+
+Availability
+  * Galaxy
+  * github
+
+Reference
+  * Supported by z/OSMF APAR PH24072 (PTF UI69958 for V2R3, PTF UI69959 for V2R4)
+
 Version 2.0.1
 -------------
 
@@ -111,3 +126,5 @@ Availability
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.0
 .. _v2.0.1:
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.1
+.. _v2.1.0:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0

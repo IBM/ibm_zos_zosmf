@@ -16,9 +16,9 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r"""
 ---
 module: zmf_workflow
-short_description: Ansible module for running z/OS workflows
+short_description: Operate z/OS workflows
 description:
-    - Ansible module for running z/OS workflows by issuing z/OSMF workflow RESTful services.
+    - Operate z/OS workflows by issuing z/OSMF workflow RESTful services.
     - This module supports to compare, start, delete and check a workflow.
 version_added: "2.9"
 author:
@@ -104,7 +104,8 @@ options:
         default: null
     workflow_host:
         description:
-            - Nickname of the system on which the workflow is to be performed.
+            - Nickname of the target z/OS system on which the workflow is to be performed.
+            - This variable should be specified as C({{ inventory_hostname }}), and its value should be specified in the inventory file as a managed node.
             - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
@@ -269,9 +270,9 @@ EXAMPLES = r"""
   zmf_workflow:
     state: "started"
     zmf_host: "sample.ibm.com"
-    workflow_name: "ansible_sample_workflow_SY1"
+    workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}"
     workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
-    workflow_host: "SY1"
+    workflow_host: "{{ inventory_hostname }}"
 
 - name: Delete a workflow if it exists
   zmf_workflow:
@@ -337,7 +338,7 @@ deleted:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_workflow_util import (
+from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import (
     get_connect_argument_spec,
     get_connect_session,
     cmp_list

@@ -45,6 +45,7 @@ Contents
    README_workflow
    README_cpm
    README_job
+   README_console
 
 
 
