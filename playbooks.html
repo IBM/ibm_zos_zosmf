@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Playbooks &mdash; IBM z/OSMF Collection 2.0.1 documentation</title>
+  <title>Playbooks &mdash; IBM z/OSMF Collection 2.1.0 documentation</title>
   
 
   
@@ -104,6 +104,7 @@
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_job_complete.html">sample_role_job_complete</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_job_query.html">sample_role_job_query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_console_command.html">sample_module_console_command</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#run-the-playbooks">Run the Playbooks</a></li>
@@ -174,7 +175,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.0.1/docs/source/playbooks.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.1.0/docs/source/playbooks.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -217,41 +218,52 @@
 <p>Ansible works with multiple managed nodes (hosts) at the same time, using a list or group of lists know as an <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html">inventory</a>. Once the inventory is defined, you can use <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#intro-patterns">patterns</a> to select the hosts, or groups, you want Ansible to run against.</p>
 <p>Included in the <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">playbooks directory</a> is a sample inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts">hosts</a> that with little modification can be used to manage the target z/OS systems. This inventory file should be included when running the sample playbook.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">[</span><span class="nv">workflow</span><span class="p p-Indicator">]</span>
-<span class="l l-Scalar l-Scalar-Plain">SY1</span>
-<span class="l l-Scalar l-Scalar-Plain">SY2</span>
+<span class="l l-Scalar l-Scalar-Plain">workflowHost1</span>
+<span class="l l-Scalar l-Scalar-Plain">workflowHost2</span>
 
 <span class="l l-Scalar l-Scalar-Plain">[cpm]</span>
-<span class="l l-Scalar l-Scalar-Plain">zosmf1 zmf_host=zosmf1.ibm.com zmf_port=443</span>
-<span class="l l-Scalar l-Scalar-Plain">zosmf2 zmf_host=zosmf2.ibm.com zmf_port=443</span>
+<span class="l l-Scalar l-Scalar-Plain">cpmHost1 zmf_host=zosmf1.ibm.com zmf_port=443</span>
+<span class="l l-Scalar l-Scalar-Plain">cpmHost2 zmf_host=zosmf2.ibm.com zmf_port=443</span>
 
 <span class="l l-Scalar l-Scalar-Plain">[job]</span>
-<span class="l l-Scalar l-Scalar-Plain">SY1 zmf_host=zosmf1.ibm.com zmf_port=443</span>
-<span class="l l-Scalar l-Scalar-Plain">SY2 zmf_host=zosmf2.ibm.com zmf_port=443</span>
+<span class="l l-Scalar l-Scalar-Plain">jobHost1 zmf_host=zosmf1.ibm.com zmf_port=443</span>
+<span class="l l-Scalar l-Scalar-Plain">jobHost2 zmf_host=zosmf2.ibm.com zmf_port=443</span>
+
+<span class="l l-Scalar l-Scalar-Plain">[console]</span>
+<span class="l l-Scalar l-Scalar-Plain">consoleHost1</span>
+<span class="l l-Scalar l-Scalar-Plain">consoleHost2</span>
 </pre></div>
 </div>
 <ul>
 <li><p><strong>workflow</strong>: Host grouping for z/OSMF Workflows.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><strong>SY1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in <strong>z/OSMF Systems</strong> plugin.</p></li>
+<li><p><strong>workflowHost1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in <strong>z/OSMF Systems</strong> plugin.</p></li>
 </ul>
 </div></blockquote>
 </li>
 <li><p><strong>cpm</strong>: Host grouping for Cloud Provisioning &amp; Management (CP&amp;M).</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><strong>zosmf1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in <a class="reference external" href="#host-vars">Host Vars</a>.</p></li>
+<li><p><strong>cpmHost1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in <a class="reference external" href="#host-vars">Host Vars</a>.</p></li>
 <li><p><strong>zmf_host</strong>: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: <code class="docutils literal notranslate"><span class="pre">zmf_host=pev076.pok.ibm.com</span></code>.</p></li>
 <li><p><strong>zmf_port</strong>: The value of this property identifies the port number of z/OSMF server.</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><strong>job</strong>: Host grouping for z/OSMF Jobs.</p>
+<li><p><strong>job</strong>: Host grouping for z/OS Jobs.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><strong>SY1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in <a class="reference external" href="#host-vars">Host Vars</a>.</p></li>
+<li><p><strong>jobHost1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in <a class="reference external" href="#host-vars">Host Vars</a>.</p></li>
 <li><p><strong>zmf_host</strong>: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: <code class="docutils literal notranslate"><span class="pre">zmf_host=pev076.pok.ibm.com</span></code>.</p></li>
 <li><p><strong>zmf_port</strong>: The value of this property identifies the port number of z/OSMF server.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>console</strong>: Host grouping for z/OS Consoles.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>consoleHost1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in <strong>z/OSMF Systems</strong> plugin.</p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -262,7 +274,7 @@
 <p>You can supply host variables in either the inventory file or the separate variable file. Storing separate host and group variables files may help you organize your variable values more easily.</p>
 <p>Included in the <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">playbooks directory</a> is some sample variables files in the directory <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/">host_vars</a>.</p>
 <ul>
-<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/zosmf1.yml">zosmf1.yml</a>: It contains the variables for host <code class="docutils literal notranslate"><span class="pre">zosmf1</span></code> in group <code class="docutils literal notranslate"><span class="pre">cpm</span></code>:</p>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/cpmHost1.yml">cpmHost1.yml</a>: It contains the variables for host <code class="docutils literal notranslate"><span class="pre">cpmHost1</span></code> in group <code class="docutils literal notranslate"><span class="pre">cpm</span></code>:</p>
 <blockquote>
 <div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">instance_record_dir</span><span class="p">:</span> <span class="s">&quot;/tmp&quot;</span>
 <span class="nt">api_polling_retry_count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">50</span>
@@ -276,7 +288,7 @@
 </ul>
 </div></blockquote>
 </li>
-<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/SY1.yml">SY1.yml</a>: It contains the variables for host <code class="docutils literal notranslate"><span class="pre">SY1</span></code> in group <code class="docutils literal notranslate"><span class="pre">job</span></code>:</p>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/jobHost1.yml">jobHost1.yml</a>: It contains the variables for host <code class="docutils literal notranslate"><span class="pre">jobHost1</span></code> in group <code class="docutils literal notranslate"><span class="pre">job</span></code>:</p>
 <blockquote>
 <div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># zmf_user:</span>
 <span class="c1"># zmf_password:</span>
@@ -325,13 +337,33 @@
 <li><p><strong>zmf_crt</strong>: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.</p></li>
 <li><p><strong>zmf_key</strong>: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.</p></li>
 </ul>
+</div></blockquote>
+</li>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/console.yml">console.yml</a>: It contains the variables for group <code class="docutils literal notranslate"><span class="pre">console</span></code>:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">zmf_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.host.name</span>
+<span class="nt">zmf_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">port_number</span>
+<span class="c1"># zmf_user:</span>
+<span class="c1"># zmf_password:</span>
+<span class="c1"># zmf_crt:</span>
+<span class="c1"># zmf_key:</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>zmf_host</strong>: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: <code class="docutils literal notranslate"><span class="pre">zmf_host=pev076.pok.ibm.com</span></code>.</p></li>
+<li><p><strong>zmf_port</strong>: The value of this property identifies the port number of z/OSMF server.</p></li>
+<li><p><strong>zmf_user</strong>: The value of this property identifies the username to be used for authenticating with z/OSMF server.</p></li>
+<li><p><strong>zmf_password</strong>: The value of this property identifies the password to be used for authenticating with z/OSMF server.</p></li>
+<li><p><strong>zmf_crt</strong>: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.</p></li>
+<li><p><strong>zmf_key</strong>: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is an easy example to use username and password for authenticating with z/OSMF server. <code class="docutils literal notranslate"><span class="pre">zmf_user</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_password</span></code> will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use <code class="docutils literal notranslate"><span class="pre">zmf_crt</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_key</span></code> to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.</p>
 </div>
-</div></blockquote>
-</li>
-</ul>
 </div>
 <div class="section" id="sample-playbooks">
 <h2>Sample Playbooks<a class="headerlink" href="#sample-playbooks" title="Permalink to this headline">¶</a></h2>
@@ -344,6 +376,7 @@
 <li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_job_complete.html">sample_role_job_complete</a></li>
 <li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_job_query.html">sample_role_job_query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_module_console_command.html">sample_module_console_command</a></li>
 </ul>
 </div>
 </div>
@@ -396,12 +429,13 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.0.1
+        v: v2.1.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="v2.1.0/playbooks.html">v2.1.0</a></dd>
             <dd><a href="v2.0.1/playbooks.html">v2.0.1</a></dd>
             <dd><a href="v2.0.0/playbooks.html">v2.0.0</a></dd>
         </dl>

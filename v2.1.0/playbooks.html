@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Playbooks &mdash; IBM z/OSMF Collection 2.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sample_role_workflow_complete" href="playbooks/sample_role_workflow_complete.html" />
+    <link rel="prev" title="zmf_job_query" href="roles/README_zmf_job_query.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> IBM z/OSMF Collection
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roles.html">Roles</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Playbooks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#playbook-documentation">Playbook Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ansible-config">Ansible Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inventory">Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#host-vars">Host Vars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#group-vars">Group Vars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sample-playbooks">Sample Playbooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_workflow_complete.html">sample_role_workflow_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_cpm_manage_instance.html">sample_role_cpm_manage_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_cpm_provision.html">sample_role_cpm_provision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_cpm_remove_instance.html">sample_role_cpm_remove_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_job_complete.html">sample_role_job_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_job_query.html">sample_role_job_query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_console_command.html">sample_module_console_command</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-playbooks">Run the Playbooks</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Community Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="community_guides.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="community_guides.html#helpful-links">Helpful Links</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Requirements</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">IBM z/OSMF Collection</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Playbooks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.1.0/docs/source/playbooks.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="playbooks">
+<h1>Playbooks<a class="headerlink" href="#playbooks" title="Permalink to this headline">¶</a></h1>
+<p>An <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html#playbooks-intro">Ansible Playbook</a> consists of organized instructions that define work for a managed node (hosts) to be managed with Ansible.</p>
+<div class="section" id="playbook-documentation">
+<h2>Playbook Documentation<a class="headerlink" href="#playbook-documentation" title="Permalink to this headline">¶</a></h2>
+<p><strong>IBM z/OSMF collection</strong> provides a <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">playbooks directory</a>, which contains various sample playbooks to demonstrate the use of modules and roles.</p>
+<p>You can find the playbook content that is included with the collection where the collection was installed, please refer back to the section <a class="reference external" href="installation.html">Installation</a> to obtain the installation path for the collection. In the following examples, this document will refer to the installation path as <code class="docutils literal notranslate"><span class="pre">~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf</span></code>.</p>
+</div>
+<div class="section" id="ansible-config">
+<h2>Ansible Config<a class="headerlink" href="#ansible-config" title="Permalink to this headline">¶</a></h2>
+<p>Ansible config file <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> can override nearly all <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> configurations.</p>
+<p>Included in the <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">playbooks directory</a> is a sample <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/ansible.cfg">ansible.cfg</a> that with little modification can supplement <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>.</p>
+<p>You can modify the following configuration statement to refer to your own installation path for the collection:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">collections_paths = ~/.ansible/collections:/usr/share/ansible/collections</span>
+</pre></div>
+</div>
+<p>For more information about available configurations for <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code>, see <a class="reference external" href="https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-configuration-settings-locations">Ansible Configuration Settings</a>.</p>
+</div>
+<div class="section" id="inventory">
+<h2>Inventory<a class="headerlink" href="#inventory" title="Permalink to this headline">¶</a></h2>
+<p>Ansible works with multiple managed nodes (hosts) at the same time, using a list or group of lists know as an <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html">inventory</a>. Once the inventory is defined, you can use <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#intro-patterns">patterns</a> to select the hosts, or groups, you want Ansible to run against.</p>
+<p>Included in the <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">playbooks directory</a> is a sample inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts">hosts</a> that with little modification can be used to manage the target z/OS systems. This inventory file should be included when running the sample playbook.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">[</span><span class="nv">workflow</span><span class="p p-Indicator">]</span>
+<span class="l l-Scalar l-Scalar-Plain">workflowHost1</span>
+<span class="l l-Scalar l-Scalar-Plain">workflowHost2</span>
+
+<span class="l l-Scalar l-Scalar-Plain">[cpm]</span>
+<span class="l l-Scalar l-Scalar-Plain">cpmHost1 zmf_host=zosmf1.ibm.com zmf_port=443</span>
+<span class="l l-Scalar l-Scalar-Plain">cpmHost2 zmf_host=zosmf2.ibm.com zmf_port=443</span>
+
+<span class="l l-Scalar l-Scalar-Plain">[job]</span>
+<span class="l l-Scalar l-Scalar-Plain">jobHost1 zmf_host=zosmf1.ibm.com zmf_port=443</span>
+<span class="l l-Scalar l-Scalar-Plain">jobHost2 zmf_host=zosmf2.ibm.com zmf_port=443</span>
+
+<span class="l l-Scalar l-Scalar-Plain">[console]</span>
+<span class="l l-Scalar l-Scalar-Plain">consoleHost1</span>
+<span class="l l-Scalar l-Scalar-Plain">consoleHost2</span>
+</pre></div>
+</div>
+<ul>
+<li><p><strong>workflow</strong>: Host grouping for z/OSMF Workflows.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>workflowHost1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in <strong>z/OSMF Systems</strong> plugin.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>cpm</strong>: Host grouping for Cloud Provisioning &amp; Management (CP&amp;M).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>cpmHost1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in <a class="reference external" href="#host-vars">Host Vars</a>.</p></li>
+<li><p><strong>zmf_host</strong>: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: <code class="docutils literal notranslate"><span class="pre">zmf_host=pev076.pok.ibm.com</span></code>.</p></li>
+<li><p><strong>zmf_port</strong>: The value of this property identifies the port number of z/OSMF server.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>job</strong>: Host grouping for z/OS Jobs.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>jobHost1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in <a class="reference external" href="#host-vars">Host Vars</a>.</p></li>
+<li><p><strong>zmf_host</strong>: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: <code class="docutils literal notranslate"><span class="pre">zmf_host=pev076.pok.ibm.com</span></code>.</p></li>
+<li><p><strong>zmf_port</strong>: The value of this property identifies the port number of z/OSMF server.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>console</strong>: Host grouping for z/OS Consoles.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>consoleHost1</strong>: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in <strong>z/OSMF Systems</strong> plugin.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="host-vars">
+<h2>Host Vars<a class="headerlink" href="#host-vars" title="Permalink to this headline">¶</a></h2>
+<p>You can supply host variables in either the inventory file or the separate variable file. Storing separate host and group variables files may help you organize your variable values more easily.</p>
+<p>Included in the <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">playbooks directory</a> is some sample variables files in the directory <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/">host_vars</a>.</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/cpmHost1.yml">cpmHost1.yml</a>: It contains the variables for host <code class="docutils literal notranslate"><span class="pre">cpmHost1</span></code> in group <code class="docutils literal notranslate"><span class="pre">cpm</span></code>:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">instance_record_dir</span><span class="p">:</span> <span class="s">&quot;/tmp&quot;</span>
+<span class="nt">api_polling_retry_count</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="nt">api_polling_interval_seconds</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>instance_record_dir</strong>: The value of this property identifies the file path in local system where the provision result (in json) will be stored.</p></li>
+<li><p><strong>api_polling_retry_count</strong>: The value of this property identifies max times of status polling before task fail and exit.</p></li>
+<li><p><strong>api_polling_interval_seconds</strong>: The value of this property identifies interval in seconds between each <em>api_polling_retry_count</em> polling.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/jobHost1.yml">jobHost1.yml</a>: It contains the variables for host <code class="docutils literal notranslate"><span class="pre">jobHost1</span></code> in group <code class="docutils literal notranslate"><span class="pre">job</span></code>:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># zmf_user:</span>
+<span class="c1"># zmf_password:</span>
+<span class="c1"># zmf_crt:</span>
+<span class="c1"># zmf_key:</span>
+<span class="nt">job_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">JCLSAMP1</span>
+<span class="nt">job_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">JOB00000</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>zmf_user</strong>: The value of this property identifies the username to be used for authenticating with z/OSMF server.</p></li>
+<li><p><strong>zmf_password</strong>: The value of this property identifies the password to be used for authenticating with z/OSMF server.</p></li>
+<li><p><strong>zmf_crt</strong>: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.</p></li>
+<li><p><strong>zmf_key</strong>: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.</p></li>
+<li><p><strong>job_name</strong>: The value of this property identifies the job name to be used for role <code class="docutils literal notranslate"><span class="pre">zmf_job_query</span></code> to query a job running on different z/OS.</p></li>
+<li><p><strong>job_id</strong>: The value of this property identifies the job ID to be used for role <code class="docutils literal notranslate"><span class="pre">zmf_job_query</span></code> to query a job running on different z/OS.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is an easy example to use username and password for authenticating with z/OSMF server. <code class="docutils literal notranslate"><span class="pre">zmf_user</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_password</span></code> will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use <code class="docutils literal notranslate"><span class="pre">zmf_crt</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_key</span></code> to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.</p>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="group-vars">
+<h2>Group Vars<a class="headerlink" href="#group-vars" title="Permalink to this headline">¶</a></h2>
+<p>You can supply group variables in either the inventory file or the separate variable file. Storing separate host and group variables files may help you organize your variable values more easily.</p>
+<p>Included in the <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">playbooks directory</a> is some sample variables files in the directory <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/">group_vars</a>.</p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/workflow.yml">workflow.yml</a>: It contains the variables for group <code class="docutils literal notranslate"><span class="pre">workflow</span></code>:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">zmf_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.host.name</span>
+<span class="nt">zmf_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">port_number</span>
+<span class="c1"># zmf_user:</span>
+<span class="c1"># zmf_password:</span>
+<span class="c1"># zmf_crt:</span>
+<span class="c1"># zmf_key:</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>zmf_host</strong>: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: <code class="docutils literal notranslate"><span class="pre">zmf_host=pev076.pok.ibm.com</span></code>.</p></li>
+<li><p><strong>zmf_port</strong>: The value of this property identifies the port number of z/OSMF server.</p></li>
+<li><p><strong>zmf_user</strong>: The value of this property identifies the username to be used for authenticating with z/OSMF server.</p></li>
+<li><p><strong>zmf_password</strong>: The value of this property identifies the password to be used for authenticating with z/OSMF server.</p></li>
+<li><p><strong>zmf_crt</strong>: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.</p></li>
+<li><p><strong>zmf_key</strong>: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/group_vars/console.yml">console.yml</a>: It contains the variables for group <code class="docutils literal notranslate"><span class="pre">console</span></code>:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">zmf_host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">your.host.name</span>
+<span class="nt">zmf_port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">port_number</span>
+<span class="c1"># zmf_user:</span>
+<span class="c1"># zmf_password:</span>
+<span class="c1"># zmf_crt:</span>
+<span class="c1"># zmf_key:</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>zmf_host</strong>: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: <code class="docutils literal notranslate"><span class="pre">zmf_host=pev076.pok.ibm.com</span></code>.</p></li>
+<li><p><strong>zmf_port</strong>: The value of this property identifies the port number of z/OSMF server.</p></li>
+<li><p><strong>zmf_user</strong>: The value of this property identifies the username to be used for authenticating with z/OSMF server.</p></li>
+<li><p><strong>zmf_password</strong>: The value of this property identifies the password to be used for authenticating with z/OSMF server.</p></li>
+<li><p><strong>zmf_crt</strong>: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.</p></li>
+<li><p><strong>zmf_key</strong>: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is an easy example to use username and password for authenticating with z/OSMF server. <code class="docutils literal notranslate"><span class="pre">zmf_user</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_password</span></code> will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use <code class="docutils literal notranslate"><span class="pre">zmf_crt</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_key</span></code> to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.</p>
+</div>
+</div>
+<div class="section" id="sample-playbooks">
+<h2>Sample Playbooks<a class="headerlink" href="#sample-playbooks" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_workflow_complete.html">sample_role_workflow_complete</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_cpm_manage_instance.html">sample_role_cpm_manage_instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_cpm_provision.html">sample_role_cpm_provision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_cpm_remove_instance.html">sample_role_cpm_remove_instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_job_complete.html">sample_role_job_complete</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_role_job_query.html">sample_role_job_query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks/sample_module_console_command.html">sample_module_console_command</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="run-the-playbooks">
+<h2>Run the Playbooks<a class="headerlink" href="#run-the-playbooks" title="Permalink to this headline">¶</a></h2>
+<p>The sample playbooks must be run from the <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">playbooks directory</a> of the installed collection: <code class="docutils literal notranslate"><span class="pre">~/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/playbooks/</span></code></p>
+<p>You can use the <a class="reference external" href="https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html">ansible-playbook</a> command to run the sample playbooks as follows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ ansible-playbook <span class="o">[</span>-i hosts<span class="o">]</span> sample_role_*.yml <span class="o">[</span>-e <span class="nv">zmf_user</span><span class="o">=</span>&lt;username&gt; -e <span class="nv">zmf_password</span><span class="o">=</span>&lt;password&gt;<span class="o">]</span>
+</pre></div>
+</div>
+<p>To adjust the logging verbosity, include the <code class="docutils literal notranslate"><span class="pre">-v</span></code> option with <a class="reference external" href="https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html">ansible-playbook</a> command. You can append more letter <code class="docutils literal notranslate"><span class="pre">v</span></code>’s, for example, <code class="docutils literal notranslate"><span class="pre">-v</span></code>, <code class="docutils literal notranslate"><span class="pre">-vv</span></code>, <code class="docutils literal notranslate"><span class="pre">-vvv</span></code>, or <code class="docutils literal notranslate"><span class="pre">-vvvv</span></code>, to obtain more details in case a connection failed. Each letter <code class="docutils literal notranslate"><span class="pre">v</span></code> increases the logging verbosity similar to the traditional logging levels, such as INFO, WARN, ERROR, or DEBUG.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="playbooks/sample_role_workflow_complete.html" class="btn btn-neutral float-right" title="sample_role_workflow_complete" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="roles/README_zmf_job_query.html" class="btn btn-neutral float-left" title="zmf_job_query" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, IBM
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v2.1.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="playbooks.html">v2.1.0</a></dd>
+            <dd><a href="../v2.0.1/playbooks.html">v2.0.1</a></dd>
+            <dd><a href="../v2.0.0/playbooks.html">v2.0.0</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

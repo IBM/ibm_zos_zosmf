@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_workflow – Ansible module for running z/OS workflows &mdash; IBM z/OSMF Collection 2.0.1 documentation</title>
+  <title>zmf_workflow – Operate z/OS workflows &mdash; IBM z/OSMF Collection 2.1.0 documentation</title>
   
 
   
@@ -33,10 +33,11 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Roles" href="../roles.html" />
-    <link rel="prev" title="Modules" href="../modules.html" /> 
+    <link rel="prev" title="zmf_console_command – Issue MVS command" href="zmf_console_command.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,7 +90,8 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module Reference</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_workflow – Ansible module for running z/OS workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_workflow – Operate z/OS workflows</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
@@ -165,7 +167,7 @@
         
           <li><a href="../modules.html">Modules</a> &raquo;</li>
         
-      <li>zmf_workflow – Ansible module for running z/OS workflows</li>
+      <li>zmf_workflow – Operate z/OS workflows</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -173,7 +175,7 @@
             
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.0.1/plugins/modules/zmf_workflow.py" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/zmf_workflow.py" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -187,8 +189,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="zmf-workflow-ansible-module-for-running-z-os-workflows">
-<span id="zmf-workflow-module"></span><h1>zmf_workflow – Ansible module for running z/OS workflows<a class="headerlink" href="#zmf-workflow-ansible-module-for-running-z-os-workflows" title="Permalink to this headline">¶</a></h1>
+  
+
+
+
+
+
+<div class="section" id="zmf-workflow-operate-z-os-workflows">
+<span id="zmf-workflow-module"></span><h1>zmf_workflow – Operate z/OS workflows<a class="headerlink" href="#zmf-workflow-operate-z-os-workflows" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
@@ -200,7 +208,7 @@
 <div class="section" id="synopsis">
 <h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Ansible module for running z/OS workflows by issuing z/OSMF workflow RESTful services.</p></li>
+<li><p>Operate z/OS workflows by issuing z/OSMF workflow RESTful services.</p></li>
 <li><p>This module supports to compare, start, delete and check a workflow.</p></li>
 </ul>
 </div>
@@ -278,7 +286,8 @@
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
-<dt>workflow_host</dt><dd><p>Nickname of the system on which the workflow is to be performed.</p>
+<dt>workflow_host</dt><dd><p>Nickname of the target z/OS system on which the workflow is to be performed.</p>
+<p>This variable should be specified as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}</span></code>, and its value should be specified in the inventory file as a managed node.</p>
 <p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
@@ -437,9 +446,9 @@
   <span class="nt">zmf_workflow</span><span class="p">:</span>
     <span class="nt">state</span><span class="p">:</span> <span class="s">&quot;started&quot;</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">workflow_name</span><span class="p">:</span> <span class="s">&quot;ansible_sample_workflow_SY1&quot;</span>
+    <span class="nt">workflow_name</span><span class="p">:</span> <span class="s">&quot;ansible_sample_workflow_</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
     <span class="nt">workflow_file</span><span class="p">:</span> <span class="s">&quot;/var/zosmf/workflow_def/workflow_sample_automation_steps.xml&quot;</span>
-    <span class="nt">workflow_host</span><span class="p">:</span> <span class="s">&quot;SY1&quot;</span>
+    <span class="nt">workflow_host</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Delete a workflow if it exists</span>
   <span class="nt">zmf_workflow</span><span class="p">:</span>
@@ -544,7 +553,7 @@
         <a href="../roles.html" class="btn btn-neutral float-right" title="Roles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="zmf_console_command.html" class="btn btn-neutral float-left" title="zmf_console_command – Issue MVS command" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -556,8 +565,9 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div> 
+  </div>
   Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
 </footer>
 
         </div>
@@ -570,14 +580,15 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.0.1
+        v: v2.1.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
-            <dd><a href="../v2.0.1/modules/zmf_workflow.html">v2.0.1</a></dd>
-            <dd><a href="../v2.0.0/modules/zmf_workflow.html">v2.0.0</a></dd>
+            <dd><a href="../v2.1.0/modules/zmf_workflow.html">v2.1.0</a></dd>
+            <dd><a href="../v2.0.1/index.html">v2.0.1</a></dd>
+            <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
         </dl>
     </div>
 </div>
