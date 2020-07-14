@@ -47,7 +47,11 @@ console_broadcastmsg_keyword
 
   This value can be a string or a regular expression. To use a regular expression, you must also set *console_broadcastmsg_reg=Y*.
 
-  The module will fail if no specified keywords are detected in neither the command response nor broadcast messages.
+  This parameter is designed to help user determine whether the broadcast messages issued after the command matches with user's expectation.
+
+  If *console_cmdresponse_keyword* is not specified, the module will fail if the specified keyword can not be detected from broadcast messages.
+
+  Otherwise, the module will fail if the specified keywords can not be detected from both command response and broadcast messages.
 
   For more information, see the documentation for the z/OS console REST services.
 
@@ -89,7 +93,11 @@ console_cmdresponse_keyword
 
   This value can be a string or a regular expression. To use a regular expression, you must also set *console_cmdresponse_reg=Y*.
 
-  The module will fail if no specified keywords are detected in neither the command response nor broadcast messages.
+  This parameter is designed to help user determine whether the command response matches with user's expectation.
+
+  If *console_broadcastmsg_keyword* is not specified, the module will fail if the specified keyword can not be detected from the command response.
+
+  Otherwise, the module will fail if the specified keywords can not be detected from both command response and broadcast messages.
 
   For more information, see the documentation for the z/OS console REST services.
 

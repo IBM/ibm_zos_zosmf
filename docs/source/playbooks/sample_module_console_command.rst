@@ -47,7 +47,7 @@ This `sample playbook`_ shows how to issue MVS command by using a system console
   
   * ``delegate_to: localhost`` statement is required for using this module to avoid setting up an SSH connection and install Python on the target z/OS systems.
 
-  * In the inventory file `hosts`_, the nickname ``consoleHost1`` for the target z/OS system, which is configured as managed node, indicates the system in the same sysplex that the command is routed to. You can modify it to refer to your own z/OS system. You need to ensure the z/OS system ``consoleHost1`` or your own z/OS system is configured in **z/OSMF Systems** plugin.
+  * In the inventory file `hosts`_, the name of Ansible managed node should be the same with the system name of target z/OS system. You can update it to your own z/OS system name.
 
   * In the inventory file `hosts`_, each z/OS managed node typically needs to specify its serving z/OSMF via variable ``zmf_host`` and ``zmf_port``. For z/OS managed nodes in the same sysplex, it's recommended to specify the same serving z/OSMF host since z/OSMF is sysplex scope typically. Otherwise if you have different serving z/OSMF specified for multiple z/OS managed nodes which are in the same sysplex, you need to specify the variable ``console_name`` in host specific variable file under host_vars directory so that each z/OS managed node uses an unique console name.
   
