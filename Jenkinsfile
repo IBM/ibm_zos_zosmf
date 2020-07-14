@@ -76,7 +76,6 @@ pipeline {
 			sh "cp -p /Users/strangepear2019/ansible-tmp/p00.yml /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars/p00.yml" 
 			sh "cp -p /Users/strangepear2019/ansible-tmp/p03.yml /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars/p03.yml"
 			sh "cp -p /Users/strangepear2019/ansible-tmp/hosts /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/hosts"
-			sh "ls -l"
 		}
 		echo 'Jobapi BVT'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
