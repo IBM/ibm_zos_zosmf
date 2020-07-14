@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [v2.1.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0) - 2020-07-13
+## [v2.1.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0) - 2020-07-14
 ### Added
 - add modules: `zmf_console_command`
 
