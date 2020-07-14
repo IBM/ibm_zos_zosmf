@@ -9,13 +9,6 @@
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
-  vars_prompt:
-    - name: zmf_user
-      prompt: "Enter your zOSMF username (skip if zmf_crt and zmf_key are supplied)"
-      private: no
-    - name: zmf_password
-      prompt: "Enter your zOSMF password (skip if zmf_crt and zmf_key are supplied)"
-      private: yes
   tasks:
     - zmf_console_command:
         zmf_host: "{{ zmf_host }}"
