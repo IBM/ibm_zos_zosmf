@@ -94,6 +94,11 @@
           set_fact:
             final_result: "{{ final_result | combine({ \
                            'msg': 'Job is found but not completed. The return code is mismatched.' }) }}"
+
+        - name: Save the contents of spool file if job_save_output_local_path is defined
+          include_tasks: save_spool_files.yml
+          when: job_save_output_local_path is not undefined
+
         - name: Query and match the return code - Check the return code - Step 1 match 'CC nnnn' - Fail if the return code is not "CC nnnn"
           fail:
             msg: "{{ final_result }}"
@@ -111,6 +116,11 @@
               set_fact:
                 final_result: "{{ final_result | combine({ \
                               'msg': 'Job is found but not completed. The return code is mismatched.' }) }}"
+
+            - name: Save the contents of spool file if job_save_output_local_path is defined
+              include_tasks: save_spool_files.yml
+              when: job_save_output_local_path is not undefined
+
             - name: Query and match the return code - Check the return code - Step 2 match job_max_rc - Fail if the return code is mismatched
               fail:
                 msg: "{{ final_result }}"
@@ -167,6 +177,13 @@
           set_fact:
             final_result: "{{ final_result | combine({ \
                            'msg': 'Job is found but not completed. The return code is matched but no matched output content is found.' }) }}"
+
+        - name: Save the contents of spool file if job_save_output_local_path is defined
+          include_tasks: save_spool_files.yml
+          vars:
+            files_result_list: "{{ files_result.json }}"
+          when: job_save_output_local_path is not undefined
+
         - name: Check and return final_result if job_search_output is defined - Fail if no matched output content is found
           fail:
             msg: "{{ final_result }}"
@@ -179,6 +196,13 @@
           set_fact:
             final_result: "{{ final_result | combine({ \
                            'msg': 'Job is found but not completed. The return code is mismatched and no matched output content is found.' }) }}"
+
+        - name: Save the contents of spool file if job_save_output_local_path is defined
+          include_tasks: save_spool_files.yml
+          vars:
+            files_result_list: "{{ files_result.json }}"
+          when: job_save_output_local_path is not undefined
+
         - name: Check and return final_result if job_search_output is defined - Fail if the return code is mismatched and no matched output content is found
           fail:
             msg: "{{ final_result }}"
@@ -218,6 +242,12 @@
         - job_matched_rc_str != empty_str
         - job_matched_rc_int|int <= job_max_rc|int
         - job_matched_contents_found
+
+    - name: Save the contents of spool file if job_save_output_local_path is defined
+      include_tasks: save_spool_files.yml
+      vars:
+        files_result_list: "{{ files_result.json }}"
+      when: job_save_output_local_path is not undefined
   when: job_search_output is not undefined
 
 - block:
@@ -225,6 +255,11 @@
       set_fact:
         final_result: "{{ final_result | combine({ \
                        'msg': 'Job is found but not completed. The return code is mismatched.' }) }}"
+
+    - name: Save the contents of spool file if job_save_output_local_path is defined
+      include_tasks: save_spool_files.yml
+      when: job_save_output_local_path is not undefined
+
     - name: Check and return final_result if job_search_output is not defined - Fail if the return code is mismatched
       fail:
         msg: "{{ final_result }}"
@@ -233,10 +268,14 @@
     - (job_matched_rc_str == empty_str) or (job_matched_rc_int|int > job_max_rc|int)
 
 - block:
-    - name: Check and return final_result result if 'job_search_output' is not defined - Update final_result
+    - name: Check and return final_result result if job_search_output is not defined - Update final_result
       set_fact:
         final_result: "{{ final_result | combine({ \
                        'msg': 'Job is found and completed successfully. The return code is matched.' }) }}"
+
+    - name: Save the contents of spool file if job_save_output_local_path is defined
+      include_tasks: save_spool_files.yml
+      when: job_save_output_local_path is not undefined
   when:
     - job_search_output is undefined
     - job_matched_rc_str != empty_str
