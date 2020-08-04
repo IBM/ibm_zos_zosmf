@@ -28,5 +28,5 @@
 - name: Save the contents of each spool file - Save to local file
   copy:
     content: "{{ save_record_result.content }}"
-    dest: "{{ save_dir.path }}/{{ file_item.ddname }}"
+    dest: "{{ save_dir.path }}/{{ file_item.ddname }}({{ file_item.id }})"
   delegate_to: localhost

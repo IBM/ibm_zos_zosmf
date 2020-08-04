@@ -33,7 +33,7 @@
 
 - name: Save the contents of spool file - Create local directory
   file:
-    path: "{{ job_save_output_local_path | regex_replace('/$', '') }}/{{ inventory_hostname }}_{{ final_result.job_name }}_{{ final_result.job_id }}"
+    path: "{{ job_save_output_localpath | regex_replace('/$', '') }}/{{ inventory_hostname }}_{{ final_result.job_name }}_{{ final_result.job_id }}"
     state: "directory"
   delegate_to: localhost
   register: save_dir
