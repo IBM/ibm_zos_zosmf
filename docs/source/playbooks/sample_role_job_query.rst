@@ -11,7 +11,7 @@ This `sample playbook`_ shows how to query a job running on the target z/OS syst
 
 .. code-block:: yaml
 
-   - name: sample of querying a job running on z/OS, check its return code and user specified content from spool files
+   - name: sample of querying a job running on z/OS
      hosts: job
      gather_facts: no
      collections:
@@ -37,6 +37,8 @@ This `sample playbook`_ shows how to query a job running on the target z/OS syst
            job_search_output_ddname: ["JESMSGLG"] # The list of spool files in which the match work will be done.
            # job_search_output_insensitive: True # Whether the comparison of job_search_output is case insensitive. Default is True
            # job_search_output_maxreturnsize: 1 # How many lines of contents from the first matched line in spool file will be returned when job_search_output is matched in job_search_output_ddname. Default is 1
+           job_save_output_localpath: "/tmp/job_output" # The local path on control node where the specified spool files will be saved to
+           job_save_output_ddname: ["JESYSMSG"] # The list of spool files which will be saved locally on control node
 
 .. note::
 
