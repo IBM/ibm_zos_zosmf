@@ -45,6 +45,7 @@ Specific Requirements
 .. _Ansible:
    https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
 .. _Python:
+   https://www.python.org
 .. _z/OS:
    https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3/en/homepage.html
 .. _z/OS Management Facility:
