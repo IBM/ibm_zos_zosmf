@@ -12,11 +12,11 @@ Roles
 
 * `zmf_job_complete`_:
 
-  This role can be used to submit a job to run on z/OS, check its return code after the job is completed, and check the user specified content from spool files.
+  This role can be used to submit a job to run on z/OS, check its return code after the job is completed, and check the user specified content from spool files, and save the user specified spool files locally on control node.
 
 * `zmf_job_query`_:
 
-  This role can be used to query a job running on z/OS, check its return code, and check the user specified content from spool files.
+  This role can be used to query a job running on z/OS, check its return code, and check the user specified content from spool files, and save the user specified spool files locally on control node.
 
 Requirements
 ------------

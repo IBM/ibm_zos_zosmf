@@ -5,6 +5,18 @@
 Releases
 ========
 
+Version 2.1.1
+-------------
+
+`v2.1.1`_
+
+Added
+  * support to save job output locally on control node for roles: `zmf_job_complete`, `zmf_job_query`
+
+Availability
+  * Galaxy
+  * github
+
 Version 2.1.0
 -------------
 
@@ -128,3 +140,5 @@ Availability
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.1
 .. _v2.1.0:
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0
+.. _v2.1.1:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.1

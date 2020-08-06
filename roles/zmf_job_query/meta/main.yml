@@ -3,7 +3,9 @@
 ---
 galaxy_info:
   author: Yang Cao <caoy@cn.ibm.com>, Yun Juan Yang <yunyyang@cn.ibm.com>
-  description: Ansible role to query a job running on z/OS, check its return code and user specified content from spool files.
+  description:
+    Ansible role to query a job running on z/OS.
+    This role supports to check its return code and user specified content from spool files, and save the user specified spool files locally on control node.
   company: IBM
   min_ansible_version: 2.9
   galaxy_tags:

@@ -1,0 +1,51 @@
+# Copyright (c) IBM Corporation 2020 
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+- block:
+    - name: Save the contents of spool file - Send https request to list spool files if files_result_list is not defined
+      uri:
+        url: "{{ job_files_url }}"
+        method: GET
+        return_content: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+        user: "{{ user }}"
+        password: "{{ password }}"
+        client_cert: "{{ crt }}"
+        client_key: "{{ key }}"
+        force_basic_auth: yes
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: save_files_result
+      failed_when: no
+
+    - include_tasks: handle_request_error.yml
+      vars:
+        expect_rcode: 200
+        result: "{{ save_files_result }}"
+
+    - name: Save the contents of spool file - Update files_result_list
+      set_fact:
+        files_result_list: "{{ save_files_result.json }}"
+  when: files_result_list is undefined
+
+- name: Save the contents of spool file - Create local directory
+  file:
+    path: "{{ job_save_output_localpath | regex_replace('/$', '') }}/{{ inventory_hostname }}_{{ final_result.job_name }}_{{ final_result.job_id }}"
+    state: "directory"
+  delegate_to: localhost
+  register: save_dir
+
+- include_tasks: save_each_spool_file.yml
+  when: (job_save_output_ddname is undefined) or (job_save_output_ddname == []) or (file_item.ddname in job_save_output_ddname)
+  loop: "{{ files_result_list }}"
+  loop_control:
+    label: "{{ file_item.ddname }}"
+    loop_var: file_item
+
+- name: Save the contents of spool file - Update final_result
+  set_fact:
+    final_result: "{{ final_result | combine({ \
+                   'msg': final_result.msg ~ ' The contents of specified spool files are saved in: ' ~ save_dir.path }) }}"

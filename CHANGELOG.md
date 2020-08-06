@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v2.1.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.1) - 2020-08-06
+### Added
+- support to save job output locally on control node for roles: `zmf_job_complete`, `zmf_job_query`
+
 ## [v2.1.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0) - 2020-07-14
 ### Added
 - add modules: `zmf_console_command`
