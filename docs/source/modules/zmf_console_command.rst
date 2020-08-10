@@ -18,6 +18,7 @@ Synopsis
 --------
 - Issue MVS command by using a system console through z/OS console RESTful services.
 - Retrieve command response and define success condition based on specified keywords in the command response or broadcast messages.
+- Save the command response locally on control node.
 
 
 
@@ -153,6 +154,20 @@ console_name
 
  
      
+console_save_output_localpath
+  The local path on control node where the command response should be saved to. This path can be absolute or relative.
+
+  The module will fail if the parent directory of *console_save_output_localpath* is a read-only file system.
+
+  The directory ``{{ console_save_output_localpath }}/{{ inventory_hostname }}/`` will be created to save the command response.
+
+
+  | **required**: False
+  | **type**: str
+
+
+ 
+     
 console_system
   Nickname of the target z/OS system in the same sysplex that the command is routed to.
 
@@ -251,6 +266,13 @@ Examples
        console_cmd: "display a,l"
        console_system: "{{ inventory_hostname }}"
 
+   - name: Issue command to display active jobs and save the command response
+     zmf_console_command:
+       zmf_host: "sample.ibm.com"
+       console_cmd: "display a,l"
+       console_system: "{{ inventory_hostname }}"
+       console_save_output_localpath: "/tmp/cmd_output"
+
    - name: Issue command to start CIM server and detect if it is started successfully or not
      zmf_console_command:
        zmf_host: "sample.ibm.com"
@@ -294,13 +316,15 @@ Return Values
 
         If either `console_cmdresponse_keyword` or `console_broadcastmsg_keyword` is specified, indicate whether the specified keyword is detected.
 
+        If `console_save_output_localpath` is specified, indicate whether the command response is saved locally.
+
 
         | **returned**: on success 
         | **type**: str
 
         **sample**: ::
 
-                  "The command is issued successfully."
+                  "The command is issued successfully. The command response is saved in: /tmp/output/SY1/display_a_l"
 
                   "The command is issued successfully. The specified keyword is detected in the command response."
 
