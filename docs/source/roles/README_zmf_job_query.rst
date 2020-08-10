@@ -146,9 +146,9 @@ job_save_output_localpath
   
   This path can be absolute or relative. The role will fail if the parent directory of *job_save_output_localpath* is a read-only file system.
   
-  The directory ``{{ job_save_output_localpath }}/{{ inventory_hostname }}_{{ job_name }}_{{ job_id }}/`` will be created to save the specified spool files.
+  The directory ``{{ job_save_output_localpath }}/{{ inventory_hostname }}/{{ job_name }}_{{ job_id }}/`` will be created to save the specified spool files.
 
-  For example: ``/tmp/job_output/SY1_JCLSAMP1_JOB00000/``.
+  For example: ``/tmp/job_output/SY1/JCLSAMP1_JOB00000/``.
 
   Use *job_save_output_ddname* to specify the spool files that you want to save.
 
@@ -162,7 +162,7 @@ job_save_output_ddname
   
   The spool files listed in this variable will be saved as separate files and named as ``{{ spoolfile_name }}({{ spoolfile_id }})``.
   
-  For example: ``/tmp/job_output/SY1_JCLSAMP1_JOB00000/JESYSMSG(4)``.
+  For example: ``/tmp/job_output/SY1/JCLSAMP1_JOB00000/JESYSMSG(4)``.
 
   If this variable is omitted, all spool files will be saved locally on control node.
   
