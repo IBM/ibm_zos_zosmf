@@ -190,9 +190,12 @@ options:
         default: 1
     console_save_output_localpath:
         description:
-            - The local path on control node where the command response should be saved to. This path can be absolute or relative.
-            - The module will fail if the parent directory of I(console_save_output_localpath) is a read-only file system.
+            - The local path on control node where the command response should be saved to. For example, C(/tmp/cmd_output).
+            - This path can be absolute or relative. The module will fail if parent directory of I(console_save_output_localpath) is a read-only file system.
             - The directory C({{ console_save_output_localpath }}/{{ inventory_hostname }}/) will be created to save the command response.
+            - For example, C(/tmp/cmd_output/SY1/).
+            - The command response will be saved as separate file and named as C({{ console_cmd }}).
+            - For example, C(/tmp/cmd_output/SY1/display_a_l).
         required: false
         type: str
         default: null

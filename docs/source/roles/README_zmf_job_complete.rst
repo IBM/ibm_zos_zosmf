@@ -5,7 +5,7 @@
 zmf_job_complete
 ================
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_complete**, to submit a job to run on z/OS, check its return code and user specified content from spool files, and save the user specified spool files locally on control node.
+**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_job_complete**, to submit a job to run on z/OS, check its return code and user specified content from spool files, and save the user specified spool files locally on control node.
 
 Role Variables
 --------------
