@@ -191,6 +191,7 @@ Sample Playbooks
    :maxdepth: 1
    :glob:
 
+   playbooks/sample_module_workflow
    playbooks/sample_role_workflow_complete
    playbooks/sample_role_cpm_manage_instance
    playbooks/sample_role_cpm_provision

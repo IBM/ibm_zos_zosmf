@@ -22,10 +22,10 @@
         zmf_port: "{{ zmf_port }}"
         zmf_user: "{{ zmf_user }}"
         zmf_password: "{{ zmf_password }}"
-      register: result
+      register: result_auth
       delegate_to: localhost
     - zmf_console_command:
-        zmf_credential: "{{ result }}"
+        zmf_credential: "{{ result_auth }}"
         console_cmd: "start pegasus"
         console_system: "{{ inventory_hostname }}"
         # console_cmdresponse_keyword: "SLP registration initiated" # The keyword that you want to detect in the command response. The module will fail if no specified keywords are detected in neither the command response nor broadcast messages

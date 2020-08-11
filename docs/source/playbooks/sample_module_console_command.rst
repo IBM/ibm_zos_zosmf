@@ -24,11 +24,15 @@ This `sample playbook`_ shows how to issue MVS command by using a system console
          prompt: "Enter your zOSMF password (skip if zmf_crt and zmf_key are supplied)"
          private: yes
      tasks:
-       - zmf_console_command:
+       - zmf_authenticate:
            zmf_host: "{{ zmf_host }}"
            zmf_port: "{{ zmf_port }}"
            zmf_user: "{{ zmf_user }}"
            zmf_password: "{{ zmf_password }}"
+         register: result_auth
+         delegate_to: localhost
+       - zmf_console_command:
+           zmf_credential: "{{ result_auth }}"
            console_cmd: "start pegasus"
            console_system: "{{ inventory_hostname }}"
            # console_cmdresponse_keyword: "SLP registration initiated" # The keyword that you want to detect in the command response. The module will fail if no specified keywords are detected in neither the command response nor broadcast messages

@@ -2,7 +2,7 @@
 
 # This sample playbook demonstrates using module `zmf_workflow` to start a z/OS workflow.
 # Example:
-# ansible-playbook -i hosts sample_module_workflow_start.yml
+# ansible-playbook -i hosts sample_module_workflow.yml
 
 - name: sample of starting a z/OS workflow
   hosts: workflow
@@ -22,11 +22,11 @@
         zmf_port: "{{ zmf_port }}"
         zmf_user: "{{ zmf_user }}"
         zmf_password: "{{ zmf_password }}"
-      register: result
+      register: result_auth
       delegate_to: localhost
     - zmf_workflow:
         state: "started"
-        zmf_credential: "{{ result }}"
+        zmf_credential: "{{ result_auth }}"
         workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}" # The name of the workflow
         workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml" # The location of the workflow definition file
         workflow_host: "{{ inventory_hostname }}" # Nickname of the target z/OS system on which the workflow is to be performed

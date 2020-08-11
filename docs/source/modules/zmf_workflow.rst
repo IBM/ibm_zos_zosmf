@@ -325,10 +325,69 @@ workflow_vendor
 
  
      
+zmf_credential
+  Authentication credentials, returned by module ``zmf_authenticate``, for the successfully authentication with z/OSMF server.
+
+  If *zmf_credential* is supplied, *zmf_host*, *zmf_port*, *zmf_user*, *zmf_password*, *zmf_crt* and *zmf_key* are ignored.
+
+
+  | **required**: False
+  | **type**: dict
+
+
+ 
+     
+  jwtToken
+    The value of JSON Web token, which supports strong encryption.
+
+    If *LtpaToken2* is not supplied, *jwtToken* is required.
+
+
+    | **required**: False
+    | **type**: str
+
+
+ 
+     
+  LtpaToken2
+    The value of Lightweight Third Party Access (LTPA) token, which supports strong encryption.
+
+    If *jwtToken* is not supplied, *LtpaToken2* is required.
+
+
+    | **required**: False
+    | **type**: str
+
+
+ 
+     
+  zmf_host
+    Hostname of the z/OSMF server.
+
+
+    | **required**: True
+    | **type**: str
+
+
+ 
+     
+  zmf_port
+    Port number of the z/OSMF server.
+
+
+    | **required**: False
+    | **type**: int
+
+
+
+ 
+     
 zmf_crt
   Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.
 
-  Required when *zmf_user* and *zmf_password* are not supplied.
+  If *zmf_credential* is supplied, *zmf_crt* is ignored.
+
+  If *zmf_credential* is not supplied, *zmf_crt* is required when *zmf_user* and *zmf_password* are not supplied.
 
 
   | **required**: False
@@ -340,8 +399,12 @@ zmf_crt
 zmf_host
   Hostname of the z/OSMF server.
 
+  If *zmf_credential* is supplied, *zmf_host* is ignored.
 
-  | **required**: True
+  If *zmf_credential* is not supplied, *zmf_host* is required.
+
+
+  | **required**: False
   | **type**: str
 
 
@@ -350,7 +413,9 @@ zmf_host
 zmf_key
   Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.
 
-  Required when *zmf_user* and *zmf_password* are not supplied.
+  If *zmf_credential* is supplied, *zmf_key* is ignored.
+
+  If *zmf_credential* is not supplied, *zmf_key* is required when *zmf_user* and *zmf_password* are not supplied.
 
 
   | **required**: False
@@ -362,9 +427,11 @@ zmf_key
 zmf_password
   Password to be used for authenticating with z/OSMF server.
 
-  Required when *zmf_crt* and *zmf_key* are not supplied.
+  If *zmf_credential* is supplied, *zmf_password* is ignored.
 
-  If *zmf_crt* and *zmf_key* are supplied, *zmf_user* and *zmf_password* are ignored.
+  If *zmf_credential* is not supplied, *zmf_password* is required when *zmf_crt* and *zmf_key* are not supplied.
+
+  If *zmf_credential* is not supplied and *zmf_crt* and *zmf_key* are supplied, *zmf_user* and *zmf_password* are ignored.
 
 
   | **required**: False
@@ -376,6 +443,8 @@ zmf_password
 zmf_port
   Port number of the z/OSMF server.
 
+  If *zmf_credential* is supplied, *zmf_port* is ignored.
+
 
   | **required**: False
   | **type**: int
@@ -386,9 +455,11 @@ zmf_port
 zmf_user
   User name to be used for authenticating with z/OSMF server.
 
-  Required when *zmf_crt* and *zmf_key* are not supplied.
+  If *zmf_credential* is supplied, *zmf_user* is ignored.
 
-  If *zmf_crt* and *zmf_key* are supplied, *zmf_user* and *zmf_password* are ignored.
+  If *zmf_credential* is not supplied, *zmf_user* is required when *zmf_crt* and *zmf_key* are not supplied.
+
+  If *zmf_credential* is not supplied and *zmf_crt* and *zmf_key* are supplied, *zmf_user* and *zmf_password* are ignored.
 
 
   | **required**: False
