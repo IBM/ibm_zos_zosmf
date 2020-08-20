@@ -31,4 +31,3 @@
       register: result
       delegate_to: localhost
     - debug: var=result
-
