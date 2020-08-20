@@ -5,13 +5,15 @@
 Releases
 ========
 
-Version 2.1.1
+Version 2.2.0
 -------------
 
-`v2.1.1`_
+`v2.2.0`_
 
 Added
+  * add modules: `zmf_authenticate`
   * support to save job output locally on control node for roles: `zmf_job_complete`, `zmf_job_query`
+  * support to save command response locally on control node for module: `zmf_console_command`
 
 Availability
   * Galaxy
@@ -140,5 +142,5 @@ Availability
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.1
 .. _v2.1.0:
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0
-.. _v2.1.1:
-    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.1
+.. _v2.2.0:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.0
