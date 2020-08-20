@@ -43,15 +43,15 @@ pipeline {
 			echo "Remote workspace is ${remoteWorkspace}"
 			
 			dir("${remoteWorkspace}") {
-				if (fileExists('ibm-ibm_zos_zosmf-2.1.0.tar.gz')) {
-					echo "ibm-ibm_zos_zosmf-2.1.0.tar.gz existed"
-					sh 'rm ibm-ibm_zos_zosmf-2.1.0.tar.gz'
+				if (fileExists('ibm-ibm_zos_zosmf-2.2.0.tar.gz')) {
+					echo "ibm-ibm_zos_zosmf-2.2.0.tar.gz existed"
+					sh 'rm ibm-ibm_zos_zosmf-2.2.0.tar.gz'
 					sh '/usr/local/bin/ansible-galaxy collection build'
 				} else {
 					sh '/usr/local/bin/ansible-galaxy collection build'
 				}
 				sh "pwd"
-				sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.1.0.tar.gz'
+				sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.2.0.tar.gz'
 			}
 		}
             }
@@ -93,6 +93,7 @@ pipeline {
 		echo 'Console BVT'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook console_CICDtest1.yml'
+			sh '/usr/local/bin/ansible-playbook console_CICDtest2.yml'
 		}
 		echo 'CICD test successfully!'
             }
