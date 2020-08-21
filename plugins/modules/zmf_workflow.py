@@ -46,7 +46,7 @@ options:
             - check
     zmf_credential:
         description:
-            - Authentication credentials, returned by module C(zmf_authenticate), for the successfully authentication with z/OSMF server.
+            - Authentication credentials, returned by module C(zmf_authenticate), for the successful authentication with z/OSMF server.
             - If I(zmf_credential) is supplied, I(zmf_host), I(zmf_port), I(zmf_user), I(zmf_password), I(zmf_crt) and I(zmf_key) are ignored.
         required: false
         type: dict

@@ -5,7 +5,7 @@
 zmf_job_query
 =============
 
-**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, check its return code and user specified content from spool files, and save the user specified spool files locally on control node.
+**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, check its return code and user specified content from spool files, and save the user specified spool files on Ansible control node.
 
 Role Variables
 --------------
@@ -156,7 +156,7 @@ job_save_output_localpath
   | **type**: str
 
 job_save_output_ddname
-  A list specifies the list of spool files which should be saved locally on control node. For example: ``["JESYSMSG", "JESJCL"]``. 
+  A list specifies the list of spool files which should be saved on control node. For example: ``["JESYSMSG", "JESJCL"]``. 
   
   This variable only take effects when *job_save_output_localpath* is defined.
   
@@ -164,7 +164,7 @@ job_save_output_ddname
   
   For example: ``/tmp/job_output/SY1/JCLSAMP1_JOB00000/JESYSMSG(4)``.
 
-  If this variable is omitted, all spool files will be saved locally on control node.
+  If this variable is omitted, all spool files will be saved on control node.
   
   | **required**: False
   | **type**: list

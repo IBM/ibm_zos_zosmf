@@ -16,8 +16,9 @@ zmf_authenticate -- Authenticate with z/OSMF server
 
 Synopsis
 --------
-- Authenticate with z/OSMF server by either username/password or HTTPS client authentication.
-- Return the authentication credentials for the successfully authentication with z/OSMF server.
+- Authenticate with z/OSMF server by either username/password or HTTPS client authenticate.
+- Return the authentication credentials for successful authentication.
+- The credential can be then used for succeeding Ansible tasks which call z/OSMF Ansible module or role.
 
 
 
@@ -113,11 +114,26 @@ Examples
        zmf_user: "your_username"
        zmf_password: "your_password"
 
-   - name: Authenticate with z/OSMF server by HTTPS client authentication
+   - name: Authenticate with z/OSMF server by HTTPS client authenticate
      zmf_authenticate:
        zmf_host: "sample.ibm.com"
        zmf_crt: "/file_with_your_certificate_chain.crt"
        zmf_key: "/file_with_your_private_key.key"
+
+   - name: Authenticate with z/OSMF server by prompting to input the sensitive username/password when running the playbook
+     vars_prompt:
+       - name: zmf_user
+         prompt: "Enter your zOSMF username"
+         private: no
+       - name: zmf_password
+         prompt: "Enter your zOSMF password"
+         private: yes
+     tasks:
+       - zmf_authenticate:
+           zmf_host: "{{ zmf_host }}"
+           zmf_port: "{{ zmf_port }}"
+           zmf_user: "{{ zmf_user }}"
+           zmf_password: "{{ zmf_password }}"
 
 
 

@@ -12,8 +12,8 @@ Version 2.2.0
 
 Added
   * add modules: `zmf_authenticate`
-  * support to save job output locally on control node for roles: `zmf_job_complete`, `zmf_job_query`
-  * support to save command response locally on control node for module: `zmf_console_command`
+  * support to save job output on Ansible control node for roles: `zmf_job_complete`, `zmf_job_query`
+  * support to save command response on Ansible control node for module: `zmf_console_command`
 
 Availability
   * Galaxy

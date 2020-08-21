@@ -326,7 +326,7 @@ workflow_vendor
  
      
 zmf_credential
-  Authentication credentials, returned by module ``zmf_authenticate``, for the successfully authentication with z/OSMF server.
+  Authentication credentials, returned by module ``zmf_authenticate``, for the successful authentication with z/OSMF server.
 
   If *zmf_credential* is supplied, *zmf_host*, *zmf_port*, *zmf_user*, *zmf_password*, *zmf_crt* and *zmf_key* are ignored.
 

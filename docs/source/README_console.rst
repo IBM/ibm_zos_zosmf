@@ -5,7 +5,7 @@
 MVS Command Operations
 ======================
 
-**IBM z/OSMF collection** provides a module to work with z/OS console. You can use this module to issue MVS command, retrieve command response and easily define success condition based on specified keywords in the command response or broadcast messages, and save the command response locally on control node.
+**IBM z/OSMF collection** provides a module to work with z/OS console. You can use this module to issue MVS command, retrieve command response and easily define success condition based on specified keywords in the command response or broadcast messages, and save the command response on Ansible control node.
 
 .. note::
 
@@ -18,7 +18,7 @@ Modules
 
 * `zmf_console_command`_:
    
-   This module can be used to issue MVS command, retrieve command response and easily define success condition based on specified keywords in the command response or broadcast messages, and save the command response locally on control node.
+   This module can be used to issue MVS command, retrieve command response and easily define success condition based on specified keywords in the command response or broadcast messages, and save the command response on Ansible control node.
 
 Requirements
 ------------

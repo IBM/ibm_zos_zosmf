@@ -18,7 +18,7 @@ Synopsis
 --------
 - Issue MVS command by using a system console through z/OS console RESTful services.
 - Retrieve command response and define success condition based on specified keywords in the command response or broadcast messages.
-- Save the command response locally on control node.
+- Save the command response on Ansible control node.
 
 
 
@@ -163,7 +163,7 @@ console_save_output_localpath
 
   For example, ``/tmp/cmd_output/SY1/``.
 
-  The command response will be saved as separate file and named as ``{{ console_cmd }}``.
+  The command response will be saved as separate file and named as ``{{ console_cmd }}``, in which comma and space will be replaced with underline.
 
   For example, ``/tmp/cmd_output/SY1/display_a_l``.
 
@@ -189,7 +189,7 @@ console_system
  
      
 zmf_credential
-  Authentication credentials, returned by module ``zmf_authenticate``, for the successfully authentication with z/OSMF server.
+  Authentication credentials, returned by module ``zmf_authenticate``, for the successful authentication with z/OSMF server.
 
   If *zmf_credential* is supplied, *zmf_host*, *zmf_port*, *zmf_user*, *zmf_password*, *zmf_crt* and *zmf_key* are ignored.
 
@@ -393,7 +393,7 @@ Return Values
 
         If either `console_cmdresponse_keyword` or `console_broadcastmsg_keyword` is specified, indicate whether the specified keyword is detected.
 
-        If `console_save_output_localpath` is specified, indicate whether the command response is saved locally.
+        If `console_save_output_localpath` is specified, indicate whether the command response is saved on control node.
 
 
         | **returned**: on success 
