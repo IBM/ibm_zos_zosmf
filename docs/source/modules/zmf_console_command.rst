@@ -18,6 +18,7 @@ Synopsis
 --------
 - Issue MVS command by using a system console through z/OS console RESTful services.
 - Retrieve command response and define success condition based on specified keywords in the command response or broadcast messages.
+- Save the command response on Ansible control node.
 
 
 
@@ -153,6 +154,26 @@ console_name
 
  
      
+console_save_output_localpath
+  The local path on control node where the command response should be saved to. For example, ``/tmp/cmd_output``.
+
+  This path can be absolute or relative. The module will fail if parent directory of *console_save_output_localpath* is a read-only file system.
+
+  The directory ``{{ console_save_output_localpath }}/{{ inventory_hostname }}/`` will be created to save the command response.
+
+  For example, ``/tmp/cmd_output/SY1/``.
+
+  The command response will be saved as separate file and named as ``{{ console_cmd }}``, in which comma and space will be replaced with underline.
+
+  For example, ``/tmp/cmd_output/SY1/display_a_l``.
+
+
+  | **required**: False
+  | **type**: str
+
+
+ 
+     
 console_system
   Nickname of the target z/OS system in the same sysplex that the command is routed to.
 
@@ -167,10 +188,69 @@ console_system
 
  
      
+zmf_credential
+  Authentication credentials, returned by module ``zmf_authenticate``, for the successful authentication with z/OSMF server.
+
+  If *zmf_credential* is supplied, *zmf_host*, *zmf_port*, *zmf_user*, *zmf_password*, *zmf_crt* and *zmf_key* are ignored.
+
+
+  | **required**: False
+  | **type**: dict
+
+
+ 
+     
+  jwtToken
+    The value of JSON Web token, which supports strong encryption.
+
+    If *LtpaToken2* is not supplied, *jwtToken* is required.
+
+
+    | **required**: False
+    | **type**: str
+
+
+ 
+     
+  LtpaToken2
+    The value of Lightweight Third Party Access (LTPA) token, which supports strong encryption.
+
+    If *jwtToken* is not supplied, *LtpaToken2* is required.
+
+
+    | **required**: False
+    | **type**: str
+
+
+ 
+     
+  zmf_host
+    Hostname of the z/OSMF server.
+
+
+    | **required**: True
+    | **type**: str
+
+
+ 
+     
+  zmf_port
+    Port number of the z/OSMF server.
+
+
+    | **required**: False
+    | **type**: int
+
+
+
+ 
+     
 zmf_crt
   Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.
 
-  Required when *zmf_user* and *zmf_password* are not supplied.
+  If *zmf_credential* is supplied, *zmf_crt* is ignored.
+
+  If *zmf_credential* is not supplied, *zmf_crt* is required when *zmf_user* and *zmf_password* are not supplied.
 
 
   | **required**: False
@@ -182,8 +262,12 @@ zmf_crt
 zmf_host
   Hostname of the z/OSMF server.
 
+  If *zmf_credential* is supplied, *zmf_host* is ignored.
 
-  | **required**: True
+  If *zmf_credential* is not supplied, *zmf_host* is required.
+
+
+  | **required**: False
   | **type**: str
 
 
@@ -192,7 +276,9 @@ zmf_host
 zmf_key
   Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.
 
-  Required when *zmf_user* and *zmf_password* are not supplied.
+  If *zmf_credential* is supplied, *zmf_key* is ignored.
+
+  If *zmf_credential* is not supplied, *zmf_key* is required when *zmf_user* and *zmf_password* are not supplied.
 
 
   | **required**: False
@@ -204,9 +290,11 @@ zmf_key
 zmf_password
   Password to be used for authenticating with z/OSMF server.
 
-  Required when *zmf_crt* and *zmf_key* are not supplied.
+  If *zmf_credential* is supplied, *zmf_password* is ignored.
 
-  If *zmf_crt* and *zmf_key* are supplied, *zmf_user* and *zmf_password* are ignored.
+  If *zmf_credential* is not supplied, *zmf_password* is required when *zmf_crt* and *zmf_key* are not supplied.
+
+  If *zmf_credential* is not supplied and *zmf_crt* and *zmf_key* are supplied, *zmf_user* and *zmf_password* are ignored.
 
 
   | **required**: False
@@ -218,6 +306,8 @@ zmf_password
 zmf_port
   Port number of the z/OSMF server.
 
+  If *zmf_credential* is supplied, *zmf_port* is ignored.
+
 
   | **required**: False
   | **type**: int
@@ -228,9 +318,11 @@ zmf_port
 zmf_user
   User name to be used for authenticating with z/OSMF server.
 
-  Required when *zmf_crt* and *zmf_key* are not supplied.
+  If *zmf_credential* is supplied, *zmf_user* is ignored.
 
-  If *zmf_crt* and *zmf_key* are supplied, *zmf_user* and *zmf_password* are ignored.
+  If *zmf_credential* is not supplied, *zmf_user* is required when *zmf_crt* and *zmf_key* are not supplied.
+
+  If *zmf_credential* is not supplied and *zmf_crt* and *zmf_key* are supplied, *zmf_user* and *zmf_password* are ignored.
 
 
   | **required**: False
@@ -250,6 +342,13 @@ Examples
        zmf_host: "sample.ibm.com"
        console_cmd: "display a,l"
        console_system: "{{ inventory_hostname }}"
+
+   - name: Issue command to display active jobs and save the command response
+     zmf_console_command:
+       zmf_host: "sample.ibm.com"
+       console_cmd: "display a,l"
+       console_system: "{{ inventory_hostname }}"
+       console_save_output_localpath: "/tmp/cmd_output"
 
    - name: Issue command to start CIM server and detect if it is started successfully or not
      zmf_console_command:
@@ -294,6 +393,8 @@ Return Values
 
         If either `console_cmdresponse_keyword` or `console_broadcastmsg_keyword` is specified, indicate whether the specified keyword is detected.
 
+        If `console_save_output_localpath` is specified, indicate whether the command response is saved on control node.
+
 
         | **returned**: on success 
         | **type**: str
@@ -305,6 +406,8 @@ Return Values
                   "The command is issued successfully. The specified keyword is detected in the command response."
 
                   "The command is issued successfully. The specified keyword is detected in broadcast messages."
+
+                  "The command is issued successfully. The command response is saved in: /tmp/output/SY1/display_a_l"
 
 
 

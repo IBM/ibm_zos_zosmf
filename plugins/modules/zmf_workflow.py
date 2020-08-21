@@ -44,44 +44,84 @@ options:
             - started
             - deleted
             - check
+    zmf_credential:
+        description:
+            - Authentication credentials, returned by module C(zmf_authenticate), for the successful authentication with z/OSMF server.
+            - If I(zmf_credential) is supplied, I(zmf_host), I(zmf_port), I(zmf_user), I(zmf_password), I(zmf_crt) and I(zmf_key) are ignored.
+        required: false
+        type: dict
+        default: null
+        suboptions:
+            LtpaToken2:
+                description:
+                    - The value of Lightweight Third Party Access (LTPA) token, which supports strong encryption.
+                    - If I(jwtToken) is not supplied, I(LtpaToken2) is required.
+                required: false
+                type: str
+                default: null
+            jwtToken:
+                description:
+                    - The value of JSON Web token, which supports strong encryption.
+                    - If I(LtpaToken2) is not supplied, I(jwtToken) is required.
+                required: false
+                type: str
+                default: null
+            zmf_host:
+                description: Hostname of the z/OSMF server.
+                required: true
+                type: str
+                default: null
+            zmf_port:
+                description: Port number of the z/OSMF server.
+                required: false
+                type: int
+                default: null
     zmf_host:
         description:
             - Hostname of the z/OSMF server.
-        required: true
+            - If I(zmf_credential) is supplied, I(zmf_host) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_host) is required.
+        required: false
         type: str
+        default: null
     zmf_port:
         description:
             - Port number of the z/OSMF server.
+            - If I(zmf_credential) is supplied, I(zmf_port) is ignored.
         required: false
         type: int
         default: null
     zmf_user:
         description:
             - User name to be used for authenticating with z/OSMF server.
-            - Required when I(zmf_crt) and I(zmf_key) are not supplied.
-            - If I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
+            - If I(zmf_credential) is supplied, I(zmf_user) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_user) is required when I(zmf_crt) and I(zmf_key) are not supplied.
+            - If I(zmf_credential) is not supplied and I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
         required: false
         type: str
         default: null
     zmf_password:
         description:
             - Password to be used for authenticating with z/OSMF server.
-            - Required when I(zmf_crt) and I(zmf_key) are not supplied.
-            - If I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
+            - If I(zmf_credential) is supplied, I(zmf_password) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_password) is required when I(zmf_crt) and I(zmf_key) are not supplied.
+            - If I(zmf_credential) is not supplied and I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
         required: false
         type: str
         default: null
     zmf_crt:
         description:
             - Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.
-            - Required when I(zmf_user) and I(zmf_password) are not supplied.
+            - If I(zmf_credential) is supplied, I(zmf_crt) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_crt) is required when I(zmf_user) and I(zmf_password) are not supplied.
         required: false
         type: str
         default: null
     zmf_key:
         description:
             - Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.
-            - Required when I(zmf_user) and I(zmf_password) are not supplied.
+            - If I(zmf_credential) is supplied, I(zmf_key) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_key) is required when I(zmf_user) and I(zmf_password) are not supplied.
         required: false
         type: str
         default: null

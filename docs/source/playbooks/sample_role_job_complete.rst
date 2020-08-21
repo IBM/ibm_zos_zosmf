@@ -38,7 +38,7 @@ This `sample playbook`_ shows how to submit a job to run on the target z/OS syst
            # job_search_output_insensitive: True # Whether the comparison of job_search_output is case insensitive. Default is True
            # job_search_output_maxreturnsize: 1 # How many lines of contents from the first matched line in spool file will be returned when job_search_output is matched in job_search_output_ddname. Default is 1
            job_save_output_localpath: "/tmp/job_output" # The local path on control node where the specified spool files will be saved to
-           job_save_output_ddname: ["JESYSMSG"] # The list of spool files which will be saved locally on control node
+           job_save_output_ddname: ["JESYSMSG"] # The list of spool files which will be saved on control node
 
 .. note::
 

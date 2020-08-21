@@ -20,49 +20,90 @@ short_description: Issue MVS command
 description:
     - Issue MVS command by using a system console through z/OS console RESTful services.
     - Retrieve command response and define success condition based on specified keywords in the command response or broadcast messages.
+    - Save the command response on Ansible control node.
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
     - Yun Juan Yang (@zosmf-Robyn)
 options:
+    zmf_credential:
+        description:
+            - Authentication credentials, returned by module C(zmf_authenticate), for the successful authentication with z/OSMF server.
+            - If I(zmf_credential) is supplied, I(zmf_host), I(zmf_port), I(zmf_user), I(zmf_password), I(zmf_crt) and I(zmf_key) are ignored.
+        required: false
+        type: dict
+        default: null
+        suboptions:
+            LtpaToken2:
+                description:
+                    - The value of Lightweight Third Party Access (LTPA) token, which supports strong encryption.
+                    - If I(jwtToken) is not supplied, I(LtpaToken2) is required.
+                required: false
+                type: str
+                default: null
+            jwtToken:
+                description:
+                    - The value of JSON Web token, which supports strong encryption.
+                    - If I(LtpaToken2) is not supplied, I(jwtToken) is required.
+                required: false
+                type: str
+                default: null
+            zmf_host:
+                description: Hostname of the z/OSMF server.
+                required: true
+                type: str
+                default: null
+            zmf_port:
+                description: Port number of the z/OSMF server.
+                required: false
+                type: int
+                default: null
     zmf_host:
         description:
             - Hostname of the z/OSMF server.
-        required: true
+            - If I(zmf_credential) is supplied, I(zmf_host) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_host) is required.
+        required: false
         type: str
+        default: null
     zmf_port:
         description:
             - Port number of the z/OSMF server.
+            - If I(zmf_credential) is supplied, I(zmf_port) is ignored.
         required: false
         type: int
         default: null
     zmf_user:
         description:
             - User name to be used for authenticating with z/OSMF server.
-            - Required when I(zmf_crt) and I(zmf_key) are not supplied.
-            - If I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
+            - If I(zmf_credential) is supplied, I(zmf_user) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_user) is required when I(zmf_crt) and I(zmf_key) are not supplied.
+            - If I(zmf_credential) is not supplied and I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
         required: false
         type: str
         default: null
     zmf_password:
         description:
             - Password to be used for authenticating with z/OSMF server.
-            - Required when I(zmf_crt) and I(zmf_key) are not supplied.
-            - If I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
+            - If I(zmf_credential) is supplied, I(zmf_password) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_password) is required when I(zmf_crt) and I(zmf_key) are not supplied.
+            - If I(zmf_credential) is not supplied and I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
         required: false
         type: str
         default: null
     zmf_crt:
         description:
             - Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.
-            - Required when I(zmf_user) and I(zmf_password) are not supplied.
+            - If I(zmf_credential) is supplied, I(zmf_crt) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_crt) is required when I(zmf_user) and I(zmf_password) are not supplied.
         required: false
         type: str
         default: null
     zmf_key:
         description:
             - Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.
-            - Required when I(zmf_user) and I(zmf_password) are not supplied.
+            - If I(zmf_credential) is supplied, I(zmf_key) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_key) is required when I(zmf_user) and I(zmf_password) are not supplied.
         required: false
         type: str
         default: null
@@ -147,6 +188,17 @@ options:
         required: false
         type: int
         default: 1
+    console_save_output_localpath:
+        description:
+            - The local path on control node where the command response should be saved to. For example, C(/tmp/cmd_output).
+            - This path can be absolute or relative. The module will fail if parent directory of I(console_save_output_localpath) is a read-only file system.
+            - The directory C({{ console_save_output_localpath }}/{{ inventory_hostname }}/) will be created to save the command response.
+            - For example, C(/tmp/cmd_output/SY1/).
+            - The command response will be saved as separate file and named as C({{ console_cmd }}), in which comma and space will be replaced with underline.
+            - For example, C(/tmp/cmd_output/SY1/display_a_l).
+        required: false
+        type: str
+        default: null
 requirements:
     - requests >= 2.23.0
 """
@@ -157,6 +209,13 @@ EXAMPLES = r"""
     zmf_host: "sample.ibm.com"
     console_cmd: "display a,l"
     console_system: "{{ inventory_hostname }}"
+
+- name: Issue command to display active jobs and save the command response
+  zmf_console_command:
+    zmf_host: "sample.ibm.com"
+    console_cmd: "display a,l"
+    console_system: "{{ inventory_hostname }}"
+    console_save_output_localpath: "/tmp/cmd_output"
 
 - name: Issue command to start CIM server and detect if it is started successfully or not
   zmf_console_command:
@@ -182,12 +241,14 @@ message:
     description:
         - The output message generated by the module to indicate whether the command is successful.
         - If either `console_cmdresponse_keyword` or `console_broadcastmsg_keyword` is specified, indicate whether the specified keyword is detected.
+        - If `console_save_output_localpath` is specified, indicate whether the command response is saved on control node.
     returned: on success
     type: str
     sample:
         sample1: "The command is issued successfully."
         sample2: "The command is issued successfully. The specified keyword is detected in the command response."
         sample3: "The command is issued successfully. The specified keyword is detected in broadcast messages."
+        sample4: "The command is issued successfully. The command response is saved in: /tmp/output/SY1/display_a_l"
 cmd_response:
     description: The command response.
     returned: on success
@@ -233,15 +294,37 @@ from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_console_api 
     get_request_argument_spec,
     call_console_api
 )
+from time import sleep
 import json
 import re
-from time import sleep
+import os
 
 
-def format_message(message):
+def format_message_to_list(message):
     message = message.replace('\n', '')
     msg_list = message.split('\r')
     return msg_list
+
+
+def format_message_to_file(msg_list):
+    for i in range(len(msg_list)):
+        msg_list[i] = msg_list[i] + '\n'
+    return msg_list
+
+
+def format_cmd_to_str(cmd):
+    cmd = cmd.replace(',', ' ')
+    cmd = cmd.replace('=', ' ')
+    cmd_list = cmd.split(' ')
+    cmd_str = ''
+    for i in range(len(cmd_list)):
+        v = cmd_list[i].replace('"', '').replace("'", '').replace('(', '').replace(')', '')
+        if v.strip() != '':
+            if i == 0:
+                cmd_str = v
+            else:
+                cmd_str = cmd_str + '_' + v
+    return cmd_str
 
 
 def issue_command(module):
@@ -275,7 +358,7 @@ def issue_command(module):
             else:
                 issue_result['changed'] = True
                 response_key = response_issue['cmd-response-key']
-                cmd_response = format_message(cmd_response)
+                cmd_response = format_message_to_list(cmd_response)
         else:
             module.fail_json(msg='Failed to issue the command ---- No response is returned.')
     else:
@@ -286,7 +369,7 @@ def issue_command(module):
     if module.params['console_broadcastmsg_keyword'] is not None and module.params['console_broadcastmsg_keyword'].strip() != '':
         if response_issue['status'] == 'detected':
             issue_result['broadcastmsg_keyword_detected'] = True
-            issue_result['detected_broadcastmsg'] = format_message(response_issue['msg'])
+            issue_result['detected_broadcastmsg'] = format_message_to_list(response_issue['msg'])
         else:
             issue_result['broadcastmsg_keyword_detected'] = False
     # step3 - retrieve the command response and detect again
@@ -304,23 +387,40 @@ def issue_command(module):
                     elif module.params['console_cmdresponse_keyword'].upper() in response_getResponse['cmd-response'].upper():
                         issue_result['cmdresponse_keyword_detected'] = True
                 # append the retrieved response
-                cmd_response = cmd_response + format_message(response_getResponse['cmd-response'])
+                cmd_response = cmd_response + format_message_to_list(response_getResponse['cmd-response'])
                 sleep(check_delay)
             check_times = check_times - 1
         else:
             module.fail_json(msg='Failed to retrieve the command response ---- ' + response_getResponse)
     issue_result['cmd_response'] = cmd_response
-    # step4 - decide if detect fails or not
+    # step4 - save to local if console_save_output_localpath is defined
+    save_message = ''
+    if module.params['console_save_output_localpath'] is not None and module.params['console_save_output_localpath'].strip() != '':
+        if module.params['console_save_output_localpath'].endswith('/'):
+            save_path = module.params['console_save_output_localpath'] + module.params['console_system'] + '/'
+        else:
+            save_path = module.params['console_save_output_localpath'] + '/' + module.params['console_system'] + '/'
+        if not os.path.exists(save_path):
+            os.makedirs(save_path, 0o755, True)
+        else:
+            os.chmod(save_path, 0o755)
+        save_file = format_cmd_to_str(module.params['console_cmd'])
+        f_write = open(save_path + save_file, 'w')
+        f_write.writelines(format_message_to_file(cmd_response))
+        f_write.close()
+        save_message = ' The command response is saved in: ' + save_path + save_file
+    # step5 - decide if detect fails or not
     if 'cmdresponse_keyword_detected' not in issue_result and 'broadcastmsg_keyword_detected' not in issue_result:
-        issue_result['message'] = 'The command is issued successfully.'
+        issue_result['message'] = 'The command is issued successfully.' + save_message
     elif 'cmdresponse_keyword_detected' in issue_result and issue_result['cmdresponse_keyword_detected'] is True:
-        issue_result['message'] = 'The command is issued successfully. The specified keyword is detected in the command response.'
+        issue_result['message'] = 'The command is issued successfully. The specified keyword is detected in the command response.' + save_message
     elif 'broadcastmsg_keyword_detected' in issue_result and issue_result['broadcastmsg_keyword_detected'] is True:
-        issue_result['message'] = 'The command is issued successfully. The specified keyword is detected in broadcast messages.'
+        issue_result['message'] = 'The command is issued successfully. The specified keyword is detected in broadcast messages.' + save_message
     else:
         module.fail_json(
             cmd_response=cmd_response,
             msg='The command is issued successfully. But no specified keywords are detected in neither the command response nor broadcast messages.'
+                + save_message
         )
     module.exit_json(**issue_result)
 
@@ -333,7 +433,8 @@ def main():
     argument_spec.update(request_argument_spec)
     argument_spec.update(
         console_name=dict(required=False, type='str'),
-        console_cmdresponse_retrieve_times=dict(required=False, type='int', default=1))
+        console_cmdresponse_retrieve_times=dict(required=False, type='int', default=1),
+        console_save_output_localpath=dict(required=False, type='str'))
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=False

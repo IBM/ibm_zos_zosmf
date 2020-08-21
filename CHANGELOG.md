@@ -1,9 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [v2.1.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.1) - 2020-08-06
+## [v2.2.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.0) - 2020-08-21
 ### Added
-- support to save job output locally on control node for roles: `zmf_job_complete`, `zmf_job_query`
+- add modules: `zmf_authenticate`
+- support to save job output on Ansible control node for roles: `zmf_job_complete`, `zmf_job_query`
+- support to save command response on Ansible control node for module: `zmf_console_command`
 
 ## [v2.1.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0) - 2020-07-14
 ### Added

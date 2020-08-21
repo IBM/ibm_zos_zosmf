@@ -5,7 +5,7 @@
 zmf_workflow_complete
 ======================
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_workflow_complete**, to complete a z/OS workflow, either forcibly or idempotently.
+**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_workflow_complete**, to complete a z/OS workflow, either forcibly or idempotently.
 
 Role Variables
 --------------
