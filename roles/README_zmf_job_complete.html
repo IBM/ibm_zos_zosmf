@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_job_complete &mdash; IBM z/OSMF Collection 2.1.0 documentation</title>
+  <title>zmf_job_complete &mdash; IBM z/OSMF Collection 2.2.0 documentation</title>
   
 
   
@@ -175,7 +175,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.1.0/docs/source/roles/README_zmf_job_complete.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.2.0/docs/source/roles/README_zmf_job_complete.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -197,7 +197,7 @@
 
 <div class="section" id="zmf-job-complete">
 <h1>zmf_job_complete<a class="headerlink" href="#zmf-job-complete" title="Permalink to this headline">¶</a></h1>
-<p><strong>IBM z/OSMF collection</strong> provides provides an Ansible role, referred to as <strong>zmf_job_complete</strong>, to submit a job to run on z/OS, check its return code and user specified content from spool files.</p>
+<p><strong>IBM z/OSMF collection</strong> provides an Ansible role, referred to as <strong>zmf_job_complete</strong>, to submit a job to run on z/OS, check its return code and user specified content from spool files, and save the user specified spool files on Ansible control node.</p>
 <div class="section" id="role-variables">
 <h2>Role Variables<a class="headerlink" href="#role-variables" title="Permalink to this headline">¶</a></h2>
 <dl>
@@ -399,6 +399,26 @@ A job correlator consists of a 31-byte system-defined portion and a colon charac
 <div class="line"><strong>default</strong>: 5</div>
 </div>
 </dd>
+<dt>job_save_output_localpath</dt><dd><p>The local path on control node where the specified spool files should be saved to. For example: <code class="docutils literal notranslate"><span class="pre">/tmp/job_output</span></code>.</p>
+<p>This path can be absolute or relative. The role will fail if the parent directory of <em>job_save_output_localpath</em> is a read-only file system.</p>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">job_save_output_localpath</span> <span class="pre">}}/{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}/{{</span> <span class="pre">job_name</span> <span class="pre">}}_{{</span> <span class="pre">job_id</span> <span class="pre">}}/</span></code> will be created to save the specified spool files.</p>
+<p>For example: <code class="docutils literal notranslate"><span class="pre">/tmp/job_output/SY1/JCLSAMP1_JOB00000/</span></code>.</p>
+<p>Use <em>job_save_output_ddname</em> to specify the spool files that you want to save.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>job_save_output_ddname</dt><dd><p>A list specifies the list of spool files which should be saved on control node. For example: <code class="docutils literal notranslate"><span class="pre">[&quot;JESYSMSG&quot;,</span> <span class="pre">&quot;JESJCL&quot;]</span></code>.</p>
+<p>This variable only take effects when <em>job_save_output_localpath</em> is defined.</p>
+<p>The spool files listed in this variable will be saved as separate files and named as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">spoolfile_name</span> <span class="pre">}}({{</span> <span class="pre">spoolfile_id</span> <span class="pre">}})</span></code>.</p>
+<p>For example: <code class="docutils literal notranslate"><span class="pre">/tmp/job_output/SY1/JCLSAMP1_JOB00000/JESYSMSG(4)</span></code>.</p>
+<p>If this variable is omitted, all spool files will be saved on control node.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: list</div>
+</div>
+</dd>
 </dl>
 </div>
 <div class="section" id="dependencies">
@@ -453,12 +473,13 @@ A job correlator consists of a 31-byte system-defined portion and a colon charac
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.1.0
+        v: v2.2.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../v2.2.0/roles/README_zmf_job_complete.html">v2.2.0</a></dd>
             <dd><a href="../v2.1.0/roles/README_zmf_job_complete.html">v2.1.0</a></dd>
             <dd><a href="../v2.0.1/roles/README_zmf_job_complete.html">v2.0.1</a></dd>
             <dd><a href="../v2.0.0/roles/README_zmf_job_complete.html">v2.0.0</a></dd>

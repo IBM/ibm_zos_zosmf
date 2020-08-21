@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_console_command – Issue MVS command &mdash; IBM z/OSMF Collection 2.1.0 documentation</title>
+  <title>zmf_console_command – Issue MVS command &mdash; IBM z/OSMF Collection 2.2.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="zmf_workflow – Operate z/OS workflows" href="zmf_workflow.html" />
-    <link rel="prev" title="Modules" href="../modules.html" /> 
+    <link rel="prev" title="zmf_authenticate – Authenticate with z/OSMF server" href="zmf_authenticate.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -90,6 +90,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module Reference</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_console_command – Issue MVS command</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
@@ -210,6 +211,7 @@
 <ul class="simple">
 <li><p>Issue MVS command by using a system console through z/OS console RESTful services.</p></li>
 <li><p>Retrieve command response and define success condition based on specified keywords in the command response or broadcast messages.</p></li>
+<li><p>Save the command response on Ansible control node.</p></li>
 </ul>
 </div>
 <div class="section" id="parameters">
@@ -288,6 +290,17 @@
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
+<dt>console_save_output_localpath</dt><dd><p>The local path on control node where the command response should be saved to. For example, <code class="docutils literal notranslate"><span class="pre">/tmp/cmd_output</span></code>.</p>
+<p>This path can be absolute or relative. The module will fail if parent directory of <em>console_save_output_localpath</em> is a read-only file system.</p>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">console_save_output_localpath</span> <span class="pre">}}/{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}/</span></code> will be created to save the command response.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">/tmp/cmd_output/SY1/</span></code>.</p>
+<p>The command response will be saved as separate file and named as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">console_cmd</span> <span class="pre">}}</span></code>, in which comma and space will be replaced with underline.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">/tmp/cmd_output/SY1/display_a_l</span></code>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
 <dt>console_system</dt><dd><p>Nickname of the target z/OS system in the same sysplex that the command is routed to.</p>
 <p>This variable should be specified as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}</span></code>, and its value should be specified in the inventory file as a managed node.</p>
 <p>For more information, see the documentation for the z/OS console REST services.</p>
@@ -296,8 +309,22 @@
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
-<dt>zmf_crt</dt><dd><p>Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.</p>
-<p>Required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<dt>zmf_credential</dt><dd><p>Authentication credentials, returned by module <code class="docutils literal notranslate"><span class="pre">zmf_authenticate</span></code>, for the successful authentication with z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_host</em>, <em>zmf_port</em>, <em>zmf_user</em>, <em>zmf_password</em>, <em>zmf_crt</em> and <em>zmf_key</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<dl>
+<dt>jwtToken</dt><dd><p>The value of JSON Web token, which supports strong encryption.</p>
+<p>If <em>LtpaToken2</em> is not supplied, <em>jwtToken</em> is required.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>LtpaToken2</dt><dd><p>The value of Lightweight Third Party Access (LTPA) token, which supports strong encryption.</p>
+<p>If <em>jwtToken</em> is not supplied, <em>LtpaToken2</em> is required.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -309,30 +336,58 @@
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
-<dt>zmf_key</dt><dd><p>Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.</p>
-<p>Required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
-<div class="line"><strong>type</strong>: str</div>
-</div>
-</dd>
-<dt>zmf_password</dt><dd><p>Password to be used for authenticating with z/OSMF server.</p>
-<p>Required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
-<p>If <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
-<div class="line"><strong>type</strong>: str</div>
-</div>
-</dd>
 <dt>zmf_port</dt><dd><p>Port number of the z/OSMF server.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: int</div>
 </div>
 </dd>
+</dl>
+</dd>
+<dt>zmf_crt</dt><dd><p>Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_crt</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_crt</em> is required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_host</dt><dd><p>Hostname of the z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_host</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_host</em> is required.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_key</dt><dd><p>Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_key</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_key</em> is required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_password</dt><dd><p>Password to be used for authenticating with z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_password</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_password</em> is required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
+<p>If <em>zmf_credential</em> is not supplied and <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_port</dt><dd><p>Port number of the z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_port</em> is ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+</div>
+</dd>
 <dt>zmf_user</dt><dd><p>User name to be used for authenticating with z/OSMF server.</p>
-<p>Required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
-<p>If <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_user</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_user</em> is required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
+<p>If <em>zmf_credential</em> is not supplied and <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -347,6 +402,13 @@
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
     <span class="nt">console_cmd</span><span class="p">:</span> <span class="s">&quot;display</span><span class="nv"> </span><span class="s">a,l&quot;</span>
     <span class="nt">console_system</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Issue command to display active jobs and save the command response</span>
+  <span class="nt">zmf_console_command</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">console_cmd</span><span class="p">:</span> <span class="s">&quot;display</span><span class="nv"> </span><span class="s">a,l&quot;</span>
+    <span class="nt">console_system</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">console_save_output_localpath</span><span class="p">:</span> <span class="s">&quot;/tmp/cmd_output&quot;</span>
 
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Issue command to start CIM server and detect if it is started successfully or not</span>
   <span class="nt">zmf_console_command</span><span class="p">:</span>
@@ -376,6 +438,7 @@
 </dd>
 <dt>message</dt><dd><p>The output message generated by the module to indicate whether the command is successful.</p>
 <p>If either <cite>console_cmdresponse_keyword</cite> or <cite>console_broadcastmsg_keyword</cite> is specified, indicate whether the specified keyword is detected.</p>
+<p>If <cite>console_save_output_localpath</cite> is specified, indicate whether the command response is saved on control node.</p>
 <div class="line-block">
 <div class="line"><strong>returned</strong>: on success</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -386,6 +449,8 @@
 <span class="s2">&quot;The command is issued successfully. The specified keyword is detected in the command response.&quot;</span>
 
 <span class="s2">&quot;The command is issued successfully. The specified keyword is detected in broadcast messages.&quot;</span>
+
+<span class="s2">&quot;The command is issued successfully. The command response is saved in: /tmp/output/SY1/display_a_l&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -437,7 +502,7 @@
         <a href="zmf_workflow.html" class="btn btn-neutral float-right" title="zmf_workflow – Operate z/OS workflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="zmf_authenticate.html" class="btn btn-neutral float-left" title="zmf_authenticate – Authenticate with z/OSMF server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -464,12 +529,13 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.1.0
+        v: v2.2.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../v2.2.0/modules/zmf_console_command.html">v2.2.0</a></dd>
             <dd><a href="../v2.1.0/modules/zmf_console_command.html">v2.1.0</a></dd>
             <dd><a href="../v2.0.1/index.html">v2.0.1</a></dd>
             <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>

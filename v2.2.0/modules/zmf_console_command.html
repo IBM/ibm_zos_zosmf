@@ -1,0 +1,559 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>zmf_console_command – Issue MVS command &mdash; IBM z/OSMF Collection 2.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="zmf_workflow – Operate z/OS workflows" href="zmf_workflow.html" />
+    <link rel="prev" title="zmf_authenticate – Authenticate with z/OSMF server" href="zmf_authenticate.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> IBM z/OSMF Collection
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module Reference</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_console_command – Issue MVS command</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-values">Return Values</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html#module-documentation">Module Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../roles.html">Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbooks.html">Playbooks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community_guides.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community_guides.html#helpful-links">Helpful Links</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Requirements</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../requirements.html">Requirements</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">IBM z/OSMF Collection</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Modules</a> &raquo;</li>
+        
+      <li>zmf_console_command – Issue MVS command</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/zmf_console_command.py" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="zmf-console-command-issue-mvs-command">
+<span id="zmf-console-command-module"></span><h1>zmf_console_command – Issue MVS command<a class="headerlink" href="#zmf-console-command-issue-mvs-command" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id3">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id4">Return Values</a></p></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Issue MVS command by using a system console through z/OS console RESTful services.</p></li>
+<li><p>Retrieve command response and define success condition based on specified keywords in the command response or broadcast messages.</p></li>
+<li><p>Save the command response on Ansible control node.</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id2">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>console_broadcastmsg_detect_timeout</dt><dd><p>Specifies how long, in seconds, the console attempts to detect the value of <em>console_broadcastmsg_keyword</em> in broadcast messages.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: 30</div>
+</div>
+</dd>
+<dt>console_broadcastmsg_keyword</dt><dd><p>Specifies a keyword that you want to detect in broadcast messages. Case is not significant.</p>
+<p>This value can be a string or a regular expression. To use a regular expression, you must also set <em>console_broadcastmsg_reg=Y</em>.</p>
+<p>This parameter is designed to help user determine whether the broadcast messages issued after the command matches with user’s expectation.</p>
+<p>If <em>console_cmdresponse_keyword</em> is not specified, the module will fail if the specified keyword can not be detected from broadcast messages.</p>
+<p>Otherwise, the module will fail if the specified keywords can not be detected from both command response and broadcast messages.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>console_broadcastmsg_reg</dt><dd><p>If <em>console_broadcastmsg_keyword</em> is specified, this variable specifies whether <em>console_broadcastmsg_keyword</em> represents a regular expression.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>default</strong>: N</div>
+<div class="line"><strong>choices</strong>: Y, N</div>
+</div>
+</dd>
+<dt>console_cmd</dt><dd><p>Specifies the command to issue.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>console_cmdresponse_keyword</dt><dd><p>Specifies a keyword that you want to detect in the command response. Case is not significant.</p>
+<p>This value can be a string or a regular expression. To use a regular expression, you must also set <em>console_cmdresponse_reg=Y</em>.</p>
+<p>This parameter is designed to help user determine whether the command response matches with user’s expectation.</p>
+<p>If <em>console_broadcastmsg_keyword</em> is not specified, the module will fail if the specified keyword can not be detected from the command response.</p>
+<p>Otherwise, the module will fail if the specified keywords can not be detected from both command response and broadcast messages.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>console_cmdresponse_reg</dt><dd><p>If <em>console_cmdresponse_keyword</em> is specified, this variable specifies whether <em>console_cmdresponse_keyword</em> represents a regular expression.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>default</strong>: N</div>
+<div class="line"><strong>choices</strong>: Y, N</div>
+</div>
+</dd>
+<dt>console_cmdresponse_retrieve_times</dt><dd><p>Specifies how many times the console attempts to retrieve the command response.</p>
+<p>If the command response contains a large volume of messages, it will not arrive within a certain time interval.</p>
+<p>In this case you might retrieve again several times to ensure that all messages related to the command are retrieved.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: 1</div>
+</div>
+</dd>
+<dt>console_name</dt><dd><p>Name of the EMCS console that is used to issue the command.</p>
+<p>If this value is omitted, the console name is generated by adding CN to the logon user ID.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>console_save_output_localpath</dt><dd><p>The local path on control node where the command response should be saved to. For example, <code class="docutils literal notranslate"><span class="pre">/tmp/cmd_output</span></code>.</p>
+<p>This path can be absolute or relative. The module will fail if parent directory of <em>console_save_output_localpath</em> is a read-only file system.</p>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">console_save_output_localpath</span> <span class="pre">}}/{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}/</span></code> will be created to save the command response.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">/tmp/cmd_output/SY1/</span></code>.</p>
+<p>The command response will be saved as separate file and named as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">console_cmd</span> <span class="pre">}}</span></code>, in which comma and space will be replaced with underline.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">/tmp/cmd_output/SY1/display_a_l</span></code>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>console_system</dt><dd><p>Nickname of the target z/OS system in the same sysplex that the command is routed to.</p>
+<p>This variable should be specified as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}</span></code>, and its value should be specified in the inventory file as a managed node.</p>
+<p>For more information, see the documentation for the z/OS console REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_credential</dt><dd><p>Authentication credentials, returned by module <code class="docutils literal notranslate"><span class="pre">zmf_authenticate</span></code>, for the successful authentication with z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_host</em>, <em>zmf_port</em>, <em>zmf_user</em>, <em>zmf_password</em>, <em>zmf_crt</em> and <em>zmf_key</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<dl>
+<dt>jwtToken</dt><dd><p>The value of JSON Web token, which supports strong encryption.</p>
+<p>If <em>LtpaToken2</em> is not supplied, <em>jwtToken</em> is required.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>LtpaToken2</dt><dd><p>The value of Lightweight Third Party Access (LTPA) token, which supports strong encryption.</p>
+<p>If <em>jwtToken</em> is not supplied, <em>LtpaToken2</em> is required.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_host</dt><dd><p>Hostname of the z/OSMF server.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_port</dt><dd><p>Port number of the z/OSMF server.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>zmf_crt</dt><dd><p>Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_crt</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_crt</em> is required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_host</dt><dd><p>Hostname of the z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_host</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_host</em> is required.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_key</dt><dd><p>Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_key</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_key</em> is required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_password</dt><dd><p>Password to be used for authenticating with z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_password</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_password</em> is required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
+<p>If <em>zmf_credential</em> is not supplied and <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_port</dt><dd><p>Port number of the z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_port</em> is ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+</div>
+</dd>
+<dt>zmf_user</dt><dd><p>User name to be used for authenticating with z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_user</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_user</em> is required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
+<p>If <em>zmf_credential</em> is not supplied and <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Issue command to display active jobs</span>
+  <span class="nt">zmf_console_command</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">console_cmd</span><span class="p">:</span> <span class="s">&quot;display</span><span class="nv"> </span><span class="s">a,l&quot;</span>
+    <span class="nt">console_system</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Issue command to display active jobs and save the command response</span>
+  <span class="nt">zmf_console_command</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">console_cmd</span><span class="p">:</span> <span class="s">&quot;display</span><span class="nv"> </span><span class="s">a,l&quot;</span>
+    <span class="nt">console_system</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">console_save_output_localpath</span><span class="p">:</span> <span class="s">&quot;/tmp/cmd_output&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Issue command to start CIM server and detect if it is started successfully or not</span>
+  <span class="nt">zmf_console_command</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">console_cmd</span><span class="p">:</span> <span class="s">&quot;start</span><span class="nv"> </span><span class="s">pegasus&quot;</span>
+    <span class="nt">console_system</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">console_cmdresponse_keyword</span><span class="p">:</span> <span class="s">&quot;SLP</span><span class="nv"> </span><span class="s">registration</span><span class="nv"> </span><span class="s">initiated&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Issue command to start CIM server and detect if it is started successfully or not</span>
+  <span class="nt">zmf_console_command</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">console_cmd</span><span class="p">:</span> <span class="s">&quot;start</span><span class="nv"> </span><span class="s">pegasus&quot;</span>
+    <span class="nt">console_system</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="nt">console_broadcastmsg_keyword</span><span class="p">:</span> <span class="s">&quot;started</span><span class="nv"> </span><span class="s">CIM</span><span class="nv"> </span><span class="s">server&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="return-values">
+<h2><a class="toc-backref" href="#id4">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl>
+<dt>changed</dt><dd><p>Indicates if any change is made during the module operation.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: always</div>
+<div class="line"><strong>type</strong>: bool</div>
+</div>
+</dd>
+<dt>message</dt><dd><p>The output message generated by the module to indicate whether the command is successful.</p>
+<p>If either <cite>console_cmdresponse_keyword</cite> or <cite>console_broadcastmsg_keyword</cite> is specified, indicate whether the specified keyword is detected.</p>
+<p>If <cite>console_save_output_localpath</cite> is specified, indicate whether the command response is saved on control node.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: on success</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+<p><strong>sample</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;The command is issued successfully.&quot;</span>
+
+<span class="s2">&quot;The command is issued successfully. The specified keyword is detected in the command response.&quot;</span>
+
+<span class="s2">&quot;The command is issued successfully. The specified keyword is detected in broadcast messages.&quot;</span>
+
+<span class="s2">&quot;The command is issued successfully. The command response is saved in: /tmp/output/SY1/display_a_l&quot;</span>
+</pre></div>
+</div>
+</dd>
+<dt>cmd_response</dt><dd><p>The command response.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: on success</div>
+<div class="line"><strong>type</strong>: list</div>
+</div>
+<p><strong>sample</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot; CNZ4105I 04.32.31 DISPLAY ACTIVITY 458&quot;</span><span class="p">,</span> <span class="s2">&quot;  JOBS     M/S    TS USERS    SYSAS    INITS   ACTIVE/MAX VTAM     OAS&quot;</span><span class="p">,</span> <span class="s2">&quot; 00002    00015    00002      00032    00005    00001/00020       00011&quot;</span><span class="p">,</span> <span class="s2">&quot;  VLF      VLF      VLF      NSW  S  IGVDGNPP IGVDGNPP PRIMEPSA OWT  S&quot;</span><span class="p">,</span> <span class="s2">&quot;  VTAM44   VTAM44   VTAM     NSW  S  RACF     RACF     RACF     NSW  S&quot;</span><span class="p">,</span> <span class="s2">&quot;  GRSSTMON GRSSTMON STEP1    OWT  S  SDSF23   SDSF23   SDSF     NSW  S&quot;</span><span class="p">,</span> <span class="s2">&quot;  HZR      HZR      IEFPROC  NSW  S  JES2     JES2     IEFPROC  NSW  S&quot;</span><span class="p">,</span> <span class="s2">&quot;  SDSFAUX  SDSFAUX  SDSFAUX  NSW  S  TCAS     TCAS     TSO      OWT  S&quot;</span><span class="p">,</span> <span class="s2">&quot;  TCPIP    TCPIP    TCPIP    NSW  SO RESOLVER RESOLVER EZBREINI NSW  SO&quot;</span><span class="p">,</span> <span class="s2">&quot;  RRS      RRS      RRS      NSW  S  OMPROUTE OMPROUTE OMPROUTE NSW  SO&quot;</span><span class="p">,</span> <span class="s2">&quot;  INETD1   STEP1    INETD    OWT  AO FTPDEV1  STEP1    FTPD     OWT  AO&quot;</span><span class="p">,</span> <span class="s2">&quot;  PEGASUS  PEGASUS  *OMVSEX  IN   SO&quot;</span><span class="p">,</span> <span class="s2">&quot; IBMUSER  OWT      ZOSMFAD  IN   O&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+<dt>cmdresponse_keyword_detected</dt><dd><p>Indicate whether the specified keyword is detected in the command response.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: on success when <cite>console_cmdresponse_keyword</cite> is specified</div>
+<div class="line"><strong>type</strong>: bool</div>
+</div>
+</dd>
+<dt>broadcastmsg_keyword_detected</dt><dd><p>Indicate whether the specified keyword is detected in broadcast messages.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: on success when <cite>console_broadcastmsg_keyword</cite> is specified</div>
+<div class="line"><strong>type</strong>: bool</div>
+</div>
+</dd>
+<dt>detected_broadcastmsg</dt><dd><p>The message that contains the specified keyword that was detected in broadcast messages.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: on success when <cite>console_broadcastmsg_keyword</cite> is specified</div>
+<div class="line"><strong>type</strong>: list</div>
+</div>
+<p><strong>sample</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot; BPXM023I (ZOSMFAD) CFZ10030I: Started CIM Server version 2.14.2.&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="zmf_workflow.html" class="btn btn-neutral float-right" title="zmf_workflow – Operate z/OS workflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="zmf_authenticate.html" class="btn btn-neutral float-left" title="zmf_authenticate – Authenticate with z/OSMF server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, IBM
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v2.2.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="zmf_console_command.html">v2.2.0</a></dd>
+            <dd><a href="../../v2.1.0/modules/zmf_console_command.html">v2.1.0</a></dd>
+            <dd><a href="../../v2.0.1/index.html">v2.0.1</a></dd>
+            <dd><a href="../../v2.0.0/index.html">v2.0.0</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

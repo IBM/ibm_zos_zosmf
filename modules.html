@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Modules &mdash; IBM z/OSMF Collection 2.1.0 documentation</title>
+  <title>Modules &mdash; IBM z/OSMF Collection 2.2.0 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="zmf_console_command – Issue MVS command" href="modules/zmf_console_command.html" />
+    <link rel="next" title="zmf_authenticate – Authenticate with z/OSMF server" href="modules/zmf_authenticate.html" />
     <link rel="prev" title="MVS Command Operations" href="README_console.html" /> 
 </head>
 
@@ -90,6 +90,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-reference">Module Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
 </ul>
@@ -164,7 +165,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.1.0/docs/source/modules.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.2.0/docs/source/modules.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -192,6 +193,7 @@
 <p><strong>IBM z/OSMF collection</strong> provides several modules. Reference material for each module contains documentation on what parameters certain modules accept, what values they expect those parameters to be, and what will returned.</p>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
 </ul>
@@ -215,7 +217,7 @@ $ ansible-doc ibm.ibm_zos_zosmf.zmf_console_command
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="modules/zmf_console_command.html" class="btn btn-neutral float-right" title="zmf_console_command – Issue MVS command" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="modules/zmf_authenticate.html" class="btn btn-neutral float-right" title="zmf_authenticate – Authenticate with z/OSMF server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="README_console.html" class="btn btn-neutral float-left" title="MVS Command Operations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -245,12 +247,13 @@ $ ansible-doc ibm.ibm_zos_zosmf.zmf_console_command
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.1.0
+        v: v2.2.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="v2.2.0/modules.html">v2.2.0</a></dd>
             <dd><a href="v2.1.0/modules.html">v2.1.0</a></dd>
             <dd><a href="v2.0.1/modules.html">v2.0.1</a></dd>
             <dd><a href="v2.0.0/modules.html">v2.0.0</a></dd>
