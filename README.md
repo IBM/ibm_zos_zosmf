@@ -11,7 +11,7 @@
 
 For guides and reference, see [Docs Site](https://ibm.github.io/ibm_zos_zosmf/index.html).
 
-For a quick approach to set up z/OSMF dependencies for z/OSMF collection **ibm_zos_zosmf**, please refer to [here](https://github.com/IBM/ibm_zos_zosmf/tree/feature/4/conf_readme/docs/zmf_sample_conf/README.md).
+For a quick approach to set up z/OSMF dependencies for z/OSMF collection **ibm_zos_zosmf**, please refer to [here](https://github.com/IBM/ibm_zos_zosmf/tree/master/docs/zmf_sample_conf/README.md).
 
 
 ## Copyright
