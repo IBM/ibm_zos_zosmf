@@ -1,8 +1,8 @@
 # IBM z/OS Management Facility Collection
 
-**IBM z/OS Management Facility (z/OSMF) Collection**, referred to as **ibm_zos_zosmf**, consists of modules and roles that you can use with z/OS.
+**IBM z/OS Management Facility (z/OSMF) Collection**, referred as **ibm_zos_zosmf**, consists of modules and roles that you can use with z/OS.
 
-**IBM z/OSMF collection** intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, z/OS console REST services, Cloud Provisioning and Management services etc.
+**IBM z/OSMF collection** intends to allow Ansible to drive z/OS operations via z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, z/OS console REST services, Cloud Provisioning and Management services etc.
 
 
 ## Features
@@ -10,6 +10,8 @@
 **IBM z/OSMF collection** includes [modules](https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/), [roles](https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/), [sample playbooks](https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/) and `ansible-doc` to automate tasks on z/OS.
 
 For guides and reference, see [Docs Site](https://ibm.github.io/ibm_zos_zosmf/index.html).
+
+For a quick approach to set up z/OSMF dependencies for z/OSMF collection **ibm_zos_zosmf**, please refer to [here](https://github.com/IBM/ibm_zos_zosmf/tree/feature/4/conf_readme/docs/zmf_sample_conf/README.md).
 
 
 ## Copyright

@@ -1,0 +1,13 @@
+{
+   "services": {
+      "IZU_CLOUD_SERVICE": "N",
+      "IZU_HELP_SERVICE": "N",
+      "IZU_IMPORT_SERVICE": "N",
+      "IZU_REST_COSOLE": "Y",
+      "IZU_REST_FILE": "Y",
+      "IZU_REST_JOB": "Y",
+      "IZU_REST_TSO": "Y",
+      "IZU_SCA_SERVICE": "N",
+      "IZU_WORKFLOW_SERVICE": "Y"
+   }
+}
