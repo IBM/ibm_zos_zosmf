@@ -1,0 +1,49 @@
+# Copyright (c) IBM Corporation 2020
+
+# This sample playbook demonstrates provisioning CICS region and deploying application into CICS region file system
+# Example:
+# ansible-playbook -i hosts sample_role_deploy_cics_application.yml
+
+- name: Sample for provisioning CICS region and deploying application
+  hosts: cpmHost1 # need to match host nick name specified in hosts inventory file
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    - name: instance_info_json_path #will store instance json information globally thru the playbook
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
+
+    - name: application_path_input
+      prompt: "Enter your application file full path"
+      private: no
+
+  tasks:
+    - include_role:
+        name: zmf_cpm_provision_software_service
+      vars:
+        cpm_template_name: "<fill-me-template-name>"   # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
+        domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
+        tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
+        systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+
+#########################################################################################################
+#
+#   WARNING! to use this role, you need to manually copy ./files/cics_wlp_install_app
+#   to collections/roles/ibm/ibm_zos_zosmf/roles to make the role self available to user
+#
+##########################################################################################################
+
+    - include_role:
+        name: cics_wlp_install_app
+      vars:
+        instance_info_json: "{{lookup('file', instance_info_json_path)}}" # Path of the instance json file contains cics public variables
+        app_root_uri: "/CloudTestServlet" # The URI path to access the application once upload
+        app_file_name: "CloudTestServlet.war" # The file name that the application file will be written to the USS file system in z/OS
+        application_path: "{{ application_path_input }}" # The local absolute file path to the application binary file

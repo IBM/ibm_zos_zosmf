@@ -1,0 +1,26 @@
+# Copyright (c) IBM Corporation 2020
+
+# This sample playbook demonstrates using zmf_cpm_manage_software_instance to perform a
+# specific action on provisioned software instance.
+# Example:
+# ansible-playbook -i hosts sample_role_cpm_manage_instance.yml
+
+- name: sample of managing software instance
+  hosts: cpmHost1 # need to match host nick name specified in hosts inventory file
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
+  tasks:
+    - include_role:
+        name: zmf_cpm_manage_software_instance
+      vars:
+        instance_action_name: "<action-name>"
+        instance_info_json_path: "<full-instance-json-file-path>"

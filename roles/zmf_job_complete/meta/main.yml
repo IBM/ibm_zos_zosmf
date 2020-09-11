@@ -1,0 +1,23 @@
+# Copyright (c) IBM Corporation 2020
+
+---
+galaxy_info:
+  author: Yang Cao <caoy@cn.ibm.com>, Yun Juan Yang <yunyyang@cn.ibm.com>
+  description:
+    Ansible role to submit a job to run on z/OS.
+    This role supports to check its return code and user specified content from spool files, and save the user specified spool files on Ansible control node.
+  company: IBM
+  min_ansible_version: 2.9
+  galaxy_tags:
+    - ibm
+    - z
+    - zos
+    - zosmf
+    - job
+  license:
+    - Apache-2.0
+  platforms:
+    - name: GenericLinux
+      versions:
+      - all
+dependencies: []

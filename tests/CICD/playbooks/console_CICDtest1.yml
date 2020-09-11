@@ -1,0 +1,28 @@
+# Copyright (c) IBM Corporation 2020 
+
+# This sample playbook demonstrates using module `zmf_console_command` to issue MVS command by using a system console.
+# Example:
+# ansible-playbook -i hosts sample_module_console_command.yml
+
+- name: sample of issuing MVS command by using a system console
+  hosts: console
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  tasks:
+    - zmf_console_command:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+        console_cmd: "d a,l"
+        console_system: "{{ inventory_hostname }}"
+        #console_cmdresponse_keyword: "SLP registration initiated"
+        console_cmdresponse_reg: "N" # Whether console_cmdresponse_keyword represents a regular expression. Default is 'N'
+        #onsole_broadcastmsg_keyword: "started CIM server"
+        console_broadcastmsg_reg: "N" # Whether console_broadcastmsg_keyword represents a regular expression. Default is 'N'
+        console_broadcastmsg_detect_timeout: 30 # How long, in seconds, the console attempts to detect the value of console_broadcastmsg_keyword in the broadcast messages. Default is 30
+        console_cmdresponse_retrieve_times: 1 # How many times the console attempts to retrieve the command response. Default is 1
+      register: result
+      delegate_to: localhost
+    - debug: var=result

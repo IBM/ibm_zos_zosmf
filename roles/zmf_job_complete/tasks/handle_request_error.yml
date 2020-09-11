@@ -1,0 +1,24 @@
+# Copyright (c) IBM Corporation 2020 
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+- name: Handle request error - Fail if result status is not {{ expect_rcode }} - Error from z/OSMF
+  fail:
+    msg: "HTTP Error {{ result.status }}: category={{ result.json.category }}, rc={{ result.json.rc }}, \
+          reason={{ result.json.reason }}, message={{ result.json.message }}"
+  when:
+    - result.status != expect_rcode
+    - ('json' in result) and ('message' in result.json)
+
+- name: Handle request error - Fail if result status is not {{ expect_rcode }} - Error from HTTPS Response
+  fail:
+    msg: "HTTP Error {{ result.status }}: {{ result.content }}"
+  when:
+    - result.status != expect_rcode
+    - result.content != empty_str
+
+- name: Handle request error - Fail if result status is not {{ expect_rcode }} - Error from HTTPS connection
+  fail:
+    msg: "HTTP Error {{ result.status }}: {{ result.msg }}"
+  when:
+    - result.status != expect_rcode

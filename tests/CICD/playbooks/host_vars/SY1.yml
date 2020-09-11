@@ -1,0 +1,16 @@
+# Copyright (c) IBM Corporation 2020
+
+# The value for property zmf_user is your username of z/OSMF.
+# The value for property zmf_password is the password of your username of z/OSMF.
+# `zmf_user` and `zmf_password` are prompted to input when running a playbook
+# zmf_user:
+# zmf_password:
+
+# Client certificate is supported by specifying the location of client certificate and key files on control node via zmf_crt and zmf_key.
+# If below variables are specified, then the module and role will use client certificate to login instead of using username/password even those variables are specified.
+# zmf_crt:
+# zmf_key:
+
+# Used for role `zmf_job_query` if you want to query a job running on different z/OS
+# job_name:
+# job_id:

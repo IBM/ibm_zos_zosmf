@@ -1,0 +1,23 @@
+# Copyright (c) IBM Corporation 2020
+
+# this group is used in sample_role_workflow_*.yml
+[workflow]
+workflowHost1
+workflowHost2
+
+# this group is used in sample_role_cpm_*.yml
+# If hostname is changed here, please create "host_name".yml file under host_vars and specify host specific variables as shown in example cpmHost1.yml
+[cpm]
+cpmHost1 zmf_host=zosmf1.ibm.com zmf_port=443
+cpmHost2 zmf_host=zosmf2.ibm.com zmf_port=443
+
+# this group is used in sample_role_job_*.yml
+# If hostname is changed here, please create "host_name".yml file under host_vars and specify host specific variables as shown in example jobHost1.yml
+[job]
+jobHost1 zmf_host=zosmf1.ibm.com zmf_port=443
+jobHost2 zmf_host=zosmf2.ibm.com zmf_port=443
+
+# this group is used in sample_module_console_*.yml
+[console]
+consoleHost1
+consoleHost2
