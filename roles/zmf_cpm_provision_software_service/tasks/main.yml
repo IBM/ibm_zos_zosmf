@@ -8,7 +8,13 @@
   include_tasks: instance_dir_util.yml
   run_once: true
 
-- name: Provision template with user supplied body
+# Allow zmf_body to be set in previous tasks. If zmf_body isn't set then set default below
+- name: Set zmf_body as fact
+  set_fact:
+    zmf_body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}","systems-nicknames":["{{ systems_nicknames }}"]}'
+  when: zmf_body is not defined
+
+- name: Provision template
   uri:
     url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/psc/{{ cpm_template_name }}/actions/run"
     return_content: yes
@@ -26,25 +32,6 @@
   delegate_to: localhost
   register: provision_results
   when: zmf_body is defined
-
-- name: Provision template with default body
-  uri:
-    url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/psc/{{ cpm_template_name }}/actions/run"
-    return_content: yes
-    user: "{{ zmf_user| trim }}"
-    password: "{{ zmf_password| trim  }}"
-    force_basic_auth: yes
-    headers:
-      Host: "{{ zmf_host }}"
-      Origin: "https://{{ zmf_host }}"
-    method: POST
-    status_code: "200"
-    validate_certs: no
-    body_format: json
-    body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}","systems-nicknames":["{{ systems_nicknames }}"]}'
-  delegate_to: localhost
-  register: provision_results
-  when: zmf_body is not defined
 
 - name: Write instance information to disk
   copy:
