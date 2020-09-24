@@ -158,3 +158,5 @@ Availability
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0
 .. _v2.2.0:
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.0
+.. _v2.2.1:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.1
