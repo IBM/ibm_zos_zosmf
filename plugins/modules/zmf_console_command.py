@@ -400,8 +400,9 @@ def issue_command(module):
             save_path = module.params['console_save_output_localpath'] + module.params['console_system'] + '/'
         else:
             save_path = module.params['console_save_output_localpath'] + '/' + module.params['console_system'] + '/'
+        # fix - compatible with python2.7
         if not os.path.exists(save_path):
-            os.makedirs(save_path, 0o755, True)
+            os.makedirs(save_path, 0o755)
         else:
             os.chmod(save_path, 0o755)
         save_file = format_cmd_to_str(module.params['console_cmd'])
