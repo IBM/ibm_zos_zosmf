@@ -1,0 +1,28 @@
+# Copyright (c) IBM Corporation 2020 
+
+- name: CF check before rebuild -- D XCF,STR,STRNM={{ item }}
+  zmf_console_command:
+    zmf_credential: "{{ result_auth }}"
+    console_cmd: "D XCF,STR,STRNM={{ item }}"
+    console_system: "{{ inventory_hostname }}"
+    console_save_output_localpath: "{{ demo_save_dir.path }}"
+  delegate_to: localhost
+
+- name: rebuild CFRM structures - SETXCF START,REBUILD,STRNM={{ item }}
+  zmf_console_command:
+    zmf_credential: "{{ result_auth }}"
+    console_cmd: "SETXCF START,REBUILD,STRNM={{ item }}"
+    console_system: "{{ inventory_hostname }}"
+    console_cmdresponse_keyword: "IXC367I" # IXC367I THE SETXCF START REBUILD REQUEST FOR STRUCTURE XXXXX WAS ACCEPTED
+    console_save_output_localpath: "{{ demo_save_dir.path }}"
+  delegate_to: localhost
+
+- name: alter CFRM structures - SETXCF START,ALTER,STRNM={{ item }},SIZE={{ cfrm_policy_change.changed_structures[item].SIZE }}
+  zmf_console_command:
+    zmf_credential: "{{ result_auth }}"
+    console_cmd: "SETXCF START,ALTER,STRNM={{ item }},SIZE={{ cfrm_policy_change.changed_structures[item].SIZE }}"
+    console_system: "{{ inventory_hostname }}"
+    console_cmdresponse_keyword: "IXC530I" # IXC530I START ALTER REQUEST FOR STRUCTURE XXXXX ACCEPTED
+    console_save_output_localpath: "{{ demo_save_dir.path }}"
+  delegate_to: localhost
+

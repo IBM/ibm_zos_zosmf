@@ -1,0 +1,131 @@
+# Copyright (c) IBM Corporation 2020 
+
+# Sample playbook for CFRM Policy Change scenario.
+# Example:
+# ansible-playbook -i hosts demo_step1_prepare_cfrm_policy.yml
+
+- name: prepare CFRM policy
+  hosts: mySystems
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    current_dir: "{{ local_output_dir | regex_replace('/$', '') }}/CFRMChange{{ '%Y%m%d' | strftime }}"
+    cfrm_policy_change: "{{ lookup('file', local_input_dir ~ '/cfrm_policy_change.txt') }}"
+    cfrm_policy_jcl: "CFRM00"
+  tasks:
+    - name: create local directory to save output
+      local_action:
+        module: file
+        path: "{{ current_dir }}/step1_prepare_cfrm"
+        state: "directory"
+      register: demo_save_dir
+
+    - name: update JCL (POLUPD)
+      local_action:
+        module: lineinfile
+        path: "{{ local_input_dir }}/POLUPD"
+        regexp: 'DSN=(.*)\((.*)\)'
+        line: //SYSIN     DD  DISP=SHR,DSN={{ jcl_dataset }}({{ cfrm_policy_jcl }})
+
+    # will be replaced by zmf_dataset module later
+    - name: create dataset if not exist
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/ds/{{ jcl_dataset }}"
+        method: POST
+        user: "{{ zmf_user }}"
+        password: "{{ zmf_password }}"
+        validate_certs: no
+        force_basic_auth: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+          Content-Type: "application/json"
+        body_format: json
+        body: '{"unit":"3390","dsorg":"PO","alcunit":"TRK","primary":10,"secondary":5,"dirblk":10,"avgblk":500,"recfm":"FB","blksize":400,"lrecl":80}'
+        return_content: yes
+        status_code: "201"
+      delegate_to: localhost
+      failed_when: no
+
+    # will be replaced by zmf_dataset module later
+    - name: upload JCL to dataset
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/ds/{{ jcl_dataset }}(POLPRT)"
+        method: PUT
+        user: "{{ zmf_user }}"
+        password: "{{ zmf_password }}"
+        validate_certs: no
+        force_basic_auth: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+          Content-Type: "text/plain"
+        body: "{{ lookup('file', local_input_dir ~ '/POLPRT') }}"
+        return_content: yes
+        status_code: "204"
+      delegate_to: localhost
+      failed_when: no
+
+    # will be replaced by zmf_dataset module later
+    - name: upload JCL to dataset
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/ds/{{ jcl_dataset }}(POLUPD)"
+        method: PUT
+        user: "{{ zmf_user }}"
+        password: "{{ zmf_password }}"
+        validate_certs: no
+        force_basic_auth: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+          Content-Type: "text/plain"
+        body: "{{ lookup('file', local_input_dir ~ '/POLUPD') }}"
+        return_content: yes
+        status_code: "204"
+      delegate_to: localhost
+      failed_when: no
+
+    - name: report all CFRM policies
+      include_role:
+        name: zmf_job_complete
+      vars:
+        job_jcl_src: "{{ jcl_dataset }}(POLPRT)"
+        job_jcl_location: "DATASET"
+        job_search_output: "DEFINE POLICY NAME"
+        job_search_output_ddname: ["SYSPRINT"]
+        job_search_output_maxreturnsize: 9999
+        job_save_output_localpath: "{{ demo_save_dir.path }}"
+        job_save_output_ddname: ["SYSPRINT"]
+
+    - name: run python script to modify CFRM policy and save to local file
+      local_action:
+        module: copy
+        src: "{{ save_dir.path }}/SYSPRINT(104)"
+        dest: "{{ demo_save_dir.path }}/SYSPRINT"
+    - set_fact:
+        in_file_path: "{{ demo_save_dir.path }}/SYSPRINT"
+        out_file_path: "{{ demo_save_dir.path }}/{{ cfrm_policy_jcl }}"
+        change_file_path: "{{ local_input_dir }}/cfrm_policy_change.txt"
+    - script: "{{ local_input_dir }}/modify_policy.py {{ in_file_path }} {{ out_file_path }} {{ change_file_path }}"
+      args:
+        executable: python3
+      delegate_to: localhost
+    
+    # will be replaced by zmf_dataset module later
+    - name: upload modified CFRM policy file to dataset
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/ds/{{ jcl_dataset }}({{ cfrm_policy_jcl }})"
+        method: PUT
+        user: "{{ zmf_user }}"
+        password: "{{ zmf_password }}"
+        validate_certs: no
+        force_basic_auth: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+          Content-Type: "text/plain"
+        body: "{{ lookup('file', out_file_path) }}"
+        return_content: yes
+        status_code: "204"
+      delegate_to: localhost
+      failed_when: no
+
+    - name: display result
+      debug: msg="Step1 CFRM Policy Preparation is completed. The modified CFRM policy is saved in {{ demo_save_dir.path }}/{{ cfrm_policy_jcl }}"

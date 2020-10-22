@@ -1,0 +1,51 @@
+# Copyright (c) IBM Corporation 2020 
+
+# Sample playbook for CFRM Policy Change scenario.
+# Example:
+# ansible-playbook -i hosts demo_step3.1_active_cfrm_policy.yml
+
+- name: update and active CFRM policy
+  hosts: mySystems
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    current_dir: "{{ local_output_dir | regex_replace('/$', '') }}/CFRMChange{{ '%Y%m%d' | strftime }}"
+    cfrm_policy_change: "{{ lookup('file', local_input_dir ~ '/cfrm_policy_change.txt') }}"
+  tasks:
+    - name: create local directory to save output
+      local_action:
+        module: file
+        path: "{{ current_dir }}/step3_change_cfrm/3.1_active_policy"
+        state: "directory"
+      register: demo_save_dir
+
+    - zmf_authenticate:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+      register: result_auth
+      delegate_to: localhost
+
+    - name: update CFRM policy
+      include_role:
+        name: zmf_job_complete
+      vars:
+        job_jcl_src: "{{ jcl_dataset }}(POLUPD)"
+        job_jcl_location: "DATASET"
+
+    - name: active CFRM policy
+      zmf_console_command:
+        zmf_credential: "{{ result_auth }}"
+        console_cmd: "SETXCF START,POLICY,TYPE=CFRM,POLNAME={{ cfrm_policy_change.policy_name }}"
+        console_system: "{{ inventory_hostname }}"
+        console_cmdresponse_keyword: "IXC511I" # IXC511I START ADMINISTRATIVE POLICY CTTEST1 FOR CFRM ACCEPTED
+        console_save_output_localpath: "{{ demo_save_dir.path }}"
+      register: result
+      delegate_to: localhost
+    - name: display response for active CFRM policy
+      debug: var=result.cmd_response
+
+    - name: display result
+      debug: msg="Step3.1 Active CFRM Policy is completed. Run Step3.2 to check CFRM policy change pending."
