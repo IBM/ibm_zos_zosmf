@@ -70,6 +70,20 @@ CFRM Policy Change is a regular standardized operation on z/OS systems in the pr
         SETXCF START,ALTER,STRNM={{ cfrm_structure_to_be_rebuilt }},SIZE={{ size_of_cfrm_structure_to_be_rebuilt }}
         ```
 
+### As-Is VS To-Be
+**As-Is (Without Ansible - Manually operate the CFRM policy change):**
+* Repeated effort of manual actions.
+* A lot manual actions will cause pressure and risk during the limited time window.
+* No visualized progress.
+
+**To-Be (With Ansible and IBM z/OSMF Ansible collection `ibm_zos_zosmf`):**
+* Avoid repeat effort (same template can be run against same or different hosts with one click).
+* Less error-prone due to predefined process in Ansible playbooks.
+* Visualize automation progress via Ansible AWX.
+* Automation increases efficiency.
+* Different org owned playbooks can be combined to accomplish a complex task.
+* Archive the output of each auto-operation.
+
 
 ## Pre-requisites
 * [POLPRT](files/POLPRT): Sample JCL file to be used to report all CFRM policies on the target z/OS system.

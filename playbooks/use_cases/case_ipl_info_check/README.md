@@ -31,6 +31,19 @@ IPL INFO Check is a regular standardized operation on z/OS systems in the produc
 
     * Run the python script file [compare_pds.py](files/compare_pds.py) to compare the contents of output PDS before and after IPL, and generate a html to show the compare result.
 
+### As-Is VS To-Be
+**As-Is (Without Ansible - Manually operate the IPL info check):**
+* Repeated effort of manual actions.
+* A lot manual actions will cause pressure and risk during the limited time window.
+* z/OS admin need to manually switch between the output PDS before and after IPL to compare them.
+
+**To-Be (With Ansible and IBM z/OSMF Ansible collection `ibm_zos_zosmf`):**
+* Avoid repeat effort (same template can be run against same or different hosts with one click).
+* Less error-prone due to predefined process in Ansible playbooks.
+* Visualize the compare result of the output PDS before and after IPL via running the python script file in Ansible playbooks.
+* Automation increases efficiency.
+* Archive the output of each auto-operation.
+
 
 ## Pre-requisites
 * `IPLINFO`: Sample JCL file to be used to report the current system information. In this JCL file, you should specify the output partitioned data set (PDS) which will contain the reported system information as its members. For example, you can specify `RPT.SYSINFO.{{ system_nickname }}.ONETIME` as the output PDS name before IPL, and `RPT.SYSINFO.{{ system_nickname }}.IPL` as the output PDS name after IPL.
