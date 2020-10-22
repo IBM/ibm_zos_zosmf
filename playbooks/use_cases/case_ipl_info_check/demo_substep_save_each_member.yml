@@ -1,0 +1,24 @@
+# Copyright (c) IBM Corporation 2020 
+
+# will be replaced by zmf_dataset module later
+- name: retrieve data from {{ pds_name }}({{ pds_list_item.member }})
+  uri:
+    url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/ds/{{ pds_name }}({{ pds_list_item.member }})"
+    method: GET
+    user: "{{ zmf_user }}"
+    password: "{{ zmf_password }}"
+    validate_certs: no
+    force_basic_auth: yes
+    headers:
+      X-CSRF-ZOSMF-HEADER: "ZOSMF"
+    return_content: yes
+    status_code: "200"
+  delegate_to: localhost
+  register: member_result
+
+# will be replaced by zmf_dataset module later
+- name: save data to local file
+  local_action:
+    module: copy
+    content: "{{ member_result.content }}"
+    dest: "{{ demo_save_dir_pds.path }}/{{ pds_list_item.member }}"
