@@ -11,7 +11,7 @@
     - ibm.ibm_zos_zosmf
   vars:
     current_dir: "{{ local_output_dir | regex_replace('/$', '') }}/before_ipl_{{ '%Y%m%d%H%M' | strftime }}"
-    ipl_info_jcl: "IPLINFO"
+    ipl_info_jcl: "IPLCONF"
   tasks:
     - name: create local directory to save output
       local_action:

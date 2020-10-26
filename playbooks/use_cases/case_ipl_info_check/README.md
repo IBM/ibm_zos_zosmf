@@ -7,10 +7,10 @@ IPL INFO Check is a regular standardized operation on z/OS systems in the produc
 
 1. Get system information before IPL ([demo_ipl_1_get_info_before_ipl.yml](demo_ipl_1_get_info_before_ipl.yml)):
 
-    * Report the current system information before IPL by issuing the following MVS command to submit the JCL file `IPLINFO` on all z/OS systems in one sysplex. The JCL file `IPLINFO` will put the reported system information before IPL into the specified output PDS (`RPT.SYSINFO.{{ system_nickname }}.ONETIME`).
+    * Report the current system information before IPL by issuing the following MVS command to submit the JCL file `IPLCONF` on all z/OS systems in one sysplex. The JCL file `IPLCONF` will put the reported system information before IPL into the specified output PDS (`RPT.SYSINFO.{{ system_nickname }}.ONETIME`).
 
         ```
-        RO *ALL,S IPLINFO
+        RO *ALL,S IPLCONF
         ```
 
     * For each submitted job, query its status and search the output PDS name in its spool files after the job is completed. 
@@ -19,10 +19,10 @@ IPL INFO Check is a regular standardized operation on z/OS systems in the produc
 
 2. Get system information after IPL ([demo_ipl_2_get_info_after_ipl.yml](demo_ipl_2_get_info_after_ipl.yml)):
 
-    * Report the current system information after IPL by issuing the following MVS command to submit the JCL file `IPLINFO` again on all z/OS systems in one sysplex. The JCL file `IPLINFO` will put the reported system information after IPL into the specified output PDS (`RPT.SYSINFO.{{ system_nickname }}.IPL`).
+    * Report the current system information after IPL by issuing the following MVS command to submit the JCL file `IPLCONF` again on all z/OS systems in one sysplex. The JCL file `IPLCONF` will put the reported system information after IPL into the specified output PDS (`RPT.SYSINFO.{{ system_nickname }}.IPL`).
 
         ```
-        RO *ALL,S IPLINFO,DSSUF=IPL
+        RO *ALL,S IPLCONF,DSSUF=IPL
         ```
 
     * For each submitted job, query its status and search the output PDS name in its spool files after the job is completed. 
@@ -46,7 +46,7 @@ IPL INFO Check is a regular standardized operation on z/OS systems in the produc
 
 
 ## Pre-requisites
-* `IPLINFO`: Sample JCL file to be used to report the current system information. In this JCL file, you should specify the output partitioned data set (PDS) which will contain the reported system information as its members. For example, you can specify `RPT.SYSINFO.{{ system_nickname }}.ONETIME` as the output PDS name before IPL, and `RPT.SYSINFO.{{ system_nickname }}.IPL` as the output PDS name after IPL.
+* `IPLCONF`: Sample JCL file to be used to report the current system information. In this JCL file, you should specify the output partitioned data set (PDS) which will contain the reported system information as its members. For example, you can specify `RPT.SYSINFO.{{ system_nickname }}.ONETIME` as the output PDS name before IPL, and `RPT.SYSINFO.{{ system_nickname }}.IPL` as the output PDS name after IPL.
 
 * [compare_pds.py](files/compare_pds.py): Sample python script to be used to compare the contents of output PDS before and after IPL, and generate a html to show the compare result.
 
