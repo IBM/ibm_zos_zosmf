@@ -97,8 +97,8 @@
 
     - name: run python script to modify CFRM policy and save to local file
       local_action:
-        module: copy
-        src: "{{ save_dir.path }}/SYSPRINT(104)"
+        module: assemble
+        src: "{{ save_dir.path }}/"
         dest: "{{ demo_save_dir.path }}/SYSPRINT"
     - set_fact:
         in_file_path: "{{ demo_save_dir.path }}/SYSPRINT"
