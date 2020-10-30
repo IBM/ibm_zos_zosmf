@@ -1,0 +1,42 @@
+# Copyright (c) IBM Corporation 2020
+
+# play 1: collect ops data on z/OS side
+- name: collect ops data from z/OS via z/OSMF
+  hosts: zos
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+
+  tasks:
+    # submit jcl to put ops data to a dataset 
+    - include_role:
+        name: zmf_job_complete
+      vars:
+        job_jcl_src: "CLCTLOG.jcl"
+        job_jcl_symbols: { "DATE": "D{{ '%m%d' | strftime }}" }
+
+    # retrieve ops data from z/OS dataset
+    - name: retrieve ops data from z/OS dataset
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/ds/OPS.DATA.D{{ '%m%d' | strftime }}"
+        method: GET
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+        user: "{{ zmf_user }}"
+        password: "{{ zmf_password }}"
+        validate_certs: no
+        force_basic_auth: yes
+        return_content: yes
+        status_code: "200"
+      delegate_to: localhost
+      register: ops_data
+      failed_when: no
+
+# play 2: insert data to Redis db on Linux side
+- name: update ops data to redis
+  hosts: linux
+
+  tasks:
+    # SSH to linux machine and run redis command to insert the ops data
+    - name: set ops data to redis
+      shell: "redis-cli hset 'opslog' '{{ '%Y%m%d' | strftime }}' '{{ hostvars['zos']['ops_data']['content'] }}'"
