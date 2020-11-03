@@ -43,4 +43,3 @@
         - name: display result
           debug: msg="Congratulation! CFRM Policy Change is completed and successful."
       when: reallocate_error_structures == []
-

@@ -25,4 +25,3 @@
     console_cmdresponse_keyword: "IXC530I" # IXC530I START ALTER REQUEST FOR STRUCTURE XXXXX ACCEPTED
     console_save_output_localpath: "{{ demo_save_dir.path }}"
   delegate_to: localhost
-

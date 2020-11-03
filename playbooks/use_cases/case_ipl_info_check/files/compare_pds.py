@@ -1,8 +1,8 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 # Copyright (c) IBM Corporation 2020
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
 
 import sys
 import os
@@ -43,18 +43,19 @@ for pds in os.listdir(beforepath):
         after_pds = afterpath + '/' + pds.replace('ONETIME', 'IPL')
         diff_list = filecmp.dircmp(before_pds, after_pds).diff_files
         if len(diff_list) == 0:
-            if f_write == None:
+            if f_write is None:
                 outputfile = outputpath + '/compare_result_' + before + '_vs_' + after + '.html'
                 f_write = open(outputfile, 'w')
                 f_write.writelines(html_start)
-            f_write.writelines('<h3 style="color: green">No difference found between PDS: ' + pds + '    <---->    ' + pds.replace('ONETIME', 'IPL') + '</h3>\n')
+            f_write.writelines(
+                '<h3 style="color: green">No difference found between PDS: ' + pds + '    <---->    ' + pds.replace('ONETIME', 'IPL') + '</h3>\n')
         else:
-            if f_write == None:
+            if f_write is None:
                 outputfile = outputpath + '/compare_result_' + before + '_vs_' + after + '.html'
                 f_write = open(outputfile, 'w')
                 f_write.writelines(html_start)
             f_write.writelines('<h3 style="color: green">Compare result for PDS: ' + pds + '    <---->    ' + pds.replace('ONETIME', 'IPL') + '</h3>\n')
-            hd = difflib.HtmlDiff()   
+            hd = difflib.HtmlDiff()
             for fname in diff_list:
                 f1_read = open(before_pds + '/' + fname, 'r')
                 f2_read = open(after_pds + '/' + fname, 'r')
@@ -70,11 +71,11 @@ for pds in os.listdir(beforepath):
                         continue
                     if res.find('</body>') > -1:
                         find_body = False
-                    if find_body == True:
+                    if find_body:
                         f_write.writelines(res + '\n')
                 f1_read.close()
                 f2_read.close()
-if f_write != None:
+if f_write is not None:
     f_write.writelines(html_end)
     f_write.close()
     print(outputfile)

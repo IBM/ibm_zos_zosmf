@@ -50,4 +50,3 @@
     
     - name: display result
       debug: msg="Step3.3 Test CFRM Structure REALLOCATE is completed. Approve and continue to run Step3.4 to active CFRM structures."
-
