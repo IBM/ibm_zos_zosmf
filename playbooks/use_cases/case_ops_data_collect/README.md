@@ -1,19 +1,18 @@
-# Demo Playbook - Collect operations data
-This directory contains a sample playbook to demonstrate the auto-operation scenario for collecting daily operations data and store it to the DB.
+# Demo Playbook - Collect operation data
+This directory contains a sample playbook to demonstrate the Ansible based automation for collecting daily operation data and save it to a DB running in distributed platform. 
 
 ## Scenario Introduction
-Normally, the z/OS admin submits JCL to collect operations data to some data sets and download the data to some linux platforms for further analysis. Generally, the data will be put into DBs(Redis, MongoDB, etc.), and a customized UI will be used to demonstrate the operations data for reviewing.
-This case demonstrates the automation of whole process with below assumptions:
+Normally, the z/OS admin submits JCL to collect operation data to some data sets and download the data to some linux platforms for further analysis. Typically, the data will be saved into DBs(such as Redis, MongoDB, etc.). There are below assumptions for this demo:
 
-* We use a sample JCL `CLCTLOG` to simulate the process of collecting operations data. In the real environment, the JCL may be more complicated.
+* We use a sample JCL `CLCTLOG` to simulate the process of collecting operation data. In the real environment, you should have your own job. 
 
-* A Redis DB installed on linux platform is used for storing the downloaded operation data. 
+* A Redis DB installed on linux platform is used for storing the downloaded operation data.
 
 This playbook ([`demo_ops_data_collect.yml`](demo_ops_data_collect.yml)) contains 2 plays:
 
-1. The first play communications with z/OS via z/OSMF to collect and download operations data. Host `zOS` is configured for this play to indicate the z/OS system to communicate. 2 tasks are contained in this play:
+1. The first play communications with z/OS via z/OSMF to collect and download operation data. Host `zOS` is configured for this play to indicate the z/OS system to communicate. 2 tasks are contained in this play:
     
-    * The first task uses z/OSMF Ansible collection's role - `zosmf_job_complete` to submit the job [`CLCTLOG`](files/CLCTLOG.jcl) to collect the operations data, the job will copy the data to a data set `OPS.DATA.&DATE`, `&DATE` is different based on the date when you running the playbook.
+    * The first task uses z/OSMF Ansible collection's role - `zosmf_job_complete` to submit the job [`CLCTLOG`](files/CLCTLOG.jcl) to collect the operation data, the job will copy the data to a data set `OPS.DATA.&DATE`, `&DATE` is different based on the date when you running the playbook.
 
     * The second task uses Ansible's `URI` module to retrieve the content of data set `OPS.DATA.&DATE` via _z/OSMF data set and file REST interface_ and register it to a variable `ops_data` for later use.
 
@@ -35,9 +34,9 @@ This playbook ([`demo_ops_data_collect.yml`](demo_ops_data_collect.yml)) contain
     - Easy to figure out which step was failed.
 
 ## Pre-requisites
-* `CLCTLOG`: Sample JCL file to simulate the process of collecting the operations data to a data set, the JCL will copy the content from `OPS.DATA.TMP` to `OPS.DATA.&DATE`, variable `&DATE` is different based on the date when running the playbook. The data set `OPS.DATA.TMP` needs to be prepared before running this case.
+* `CLCTLOG`: Sample JCL file to simulate the process of collecting the operation data to a data set, the JCL will copy the content from `OPS.DATA.TMP` to `OPS.DATA.&DATE`, variable `&DATE` is different based on the date when running the playbook. The data set `OPS.DATA.TMP` needs to be prepared before running this case.
 
-* A Redis DB runs on the linux system is used for storing the operations data retrieved from z/OS side. The key of the operations data is `opslog`, the field is in format of `YYYYMMDD`, for example, if you run the playbook on Nov 1st, 2020, then the related field is `20201101`.
+* A Redis DB runs on the linux system is used for storing the operation data retrieved from z/OS side. The key of the operation data is `opslog`, the field is in format of `YYYYMMDD`, for example, if you run the playbook on Nov 1st, 2020, then the related field is `20201101`.
 
 ## Configuration and Setup
 To run the sample playbooks, below preparation works are required:
