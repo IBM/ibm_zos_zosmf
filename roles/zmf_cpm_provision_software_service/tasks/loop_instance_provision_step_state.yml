@@ -10,28 +10,21 @@
         seconds: "{{ api_polling_interval_seconds }}"
 
     - name: Retrieve provision step information
-      block:
-        - name: Retrieve provision step information
-          uri:
-            url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_object_id }}"
-            return_content: yes
-            user: "{{ zmf_user| trim  }}"
-            password: "{{ zmf_password| trim  }}"
-            force_basic_auth: yes
-            headers:
-              Host: "{{ zmf_host }}"
-              Origin: "https://{{ zmf_host }}"
-            method: GET
-            status_code: "200"
-            validate_certs: no
-          delegate_to: localhost
-          register: results
-          no_log: true
-      rescue:
-        - name: Fail provisioning
-          fail:
-            msg: "{{ results.json.messageText }}\nAdditional Info: {{ results.json.additionalInfo }}"
-          when: results.json is defined
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_object_id }}"
+        return_content: yes
+        user: "{{ zmf_user| trim  }}"
+        password: "{{ zmf_password| trim  }}"
+        force_basic_auth: yes
+        headers:
+          Host: "{{ zmf_host }}"
+          Origin: "https://{{ zmf_host }}"
+        method: GET
+        status_code: "200"
+        validate_certs: no
+      delegate_to: localhost
+      register: results
+      no_log: true
 
     - name: "Gather provision step information"
       set_fact:
@@ -62,11 +55,11 @@
       set_fact:
         provision_current_state: "{{ 'being-provisioned' if results.json.state is undefined else results.json.state| string }}"
         provision_current_step_name: >-
-                                  {{ 'Not available' if results.json['workflow-current-step-name'] is undefined
-                                  else results.json['workflow-current-step-name']| string }}
+          {{ 'Not available' if results.json['workflow-current-step-name'] is undefined
+          else results.json['workflow-current-step-name']| string }}
         provision_current_step: >-
-                                  {{ provision_current_step if results.json['workflow-current-step-number'] is undefined
-                                  else results.json['workflow-current-step-number'] }}
+          {{ provision_current_step if results.json['workflow-current-step-number'] is undefined
+          else results.json['workflow-current-step-number'] }}
         provision_total_step: "{{ 1 if results.json['workflow-total-steps']|int == 0 else results.json['workflow-total-steps']|int }}"
 
     - name: Display current polling count
@@ -89,7 +82,7 @@
       fail:
         msg: "Reached max retry limit {{ api_polling_retry_count }} while workflow still not at 100% complete, aborting..."
       when: retry_count|int == max_retry
+
     - include_tasks: loop_instance_provision_step_state.yml
       when:
         - provision_current_state != 'provisioned'
-
