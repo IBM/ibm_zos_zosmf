@@ -1,0 +1,57 @@
+# Copyright (c) IBM Corporation 2020 
+
+- name: check job status and wait for job complete
+  include_role:
+    name: zmf_job_query
+  vars:
+    job_name: "{{ jobs_item.jobname }}"
+    job_id: "{{ jobs_item.jobid }}"
+    job_search_output: "RPT.SYSINFO"
+    job_search_output_ddname: ["SYSPRINT"]
+    complete_check_times: 10
+    complete_check_delay: 5
+
+- name: get the PDS name
+  set_fact:
+    pds_name: "{{ final_result.job_matched_contents.SYSPRINT[0] | regex_search('RPT.SYSINFO.(.*).ONETIME') }}"
+  when: not ipled
+
+- name: get the PDS name
+  set_fact:
+    pds_name: "{{ final_result.job_matched_contents.SYSPRINT[0] | regex_search('RPT.SYSINFO.(.*).IPL') }}"
+  when: ipled
+
+# will be replaced by zmf_dataset module later
+- name: retrieve member list of PDS {{ pds_name }}
+  uri:
+    url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restfiles/ds/{{ pds_name }}/member"
+    method: GET
+    user: "{{ zmf_user }}"
+    password: "{{ zmf_password }}"
+    validate_certs: no
+    force_basic_auth: yes
+    headers:
+      X-CSRF-ZOSMF-HEADER: "ZOSMF"
+    return_content: yes
+    status_code: "200"
+  delegate_to: localhost
+  register: pds_list_result
+
+# will be replaced by zmf_dataset module later
+- name: create directory to save PDS {{ pds_name }}
+  local_action:
+    module: file
+    path: "{{ demo_save_dir.path }}/{{ pds_name }}"
+    state: "directory"
+  register: demo_save_dir_pds
+
+# will be replaced by zmf_dataset module later
+- name: save each member of PDS {{ pds_name }} to local file
+  include_tasks: demo_substep_save_each_member.yml
+  loop: "{{ pds_list_result.json['items'] }}"
+  loop_control:
+    label: "{{ pds_list_item.member }}"
+    loop_var: pds_list_item
+
+- name: display result
+  debug: msg="The data from {{ pds_name }} is saved in {{ demo_save_dir_pds.path }}"

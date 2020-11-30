@@ -5,6 +5,20 @@
 Releases
 ========
 
+Version 2.2.1
+-------------
+
+`v2.2.1`_
+
+Fixed
+  * fix for module `zmf_console_command`: conflict route params
+  * fix for module `zmf_console_command`: os issue when save output to local with python2.7
+  * fix for roles `zmf_job_complete`, `zmf_job_query`: overridden matched contents
+
+Availability
+  * Galaxy
+  * github
+  
 Version 2.2.0
 -------------
 
@@ -144,3 +158,5 @@ Availability
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0
 .. _v2.2.0:
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.0
+.. _v2.2.1:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.1

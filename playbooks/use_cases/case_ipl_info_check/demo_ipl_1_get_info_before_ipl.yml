@@ -1,0 +1,72 @@
+# Copyright (c) IBM Corporation 2020 
+
+# Sample playbook for IPL Check scenario.
+# Example:
+# ansible-playbook -i hosts demo_ipl_1_get_info_before_ipl.yml
+
+- name: get info before IPL
+  hosts: mySystems
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    current_dir: "{{ local_output_dir | regex_replace('/$', '') }}/before_ipl_{{ '%Y%m%d%H%M' | strftime }}"
+    ipl_info_jcl: "IPLCONF"
+  tasks:
+    - name: create local directory to save output
+      local_action:
+        module: file
+        path: "{{ current_dir }}"
+        state: "directory"
+      register: demo_save_dir
+    
+    - name: record the time before submit jobs to get IPL info 
+      set_fact:
+        submit_day: "{{ '%Y-%m-%d' | strftime }}"
+        submit_time: "{{ ('%H' | strftime | int) * 60 + ('%M' | strftime | int) }}"
+        ipled: False
+
+    - name: issue command to submit jobs to get IPL info
+      zmf_console_command:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+        console_cmd: "RO *ALL,S {{ ipl_info_jcl }}"
+        console_system: "{{ inventory_hostname }}"
+      delegate_to: localhost
+
+    # will be replaced by zmf_job module later
+    - name: get all jobs submitted this time
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/restjobs/jobs?owner=*&prefix={{ ipl_info_jcl | upper }}&exec-data=Y"
+        method: GET
+        user: "{{ zmf_user }}"
+        password: "{{ zmf_password }}"
+        validate_certs: no
+        force_basic_auth: yes
+        headers:
+          X-CSRF-ZOSMF-HEADER: "ZOSMF"
+        return_content: yes
+        status_code: "200"
+      delegate_to: localhost
+      register: submit_jobs_result
+    - set_fact:
+        matched_jobs: []
+    - include_tasks: demo_substep_get_submitted_jobs_this_time.yml
+      loop: "{{ submit_jobs_result.json }}"
+      loop_control:
+        label: "{{ submit_jobs_item.jobid }}"
+        loop_var: submit_jobs_item 
+
+    - name: check status of each job
+      include_tasks: demo_substep_get_each_system_info.yml
+      loop: "{{ matched_jobs }}"
+      loop_control:
+        label: "{{ jobs_item.jobname }}"
+        loop_var: jobs_item
+  
+    - set_stats:
+        data:
+          before_pds_path: "{{ demo_save_dir.path }}"
+  

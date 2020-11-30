@@ -29,7 +29,8 @@
 - name: Query the contents of each spool file - Parse the matched contents - Step 1 Turn into list
   set_fact:
     matched_list: "{{ record_result.content | regex_findall('.*\n') }}"
-    matched_list_parse: []
+    # fix - overridden matched contents
+    matched_list_parse: "{{ job_matched_contents[file_item.ddname] | default([]) }}"
 
 - name: Query the contents of each spool file - Parse the matched contents - Step 2 Remove '\n'
   set_fact:

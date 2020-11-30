@@ -1,0 +1,106 @@
+# Copyright (c) IBM Corporation 2020 
+
+# Sample playbook for CFRM Policy Change scenario.
+# Example:
+# ansible-playbook -i hosts demo_step3.4_active_cfrm_structures.yml
+
+- name: active CFRM structures
+  hosts: mySystems
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    current_dir: "{{ local_output_dir | regex_replace('/$', '') }}/CFRMChange{{ '%Y%m%d' | strftime }}"
+    current_time: "{{ '%Y%m%d' | strftime }}_{{ '%H%M%S' | strftime }}"
+    reallocate_error_report: []
+    reallocate_error_structures: []
+  tasks:
+    - name: create local directory to save output
+      local_action:
+        module: file
+        path: "{{ current_dir }}/step3_change_cfrm/3.4_reallocate_and_check/{{ current_time }}"
+        state: "directory"
+      register: demo_save_dir
+
+    - zmf_authenticate:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+      register: result_auth
+      delegate_to: localhost
+
+    - name: active CFRM structures
+      zmf_console_command:
+        zmf_credential: "{{ result_auth }}"
+        console_cmd: "SETXCF START,REALLOCATE"
+        console_system: "{{ inventory_hostname }}"
+        console_cmdresponse_keyword: "IXC543I" # IXC543I THE REQUESTED START,REALLOCATE WAS COMPLETED
+        console_save_output_localpath: "{{ demo_save_dir.path }}"
+      delegate_to: localhost
+
+    - name: CF check -- D XCF,REALLOCATE,REPORT
+      zmf_console_command:
+        zmf_credential: "{{ result_auth }}"
+        console_cmd: "D XCF,REALLOCATE,REPORT"
+        console_system: "{{ inventory_hostname }}"
+        console_save_output_localpath: "{{ demo_save_dir.path }}"
+      register: result
+      delegate_to: localhost
+
+    - set_fact:
+        start_end_idx: []
+    - set_fact:
+        start_end_idx: "{{ start_end_idx + [idx] }}"
+      when: item.find('STRUCTURE(S) WITH AN ERROR/EXCEPTION CONDITION') > -1 or item.find('STRUCTURE(S) WITH A WARNING CONDITION') > -1
+      loop: "{{ result.cmd_response }}"
+      loop_control:
+        index_var: idx
+    - set_fact:
+        reallocate_error_report: "{{ reallocate_error_report + result.cmd_response[start_end_idx[0]:start_end_idx[1]-1] }}"
+    - set_fact:
+        reallocate_error_structures: '{{ reallocate_error_structures + [(item|regex_search("(?<=:\s)[^\s]+\s?")).strip()] }}'
+      when: item.find('STRNAME:') > -1
+      loop: "{{ reallocate_error_report }}"
+      loop_control:
+        index_var: idx
+
+    - name: CF check -- D XCF,POL,TYPE=CFRM
+      zmf_console_command:
+        zmf_credential: "{{ result_auth }}"
+        console_cmd: "D XCF,POL,TYPE=CFRM"
+        console_system: "{{ inventory_hostname }}"
+        console_save_output_localpath: "{{ demo_save_dir.path }}"
+      delegate_to: localhost
+
+    - name: CF check -- D XCF,STR
+      zmf_console_command:
+        zmf_credential: "{{ result_auth }}"
+        console_cmd: "D XCF,STR"
+        console_system: "{{ inventory_hostname }}"
+        console_save_output_localpath: "{{ demo_save_dir.path }}"
+      delegate_to: localhost
+
+    - name: CF check -- D XCF,STR,STRNM=ALL
+      zmf_console_command:
+        zmf_credential: "{{ result_auth }}"
+        console_cmd: "D XCF,STR,STRNM=ALL"
+        console_system: "{{ inventory_hostname }}"
+        console_save_output_localpath: "{{ demo_save_dir.path }}"
+      delegate_to: localhost
+
+    - set_stats:
+        data:
+          reallocate_error_structures: "{{ reallocate_error_structures }}"
+    
+    - name: display failed structures
+      debug: var=reallocate_error_report
+      when: reallocate_error_structures != []
+    
+    - name: display result
+      debug: msg="Step3.4 Active CFRM Structures is completed. The responses of system check are saved in {{ demo_save_dir.path }}. Approve and continue to run Step3.5 to rebuild the failed CFRM structures."
+      when: reallocate_error_structures != []
+
+    - name: display result
+      debug: msg="Step3.4 Check CFRM Structures is completed. No failed structure is found. The responses of system check are saved in {{ demo_save_dir.path }}. Approve and continue to finish."
+      when: reallocate_error_structures == []

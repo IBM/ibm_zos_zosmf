@@ -1,0 +1,52 @@
+# Copyright (c) IBM Corporation 2020 
+
+# Sample playbook for CFRM Policy Change scenario.
+# Example:
+# ansible-playbook -i hosts demo_step3.3_test_cfrm_structure_reallocate.yml
+
+- name: test CFRM structure REALLOCATE process
+  hosts: mySystems
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    current_dir: "{{ local_output_dir | regex_replace('/$', '') }}/CFRMChange{{ '%Y%m%d' | strftime }}"
+    current_time: "{{ '%Y%m%d' | strftime }}_{{ '%H%M%S' | strftime }}"
+    reallocate_test_result: []
+  tasks:
+    - name: create local directory to save output
+      local_action:
+        module: file
+        path: "{{ current_dir }}/step3_change_cfrm/3.3_test_reallocate/{{ current_time }}"
+        state: "directory"
+      register: demo_save_dir
+
+    - zmf_authenticate:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+      register: result_auth
+      delegate_to: localhost
+
+    - name: test the REALLOCATE process
+      zmf_console_command:
+        zmf_credential: "{{ result_auth }}"
+        console_cmd: "D XCF,REALLOCATE,TEST"
+        console_system: "{{ inventory_hostname }}"
+        console_save_output_localpath: "{{ demo_save_dir.path }}"
+      register: result
+      delegate_to: localhost
+
+    - set_fact:
+        reallocate_test_result: "{{ reallocate_test_result + result.cmd_response[idx:] }}"
+      when: item.find('REALLOCATE TEST RESULTED IN THE FOLLOWING') > -1
+      loop: "{{ result.cmd_response }}"
+      loop_control:
+        index_var: idx
+
+    - name: display test result for REALLOCATE process
+      debug: var=reallocate_test_result
+    
+    - name: display result
+      debug: msg="Step3.3 Test CFRM Structure REALLOCATE is completed. Approve and continue to run Step3.4 to active CFRM structures."

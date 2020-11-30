@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v2.2.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.1) - 2020-09-23
+### Fixed
+- fix for module `zmf_console_command`: conflict route params
+- fix for module `zmf_console_command`: os issue when save output to local with python2.7
+- fix for roles `zmf_job_complete`, `zmf_job_query`: overridden matched contents
+
 ## [v2.2.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.0) - 2020-08-21
 ### Added
 - add modules: `zmf_authenticate`

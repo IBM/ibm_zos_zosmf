@@ -132,6 +132,9 @@ def __get_console_api_params(module, args):
         params.pop('solKeyReg')
     if 'unsolKeyReg' in params and params['unsolKeyReg'] == 'N':
         params.pop('unsolKeyReg')
+    # fix - conflict route params
+    if 'cmd' in params and (params['cmd'].strip().upper().find('RO ') == 0 or params['cmd'].strip().upper().find('ROUTE ') == 0):
+        params.pop('system')
     return params
 
 

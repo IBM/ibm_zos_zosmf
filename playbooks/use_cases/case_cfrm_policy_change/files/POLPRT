@@ -1,0 +1,6 @@
+//POLPRT JOB ,,CLASS=A,MSGCLASS=X,MSGLEVEL=(1,1),NOTIFY=&SYSUID
+//CFRMPOL   EXEC PGM=IXCMIAPU                                  
+//SYSPRINT  DD  SYSOUT=*                                       
+//SYSIN     DD  *                                              
+   DATA TYPE(CFRM)  REPORT(YES)                                
+//*                                                            
