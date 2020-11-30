@@ -7,7 +7,7 @@ namespace: freemanlatrell
 name: cloud_provisioning
 
 # The collection version
-version: 2.2.8
+version: 2.2.9
 
 # Collection README file
 readme: README.md

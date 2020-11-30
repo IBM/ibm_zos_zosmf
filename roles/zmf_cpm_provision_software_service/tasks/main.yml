@@ -31,6 +31,7 @@
         validate_certs: no
         body_format: json
         body: "{{ zmf_body }}"
+        timeout: 120
       delegate_to: localhost
       register: provision_results
       when: zmf_body is defined
