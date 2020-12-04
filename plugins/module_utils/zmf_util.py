@@ -155,7 +155,6 @@ def handle_request_raw(module, session, method, url, params=None, header=None, t
     except Exception as ex:
         module.fail_json(msg='HTTP request error: ' + repr(ex))
     else:
-        print("debug5: "+ str(response))
         return response
 
 
