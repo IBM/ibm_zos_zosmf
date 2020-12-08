@@ -108,62 +108,83 @@ options:
         default: null
     dataset_src:
         description:
-            - 
+            - Data set or data set member name on the remote z/OS system to fetch.
+            - For example, specifying a data set like this: C(ZOSMF.ANSIBLE.DATA), or a data set member like this: C(ZOSMF.ANSIBLE.PDS(MEMBER)).
         required: true
         type: str
         default: null
     dataset_dest:
         description:
-            - 
+            - The local directory on control node where the data set should be saved to. For example, C(/tmp/dataset).
+            - This directory can be absolute or relative. The module will fail if the parent directory of I(dataset_dest) is a read-only file system.
+            - The directory C({{ dataset_dest }}/{{ zmf_host }}/) will be created to save the data set, where I(zmf_host) is the hostname of the z/OSMF server.
+            - If I(zmf_host=zosmf.ibm.com), a dataset named C(ZOSMF.ANSIBLE.DATA) would be saved into C({{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.DATA).
+            - If I(dataset_volser=VOL001), the above dataset would be saved into C({{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.DATA).
         required: true
         type: str
         default: null
     dataset_volser:
         description:
-            - 
+            - The volume serial identify the volume to be searched for an uncataloged data set or member. 
+            - The length of the volume serial cannot exceed six characters. You cannot use wildcard characters for this parameter. 
         required: false
         type: str
         default: null
-    dataset_search:
+    # TODO: 
+    dataset_flat:
         description:
-            - 
-        required: false
-        type: str
-        default: null
-    dataset_search_insensitive:
-        description:
-            - 
-        required: false
-        type: bool
-        default: true
-    dataset_search_maxreturnsize:
-        description:
-            - 
-        required: false
-        type: int
-        default: 100
-    # TODO: checksum
-    dataset_checksum:
-        description:
-            - 
-        required: false
-        type: str
-        default: null
-    dataset_validate_checksum:
-        description:
-            -
-        required: false
-        type: bool
-        default: yes
-    dataset_return_checksum_when_large:
-        description:
-            - 
+            - Specifies whether to override the default behavior of appending I(zmf_host) to the destination.
+            - If I(dataset_flat=true), the data set will be fetched to the destination directory using its name without appending I(zmf_host).
+            - For example, if I(dataset_dest=/tmp/dataset), a data set named C(ZOSMF.ANSIBLE.DATA) would be saved into C(/tmp/dataset/ZOSMF.ANSIBLE.DATA).
         required: false
         type: bool
         default: false
+    # TODO:
+    dataset_search:
+        description:
+            - Specifies a series of parameters that are used to search the content of data set or member.
+            - These parameters only take effects when I(dataset_data_type=text).
+            - If this variable is specified, only the matched records in the data set will be fetched to the destination directory.
+            - Records are returned starting with the first matching record. The I(dataset_range) may be used to specify the range of records to be searched.
+            - The matched contents in the data set will be saved as C({{ dataset_dest }}/{{ zmf_host }}/{{ dataset_src }}.search) on control node.
+            - For example, the matched contents in the dataset named C(ZOSMF.ANSIBLE.DATA) would be saved as C(....../ZOSMF.ANSIBLE.DATA.search).
+        required: false
+        type: dict
+        default: null
+        suboptions:
+            keyword:
+                description:
+                    - Specifies a string or a regular expression that is used to search the data set.
+                    - For more information, see the documentation for the z/OS data set and file REST services.
+                # TODO: required true?
+                required: false
+                type: str
+                default: null
+            insensitive:
+                description:
+                    - Specifies whether the comparison of I(keyword) is case insensitive.
+                    - This variable only take effects when I(keyword) is defined.
+                    - For more information, see the documentation for the z/OS data set and file REST services.
+                required: false
+                type: bool
+                default: true
+            maxreturnsize:
+                description:
+                    - The maximum number of records to return.
+                    - This variable only take effects when I(keyword) is defined.
+                    - For more information, see the documentation for the z/OS data set and file REST services.
+                required: false
+                type: int
+                default: 100
     dataset_data_type:
         description:
-            - 
+            - Specifies whether data conversion is to be performed on the returned data, as follows:
+            - When I(dataset_data_type=text), data conversion is performed.
+            - You can use I(dataset_encoding) to specify which encodings the fetched USS file should be converted from and to.
+            - If I(dataset_encoding) is not supplied, the data transfer process converts each record from C(IBM-1047) to C(ISO8859-1) by default.
+            - When I(dataset_data_type=binary), no data conversion is performed. The data transfer process returns each line of data as-is.
+            - When I(dataset_data_type=record), no data conversion is performed. Each logical record is preceded by the 4-byte big endian record length.
+            - For more information, see the documentation for the z/OS data set and file REST services.
         required: false
         type: str
         default: text
@@ -171,9 +192,58 @@ options:
             - text
             - binary
             - record
+    # TODO:
+    dataset_encoding:
+        description:
+            - Specifies which encodings the fetched data set should be converted from and to.
+            - These parameters only take effects when I(file_data_type=text).
+        required: false
+        type: dict
+        default: null
+        suboptions:
+            from:
+                description:
+                    - The character set of the source data set. Select an alternate EBCDIC code page.
+                    - For more information, see the documentation for the z/OS data set and file REST services.
+                required: true
+                type: str
+                default: IBM-1047
+            to:
+                description:
+                    - The destination character set for the output to be written as.
+                    - For more information, see the documentation for the z/OS data set and file REST services.
+                required: true
+                type: str
+                default: ISO8859-1
+    # TODO:
+    dataset_range:
+        description:
+            - Specifies a range that is used to retrieve records of the data set.
+            - If this variable is specified, only the retrieved range of the data set will be fetched to the destination directory.
+            - The retrieved range of the data set will be saved as C({{ dataset_dest }}/{{ zmf_host }}/{ dataset_src }}.range) on control node.
+            - For example, the retrieved range of the dat set named C(ZOSMF.ANSIBLE.DATA) would be saved as C(....../ZOSMF.ANSIBLE.DATA.range).
+        required: false
+        type: dict
+        default: null
+        suboptions:
+            start:
+                description:
+                    - If this value is omitted, a tail range is returned.
+                    - For more information, see the documentation for the z/OS data set and file REST services.
+                required: false
+                type: int
+            end:
+                description:
+                    - If this value is omitted or is set to 0, the range extends to the end of the data set.
+                    - For more information, see the documentation for the z/OS data set and file REST services.
+                required: false
+                type: int
     dataset_migrate_recall:
         description:
-            - 
+            - Specify how a migrated data set is handled. 
+            - When I(dataset_migrate_recall=wait), the migrated data set is recalled synchronously.
+            - When I(dataset_migrate_recall=nowait), request the migrated data set to be recalled, but do not wait.
+            - When I(dataset_migrate_recall=error), do not attempt to recall the migrated data set.
         required: false
         type: str
         default: wait
@@ -181,17 +251,13 @@ options:
             - wait
             - nowait
             - error
-    dataset_read_start:
+    # TODO: checksum
+    dataset_checksum:
         description:
-            - 
+            - Specifies the checksum to be used to verify that the data set to be fetched is not changed since the checksum was generated.
+            - If the checksum is matched which means the data set is not changed, the content of the data set won't be fetched.
         required: false
-        type: int
-        default: null
-    dataset_read_end:
-        description:
-            - 
-        required: false
-        type: int
+        type: str
         default: null
     
 requirements:
@@ -219,7 +285,7 @@ dataset_content:
     returned: on success when 'state' is 'read'
     type: str 
     sample: "ABC..."
-search_records:
+dataset_matched_content:
     description: 
     returned: on success when `dataset_search` is specified
     type: list
@@ -227,7 +293,8 @@ search_records:
         " ABC...",
         "...ABC"
     ]
-checksum:
+dataset_matched_range:
+dataset_checksum:
     description: 
     returned: on success
     type: str
