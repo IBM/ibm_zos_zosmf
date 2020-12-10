@@ -32,7 +32,7 @@ This `sample playbook`_ shows how to issue MVS command by using a system console
          register: result_auth
          delegate_to: localhost
        - zmf_console_command:
-           zmf_credential: "{{ result_auth }}"
+           zmf_credential: "{{ result_auth }}" # Authentication credentials returned by module zmf_authenticate
            console_cmd: "start pegasus"
            console_system: "{{ inventory_hostname }}"
            # console_cmdresponse_keyword: "SLP registration initiated" # The keyword that you want to detect in the command response. The module will fail if no specified keywords are detected in neither the command response nor broadcast messages
@@ -55,6 +55,8 @@ This `sample playbook`_ shows how to issue MVS command by using a system console
   * In the inventory file `hosts`_, the name of Ansible managed node should be the same with the system name of target z/OS system. You can update it to your own z/OS system name.
 
   * In the inventory file `hosts`_, each z/OS managed node typically needs to specify its serving z/OSMF via variable ``zmf_host`` and ``zmf_port``. For z/OS managed nodes in the same sysplex, it's recommended to specify the same serving z/OSMF host since z/OSMF is sysplex scope typically. Otherwise if you have different serving z/OSMF specified for multiple z/OS managed nodes which are in the same sysplex, you need to specify the variable ``console_name`` in host specific variable file under host_vars directory so that each z/OS managed node uses an unique console name.
+
+  * Module `zmf_authenticate`_ is supported by z/OSMF APAR PH12143 (PTF UI66511 for V2R3, PTF UI66512 for V2R4). You are also allowed to authenticate with z/OSMF server in module `zmf_console_command`_ directly.
   
 For more details about module variables, see `zmf_console_command`_.
 
@@ -67,3 +69,5 @@ For more details about module variables, see `zmf_console_command`_.
    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts
 .. _zmf_console_command:
    ../modules/zmf_console_command.html
+.. _zmf_authenticate:
+   ../modules/zmf_authenticate.html

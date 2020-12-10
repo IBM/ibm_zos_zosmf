@@ -26,7 +26,6 @@ You can also access the documentation of each module from the command line by us
 .. code-block:: sh
 
    $ ansible-doc ibm.ibm_zos_zosmf.zmf_workflow
-   $ ansible-doc ibm.ibm_zos_zosmf.zmf_console_command
 
 
 .. _ansible-doc:

@@ -54,6 +54,15 @@ Included in the `playbooks directory`_ is a sample inventory file `hosts`_ that 
    consoleHost1
    consoleHost2
 
+   [dataset]
+   datasetHost1 zmf_host=zosmf1.ibm.com zmf_port=443
+   datasetHost2 zmf_host=zosmf2.ibm.com zmf_port=443
+
+   [file]
+   fileHost1 zmf_host=zosmf1.ibm.com zmf_port=443
+   fileHost2 zmf_host=zosmf2.ibm.com zmf_port=443
+
+
 * **workflow**: Host grouping for z/OSMF Workflows.
 
    * **workflowHost1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in **z/OSMF Systems** plugin.
@@ -77,6 +86,22 @@ Included in the `playbooks directory`_ is a sample inventory file `hosts`_ that 
 * **console**: Host grouping for z/OS Consoles.
 
    * **consoleHost1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. It is configured in **z/OSMF Systems** plugin.
+
+* **dataset**: Host grouping for z/OS Data Sets.
+
+   * **datasetHost1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in `Host Vars`_.
+
+   * **zmf_host**: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: ``zmf_host=pev076.pok.ibm.com``.
+
+   * **zmf_port**: The value of this property identifies the port number of z/OSMF server.
+
+* **file**: Host grouping for z/OS USS File.
+
+   * **datasetHost1**: Nickname for the target z/OS system. You can modify it to refer to your own z/OS system. When the nickname is modified, make sure host specific variables file is defined as described in `Host Vars`_.
+
+   * **zmf_host**: The value of this property identifies the hostname of the z/OS system on which z/OSMF server is running on. For example: ``zmf_host=pev076.pok.ibm.com``.
+
+   * **zmf_port**: The value of this property identifies the port number of z/OSMF server.
 
 Host Vars
 ---------
@@ -110,7 +135,6 @@ Included in the `playbooks directory`_ is some sample variables files in the dir
       job_name: JCLSAMP1
       job_id: JOB00000
 
-
    * **zmf_user**: The value of this property identifies the username to be used for authenticating with z/OSMF server.
 
    * **zmf_password**: The value of this property identifies the password to be used for authenticating with z/OSMF server.
@@ -123,9 +147,43 @@ Included in the `playbooks directory`_ is some sample variables files in the dir
   
    * **job_id**: The value of this property identifies the job ID to be used for role ``zmf_job_query`` to query a job running on different z/OS.
 
-   .. note::
-     
-      This is an easy example to use username and password for authenticating with z/OSMF server. ``zmf_user`` and ``zmf_password`` will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use ``zmf_crt`` and ``zmf_key`` to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.
+* `datasetHost1.yml`_: It contains the variables for host ``datasetHost1`` in group ``dataset``:
+
+   .. code-block:: yaml
+
+      # zmf_user:
+      # zmf_password:
+      # zmf_crt:
+      # zmf_key:
+
+   * **zmf_user**: The value of this property identifies the username to be used for authenticating with z/OSMF server.
+
+   * **zmf_password**: The value of this property identifies the password to be used for authenticating with z/OSMF server.
+
+   * **zmf_crt**: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.
+
+   * **zmf_key**: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.
+
+* `fileHost1.yml`_: It contains the variables for host ``fileHost1`` in group ``file``:
+
+   .. code-block:: yaml
+
+      # zmf_user:
+      # zmf_password:
+      # zmf_crt:
+      # zmf_key:
+
+   * **zmf_user**: The value of this property identifies the username to be used for authenticating with z/OSMF server.
+
+   * **zmf_password**: The value of this property identifies the password to be used for authenticating with z/OSMF server.
+
+   * **zmf_crt**: The value of this property identifies the location of the PEM-formatted certificate chain file to be used for HTTPS client authentication with z/OSMF server.
+
+   * **zmf_key**: The value of this property identifies the location of the PEM-formatted file with private key to be used for HTTPS client authentication with z/OSMF server.
+
+.. note::
+   
+   This is an easy example to use username and password for authenticating with z/OSMF server. ``zmf_user`` and ``zmf_password`` will be prompted to input when running the sample playbooks. Actually, client-certificate authorization is recommended. You can use ``zmf_crt`` and ``zmf_key`` to specify the client-certificate authorization. If both methods are specified, the system attempts to use client-certificate authentication.
 
 Group Vars
 ----------
@@ -200,6 +258,8 @@ Sample Playbooks
    playbooks/sample_role_job_complete
    playbooks/sample_role_job_query
    playbooks/sample_module_console_command
+   playbooks/sample_module_dataset_fetch
+   playbooks/sample_module_file_fetch
 
 Run the Playbooks
 -----------------
@@ -245,5 +305,9 @@ To adjust the logging verbosity, include the ``-v`` option with `ansible-playboo
    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/cpmHost1.yml
 .. _jobHost1.yml:
    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/jobHost1.yml
+.. _datasetHost1.yml:
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/datasetHost1.yml
+.. _fileHost1.yml:
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/host_vars/fileHost1.yml
 .. _ansible-playbook:
    https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html

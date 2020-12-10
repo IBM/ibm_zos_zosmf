@@ -2,8 +2,8 @@
 .. Copyright (c) IBM Corporation 2020                                        .
 .. ...........................................................................
 
-MVS Command Operations
-======================
+Operate MVS Commands
+====================
 
 **IBM z/OSMF collection** provides a module to work with z/OS console. You can use this module to issue MVS command, retrieve command response and easily define success condition based on specified keywords in the command response or broadcast messages, and save the command response on Ansible control node.
 

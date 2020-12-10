@@ -33,7 +33,7 @@ This `sample playbook`_ shows how to start a z/OS workflow on the target z/OS sy
          delegate_to: localhost
        - zmf_workflow:
            state: "started"
-           zmf_credential: "{{ result_auth }}"
+           zmf_credential: "{{ result_auth }}" # Authentication credentials returned by module zmf_authenticate
            workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}" # The name of the workflow
            workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml" # The location of the workflow definition file
            workflow_host: "{{ inventory_hostname }}" # Nickname of the target z/OS system on which the workflow is to be performed
@@ -50,6 +50,8 @@ This `sample playbook`_ shows how to start a z/OS workflow on the target z/OS sy
    
   * In the inventory file `hosts`_, the nickname ``workflowHost1`` for the target z/OS system, which is configured as managed node, is used to create the workflow instance. You can modify it to refer to your own z/OS system. You need to ensure the z/OS system ``workflowHost1`` or your own z/OS system is configured in **z/OSMF Systems** plugin.
 
+  * Module `zmf_authenticate`_ is supported by z/OSMF APAR PH12143 (PTF UI66511 for V2R3, PTF UI66512 for V2R4). You are also allowed to authenticate with z/OSMF server in module `zmf_workflow`_ directly.
+
 For more details about module variables, see `zmf_workflow`_.
 
 
@@ -63,3 +65,5 @@ For more details about module variables, see `zmf_workflow`_.
    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts
 .. _zmf_workflow:
    ../modules/zmf_workflow.html
+.. _zmf_authenticate:
+   ../modules/zmf_authenticate.html
