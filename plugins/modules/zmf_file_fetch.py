@@ -298,10 +298,6 @@ RETURN = r"""
 changed:
     description:
         - Indicates if any change is made during the module operation.
-        - If no contents in the USS file is fetched, return false.
-        - If I(file_search) is specified and no matched contents in the USS file is found, return false.
-        - If I(file_range) is specified and no contents in the USS file is returned, return false.
-        - If I(file_checksum) is specified and the USS file to be fetched is not changed, return false.
     returned: always
     type: bool
 message:
@@ -576,7 +572,6 @@ def fetch_file(module):
                 os.makedirs(path, 0o755)
             else:
                 os.chmod(path, 0o755)
-            fetch_result['changed'] = True
             if res_cd == 206:
                 # binary contents returned in the specified range of bytes (206)
                 f_write = open(path + file + '.range', 'wb')
