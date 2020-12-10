@@ -10,7 +10,3 @@
 # If below variables are specified, then the module and role will use client certificate to login instead of using username/password even those variables are specified.
 # zmf_crt:
 # zmf_key:
-
-# Used for module `zmf_file_fetch` if you want to fetch a USS file from different z/OS
-# file_src:
-# file_dest:
