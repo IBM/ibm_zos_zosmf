@@ -565,9 +565,8 @@ def fetch_file(module):
             if not path.endswith('/'):
                 path += '/'
             if module.params['file_flat'] is False:
-                path = path + host + '/'
-            else:
-                file = file[file.rfind('/') + 1:]
+                path = path + host + '/' + file[0:file.rfind('/') + 1]
+            file = file[file.rfind('/') + 1:]
             if not os.path.exists(path):
                 os.makedirs(path, 0o755)
             else:
