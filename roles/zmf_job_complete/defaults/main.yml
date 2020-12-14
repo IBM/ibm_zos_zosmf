@@ -1,4 +1,6 @@
 # Copyright (c) IBM Corporation 2020 
+
+---
 job_jcl_location: 'LOCAL'
 job_search_logic: 'AND'
 job_max_rc: 0

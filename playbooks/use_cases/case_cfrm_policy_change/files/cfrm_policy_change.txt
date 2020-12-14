@@ -1,3 +1,5 @@
+# Copyright (c) IBM Corporation 2020
+
 {
   "policy_name": "CTTEST1",
   "changed_structures": {
