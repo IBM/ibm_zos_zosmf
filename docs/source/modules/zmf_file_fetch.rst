@@ -122,6 +122,7 @@ file_flat
 
   | **required**: False
   | **type**: bool
+  | **default**: false
 
 
  
@@ -201,7 +202,7 @@ file_search
 
     | **required**: False
     | **type**: bool
-    | **default**: True
+    | **default**: true
 
 
  

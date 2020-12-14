@@ -11,7 +11,7 @@ To use the modules and roles which supplied to interact with **z/OS data set and
 
 * `z/OS Management Facility`_: V02.03.00 or later
 
-   The z/OS data set and USS file managed by each z/OS manage node can be accessed by at least one z/OSMF server. Typically, this could be done by setup one z/OSMF in the same sysplex.
+   The z/OS data set and USS file managed by each z/OS managed node can be accessed by at least one z/OSMF server. Typically, this could be done by setup one z/OSMF in the same sysplex.
 
    It is required when using:
 

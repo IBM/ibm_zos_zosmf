@@ -59,7 +59,7 @@ This `sample playbook`_ shows how to fetch USS file from the remote z/OS system 
   
   * ``delegate_to: localhost`` statement is required for using this module to avoid setting up an SSH connection and install Python on the target z/OS systems.
 
-  * The inventory file `hosts`_ needs to be updated to identify the target z/OS manage node. The USS file managed by each z/OS manage node can be accessed by at least one z/OSMF server. Typically, this could be done by setup one z/OSMF in the same sysplex.
+  * The inventory file `hosts`_ needs to be updated to identify the target z/OS managed node. The USS file managed by each z/OS managed node can be accessed by at least one z/OSMF server. Typically, this could be done by setup one z/OSMF in the same sysplex.
   
   * Module `zmf_authenticate`_ is supported by z/OSMF APAR PH12143 (PTF UI66511 for V2R3, PTF UI66512 for V2R4). You are also allowed to authenticate with z/OSMF server in module `zmf_file_fetch`_ directly.
 
