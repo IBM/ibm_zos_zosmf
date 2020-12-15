@@ -312,7 +312,7 @@ message:
         sample5: "A range of bytes in the USS file /etc/profile is fetched successfully and saved in: /tmp/file_output/SY1/etc/profile.range"
         sample6: "The USS file /etc/profile is not fetched since no contents is returned in the specified range."
         sample7: "The USS file /etc/profile is not fetched since it is not changed."
-file_contents:
+file_content:
     description: The retrieved contents of the USS file.
     returned: on success when I(file_data_type=text)
     type: list
@@ -321,7 +321,7 @@ file_contents:
         "# variables set here may be overridden by a user's personal .profile",
         "# in their $HOME directory."
     ]
-file_matched_contents:
+file_matched_content:
     description: The matched contents in the USS file with the specified search keyword.
     returned: on success when I(file_data_type=text) and I(file_search) is specified
     type: list
@@ -481,19 +481,24 @@ def fetch_file(module):
     """
     Fetch USS file from z/OS
     Return the message to indicate whether the USS file is successfully fetched.
-    Return file_contents of the retrieved contents.
-    Return file_matched_contents of the matched contents if file_search is specified.
+    Return file_content of the retrieved contents.
+    Return file_matched_content of the matched contents if file_search is specified.
     Return file_matched_range of the range of the matched contents if file_search is specified.
     Return file_checksum of the ETag token if file_search and file_range are not specified.
     :param AnsibleModule module: the ansible module
     """
-    fetch_src = module.params['file_src'].strip()
     fetch_result = dict(
         changed=False,
         message='',
     )
     # create session
     session = get_connect_session(module)
+    file = module.params['file_src'].strip()
+    path = module.params['file_dest'].strip()
+    host = module.params['zmf_host'].strip()
+    fetch_src = file
+    if not fetch_src.startswith('/'):
+        fetch_src = '/' + fetch_src
     # step1 - combine request headers
     request_headers = dict()
     if module.params['file_data_type'] == 'text' and module.params['file_encoding'] is not None:
@@ -542,7 +547,7 @@ def fetch_file(module):
             fetch_result['file_checksum'] = res_hd['Etag']
         if 'X-IBM-Record-Range' in res_hd:
             fetch_result['file_matched_range'] = res_hd['X-IBM-Record-Range']
-            fetch_result['file_matched_contents'] = []
+            fetch_result['file_matched_content'] = []
             if 'Content-Length' in res_hd and int(res_hd['Content-Length']) == 0:
                 # no matched conntents with the specified search keyword (200)
                 fetch_result['message'] = 'The USS file ' + fetch_src + ' is not fetched since no matched contents is found with the specified search keyword.'
@@ -555,22 +560,20 @@ def fetch_file(module):
             fetch_result['message'] = 'The USS file ' + fetch_src + ' is not fetched since no contents is returned in the specified range.'
         else:
             # save the returned conntents to local (200/206)
-            file = module.params['file_src'].strip()
-            path = module.params['file_dest'].strip()
-            host = module.params['zmf_host'].strip()
             if file.startswith('/'):
                 file = file[1:]
-            if not path.startswith('/'):
-                path = '/' + path
             if not path.endswith('/'):
                 path += '/'
             if module.params['file_flat'] is False:
-                path = path + host + '/' + file[0:file.rfind('/') + 1]
+                path += host + '/' + file[0:file.rfind('/') + 1]
             file = file[file.rfind('/') + 1:]
-            if not os.path.exists(path):
-                os.makedirs(path, 0o755)
-            else:
-                os.chmod(path, 0o755)
+            try:
+                if not os.path.exists(path):
+                    os.makedirs(path, 0o755)
+                else:
+                    os.chmod(path, 0o755)
+            except OSError as ex:
+                module.fail_json(msg='Failed to fetch the USS file '+ fetch_src + ' ---- OS error: ' + str(ex))
             if res_cd == 206:
                 # binary contents returned in the specified range of bytes (206)
                 f_write = open(path + file + '.range', 'wb')
@@ -583,7 +586,7 @@ def fetch_file(module):
                 f_write = open(path + file + '.search', 'w')
                 f_write.write(res_fetch.text)
                 f_write.close()
-                fetch_result['file_matched_contents'] = res_fetch.text.split('\n')
+                fetch_result['file_matched_content'] = res_fetch.text.split('\n')
                 fetch_result['message'] = 'The matched contents in the USS file ' + fetch_src + ' is fetched successfully and saved in: ' \
                     + path + file + '.search'
             elif 'file_checksum' not in fetch_result:
@@ -591,7 +594,7 @@ def fetch_file(module):
                 f_write = open(path + file + '.range', 'w')
                 f_write.write(res_fetch.text)
                 f_write.close()
-                fetch_result['file_contents'] = res_fetch.text.split('\n')
+                fetch_result['file_content'] = res_fetch.text.split('\n')
                 fetch_result['message'] = 'A range of records in the USS file ' + fetch_src + ' is fetched successfully and saved in: ' \
                     + path + file + '.range'
             else:
@@ -601,7 +604,7 @@ def fetch_file(module):
                     f_write = open(path + file, 'w')
                     f_write.write(res_fetch.text)
                     f_write.close()
-                    fetch_result['file_contents'] = res_fetch.text.split('\n')
+                    fetch_result['file_content'] = res_fetch.text.split('\n')
                 else:
                     # binary contents returned
                     f_write = open(path + file, 'wb')
