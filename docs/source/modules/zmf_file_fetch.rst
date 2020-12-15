@@ -506,7 +506,7 @@ Return Values
 
    
       
-   file_contents
+   file_content
         The retrieved contents of the USS file.
 
 
@@ -520,7 +520,7 @@ Return Values
 
    
       
-   file_matched_contents
+   file_matched_content
         The matched contents in the USS file with the specified search keyword.
 
 
