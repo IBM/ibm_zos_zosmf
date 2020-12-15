@@ -40,6 +40,7 @@ Specific Requirements
    requirements_cpm
    requirements_job
    requirements_console
+   requirements_dataset_file
 
 
 .. _Ansible:

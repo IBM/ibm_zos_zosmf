@@ -1,11 +1,11 @@
 # Copyright (c) IBM Corporation 2020 
 
-# This sample playbook demonstrates using module `zmf_file_fetch` to fetch USS file from z/OS.
+# This sample playbook demonstrates using module `zmf_dataset_fetch` to fetch data set from z/OS.
 # Example:
-# ansible-playbook -i hosts sample_module_file_fetch.yml
+# ansible-playbook -i hosts sample_module_dataset_fetch.yml
 
-- name: sample of fetching USS file from z/OS
-  hosts: file
+- name: sample of fetching data set from z/OS
+  hosts: dataset
   gather_facts: no
   collections:
     - ibm.ibm_zos_zosmf
@@ -24,23 +24,23 @@
         zmf_password: "{{ zmf_password }}"
       register: result_auth
       delegate_to: localhost
-    - zmf_file_fetch:
+    - zmf_dataset_fetch:
         zmf_credential: "{{ result_auth }}"
-        file_src: "/etc/profile"
-        file_dest: "/tmp/file_output"
-        # file_flat: false
-        # file_data_type: "text"
-        # file_encoding:
+        dataset_src: "SYS1.PARMLIB(SMFPRM00)"
+        dataset_dest: "/tmp/dataset_output"
+        # dataset_flat: false
+        # dataset_data_type: "text"
+        # dataset_encoding:
         #   from: IBM-1047
         #   to: ISO8859-1
-        # file_range:
+        # dataset_range:
         #   start: 0
         #   end: 499
-        # file_search:
+        # dataset_search:
         #   keyword: "Health Checker"
         #   insensitive: true
         #   maxreturnsize: 100
-        # file_checksum: "93822124D6E66E2213C64B0D10800224"
+        # dataset_checksum: "93822124D6E66E2213C64B0D10800224"
       register: result
       delegate_to: localhost
     - debug: var=result
