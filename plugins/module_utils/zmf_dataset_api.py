@@ -18,28 +18,30 @@ def __get_dataset_apis():
         # read a data set or member
         fetch=dict(
             method='get',
-            # header={'Content-Type': 'application/json'},
             url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{dataset_name}',
-            args={ 
+            args={
                 'research': dict(required=False, type='str', nickname='dataset_search.keyword'),
-                'insensitive': dict(required=False, type='bool', nickname='dataset_search.insensitive'),
-                'maxreturnsize': dict(required=False, type='int', nickname='dataset_search.maxreturnsize')
+                'insensitive': dict(required=False, type='bool', default=True, nickname='dataset_search.insensitive'),
+                'maxreturnsize': dict(required=False, type='int', default=100, nickname='dataset_search.maxreturnsize')
             },
             headers={
                 'X-IBM-Data-Type': dict(
-                    required=False, 
-                    type='str', 
-                    choices=['text','binary','record'],
-                    nickname='dataset_data_type', 
+                    required=False,
+                    type='str',
+                    choices=['text', 'binary', 'record'],
+                    nickname='dataset_data_type',
                     default='text'),
-                'X-IBM-Return-Etag': dict(required=False, type='bool', nickname='dataset_return_checksum_when_large'),
+                # 'X-IBM-Return-Etag': dict(
+                #     required=False,
+                #     type='bool',
+                #     nickname='dataset_return_checksum_when_large'),
                 'X-IBM-Migrated-Recall': dict(
-                    required=False, 
-                    type='str', 
-                    choices=['wait','nowait','error'],
-                    nickname='dataset_migrate_recall'),
+                    required=False,
+                    type='str',
+                    choices=['wait', 'nowait', 'error'],
+                    nickname='dataset_migrate_recall',
+                    default='wait'),
                 'If-None-Match': dict(required=False, type='str', nickname='dataset_checksum')
-                # 'X-IBM-Record-Range': dict(required=False, type='str')
             },
             ok_rcode=200
         )
@@ -72,14 +74,12 @@ def __get_dataset_api_url(module, url):
         module.params['zmf_port'] = ''
     else:
         module.params['zmf_port'] = str(module.params['zmf_port']).strip()
-    
     # set up full name of data set
     dataset_name = ''
     if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
         dataset_name = '-(' + module.params['dataset_volser'].strip() + ')/' + module.params['dataset_src'].strip()
     else:
         dataset_name = module.params['dataset_src'].strip()
-
     matchObj = re.findall('{(.+?)}', url)
     for x in matchObj:
         if x == 'zmf_port' and module.params[x] == '':
@@ -88,13 +88,12 @@ def __get_dataset_api_url(module, url):
             url = re.sub('{' + x + '}', dataset_name, url)
         else:
             url = re.sub('{' + x + '}', module.params[x].strip(), url)
-
     return url
 
 
 def __get_dataset_api_params(module, args):
     """
-    Return the parsed params of the specific file API.
+    Return the parsed params of the specific data set API.
     :param AnsibleModule module: the ansible module
     :param dict[str, dict] args: the initial params of API
     :rtype: dict[str, str/list]
@@ -151,13 +150,9 @@ def call_dataset_api(module, session, api, customHeaders):
     if 'args' in zmf_api:
         zmf_api_params = __get_dataset_api_params(module, zmf_api['args'])
     if 'headers' in zmf_api:
-        zmf_api_headers = __get_dataset_api_params(module, zmf_api['headers'])  
-
+        zmf_api_headers = __get_dataset_api_params(module, zmf_api['headers'])
     if customHeaders is not None:
         zmf_api_headers.update(customHeaders)
-
-    print("debug-3: "+ str(zmf_api_params))
-    print("debug-4: "+ str(zmf_api_headers))
     return handle_request_raw(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, zmf_api_headers)
 
 
@@ -168,7 +163,7 @@ def get_request_argument_spec():
     """
     argument_spec = dict()
     dataset_apis = __get_dataset_apis()
-    for k, v in dataset_apis.items(): 
+    for k, v in dataset_apis.items():
         variables = dict()
         if v['args'] is not None:
             variables.update(v['args'])
@@ -181,5 +176,4 @@ def get_request_argument_spec():
                     argument_spec[vv['nickname']].update(choices=vv['choices'])
                 if 'default' in vv:
                     argument_spec[vv['nickname']].update(default=vv['default'])
-            
     return argument_spec
