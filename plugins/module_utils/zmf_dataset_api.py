@@ -21,40 +21,28 @@ def __get_dataset_apis():
             # header={'Content-Type': 'application/json'},
             url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{dataset_name}',
             args={ 
-                # TODO: add default?
-                'research': dict(required=False, type='str', nickname='dataset_search'),
-                'insensitive': dict(required=False, type='bool', nickname='dataset_search_insensitive'),
-                'maxreturnsize': dict(required=False, type='int', nickname='dataset_search_maxreturnsize')
+                'research': dict(required=False, type='str', nickname='dataset_search.keyword'),
+                'insensitive': dict(required=False, type='bool', nickname='dataset_search.insensitive'),
+                'maxreturnsize': dict(required=False, type='int', nickname='dataset_search.maxreturnsize')
             },
             headers={
-                'X-IBM-Data-Type': dict(required=False, type='str', choices=['text','binary','record'],nickname='dataset_data_type'),
+                'X-IBM-Data-Type': dict(
+                    required=False, 
+                    type='str', 
+                    choices=['text','binary','record'],
+                    nickname='dataset_data_type', 
+                    default='text'),
                 'X-IBM-Return-Etag': dict(required=False, type='bool', nickname='dataset_return_checksum_when_large'),
                 'X-IBM-Migrated-Recall': dict(
                     required=False, 
                     type='str', 
                     choices=['wait','nowait','error'],
-                    nickname='dataset_migrate_recall')
-                # 'If-None-Match': dict(required=False, type='str')
+                    nickname='dataset_migrate_recall'),
+                'If-None-Match': dict(required=False, type='str', nickname='dataset_checksum')
                 # 'X-IBM-Record-Range': dict(required=False, type='str')
             },
             ok_rcode=200
         )
-        # write to a data set or member
-        # write=dict(
-        #     method='put',
-        #     url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{dataset_full_name}',
-        #     headers=dict(
-        #         # TODO: add default?
-        #         'If-Match': dict(required=False, type='str', nickname='dataset_update_if_same_since'),
-        #         'X-IBM-Data-Type': dict(required=False, type='str', choices=['text','binary','record'],nickname='dataset_data_type'),
-        #         'X-IBM-Migrated-Recall': dict(
-        #             required=False, 
-        #             type='str', 
-        #             choices=['wait','nowait','error'],
-        #             nickname='dataset_migrate_recall'),
-        #     ),
-        #     ok_rcode=200
-        # )
     )
 
 
@@ -78,7 +66,7 @@ def __get_dataset_api_url(module, url):
     :param str detection_key: the detection key that can be used to retrieve the detect result for broadcast messages
     :rtype: str
     """
-    # format the input for zmd_port
+    # format the input for zmf_port
     port = ''
     if module.params['zmf_port'] is None:
         module.params['zmf_port'] = ''
@@ -88,7 +76,7 @@ def __get_dataset_api_url(module, url):
     # set up full name of data set
     dataset_name = ''
     if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
-        dataset_name = module.params['dataset_volser'].strip() + '/' + module.params['dataset_src'].strip()
+        dataset_name = '-(' + module.params['dataset_volser'].strip() + ')/' + module.params['dataset_src'].strip()
     else:
         dataset_name = module.params['dataset_src'].strip()
 
@@ -104,36 +92,47 @@ def __get_dataset_api_url(module, url):
     return url
 
 
-def __get_dataset_api_variables(module, args):
+def __get_dataset_api_params(module, args):
     """
-    Return the parsed params of the specific dataset API.
+    Return the parsed params of the specific file API.
     :param AnsibleModule module: the ansible module
-    :param dict[str, dict] args: the initial params of the API
+    :param dict[str, dict] args: the initial params of API
     :rtype: dict[str, str/list]
     """
     params = dict()
     for k, v in args.items():
-        if v['nickname'] != '' and module.params[v['nickname']] is not None and str(module.params[v['nickname']]).strip() != '':
-            # format the input for params with choices
-            if 'choices' in v:
-                found = False
-                for vv in v['choices']:
-                    if module.params[v['nickname']].strip().lower() == vv.lower():
-                        found = True
-                        params[k] = vv
-                        break
-                if found is False:
-                    module.fail_json(
-                        msg='Missing required argument or invalid argument: ' + v['nickname'] + '. The following values are valid: ' + str(v['choices']) + '.'
-                    )
+        if v['nickname'] != '':
+            # mapping the key of args with module argument
+            s = v['nickname'].find('.')
+            if s > 0:
+                # key <==> suboption of module argument
+                if module.params[v['nickname'][0:s]] is not None and v['nickname'][s + 1:] in module.params[v['nickname'][0:s]]:
+                    input_v = module.params[v['nickname'][0:s]][v['nickname'][s + 1:]]
+                else:
+                    input_v = None
             else:
-                params[k] = str(module.params[v['nickname']]).strip()
-        elif v['nickname'] != '' and v['required'] is True:
-            module.fail_json(msg='Missing required argument or invalid argument: ' + v['nickname'] + '.')
+                # key <==> module argument
+                input_v = module.params[v['nickname']]
+            # mapping the value of args with module argument
+            if input_v is not None and str(input_v).strip() != '':
+                if 'choices' in v:
+                    found = False
+                    for vv in v['choices']:
+                        if input_v.strip().lower() == vv.lower():
+                            found = True
+                            params[k] = vv
+                            break
+                    if found is False:
+                        module.fail_json(
+                            msg='Missing required argument or invalid argument: ' + v['nickname']
+                            + '. The following values are valid: ' + str(v['choices']) + '.'
+                        )
+                else:
+                    params[k] = str(input_v).strip()
+            elif v['required'] is True:
+                module.fail_json(msg='Missing required argument or invalid argument: ' + v['nickname'] + '.')
         elif 'default' in v:
             params[k] = v['default']
-    
-    print("params", params)
     return params
 
 
@@ -150,9 +149,9 @@ def call_dataset_api(module, session, api, customHeaders):
     zmf_api_params = None
     zmf_api_headers = None
     if 'args' in zmf_api:
-        zmf_api_params = __get_dataset_api_variables(module, zmf_api['args'])
+        zmf_api_params = __get_dataset_api_params(module, zmf_api['args'])
     if 'headers' in zmf_api:
-        zmf_api_headers = __get_dataset_api_variables(module, zmf_api['headers'])  
+        zmf_api_headers = __get_dataset_api_params(module, zmf_api['headers'])  
 
     if customHeaders is not None:
         zmf_api_headers.update(customHeaders)
