@@ -32,6 +32,8 @@ Parameters
 file_checksum
   Specifies the checksum to be used to verify that the USS file to be fetched is not changed since the checksum was generated.
 
+  If the checksum is matched which means the USS file is not changed, the USS file won't be fetched.
+
 
   | **required**: False
   | **type**: str
