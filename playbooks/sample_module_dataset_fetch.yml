@@ -26,9 +26,10 @@
       delegate_to: localhost
     - zmf_dataset_fetch:
         zmf_credential: "{{ result_auth }}"
-        dataset_src: "SYS1.PARMLIB(SMFPRM00)"
+        dataset_src: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
         dataset_dest: "/tmp/dataset_output"
-        # dataset_flat: false
+        # dataset_volser: “VOL003”
+        # dataset_flat: false 
         # dataset_data_type: "text"
         # dataset_encoding:
         #   from: IBM-1047
@@ -40,6 +41,7 @@
         #   keyword: "Health Checker"
         #   insensitive: true
         #   maxreturnsize: 100
+        # dataset_migrate_recall: "nowait"
         # dataset_checksum: "93822124D6E66E2213C64B0D10800224"
       register: result
       delegate_to: localhost
