@@ -548,11 +548,14 @@ def fetch_dataset(module):
                 if save_file.find('/'):
                     tmp_path = save_file.split('/')
                     path += tmp_path[0] + '/'
-                    save_file = tmp_path[1]         
-                if os.path.exists(path):
-                    os.chmod(path, 0o755)
-                else:
-                    os.makedirs(path, 0o755)
+                    save_file = tmp_path[1]    
+                try:     
+                    if os.path.exists(path):
+                        os.chmod(path, 0o755)
+                    else:
+                        os.makedirs(path, 0o755)
+                except OSError as ex:
+                    module.fail_json(msg='Failed to save the data set ' + dataset + ' ---- OS error: ' + str(ex))
 
                 if 'X-IBM-Record-Range' in response_headers:    
                     # when search             
