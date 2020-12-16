@@ -286,7 +286,6 @@ from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_console_api 
     call_console_api
 )
 from time import sleep
-import json
 import re
 import os
 
