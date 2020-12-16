@@ -28,7 +28,7 @@
         zmf_credential: "{{ result_auth }}"
         dataset_src: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
         dataset_dest: "/tmp/dataset_output"
-        # dataset_volser: “VOL003”
+        # dataset_volser: "VOL003" 
         # dataset_flat: false 
         # dataset_data_type: "text"
         # dataset_encoding:
@@ -41,7 +41,7 @@
         #   keyword: "Health Checker"
         #   insensitive: true
         #   maxreturnsize: 100
-        # dataset_migrate_recall: "nowait"
+        # dataset_migrate_recall: "wait"
         # dataset_checksum: "93822124D6E66E2213C64B0D10800224"
       register: result
       delegate_to: localhost

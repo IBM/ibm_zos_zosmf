@@ -36,19 +36,18 @@ This `sample playbook`_ shows how to fetch USS file from the remote z/OS system 
            file_src: "/etc/profile"
            file_dest: "/tmp/file_output"
            # file_flat: false # Whether to override the default behavior of appending hostname/path/to/file to the destination. Default is false
-           # file_data_type: "text" # Whether data conversion is to be performed on the returned data. Default is text 
-           (data conversion is performed)
-           # file_encoding: # Which encodings the fetched USS file should be converted from and to.
+           # file_data_type: "text" # Whether data conversion is to be performed on the returned data. Default is text (data conversion is performed)
+           # file_encoding: # Which encodings the fetched USS file should be converted from and to
            #   from: IBM-1047
            #   to: ISO8859-1
-           # file_range: # A range that is used to retrieve the USS file.
+           # file_range: # A range that is used to retrieve the USS file
            #   start: 0
            #   end: 499
-           # file_search: # A series of parameters that are used to search the USS file.
+           # file_search: # A series of parameters that are used to search the USS file
            #   keyword: "Health Checker"
            #   insensitive: true
            #   maxreturnsize: 100
-           # file_checksum: "93822124D6E66E2213C64B0D10800224" # the ETag token to be used to verify that the USS file to be fetched is not changed since the ETag token was generated.
+           # file_checksum: "93822124D6E66E2213C64B0D10800224" # the checksum to be used to verify that the USS file to be fetched is not changed since the checksum was generated
          register: result
          delegate_to: localhost
        - debug: var=result
