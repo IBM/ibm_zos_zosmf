@@ -538,7 +538,7 @@ def fetch_dataset(module):
                     path = path + host + '/'
                 if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
                     path = path + module.params['dataset_volser'] + '/'
-                save_file = dataset.replace('(', '/').replace(')','/')
+                save_file = dataset.replace('(', '/').replace(')', '/')
                 if save_file.find('/') != -1:
                     tmp_path = save_file.split('/')
                     path += tmp_path[0] + '/'
