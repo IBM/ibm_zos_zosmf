@@ -7,7 +7,7 @@ namespace: ibm
 name: ibm_zos_zosmf
 
 # The collection version
-version: 2.2.1
+version: 2.3.0
 
 # Collection README file
 readme: README.md
@@ -49,6 +49,9 @@ tags:
   - mq
   - liberty
   - was
+  - dataset
+  - data_set
+  - uss
 
 # The URL of the originating SCM repository
 repository: https://github.com/IBM/ibm_zos_zosmf
