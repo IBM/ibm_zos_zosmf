@@ -33,22 +33,23 @@ This `sample playbook`_ shows how to fetch data set from the remote z/OS system 
          delegate_to: localhost
        - zmf_dataset_fetch:
            zmf_credential: "{{ result_auth }}"
-           dataset_src: "SYS1.PARMLIB(SMFPRM00)"
+           dataset_src: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
            dataset_dest: "/tmp/dataset_output"
-           # dataset_flat: false # Whether to override the default behavior of appending hostname/path/to/file to the destination. Default is false
-           # dataset_data_type: "text" # Whether data conversion is to be performed on the returned data. Default is text 
-           (data conversion is performed)
-           # dataset_encoding: # Which encodings the fetched data set should be converted from and to.
+           # dataset_volser: "VOL003" # The volume to be searched for an uncataloged data set or member
+           # dataset_flat: false # Whether to override the default behavior of appending zmf_host to the destination. Default is false
+           # dataset_data_type: "text" # Whether data conversion is to be performed on the returned data. Default is text (data conversion is performed)
+           # dataset_encoding: # Which encodings the fetched data set should be converted from and to
            #   from: IBM-1047
            #   to: ISO8859-1
-           # dataset_range: # A range that is used to retrieve the data set.
+           # dataset_range: # A range that is used to retrieve records of the data set
            #   start: 0
            #   end: 499
-           # dataset_search: # A series of parameters that are used to search the data set.
+           # dataset_search: # A series of parameters that are used to search the content of data set or member
            #   keyword: "Health Checker"
            #   insensitive: true
            #   maxreturnsize: 100
-           # dataset_checksum: "93822124D6E66E2213C64B0D10800224" # the ETag token to be used to verify that the  data set to be fetched is not changed since the ETag token was generated.
+           # dataset_migrate_recall: "wait" # How a migrated data set is handled. Default is wait
+           # dataset_checksum: "93822124D6E66E2213C64B0D10800224" # the checksum to be used to verify that the data set to be fetched is not changed since the checksum was generated
          register: result
          delegate_to: localhost
        - debug: var=result

@@ -223,7 +223,8 @@ options:
                 type: int
     file_checksum:
         description:
-            - Specifies the ETag token to be used to verify that the USS file to be fetched is not changed since the ETag token was generated.
+            - Specifies the checksum to be used to verify that the USS file to be fetched is not changed since the checksum was generated.
+            - If the checksum is matched which means the USS file is not changed, the USS file won't be fetched.
         required: False
         type: str
         default: null
@@ -258,8 +259,8 @@ EXAMPLES = r"""
     file_src: "/etc/profile"
     file_dest: "/tmp/file_output"
     file_encoding:
-      from: IBM-037
-      to: ISO8859-1
+        from: IBM-037
+        to: ISO8859-1
 
 - name: Fetch a range of records from a USS file (the first 500 lines)
   zmf_file_fetch:
@@ -296,8 +297,7 @@ EXAMPLES = r"""
 
 RETURN = r"""
 changed:
-    description:
-        - Indicates if any change is made during the module operation.
+    description: Indicates if any change is made during the module operation.
     returned: always
     type: bool
 message:
@@ -336,7 +336,7 @@ file_matched_range:
     type: str
     sample: "0,500"
 file_checksum:
-    description: The ETag token of the fetched USS file.
+    description: The checksum of the fetched USS file.
     returned: on success when I(file_search) and I(file_range) are not specified
     type: str
     sample: "93822124D6E66E2213C64B0D10800224"
@@ -350,9 +350,6 @@ from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_file_api import (
     call_file_api
 )
-from time import sleep
-import json
-import re
 import os
 
 
@@ -484,7 +481,7 @@ def fetch_file(module):
     Return file_content of the retrieved contents.
     Return file_matched_content of the matched contents if file_search is specified.
     Return file_matched_range of the range of the matched contents if file_search is specified.
-    Return file_checksum of the ETag token if file_search and file_range are not specified.
+    Return file_checksum of the checksum if file_search and file_range are not specified.
     :param AnsibleModule module: the ansible module
     """
     fetch_result = dict(
@@ -573,7 +570,7 @@ def fetch_file(module):
                 else:
                     os.chmod(path, 0o755)
             except OSError as ex:
-                module.fail_json(msg='Failed to fetch the USS file '+ fetch_src + ' ---- OS error: ' + str(ex))
+                module.fail_json(msg='Failed to fetch the USS file ' + fetch_src + ' ---- OS error: ' + str(ex))
             if res_cd == 206:
                 # binary contents returned in the specified range of bytes (206)
                 f_write = open(path + file + '.range', 'wb')

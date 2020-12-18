@@ -30,7 +30,9 @@ Parameters
  
      
 file_checksum
-  Specifies the ETag token to be used to verify that the USS file to be fetched is not changed since the ETag token was generated.
+  Specifies the checksum to be used to verify that the USS file to be fetched is not changed since the checksum was generated.
+
+  If the checksum is matched which means the USS file is not changed, the USS file won't be fetched.
 
 
   | **required**: False
@@ -420,8 +422,8 @@ Examples
        file_src: "/etc/profile"
        file_dest: "/tmp/file_output"
        file_encoding:
-         from: IBM-037
-         to: ISO8859-1
+           from: IBM-037
+           to: ISO8859-1
 
    - name: Fetch a range of records from a USS file (the first 500 lines)
      zmf_file_fetch:
@@ -552,7 +554,7 @@ Return Values
    
       
    file_checksum
-        The ETag token of the fetched USS file.
+        The checksum of the fetched USS file.
 
 
         | **returned**: on success when I(file_search) and I(file_range) are not specified 

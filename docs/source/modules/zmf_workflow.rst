@@ -55,8 +55,6 @@ state
 workflow_access_type
   Access type for the workflow when the workflow is created.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -69,8 +67,6 @@ workflow_access_type
 workflow_account_info
   For a workflow that submits a batch job, this variable specifies the account information for the JCL JOB statement.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -81,20 +77,16 @@ workflow_account_info
 workflow_assign_to_owner
   Specifies whether the workflow steps are assigned to the workflow owner when the workflow is created.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: bool
-  | **default**: True
+  | **default**: true
 
 
  
      
 workflow_category
   Category for the workflow.
-
-  For more information, see the documentation for the z/OSMF workflow REST services.
 
 
   | **required**: False
@@ -107,8 +99,6 @@ workflow_category
 workflow_comments
   User-specified information to be associated with the workflow at creation time.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -119,19 +109,16 @@ workflow_comments
 workflow_delete_completed_jobs
   For a workflow that submits a batch job, this variable specifies whether the job is deleted from the JES spool after it completes.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: bool
+  | **default**: false
 
 
  
      
 workflow_file
   Location of the workflow definition file.
-
-  For more information, see the documentation for the z/OSMF workflow REST services.
 
 
   | **required**: False
@@ -142,8 +129,6 @@ workflow_file
      
 workflow_file_system
   Nickname of the system on which the specified workflow definition file and any related files reside.
-
-  For more information, see the documentation for the z/OSMF workflow REST services.
 
 
   | **required**: False
@@ -157,8 +142,6 @@ workflow_host
 
   This variable should be specified as ``{{ inventory_hostname }}``, and its value should be specified in the inventory file as a managed node.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -168,8 +151,6 @@ workflow_host
      
 workflow_job_statement
   For a workflow that submits a batch job, this variable specifies the JOB statement JCL for the job.
-
-  For more information, see the documentation for the z/OSMF workflow REST services.
 
 
   | **required**: False
@@ -199,8 +180,6 @@ workflow_name
 
   Either *workflow_name* or *workflow_key* is required when *state=started/deleted/check*.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -210,8 +189,6 @@ workflow_name
      
 workflow_notification_url
   URL to be used for notification when the workflow is started.
-
-  For more information, see the documentation for the z/OSMF workflow REST services.
 
 
   | **required**: False
@@ -225,8 +202,6 @@ workflow_owner
 
   If this value is omitted, *zmf_user* is used as workflow owner.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -237,12 +212,10 @@ workflow_owner
 workflow_perform_subsequent
   Specifies whether the subsequent automated steps are performed when the workflow is started.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: bool
-  | **default**: True
+  | **default**: true
 
 
  
@@ -251,8 +224,6 @@ workflow_resolve_conflict_by_using
   Specifies how to handle variable conflicts if any are detected at workflow creation time.
 
   Such conflicts can be found when z/OSMF Workflows task reads the output file from a step that runs a REXX exec or UNIX shell script.
-
-  For more information, see the documentation for the z/OSMF workflow REST services.
 
 
   | **required**: False
@@ -266,8 +237,6 @@ workflow_resolve_conflict_by_using
 workflow_resolve_global_conflict_by_using
   Version of the variable to be used if the supplied workflow variable conflicts with an existing global variable in z/OSMF Workflows task.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -280,8 +249,6 @@ workflow_resolve_global_conflict_by_using
 workflow_step_name
   Name of the workflow step at which automation processing is to begin when the workflow is started.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -291,8 +258,6 @@ workflow_step_name
      
 workflow_vars
   Values of one or more workflow variables in JSON format.
-
-  For more information, see the documentation for the z/OSMF workflow REST services.
 
 
   | **required**: False
@@ -304,8 +269,6 @@ workflow_vars
 workflow_vars_file
   Location of the optional properties file to be used to pre-specify the values of one or more variables that are defined in workflow definition file.
 
-  For more information, see the documentation for the z/OSMF workflow REST services.
-
 
   | **required**: False
   | **type**: str
@@ -315,8 +278,6 @@ workflow_vars_file
      
 workflow_vendor
   Name of the vendor that provided the workflow definition file.
-
-  For more information, see the documentation for the z/OSMF workflow REST services.
 
 
   | **required**: False
