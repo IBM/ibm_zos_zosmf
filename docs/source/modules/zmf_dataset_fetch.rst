@@ -17,7 +17,6 @@ zmf_dataset_fetch -- Operates a z/OS data set or member
 Synopsis
 --------
 - Retrieve the contents of a z/OS data set or member and store the content to a local file.
-- Write data to a z/OS data set or member from a local file.
 
 
 

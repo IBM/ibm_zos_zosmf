@@ -19,7 +19,6 @@ module: zmf_dataset_fetch
 short_description: Operates a z/OS data set or member
 description:
     - Retrieve the contents of a z/OS data set or member and store the content to a local file.
-    - Write data to a z/OS data set or member from a local file.
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
