@@ -57,7 +57,7 @@ Synopsis
 {% elif spec.type == 'int' %}
      {% set default_str = (spec.default | string ) %}
 {% else %}
-     {% set default = ", default: " + spec.default if spec.default else "" %}
+     {% set default_str = spec.default if spec.default else "" %}
 {% endif %}
 
 {{ "  " * level }}{{ name }}
@@ -68,8 +68,8 @@ Synopsis
 
   {{ "  " * level }}| **required**: {{ spec.required | default("false") }}
   {{ "  " * level }}| **type**: {{ spec.type | default("str") }}
-{%     if spec.default %}
-  {{ "  " * level }}| **default**: {{ spec.default }}
+{%     if default_str != "" and default_str != "None" %}
+  {{ "  " * level }}| **default**: {{ default_str }}
 {%     endif %}
 {%     if spec.choices %}
   {{ "  " * level }}| **choices**: {{ ", ".join(spec.choices) }}

@@ -21,3 +21,15 @@ jobHost2 zmf_host=zosmf2.ibm.com zmf_port=443
 [console]
 consoleHost1
 consoleHost2
+
+# this group is used in sample_module_dataset_*.yml
+# If hostname is changed here, please create "host_name".yml file under host_vars and specify host specific variables as shown in example datasetHost1.yml
+[dataset]
+datasetHost1 zmf_host=zosmf1.ibm.com zmf_port=443
+datasetHost2 zmf_host=zosmf2.ibm.com zmf_port=443
+
+# this group is used in sample_module_file_*.yml
+# If hostname is changed here, please create "host_name".yml file under host_vars and specify host specific variables as shown in example fileHost1.yml
+[file]
+fileHost1 zmf_host=zosmf1.ibm.com zmf_port=443
+fileHost2 zmf_host=zosmf2.ibm.com zmf_port=443

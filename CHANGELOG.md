@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v2.3.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.3.0) - 2020-12-18
+### Added
+- add modules: `zmf_dataset_fetch`, `zmf_file_fetch`
+
 ## [v2.2.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.1) - 2020-09-23
 ### Fixed
 - fix for module `zmf_console_command`: conflict route params

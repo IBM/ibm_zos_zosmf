@@ -131,14 +131,12 @@ options:
             - It is recommended that you use the naming rule C(ansible_workflowName_{{ workflow_host }}) when I(state=started).
             - Required when I(state=existed).
             - Either I(workflow_name) or I(workflow_key) is required when I(state=started/deleted/check).
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_file:
         description:
             - Location of the workflow definition file.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
@@ -146,7 +144,6 @@ options:
         description:
             - Nickname of the target z/OS system on which the workflow is to be performed.
             - This variable should be specified as C({{ inventory_hostname }}), and its value should be specified in the inventory file as a managed node.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
@@ -154,14 +151,12 @@ options:
         description:
             - User name of the workflow owner.
             - If this value is omitted, I(zmf_user) is used as workflow owner.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_file_system:
         description:
             - Nickname of the system on which the specified workflow definition file and any related files reside.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
@@ -169,21 +164,18 @@ options:
         description:
             - Location of the optional properties file to be used to pre-specify the values of one or more variables
               that are defined in workflow definition file.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_vars:
         description:
             - Values of one or more workflow variables in JSON format.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: dict
         default: null
     workflow_resolve_global_conflict_by_using:
         description:
             - Version of the variable to be used if the supplied workflow variable conflicts with an existing global variable in z/OSMF Workflows task.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: global
@@ -193,21 +185,18 @@ options:
     workflow_comments:
         description:
             - User-specified information to be associated with the workflow at creation time.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_assign_to_owner:
         description:
             - Specifies whether the workflow steps are assigned to the workflow owner when the workflow is created.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
         default: true
     workflow_access_type:
         description:
             - Access type for the workflow when the workflow is created.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: Public
@@ -218,21 +207,18 @@ options:
     workflow_account_info:
         description:
             - For a workflow that submits a batch job, this variable specifies the account information for the JCL JOB statement.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_job_statement:
         description:
             - For a workflow that submits a batch job, this variable specifies the JOB statement JCL for the job.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_delete_completed_jobs:
         description:
             - For a workflow that submits a batch job, this variable specifies whether the job is deleted from the JES spool after it completes.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
         default: false
@@ -240,7 +226,6 @@ options:
         description:
             - Specifies how to handle variable conflicts if any are detected at workflow creation time.
             - Such conflicts can be found when z/OSMF Workflows task reads the output file from a step that runs a REXX exec or UNIX shell script.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: outputFileValue
@@ -251,28 +236,24 @@ options:
     workflow_step_name:
         description:
             - Name of the workflow step at which automation processing is to begin when the workflow is started.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_perform_subsequent:
         description:
             - Specifies whether the subsequent automated steps are performed when the workflow is started.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
         default: true
     workflow_notification_url:
         description:
             - URL to be used for notification when the workflow is started.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_category:
         description:
             - Category for the workflow.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         choices:
@@ -282,7 +263,6 @@ options:
     workflow_vendor:
         description:
             - Name of the vendor that provided the workflow definition file.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null

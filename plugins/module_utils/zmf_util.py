@@ -139,6 +139,25 @@ def handle_request(module, session, method, url, params=None, rcode=200, header=
                 return 'HTTP request error: ' + str(response_code)
 
 
+def handle_request_raw(module, session, method, url, params=None, header=None, timeout=30):
+    headers = __get_request_headers()
+    if header is not None:
+        headers.update(header)
+    try:
+        if method == 'get':
+            response = session.get(url, params=params, headers=headers, verify=False, timeout=timeout)
+        elif method == 'put':
+            response = session.put(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
+        elif method == 'post':
+            response = session.post(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
+        elif method == 'delete':
+            response = session.delete(url, headers=headers, verify=False, timeout=timeout)
+    except Exception as ex:
+        module.fail_json(msg='HTTP request error: ' + repr(ex))
+    else:
+        return response
+
+
 def cmp_list(list1, list2):
     """
     Recursively compare the given lists.

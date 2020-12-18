@@ -1,0 +1,48 @@
+# Copyright (c) IBM Corporation 2020 
+
+# This sample playbook demonstrates using module `zmf_dataset_fetch` to fetch data set from z/OS.
+# Example:
+# ansible-playbook -i hosts sample_module_dataset_fetch.yml
+
+- name: sample of fetching data set from z/OS
+  hosts: dataset
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username (skip if zmf_crt and zmf_key are supplied)"
+      private: no
+    - name: zmf_password
+      prompt: "Enter your zOSMF password (skip if zmf_crt and zmf_key are supplied)"
+      private: yes
+  tasks:
+    - zmf_authenticate:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+      register: result_auth
+      delegate_to: localhost
+    - zmf_dataset_fetch:
+        zmf_credential: "{{ result_auth }}"
+        dataset_src: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
+        dataset_dest: "/tmp/dataset_output"
+        # dataset_volser: "VOL003" 
+        # dataset_flat: false 
+        # dataset_data_type: "text"
+        # dataset_encoding:
+        #   from: IBM-1047
+        #   to: ISO8859-1
+        # dataset_range:
+        #   start: 0
+        #   end: 499
+        # dataset_search:
+        #   keyword: "Health Checker"
+        #   insensitive: true
+        #   maxreturnsize: 100
+        # dataset_migrate_recall: "wait"
+        # dataset_checksum: "93822124D6E66E2213C64B0D10800224"
+      register: result
+      delegate_to: localhost
+    - debug: var=result
