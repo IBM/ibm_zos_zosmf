@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sample_module_console_command &mdash; IBM z/OSMF Collection 2.2.0 documentation</title>
+  <title>sample_module_console_command &mdash; IBM z/OSMF Collection 2.3.0 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributing" href="../community_guides.html" />
+    <link rel="next" title="sample_module_dataset_fetch" href="sample_module_dataset_fetch.html" />
     <link rel="prev" title="sample_role_job_query" href="sample_role_job_query.html" /> 
 </head>
 
@@ -106,6 +106,8 @@
 <li class="toctree-l3"><a class="reference internal" href="sample_role_job_complete.html">sample_role_job_complete</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_job_query.html">sample_role_job_query</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sample_module_console_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_module_dataset_fetch.html">sample_module_dataset_fetch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_module_file_fetch.html">sample_module_file_fetch</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#run-the-playbooks">Run the Playbooks</a></li>
@@ -178,7 +180,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.2.0/docs/source/playbooks/sample_module_console_command.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.3.0/docs/source/playbooks/sample_module_console_command.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -223,7 +225,7 @@
       <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result_auth</span>
       <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
     <span class="p p-Indicator">-</span> <span class="nt">zmf_console_command</span><span class="p">:</span>
-        <span class="nt">zmf_credential</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">result_auth</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">zmf_credential</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">result_auth</span><span class="nv"> </span><span class="s">}}&quot;</span> <span class="c1"># Authentication credentials returned by module zmf_authenticate</span>
         <span class="nt">console_cmd</span><span class="p">:</span> <span class="s">&quot;start</span><span class="nv"> </span><span class="s">pegasus&quot;</span>
         <span class="nt">console_system</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}&quot;</span>
         <span class="c1"># console_cmdresponse_keyword: &quot;SLP registration initiated&quot; # The keyword that you want to detect in the command response. The module will fail if no specified keywords are detected in neither the command response nor broadcast messages</span>
@@ -245,6 +247,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">delegate_to:</span> <span class="pre">localhost</span></code> statement is required for using this module to avoid setting up an SSH connection and install Python on the target z/OS systems.</p></li>
 <li><p>In the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts">hosts</a>, the name of Ansible managed node should be the same with the system name of target z/OS system. You can update it to your own z/OS system name.</p></li>
 <li><p>In the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts">hosts</a>, each z/OS managed node typically needs to specify its serving z/OSMF via variable <code class="docutils literal notranslate"><span class="pre">zmf_host</span></code> and <code class="docutils literal notranslate"><span class="pre">zmf_port</span></code>. For z/OS managed nodes in the same sysplex, it’s recommended to specify the same serving z/OSMF host since z/OSMF is sysplex scope typically. Otherwise if you have different serving z/OSMF specified for multiple z/OS managed nodes which are in the same sysplex, you need to specify the variable <code class="docutils literal notranslate"><span class="pre">console_name</span></code> in host specific variable file under host_vars directory so that each z/OS managed node uses an unique console name.</p></li>
+<li><p>Module <a class="reference external" href="../modules/zmf_authenticate.html">zmf_authenticate</a> is supported by z/OSMF APAR PH12143 (PTF UI66511 for V2R3, PTF UI66512 for V2R4). You are also allowed to authenticate with z/OSMF server in module <a class="reference external" href="../modules/zmf_console_command.html">zmf_console_command</a> directly.</p></li>
 </ul>
 </div>
 <p>For more details about module variables, see <a class="reference external" href="../modules/zmf_console_command.html">zmf_console_command</a>.</p>
@@ -258,7 +261,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../community_guides.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sample_module_dataset_fetch.html" class="btn btn-neutral float-right" title="sample_module_dataset_fetch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="sample_role_job_query.html" class="btn btn-neutral float-left" title="sample_role_job_query" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -288,15 +291,15 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.2.0
+        v: v2.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../v2.3.0/playbooks/sample_module_console_command.html">v2.3.0</a></dd>
             <dd><a href="../v2.2.0/playbooks/sample_module_console_command.html">v2.2.0</a></dd>
             <dd><a href="../v2.1.0/playbooks/sample_module_console_command.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/index.html">v2.0.1</a></dd>
             <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
         </dl>
     </div>

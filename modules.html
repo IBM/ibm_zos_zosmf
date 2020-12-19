@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Modules &mdash; IBM z/OSMF Collection 2.2.0 documentation</title>
+  <title>Modules &mdash; IBM z/OSMF Collection 2.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="zmf_authenticate – Authenticate with z/OSMF server" href="modules/zmf_authenticate.html" />
-    <link rel="prev" title="MVS Command Operations" href="README_console.html" /> 
+    <link rel="prev" title="Operate z/OS Data Sets and UNIX Files" href="README_dataset_file.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,6 +92,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-reference">Module Reference</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_dataset_fetch.html">zmf_dataset_fetch – Operates a z/OS data set or member</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
 </ul>
 </li>
@@ -165,7 +167,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.2.0/docs/source/modules.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.3.0/docs/source/modules.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -195,6 +197,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules/zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/zmf_dataset_fetch.html">zmf_dataset_fetch – Operates a z/OS data set or member</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
 </ul>
 </div>
@@ -203,7 +207,6 @@
 <h2>Module Documentation<a class="headerlink" href="#module-documentation" title="Permalink to this headline">¶</a></h2>
 <p>You can also access the documentation of each module from the command line by using the <a class="reference external" href="https://docs.ansible.com/ansible/latest/cli/ansible-doc.html#ansible-doc">ansible-doc</a> command:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ ansible-doc ibm.ibm_zos_zosmf.zmf_workflow
-$ ansible-doc ibm.ibm_zos_zosmf.zmf_console_command
 </pre></div>
 </div>
 </div>
@@ -220,7 +223,7 @@ $ ansible-doc ibm.ibm_zos_zosmf.zmf_console_command
         <a href="modules/zmf_authenticate.html" class="btn btn-neutral float-right" title="zmf_authenticate – Authenticate with z/OSMF server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="README_console.html" class="btn btn-neutral float-left" title="MVS Command Operations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="README_dataset_file.html" class="btn btn-neutral float-left" title="Operate z/OS Data Sets and UNIX Files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -247,15 +250,15 @@ $ ansible-doc ibm.ibm_zos_zosmf.zmf_console_command
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.2.0
+        v: v2.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="v2.3.0/modules.html">v2.3.0</a></dd>
             <dd><a href="v2.2.0/modules.html">v2.2.0</a></dd>
             <dd><a href="v2.1.0/modules.html">v2.1.0</a></dd>
-            <dd><a href="v2.0.1/modules.html">v2.0.1</a></dd>
             <dd><a href="v2.0.0/modules.html">v2.0.0</a></dd>
         </dl>
     </div>

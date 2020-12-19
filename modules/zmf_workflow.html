@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_workflow – Operate z/OS workflows &mdash; IBM z/OSMF Collection 2.2.0 documentation</title>
+  <title>zmf_workflow – Operate z/OS workflows &mdash; IBM z/OSMF Collection 2.3.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Roles" href="../roles.html" />
-    <link rel="prev" title="zmf_console_command – Issue MVS command" href="zmf_console_command.html" /> 
+    <link rel="prev" title="zmf_file_fetch – Fetch USS file from z/OS" href="zmf_file_fetch.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,6 +92,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module Reference</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset_fetch.html">zmf_dataset_fetch – Operates a z/OS data set or member</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_workflow – Operate z/OS workflows</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
@@ -228,7 +230,6 @@
 </div>
 </dd>
 <dt>workflow_access_type</dt><dd><p>Access type for the workflow when the workflow is created.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -237,22 +238,19 @@
 </div>
 </dd>
 <dt>workflow_account_info</dt><dd><p>For a workflow that submits a batch job, this variable specifies the account information for the JCL JOB statement.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_assign_to_owner</dt><dd><p>Specifies whether the workflow steps are assigned to the workflow owner when the workflow is created.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: bool</div>
-<div class="line"><strong>default</strong>: True</div>
+<div class="line"><strong>default</strong>: true</div>
 </div>
 </dd>
 <dt>workflow_category</dt><dd><p>Category for the workflow.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -260,28 +258,25 @@
 </div>
 </dd>
 <dt>workflow_comments</dt><dd><p>User-specified information to be associated with the workflow at creation time.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_delete_completed_jobs</dt><dd><p>For a workflow that submits a batch job, this variable specifies whether the job is deleted from the JES spool after it completes.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: false</div>
 </div>
 </dd>
 <dt>workflow_file</dt><dd><p>Location of the workflow definition file.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_file_system</dt><dd><p>Nickname of the system on which the specified workflow definition file and any related files reside.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -289,14 +284,12 @@
 </dd>
 <dt>workflow_host</dt><dd><p>Nickname of the target z/OS system on which the workflow is to be performed.</p>
 <p>This variable should be specified as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">inventory_hostname</span> <span class="pre">}}</span></code>, and its value should be specified in the inventory file as a managed node.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_job_statement</dt><dd><p>For a workflow that submits a batch job, this variable specifies the JOB statement JCL for the job.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -313,14 +306,12 @@
 <p>It is recommended that you use the naming rule <code class="docutils literal notranslate"><span class="pre">ansible_workflowName_{{</span> <span class="pre">workflow_host</span> <span class="pre">}}</span></code> when <em>state=started</em>.</p>
 <p>Required when <em>state=existed</em>.</p>
 <p>Either <em>workflow_name</em> or <em>workflow_key</em> is required when <em>state=started/deleted/check</em>.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_notification_url</dt><dd><p>URL to be used for notification when the workflow is started.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -328,23 +319,20 @@
 </dd>
 <dt>workflow_owner</dt><dd><p>User name of the workflow owner.</p>
 <p>If this value is omitted, <em>zmf_user</em> is used as workflow owner.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_perform_subsequent</dt><dd><p>Specifies whether the subsequent automated steps are performed when the workflow is started.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: bool</div>
-<div class="line"><strong>default</strong>: True</div>
+<div class="line"><strong>default</strong>: true</div>
 </div>
 </dd>
 <dt>workflow_resolve_conflict_by_using</dt><dd><p>Specifies how to handle variable conflicts if any are detected at workflow creation time.</p>
 <p>Such conflicts can be found when z/OSMF Workflows task reads the output file from a step that runs a REXX exec or UNIX shell script.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -353,7 +341,6 @@
 </div>
 </dd>
 <dt>workflow_resolve_global_conflict_by_using</dt><dd><p>Version of the variable to be used if the supplied workflow variable conflicts with an existing global variable in z/OSMF Workflows task.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -362,28 +349,24 @@
 </div>
 </dd>
 <dt>workflow_step_name</dt><dd><p>Name of the workflow step at which automation processing is to begin when the workflow is started.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_vars</dt><dd><p>Values of one or more workflow variables in JSON format.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: dict</div>
 </div>
 </dd>
 <dt>workflow_vars_file</dt><dd><p>Location of the optional properties file to be used to pre-specify the values of one or more variables that are defined in workflow definition file.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_vendor</dt><dd><p>Name of the vendor that provided the workflow definition file.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -596,7 +579,7 @@
         <a href="../roles.html" class="btn btn-neutral float-right" title="Roles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="zmf_console_command.html" class="btn btn-neutral float-left" title="zmf_console_command – Issue MVS command" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="zmf_file_fetch.html" class="btn btn-neutral float-left" title="zmf_file_fetch – Fetch USS file from z/OS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -623,16 +606,16 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.2.0
+        v: v2.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../v2.3.0/modules/zmf_workflow.html">v2.3.0</a></dd>
             <dd><a href="../v2.2.0/modules/zmf_workflow.html">v2.2.0</a></dd>
             <dd><a href="../v2.1.0/modules/zmf_workflow.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/modules/zmf_workflow.html">v2.0.1</a></dd>
-            <dd><a href="../v2.0.0/modules/zmf_workflow.html">v2.0.0</a></dd>
+            <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
         </dl>
     </div>
 </div>

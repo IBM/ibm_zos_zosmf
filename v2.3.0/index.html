@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>IBM z/OS Management Facility Collection &mdash; IBM z/OSMF Collection 2.3.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> IBM z/OSMF Collection
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roles.html">Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks.html">Playbooks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="community_guides.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="community_guides.html#helpful-links">Helpful Links</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Requirements</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">IBM z/OSMF Collection</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>IBM z/OS Management Facility Collection</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.3.0/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="ibm-z-os-management-facility-collection">
+<h1>IBM z/OS Management Facility Collection<a class="headerlink" href="#ibm-z-os-management-facility-collection" title="Permalink to this headline">¶</a></h1>
+<p><strong>IBM z/OS Management Facility (z/OSMF) Collection</strong>, referred to as <strong>ibm_zos_zosmf</strong>, consists of modules and roles that you can use with z/OS.</p>
+<p><strong>IBM z/OSMF collection</strong> intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, z/OS console REST services, z/OS data set and file REST services, Cloud Provisioning and Management services etc.</p>
+</div>
+<div class="section" id="features">
+<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
+<p><strong>IBM z/OSMF collection</strong> includes <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/">modules</a>, <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/roles/">roles</a>, <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/">sample playbooks</a> and <code class="docutils literal notranslate"><span class="pre">ansible-doc</span></code> to automate tasks on z/OS.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#ansible-galaxy">Ansible Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#local-build">Local Build</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#access-collection">Access Collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#contents">Contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="README_workflow.html">Operate z/OS Workflows</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="README_workflow.html#modules">Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_workflow.html#roles">Roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_workflow.html#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_workflow.html#sample-playbooks">Sample Playbooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="README_cpm.html">Provision and Manage z/OS Software Instances</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="README_cpm.html#roles">Roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_cpm.html#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_cpm.html#sample-playbooks">Sample Playbooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="README_job.html">Operate z/OS Jobs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="README_job.html#roles">Roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_job.html#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_job.html#sample-playbooks">Sample Playbooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="README_console.html">Operate MVS Commands</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="README_console.html#modules">Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_console.html#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_console.html#sample-playbooks">Sample Playbooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="README_dataset_file.html">Operate z/OS Data Sets and UNIX Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="README_dataset_file.html#modules">Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_dataset_file.html#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="README_dataset_file.html#sample-playbooks">Sample Playbooks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-reference">Module Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_dataset_fetch.html">zmf_dataset_fetch – Operates a z/OS data set or member</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-documentation">Module Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="roles.html">Roles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="roles.html#role-reference">Role Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_workflow_complete.html">zmf_workflow_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_cpm_remove_software_instance.html">zmf_cpm_remove_software_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_job_complete.html">zmf_job_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="roles/README_zmf_job_query.html">zmf_job_query</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks.html">Playbooks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="playbooks.html#playbook-documentation">Playbook Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks.html#ansible-config">Ansible Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks.html#inventory">Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks.html#host-vars">Host Vars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks.html#group-vars">Group Vars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks.html#sample-playbooks">Sample Playbooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_workflow.html">sample_module_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_workflow_complete.html">sample_role_workflow_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_cpm_manage_instance.html">sample_role_cpm_manage_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_cpm_provision.html">sample_role_cpm_provision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_cpm_remove_instance.html">sample_role_cpm_remove_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_job_complete.html">sample_role_job_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_role_job_query.html">sample_role_job_query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_console_command.html">sample_module_console_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_dataset_fetch.html">sample_module_dataset_fetch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_file_fetch.html">sample_module_file_fetch</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks.html#run-the-playbooks">Run the Playbooks</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Community Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="community_guides.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="community_guides.html#helpful-links">Helpful Links</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Requirements</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="requirements.html#overall-requirements">Overall Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="requirements.html#specific-requirements">Specific Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="requirements_workflow.html">Requirements - Operate z/OS Workflows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_cpm.html">Requirements - Provision and Manage z/OS Software Instances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_job.html">Requirements - Operate z/OS Jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_console.html">Requirements - MVS Command Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_dataset_file.html">Requirements - Operate z/OS Data Sets and UNIX Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">Releases</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="copyright">
+<h1>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h1>
+<p>© Copyright IBM Corporation 2020</p>
+</div>
+<div class="section" id="license">
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>Some portions of this collection are licensed under <a class="reference external" href="https://opensource.org/licenses/GPL-3.0">GNU General Public License, Version 3.0</a>, and other portions of this collection are licensed under <a class="reference external" href="https://opensource.org/licenses/Apache-2.0">Apache License, Version 2.0</a>. See individual files for applicable licenses.</p>
+</div>
+<div class="section" id="author-information">
+<h1>Author Information<a class="headerlink" href="#author-information" title="Permalink to this headline">¶</a></h1>
+<p><strong>IBM z/OSMF collection</strong> is maintained by the IBM z/OSMF development team. For more information about z/OSMF， see <a class="reference external" href="https://ibm.github.io/zOSMF/">IBM z/OSMF One Stop Hub</a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, IBM
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v2.3.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="index.html">v2.3.0</a></dd>
+            <dd><a href="../v2.2.0/index.html">v2.2.0</a></dd>
+            <dd><a href="../v2.1.0/index.html">v2.1.0</a></dd>
+            <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

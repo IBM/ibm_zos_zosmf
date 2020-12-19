@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_workflow_complete &mdash; IBM z/OSMF Collection 2.2.0 documentation</title>
+  <title>zmf_workflow_complete &mdash; IBM z/OSMF Collection 2.3.0 documentation</title>
   
 
   
@@ -175,7 +175,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.2.0/docs/source/roles/README_zmf_workflow_complete.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.3.0/docs/source/roles/README_zmf_workflow_complete.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -198,6 +198,11 @@
 <div class="section" id="zmf-workflow-complete">
 <h1>zmf_workflow_complete<a class="headerlink" href="#zmf-workflow-complete" title="Permalink to this headline">¶</a></h1>
 <p><strong>IBM z/OSMF collection</strong> provides an Ansible role, referred to as <strong>zmf_workflow_complete</strong>, to complete a z/OS workflow, either forcibly or idempotently.</p>
+<p>This role <strong>zmf_workflow_complete</strong> will execute z/OSMF workflows that are located on the target z/OS managed node. The workflows must be z/OSMF XML workflows and located on UNIX System Services (USS).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Submitting z/OSMF workflows found on Ansible control node is currently not supported.</p>
+</div>
 <div class="section" id="role-variables">
 <h2>Role Variables<a class="headerlink" href="#role-variables" title="Permalink to this headline">¶</a></h2>
 <dl>
@@ -244,10 +249,8 @@
 </div>
 </dd>
 <dt>force_complete</dt><dd><p>Specify whether to complete the workflow instance forcibly or idempotently.</p>
-<ul class="simple">
-<li><p><strong>Forcibly (force_complete=True)</strong>: Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p></li>
-<li><p><strong>Idempotently (force_complete=False)</strong>: Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p></li>
-</ul>
+<p>If <em>force_complete=True</em> (Forcibly): Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p>
+<p>If <em>force_complete=False</em> (Idempotently): Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: bool</div>
@@ -269,14 +272,12 @@
 </div>
 </dd>
 <dt>workflow_name</dt><dd><p>Descriptive name of the workflow.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_file</dt><dd><p>Location of the workflow definition file.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -284,35 +285,30 @@
 </dd>
 <dt>workflow_owner</dt><dd><p>User name of the workflow owner.</p>
 <p>If this value is omitted, <em>zmf_user</em> is used as workflow owner.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_file_system</dt><dd><p>Nickname of the system on which the specified workflow definition file and any related files reside.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_vars_file</dt><dd><p>Location of the optional properties file to be used to pre-specify the values of one or more variables that are defined in workflow definition file.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_vars</dt><dd><p>Values of one or more workflow variables in JSON format.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: dict</div>
 </div>
 </dd>
 <dt>workflow_resolve_global_conflict_by_using</dt><dd><p>Version of the variable to be used if the supplied workflow variable conflicts with an existing global variable in z/OSMF Workflows task.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -321,14 +317,12 @@
 </div>
 </dd>
 <dt>workflow_comments</dt><dd><p>User-specified information to be associated with the workflow at creation time.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_assign_to_owner</dt><dd><p>Specifies whether the workflow steps are assigned to the workflow owner when the workflow is created.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: bool</div>
@@ -336,7 +330,6 @@
 </div>
 </dd>
 <dt>workflow_access_type</dt><dd><p>Access type for the workflow when the workflow is created.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -345,29 +338,26 @@
 </div>
 </dd>
 <dt>workflow_account_info</dt><dd><p>For a workflow that submits a batch job, this variable specifies the account information for the JCL JOB statement.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_job_statement</dt><dd><p>For a workflow that submits a batch job, this variable specifies the JOB statement JCL for the job.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_delete_completed_jobs</dt><dd><p>For a workflow that submits a batch job, this variable specifies whether the job is deleted from the JES spool after it completes.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: False</div>
 </div>
 </dd>
 <dt>workflow_resolve_conflict_by_using</dt><dd><p>Specifies how to handle variable conflicts if any are detected at workflow creation time.</p>
 <p>Such conflicts can be found when z/OSMF Workflows task reads the output file from a step that runs a REXX exec or UNIX shell script.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -376,14 +366,12 @@
 </div>
 </dd>
 <dt>workflow_step_name</dt><dd><p>Name of the workflow step at which automation processing is to begin when the workflow is started.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>workflow_perform_subsequent</dt><dd><p>Specifies whether the subsequent automated steps are performed when the workflow is started.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: bool</div>
@@ -391,7 +379,6 @@
 </div>
 </dd>
 <dt>workflow_notification_url</dt><dd><p>URL to be used for notification when the workflow is started.</p>
-<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -453,15 +440,15 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.2.0
+        v: v2.3.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../v2.3.0/roles/README_zmf_workflow_complete.html">v2.3.0</a></dd>
             <dd><a href="../v2.2.0/roles/README_zmf_workflow_complete.html">v2.2.0</a></dd>
             <dd><a href="../v2.1.0/roles/README_zmf_workflow_complete.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/roles/README_zmf_workflow_complete.html">v2.0.1</a></dd>
             <dd><a href="../v2.0.0/roles/README_zmf_workflow_complete.html">v2.0.0</a></dd>
         </dl>
     </div>
