@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>zmf_workflow_complete &mdash; IBM z/OSMF Collection 2.2.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="zmf_cpm_provision_software_service" href="README_zmf_cpm_provision_software_service.html" />
+    <link rel="prev" title="Roles" href="../roles.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> IBM z/OSMF Collection
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../roles.html">Roles</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../roles.html#role-reference">Role Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_workflow_complete</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#role-variables">Role Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sample-playbooks">Sample Playbooks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README_zmf_cpm_remove_software_instance.html">zmf_cpm_remove_software_instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README_zmf_job_complete.html">zmf_job_complete</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README_zmf_job_query.html">zmf_job_query</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../playbooks.html">Playbooks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community_guides.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community_guides.html#helpful-links">Helpful Links</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Requirements</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../requirements.html">Requirements</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">IBM z/OSMF Collection</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../roles.html">Roles</a> &raquo;</li>
+        
+      <li>zmf_workflow_complete</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.2.1/docs/source/roles/README_zmf_workflow_complete.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+    
+    
+
+
+
+    <p class="scv-banner scv-sphinx_rtd_theme"><a href="../../v2.3.0/roles/README_zmf_workflow_complete.html"><b>Warning:</b> This document is for an old version of IBM z/OSMF Collection. The latest version is v2.3.0.</a></p>
+<div class="section" id="zmf-workflow-complete">
+<h1>zmf_workflow_complete<a class="headerlink" href="#zmf-workflow-complete" title="Permalink to this headline">¶</a></h1>
+<p><strong>IBM z/OSMF collection</strong> provides an Ansible role, referred to as <strong>zmf_workflow_complete</strong>, to complete a z/OS workflow, either forcibly or idempotently.</p>
+<div class="section" id="role-variables">
+<h2>Role Variables<a class="headerlink" href="#role-variables" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>zmf_host</dt><dd><p>Hostname of the z/OSMF server, specified via inventory or vars file.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_port</dt><dd><p>Port number of the z/OSMF server, specified via inventory file or vars file.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+</div>
+</dd>
+<dt>zmf_user</dt><dd><p>User name to be used for authenticating with z/OSMF server, prompted when playbook is run.</p>
+<p>Required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
+<p>If <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_password</dt><dd><p>Password to be used for authenticating with z/OSMF server, prompted when playbook is run.</p>
+<p>Required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
+<p>If <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_crt</dt><dd><p>Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.</p>
+<p>Required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_key</dt><dd><p>Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.</p>
+<p>Required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>force_complete</dt><dd><p>Specify whether to complete the workflow instance forcibly or idempotently.</p>
+<ul class="simple">
+<li><p><strong>Forcibly (force_complete=True)</strong>: Delete the workflow instance if it exists in the z/OSMF server. Create a new workflow instance and start it on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p></li>
+<li><p><strong>Idempotently (force_complete=False)</strong>: Create the workflow instance if it does not exist in the z/OSMF server. Start the workflow on each of the target z/OS systems. Periodically check the workflow status and return the final result when the workflow stops running.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: False</div>
+</div>
+</dd>
+<dt>complete_check_times</dt><dd><p>The maximum number of time that is used for periodic checks of the workflow status.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: 10</div>
+</div>
+</dd>
+<dt>complete_check_delay</dt><dd><p>The interval time between periodic checks of the workflow status.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+<div class="line"><strong>default</strong>: 5</div>
+</div>
+</dd>
+<dt>workflow_name</dt><dd><p>Descriptive name of the workflow.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_file</dt><dd><p>Location of the workflow definition file.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_owner</dt><dd><p>User name of the workflow owner.</p>
+<p>If this value is omitted, <em>zmf_user</em> is used as workflow owner.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_file_system</dt><dd><p>Nickname of the system on which the specified workflow definition file and any related files reside.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_vars_file</dt><dd><p>Location of the optional properties file to be used to pre-specify the values of one or more variables that are defined in workflow definition file.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_vars</dt><dd><p>Values of one or more workflow variables in JSON format.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+</dd>
+<dt>workflow_resolve_global_conflict_by_using</dt><dd><p>Version of the variable to be used if the supplied workflow variable conflicts with an existing global variable in z/OSMF Workflows task.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>default</strong>: global</div>
+<div class="line"><strong>choices</strong>: global, input</div>
+</div>
+</dd>
+<dt>workflow_comments</dt><dd><p>User-specified information to be associated with the workflow at creation time.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_assign_to_owner</dt><dd><p>Specifies whether the workflow steps are assigned to the workflow owner when the workflow is created.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: True</div>
+</div>
+</dd>
+<dt>workflow_access_type</dt><dd><p>Access type for the workflow when the workflow is created.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>default</strong>: Public</div>
+<div class="line"><strong>choices</strong>: Public, Restricted, Private</div>
+</div>
+</dd>
+<dt>workflow_account_info</dt><dd><p>For a workflow that submits a batch job, this variable specifies the account information for the JCL JOB statement.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_job_statement</dt><dd><p>For a workflow that submits a batch job, this variable specifies the JOB statement JCL for the job.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_delete_completed_jobs</dt><dd><p>For a workflow that submits a batch job, this variable specifies whether the job is deleted from the JES spool after it completes.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+</div>
+</dd>
+<dt>workflow_resolve_conflict_by_using</dt><dd><p>Specifies how to handle variable conflicts if any are detected at workflow creation time.</p>
+<p>Such conflicts can be found when z/OSMF Workflows task reads the output file from a step that runs a REXX exec or UNIX shell script.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>default</strong>: outputFileValue</div>
+<div class="line"><strong>choices</strong>: outputFileValue, existingValue, leaveConflict</div>
+</div>
+</dd>
+<dt>workflow_step_name</dt><dd><p>Name of the workflow step at which automation processing is to begin when the workflow is started.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>workflow_perform_subsequent</dt><dd><p>Specifies whether the subsequent automated steps are performed when the workflow is started.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: True</div>
+</div>
+</dd>
+<dt>workflow_notification_url</dt><dd><p>URL to be used for notification when the workflow is started.</p>
+<p>For more information, see the documentation for the z/OSMF workflow REST services.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>module: <a class="reference external" href="../modules/zmf_workflow.html">zmf_workflow</a></p></li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>See the section <a class="reference external" href="../requirements_workflow.html">Requirements</a>.</p>
+</div>
+<div class="section" id="sample-playbooks">
+<h2>Sample Playbooks<a class="headerlink" href="#sample-playbooks" title="Permalink to this headline">¶</a></h2>
+<p>See the sample playbook in section <a class="reference external" href="../playbooks/sample_role_workflow_complete.html">Playbooks</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="README_zmf_cpm_provision_software_service.html" class="btn btn-neutral float-right" title="zmf_cpm_provision_software_service" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../roles.html" class="btn btn-neutral float-left" title="Roles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, IBM
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v2.2.1
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../../v2.3.0/roles/README_zmf_workflow_complete.html">v2.3.0</a></dd>
+            <dd><a href="README_zmf_workflow_complete.html">v2.2.1</a></dd>
+            <dd><a href="../../v2.2.0/roles/README_zmf_workflow_complete.html">v2.2.0</a></dd>
+            <dd><a href="../../v2.1.0/roles/README_zmf_workflow_complete.html">v2.1.0</a></dd>
+            <dd><a href="../../v2.0.1/roles/README_zmf_workflow_complete.html">v2.0.1</a></dd>
+            <dd><a href="../../v2.0.0/roles/README_zmf_workflow_complete.html">v2.0.0</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
