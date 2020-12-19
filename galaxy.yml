@@ -32,12 +32,9 @@ tags:
   - ibm
   - z
   - zos
-  - z_os
-  - mvs
-  - zos_management_facility
   - zosmf
-  - osmf
-  - ibm_zos_zosmf
+  - zos_management_facility
+  - mvs
   - workflow
   - job
   - console
@@ -50,7 +47,6 @@ tags:
   - liberty
   - was
   - dataset
-  - data_set
   - uss
 
 # The URL of the originating SCM repository
