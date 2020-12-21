@@ -5,7 +5,6 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import handle_request_raw
-import json
 import re
 
 
@@ -22,7 +21,7 @@ def __get_file_apis():
             args={
                 'research': dict(required=False, type='str', nickname='file_search.keyword'),
                 'insensitive': dict(required=False, type='bool', default=True, nickname='file_search.insensitive'),
-                'maxreturnsize': dict(required=False, type='int', default='100', nickname='file_search.maxreturnsize')
+                'maxreturnsize': dict(required=False, type='int', default=100, nickname='file_search.maxreturnsize')
             },
             headers={
                 'Content-Type': dict(required=False, type='str', default='text/plain', nickname=''),
@@ -33,16 +32,26 @@ def __get_file_apis():
             },
             ok_rcode=200
         ),
-        # write data to an existing USS file # TODO
+        # write data to a USS file
         copy=dict(
             method='put',
             url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{file_dest}',
+            args={},
             headers={
                 'Content-Type': dict(required=False, type='str', default='text/plain', nickname=''),
-                'X-IBM-Data-Type': dict(required=False, type='str', default='text', choices=['text', 'binary', 'record'], nickname='file_data_type'),
+                'X-IBM-Data-Type': dict(required=False, type='str', default='text', choices=['text', 'binary'], nickname='file_data_type'),
                 'If-Match': dict(required=False, type='str', nickname='file_checksum')
             },
             ok_rcode=204
+        ),
+        # list the USS files and directories
+        list=dict(
+            method='get',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs?path=/{file_dest}',
+            args={
+                'name': dict(required=False, type='str', nickname='')
+            },
+            ok_rcode=200
         )
     )
 
@@ -71,9 +80,9 @@ def __get_file_api_url(module, url):
     else:
         module.params['zmf_port'] = str(module.params['zmf_port']).strip()
     # format the input for file_src & file_dest
-    if module.params['file_src'].strip().startswith('/'):
+    if module.params['file_src'] is not None and module.params['file_src'].strip().startswith('/'):
         module.params['file_src'] = (module.params['file_src'].strip())[1:]
-    if module.params['file_dest'].strip().startswith('/'):
+    if module.params['file_dest'] is not None and module.params['file_dest'].strip().startswith('/'):
         module.params['file_dest'] = (module.params['file_dest'].strip())[1:]
     matchObj = re.findall('{(.+?)}', url)
     for x in matchObj:
@@ -128,16 +137,17 @@ def __get_file_api_params(module, args):
     return params
 
 
-def call_file_api(module, session, api, headers):
+def call_file_api(module, session, api, headers=None, body=None):
     """
     Return the response or error message of the specific file API.
     :param AnsibleModule module: the ansible module
     :param Session session: the current connection session
     :param str api: the name of API
     :param dict headers: the header of HTTP request
+    :param str body: the body of HTTP PUT request
     :rtype: dict or str
     """
     zmf_api = __get_file_api_argument_spec(api)
     zmf_api_url = __get_file_api_url(module, zmf_api['url'])
     zmf_api_params = __get_file_api_params(module, zmf_api['args'])
-    return handle_request_raw(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, headers)
+    return handle_request_raw(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, headers, body)

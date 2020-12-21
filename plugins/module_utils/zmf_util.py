@@ -139,7 +139,7 @@ def handle_request(module, session, method, url, params=None, rcode=200, header=
                 return 'HTTP request error: ' + str(response_code)
 
 
-def handle_request_raw(module, session, method, url, params=None, header=None, timeout=30):
+def handle_request_raw(module, session, method, url, params=None, header=None, body=None, timeout=30):
     headers = __get_request_headers()
     if header is not None:
         headers.update(header)
@@ -147,9 +147,15 @@ def handle_request_raw(module, session, method, url, params=None, header=None, t
         if method == 'get':
             response = session.get(url, params=params, headers=headers, verify=False, timeout=timeout)
         elif method == 'put':
-            response = session.put(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
+            if body is not None:
+                response = session.put(url, data=body, headers=headers, verify=False, timeout=timeout)
+            else:
+                response = session.put(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
         elif method == 'post':
-            response = session.post(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
+            if body is not None:
+                response = session.post(url, data=body, headers=headers, verify=False, timeout=timeout)
+            else:
+                response = session.post(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
         elif method == 'delete':
             response = session.delete(url, headers=headers, verify=False, timeout=timeout)
     except Exception as ex:
