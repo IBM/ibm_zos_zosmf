@@ -16,7 +16,7 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r"""
 ---
 module: zmf_dataset_fetch
-short_description: Operates a z/OS data set or member
+short_description: Fetch z/OS data set or member from z/OS
 description:
     - Retrieve the contents of a z/OS data set or member and store the content to a local file.
 version_added: "2.9"
@@ -381,9 +381,6 @@ from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_dataset_api import (
     call_dataset_api
 )
-from time import sleep
-import json
-import re
 import os
 
 
@@ -467,7 +464,10 @@ def fetch_dataset(module):
     """
     Call z/OSMF REST file and data set interface to read data set or member
     """
-
+    fetch_result = dict(
+        changed=False,
+        message='',
+    )
     # combine custom headers
     request_headers = dict()
     if module.params['dataset_data_type'] == 'text' and module.params['dataset_encoding'] is not None:
@@ -490,15 +490,33 @@ def fetch_dataset(module):
 
     # create session
     session = get_connect_session(module)
+    dataset = module.params['dataset_src'].strip().upper()
+    # setup data set full name, data set name and member name
+    ds_full_name = ''
+    ds_v_name = ''
+    ds_name = ''
+    m_name = ''
+    if dataset.find('(') > 0:
+        ds_name = dataset[:dataset.find('(')]
+        m_name = dataset[dataset.find('(') + 1:dataset.find(')')]
+    else:
+        ds_name = dataset
+    if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
+        ds_full_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + dataset
+        ds_v_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + ds_name
+    else:
+        ds_full_name = dataset
+        ds_v_name = ds_name
+    module.params['ds_full_name'] = ds_full_name
+    module.params['ds_v_name'] = ds_v_name
+    module.params['ds_name'] = ds_name
+    module.params['m_name'] = m_name
     # fetch dataset
     response_fetch = call_dataset_api(module, session, 'fetch', request_headers)
-    dataset = module.params['dataset_src'].strip()
-    fetch_result = dict()
-    fetch_result['changed'] = False
     status_code = response_fetch.status_code
     if status_code == 404:
         if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
-            module.fail_json(msg='Failed to fetch the data set ---- ' + dataset + ' can not be found in ' + module.params['dataset_volser'])
+            module.fail_json(msg='Failed to fetch the data set ---- ' + dataset + ' can not be found in ' + module.params['dataset_volser'].strip().upper())
         else:
             module.fail_json(msg='Failed to fetch the data set ---- ' + dataset + ' not in catalog or catalog can not be accessed.')
     elif status_code != 304 and status_code != 200:
@@ -536,7 +554,7 @@ def fetch_dataset(module):
                 if module.params['dataset_flat'] is False:
                     path = path + host + '/'
                 if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
-                    path = path + module.params['dataset_volser'] + '/'
+                    path = path + module.params['dataset_volser'].strip().upper() + '/'
                 save_file = dataset.replace('(', '/').replace(')', '/')
                 if save_file.find('/') != -1:
                     tmp_path = save_file.split('/')
