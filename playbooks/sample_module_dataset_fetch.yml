@@ -28,7 +28,7 @@
         zmf_credential: "{{ result_auth }}"
         dataset_src: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
         dataset_dest: "/tmp/dataset_output"
-        # dataset_volser: "VOL003" 
+        # dataset_volser: "VOL001" 
         # dataset_flat: false 
         # dataset_data_type: "text"
         # dataset_encoding:
