@@ -18,7 +18,9 @@ DOCUMENTATION = r"""
 module: zmf_dataset_fetch
 short_description: Fetch z/OS data set or member from z/OS
 description:
-    - Retrieve the contents of a z/OS data set or member and store the content to a local file.
+    - Retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from the remote z/OS system.
+    - Save the retrieved data set or member on Ansible control node.
+    - Data set or member that already exists at I(dataset_dest) will be overwritten if it is different than the I(dataset_src).
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
@@ -107,23 +109,24 @@ options:
         default: null
     dataset_src:
         description:
-            - Data set or data set member name on the remote z/OS system to fetch.
-            - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATA), or a data set member like C(ZOSMF.ANSIBLE.PDS(MEMBER)).
+            - Data set or the name of the PDS or PDSE member on the remote z/OS system to fetch.
+            - This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
+            - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATA), or a PDS or PDSE member like C(ZOSMF.ANSIBLE.PDS(MEMBER)).
         required: true
         type: str
     dataset_dest:
         description:
-            - The local directory on control node where the data set should be saved to. For example, C(/tmp/dataset).
+            - The local directory on control node where the data set or member should be saved to. For example, C(/tmp/dataset).
             - This directory can be absolute or relative. The module will fail if the parent directory of I(dataset_dest) is a read-only file system.
             - The directory C({{ dataset_dest }}/{{ zmf_host }}/) will be created to save the data set, where I(zmf_host) is the hostname of the z/OSMF server.
-            - If I(zmf_host=zosmf.ibm.com), a dataset named C(ZOSMF.ANSIBLE.DATA) would be saved into C({{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.DATA).
-            - If I(dataset_volser=VOL001), the above dataset would be saved into C({{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.DATA).
+            - If I(zmf_host=zosmf.ibm.com), a data set named C(ZOSMF.ANSIBLE.DATA) would be saved into C({{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.DATA).
+            - If I(dataset_volser=VOL001), the above data set would be saved into C({{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.DATA).
         required: true
         type: str
     dataset_volser:
         description:
-            - The volume serial identify the volume to be searched for an uncataloged data set or member.
-            - The length of the volume serial cannot exceed six characters. You cannot use wildcard characters for this parameter.
+            - The volume serial to identify the volume to be searched for an uncataloged data set or member.
+            - The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
         required: false
         type: str
         default: null
@@ -137,12 +140,12 @@ options:
         default: false
     dataset_search:
         description:
-            - Specifies a series of parameters that are used to search the content of data set or member.
+            - Specifies a series of parameters that are used to search the content of data set.
             - These parameters only take effects when I(dataset_data_type=text).
             - If this variable is specified, only the matched records in the data set will be fetched to the destination directory.
             - Records are returned starting with the first matching record. The I(dataset_range) may be used to specify the range of records to be searched.
             - The matched contents in the data set will be saved as C({{ dataset_dest }}/{{ zmf_host }}/{{ dataset_src }}.search) on control node.
-            - For example, the matched contents in the dataset named C(ZOSMF.ANSIBLE.DATA) would be saved as C(/tmp/dataset/ZOSMF.ANSIBLE.DATA.search).
+            - For example, the matched contents in the data set named C(ZOSMF.ANSIBLE.DATA) would be saved as C(/tmp/dataset/ZOSMF.ANSIBLE.DATA.search).
         required: false
         type: dict
         default: null
@@ -172,9 +175,13 @@ options:
             - Specifies whether data conversion is to be performed on the returned data.
             - When I(dataset_data_type=text), data conversion is performed.
             - You can use I(dataset_encoding) to specify which encodings the fetched data set should be converted from and to.
+            - A newline (NL) character is inserted between logical records. For data set with fixed-length records, trailing blanks are removed.
             - If I(dataset_encoding) is not supplied, the data transfer process converts each record from C(IBM-1047) to C(ISO8859-1) by default.
-            - When I(dataset_data_type=binary), no data conversion is performed. The data transfer process returns each line of data as-is.
-            - When I(dataset_data_type=record), no data conversion is performed. Each logical record is preceded by the 4-byte big endian record length.
+            - When I(dataset_data_type=binary), no data conversion is performed.
+            - The data transfer process returns each line of data as-is, without translation. No delimiters are added between records.
+            - When I(dataset_data_type=record), no data conversion is performed.
+            - Each logical record is preceded by the 4-byte big endian record length of the record that follows. This length doesn't include the prefix length.
+            - For example, a zero-length record is 4 bytes of zeros with nothing following.
         required: false
         type: str
         default: text
@@ -249,81 +256,81 @@ requirements:
 """
 
 EXAMPLES = r"""
-- name: Fetch a data set and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE/MEMBER
+- name: Fetch a data set and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
     dataset_dest: "/tmp/dataset"
 
-- name: Fetch a dataset and store in /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER
+- name: Fetch a PDS member and store in /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
     dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
     dataset_dest: "/tmp/dataset"
     dataset_flat: true
 
-- name: Fetch an uncataloged dataset and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE/MEMBER
+- name: Fetch an uncataloged PDS member and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE/MEMBER
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
     dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
-    dataset_volser: "VOLABC"
+    dataset_volser: "VOL001"
     dataset_dest: "/tmp/dataset"
 
 - name: Fetch a data set as binary
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
     dataset_dest: "/tmp/dataset"
     dataset_data_type: "binary"
 
 - name: Fetch a data set in record format
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
     dataset_dest: "/tmp/dataset"
     dataset_data_type: "record"
 
-- name: Fetch a dataset and convert it from IBM-037 to ISO8859-1
+- name: Fetch a data set and convert it from IBM-037 to ISO8859-1
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
     dataset_dest: "/tmp/dataset"
     dataset_encoding:
         from: IBM-037
         to: ISO8859-1
 
-- name: Fetch a range of records from a dataset (the first 500 lines)
+- name: Fetch a range of records from a data set (the first 500 lines)
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
     dataset_dest: "/tmp/dataset"
     dataset_range:
         start: 0
         end: 499
 
-- name: Fetch a range of records from a dataset (the final 500 lines)
+- name: Fetch a range of records from a data set (the final 500 lines)
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
     dataset_dest: "/tmp/dataset"
     dataset_range:
         end: 500
 
-- name: Fetch 100 lines of records from the first matched line that contains "ansible" in a dataset
+- name: Fetch 100 lines of records from the first matched line that contains "ansible" in a data set
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
     dataset_dest: "/tmp/dataset"
     dataset_search:
         keyword: "ansible"
         maxreturnsize: 100
 
-- name: Fetch a dataset and validate its checksum
+- name: Fetch a data set and validate its checksum
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
     dataset_dest: "/tmp/dataset"
-    dataset_checksum: "A4B504A7427F34B97B7E109CCC0459CA"
+    dataset_checksum: "93822124D6E66E2213C64B0D10800224"
 """
 
 RETURN = r"""
@@ -332,7 +339,7 @@ changed:
     returned: always
     type: bool
 message:
-    description: The output message generated by the module to indicate whether the data set is successfully fetched.
+    description: The output message generated by the module to indicate whether the data set or member is successfully fetched.
     returned: on success
     type: str
     sample:
@@ -367,7 +374,7 @@ dataset_matched_range:
     type: str
     sample: "0,500"
 dataset_checksum:
-    description: The checksum of the fetched data set, can be set in I(dataset_checksum) in next call to this module
+    description: The checksum of the fetched data set
     returned: on success when I(dataset_search) and I(dataset_range) are not specified
     type: str
     sample: "93822124D6E66E2213C64B0D10800224"
@@ -511,7 +518,7 @@ def fetch_dataset(module):
     module.params['ds_v_name'] = ds_v_name
     module.params['ds_name'] = ds_name
     module.params['m_name'] = m_name
-    # fetch dataset
+    # fetch data set
     response_fetch = call_dataset_api(module, session, 'fetch', request_headers)
     status_code = response_fetch.status_code
     if status_code == 404:
@@ -526,7 +533,7 @@ def fetch_dataset(module):
                 and 'rc' in response_error and response_error['rc'] == 8
                 and 'reason' in response_error and response_error['reason'] == 1046):
             # not fail - no conntents returned in the range of records (500)
-            fetch_result['message'] = 'The dataset ' + dataset + ' is not fetched since no contents is returned in the specified range.'
+            fetch_result['message'] = 'The data set ' + dataset + ' is not fetched since no contents is returned in the specified range.'
             module.exit_json(**fetch_result)
         else:
             # fail - return JSON error report

@@ -19,8 +19,8 @@ module: zmf_dataset_copy
 short_description: Copy data to z/OS data set or member
 description:
     - Copy data from Ansible control node to an existing sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
-    - If the target data set or member already exists, it can be overwritten. If the target member does not exist, it can be created.
-    # TODO support create sequential data set if not exist
+    - If the target data set or member already exists, it can be overwritten. If the target PDS or PDSE member does not exist, it can be created.
+    # TODO support create data set if not exist
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
@@ -109,16 +109,16 @@ options:
         default: null
     dataset_src:
         description:
-            - The local path on control node of the data to be copied to the target data set. For example, C(/tmp/dataset_input/profile).
+            - The local path on control node of the data to be copied to the target data set or member. For example, C(/tmp/dataset_input/member01).
             - This path can be absolute or relative. The module will fail if I(dataset_src) has no read permission.
-            - The data is interpreted as one of binary, text or 'diff -e' format according to the value of I(dataset_data_type) and I(dataset_diff).
+            - The data is interpreted as one of binary, text, record or 'diff -e' format according to the value of I(dataset_data_type) and I(dataset_diff).
             - If I(dataset_content) is supplied and I(dataset_data_type=text), I(dataset_src) is ignored.
         required: false
         type: str
         default: null
     dataset_content:
         description:
-            - The contents to be copied to the target data set. This variable is used instead of I(dataset_src).
+            - The contents to be copied to the target data set or member. This variable is used instead of I(dataset_src).
             - This variable only take effects when I(dataset_data_type=text).
             - Each line of the contents should be terminated with C(\n). For example, C(Sample profile\nTZ=EST5EDT\n).
             - If I(dataset_content) is supplied and I(dataset_data_type=text), I(dataset_src) is ignored.
@@ -127,17 +127,24 @@ options:
         default: null
     dataset_dest:
         description:
-            - Data set or member on the remote z/OS system where the data should be copied to.
-            - This variable must consist of a fully qualified path and file name. For example, C(/etc/profile).
+            - Data set or the name of the PDS or PDSE member on the remote z/OS system where the data should be copied to.
+            - This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
+            - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATA), or a PDS or PDSE member like C(ZOSMF.ANSIBLE.PDS(MEMBER)).
         required: true
         type: str
         default: null
-    # dataset-model: vs auto-template
+    dataset_volser:
+        description:
+            - The volume serial to identify the volume to be searched for an uncataloged data set or member.
+            - The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
+        required: false
+        type: str
+        default: null
     dataset_force:
         description:
             - Specifies whether the target data set must always be overwritten.
             - If I(dataset_force=true), the target data set will always be overwritten.
-            - If I(dataset_force=false), the data will only be copied if the target data set does not exist.
+            - If I(dataset_force=false), the data will only be copied if the target PDS or PDSE member does not exist.
         required: false
         type: bool
         default: true
@@ -146,18 +153,28 @@ options:
             - Specifies whether data conversion is to be performed on the data to be copied.
             - When I(dataset_data_type=text), data conversion is performed.
             - You can use I(dataset_encoding) to specify which encodings the data to be copied should be converted from and to.
+            - Each line of data, delimited by a Line Feed (LF), is converted and written as a record to the target data set.
+            - The LF character is removed and the data is padded with the space character to the end of the record if it is a fixed record size data set.
+            - For variable record size data set, the record is written without padding.
+            - the module will fail if the record size of the data set is smaller than any line of text since not all data was written.
             - If I(dataset_encoding) is not supplied, the data transfer process converts each byte from C(ISO8859-1) to C(IBM-1047) by default.
             - You can use I(dataset_crlf) to control whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).
             - If I(dataset_crlf) is not supplied, LF characters are left intact by default.
             - You can use I(dataset_diff) to specify whether the input consists of commands in the same format as produced by the z/OS UNIX 'diff -e' command.
             - If I(dataset_diff) is not supplied, the input is regarded as not consisting of commands by default.
             - When I(dataset_data_type=binary), no data conversion is performed.
+            - The data is written to the data set without respect to record boundaries. All records will be written at their maximum record length.
+            - For fixed length record data set, the last record will be padded with nulls if required.
+            - When I(dataset_data_type=record), no data conversion is performed.
+            - Each logical record is preceded by the 4-byte big endian record length of the record that follows. This length doesn't include the prefix length.
+            - For example, a zero-length record is 4 bytes of zeros with nothing following.
         required: false
         type: str
         default: text
         choices:
             - text
             - binary
+            - record
     dataset_encoding:
         description:
             - Specifies which encodings the data to be copied should be converted from and to.
@@ -200,6 +217,19 @@ options:
         required: false
         type: bool
         default: false
+    dataset_migrate_recall:
+        description:
+            - Specify how a migrated data set is handled.
+            - When I(dataset_migrate_recall=wait), the migrated data set is recalled synchronously.
+            - When I(dataset_migrate_recall=nowait), request the migrated data set to be recalled, but do not wait.
+            - When I(dataset_migrate_recall=error), do not attempt to recall the migrated data set.
+        required: false
+        type: str
+        default: wait
+        choices:
+            - wait
+            - nowait
+            - error
     dataset_checksum:
         description:
             - Specifies the checksum to be used to verify that the target data set to copy to is not changed since the checksum was generated.
@@ -213,65 +243,65 @@ requirements:
 """
 
 EXAMPLES = r"""
-- name: Copy a local file to USS file /etc/profile
+- name: Copy a local file to data set ZOSMF.ANSIBLE.LIB
   zmf_dataset_copy:
     zmf_host: "sample.ibm.com"
-    dataset_src: "/tmp/dataset_input/profile"
-    dataset_dest: "/etc/profile"
+    dataset_src: "/tmp/dataset_input/sample1"
+    dataset_dest: "ZOSMF.ANSIBLE.LIB"
 
-- name: Copy a local file to USS file /etc/profile only if it does not exist
+- name: Copy a local file to PDS member ZOSMF.ANSIBLE.LIB(MEMBER01) only if it does not exist
   zmf_dataset_copy:
     zmf_host: "sample.ibm.com"
-    dataset_src: "/tmp/dataset_input/profile"
-    dataset_dest: "/etc/profile"
+    dataset_src: "/tmp/dataset_input/member01"
+    dataset_dest: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
     dataset_force: false
 
-- name: Copy the contents to USS file /etc/profile
+- name: Copy the contents to data set ZOSMF.ANSIBLE.LIB
   zmf_dataset_copy:
     zmf_host: "sample.ibm.com"
     dataset_conntent: "Sample profile\nTZ=EST5EDT\n"
-    dataset_dest: "/etc/profile"
+    dataset_dest: "ZOSMF.ANSIBLE.LIB"
 
-- name: Copy a local file to USS file /etc/profile as binary
+- name: Copy a local file to uncataloged PDS member ZOSMF.ANSIBLE.LIB(MEMBER01) as binary
   zmf_dataset_copy:
     zmf_host: "sample.ibm.com"
-    dataset_src: "/tmp/dataset_input/profile"
-    dataset_dest: "/etc/profile"
+    dataset_src: "/tmp/dataset_input/member01"
+    dataset_dest: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
+    dataset_volser: "VOL001"
     dataset_data_type: "binary"
 
-- name: Copy a local file to USS file /etc/profile and convert from ISO8859-1 to IBM-037
+- name: Copy a local file to data set ZOSMF.ANSIBLE.LIB and convert from ISO8859-1 to IBM-037
   zmf_dataset_copy:
     zmf_host: "sample.ibm.com"
-    dataset_src: "/tmp/dataset_input/profile"
-    dataset_dest: "/etc/profile"
+    dataset_src: "/tmp/dataset_input/sample1"
+    dataset_dest: "ZOSMF.ANSIBLE.LIB"
     dataset_encoding:
       from: ISO8859-1
       to: IBM-037
 
-- name: Copy a local file to USS file /etc/profile and validate its checksum
+- name: Copy a local file to data set ZOSMF.ANSIBLE.LIB and validate its checksum
   zmf_dataset_copy:
     zmf_host: "sample.ibm.com"
-    dataset_src: "/tmp/dataset_input/profile"
-    dataset_dest: "/etc/profile"
+    dataset_src: "/tmp/dataset_input/sample1"
+    dataset_dest: "ZOSMF.ANSIBLE.LIB"
     dataset_checksum: "93822124D6E66E2213C64B0D10800224"
 """
 
 RETURN = r"""
 changed:
-    description:
-        - Indicates if any change is made during the module operation.
+    description: Indicates if any change is made during the module operation.
     returned: always
     type: bool
 message:
-    description: The output message generated by the module to indicate whether the USS file is successfully copied.
+    description: The output message generated by the module to indicate whether the data set or member is successfully copied.
     returned: on success
     type: str
     sample:
-        sample1: "The target data set /etc/profile is created and updated successfully."
-        sample2: "The target data set /etc/profile is updated successfully."
-        sample7: "No data is copied since the target data set /etc/profile exists and dataset_force is set to False."
+        sample1: "The target data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is created and updated successfully."
+        sample2: "The target data set ZOSMF.ANSIBLE.SAMPLE is updated successfully."
+        sample7: "No data is copied since the target data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) exists and dataset_force is set to False."
 dataset_checksum:
-    description: The checksum of the USS file.
+    description: The checksum of the updated data set.
     returned: on success
     type: str
     sample: "93822124D6E66E2213C64B0D10800224"

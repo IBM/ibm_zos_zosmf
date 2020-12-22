@@ -257,8 +257,7 @@ EXAMPLES = r"""
 
 RETURN = r"""
 changed:
-    description:
-        - Indicates if any change is made during the module operation.
+    description: Indicates if any change is made during the module operation.
     returned: always
     type: bool
 message:
@@ -270,7 +269,7 @@ message:
         sample2: "The target USS file /etc/profile is updated successfully."
         sample7: "No data is copied since the target USS file /etc/profile exists and file_force is set to False."
 file_checksum:
-    description: The checksum of the USS file.
+    description: The checksum of the updated USS file.
     returned: on success
     type: str
     sample: "93822124D6E66E2213C64B0D10800224"
