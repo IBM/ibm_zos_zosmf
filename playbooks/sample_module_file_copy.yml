@@ -1,10 +1,10 @@
 # Copyright (c) IBM Corporation 2020 
 
-# This sample playbook demonstrates using module `zmf_file_copy` to copy USS file to z/OS.
+# This sample playbook demonstrates using module `zmf_file_copy` to copy data to a z/OS USS file.
 # Example:
 # ansible-playbook -i hosts sample_module_file_copy.yml
 
-- name: sample of copying USS file to z/OS
+- name: sample of copying data to a z/OS USS file
   hosts: file
   gather_facts: no
   collections:

@@ -16,9 +16,9 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r"""
 ---
 module: zmf_file_copy
-short_description: Copy data to a USS file
+short_description: Copy data to z/OS USS file
 description:
-    - Copy data from Ansible control node to z/OS UNIX System Services (USS) file on the remote z/OS system.
+    - Copy data from Ansible control node to a z/OS UNIX System Services (USS) file on the remote z/OS system.
     - If the target USS file already exists, it can be overwritten. If the target USS file does not exist, it can be created with mode 644.
 version_added: "2.9"
 author:
@@ -284,8 +284,6 @@ from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_file_api import (
     call_file_api
 )
-from tempfile import mkstemp
-import os
 
 
 def validate_module_params(module):

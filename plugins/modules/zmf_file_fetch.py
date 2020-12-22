@@ -19,7 +19,7 @@ module: zmf_file_fetch
 short_description: Fetch USS file from z/OS
 description:
     - Retrieve the contents of a z/OS UNIX System Services (USS) file from the remote z/OS system, and save them on Ansible control node.
-    - USS files that already exist at I(file_dest) will be overwritten if they are different than the I(file_src).
+    - USS file that already exists at I(file_dest) will be overwritten if it is different than the I(file_src).
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
