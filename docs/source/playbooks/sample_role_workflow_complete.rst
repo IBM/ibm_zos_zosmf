@@ -32,7 +32,6 @@ This `sample playbook`_ shows how to complete a z/OS workflow on the target z/OS
            # force_complete: False # Whether to complete the workflow instance forcibly or idempotently. Default is False
            # complete_check_times: 10 # The maximum number of time that is used for periodic checks of the workflow status. Default is 10
            # complete_check_delay: 5 # The interval time (seconds) between periodic checks of the workflow status. Default is 5
-       - debug: var=result
 
 .. note::
 

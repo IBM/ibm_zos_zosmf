@@ -2,6 +2,10 @@
 # Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
 
 ---
+- name: Initialize final_result
+  set_fact:
+    final_result: {'workflow_name': "{{ workflow_name }}"}
+
 - name: Check whether a workflow instance with the given name already exists
   ibm.ibm_zos_zosmf.zmf_workflow:
     state: "existed"
@@ -97,7 +101,17 @@
   retries: "{{ complete_check_times }}"
   delay: "{{ complete_check_delay }}"
 
+- name: Update final_result
+  set_fact:
+    final_result: "{{ final_result | combine({ \
+                   'workflow_key': start_result.workflow_key | default(compare_result.workflow_key), \
+                   'completed': result.completed, \
+                   'msg': result.message }) }}"
+
 - name: Fail if the workflow instance is not completed
   fail:
     msg: "{{ result.message }}"
   when: not result.completed
+
+- name: Return final_result
+  debug: var=final_result
