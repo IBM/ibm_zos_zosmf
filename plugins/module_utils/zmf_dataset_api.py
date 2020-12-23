@@ -167,8 +167,8 @@ def call_dataset_api(module, session, api, headers=None, body=None):
     """
     zmf_api = __get_dataset_api_argument_spec(api)
     zmf_api_url = __get_dataset_api_url(module, zmf_api['url'])
-    zmf_api_params = None
-    zmf_api_headers = None
+    zmf_api_params = dict()
+    zmf_api_headers = dict()
     if 'args' in zmf_api:
         zmf_api_params = __get_dataset_api_params(module, zmf_api['args'])
     if 'headers' in zmf_api:

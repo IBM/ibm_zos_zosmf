@@ -29,7 +29,7 @@
         dataset_src: "/tmp/dataset_input/member01"
         # dataset_content: "Sample profile\nTZ=EST5EDT\n"
         dataset_dest: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
-        # dataset_volser: "VOL003"
+        # dataset_volser: "VOL001"
         # dataset_force: true
         # dataset_data_type: "text"
         # dataset_encoding:
