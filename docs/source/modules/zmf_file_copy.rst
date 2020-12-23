@@ -4,8 +4,8 @@
 .. _zmf_file_copy_module:
 
 
-zmf_file_copy -- Copy data to a USS file
-========================================
+zmf_file_copy -- Copy data to z/OS USS file
+===========================================
 
 
 
@@ -16,7 +16,7 @@ zmf_file_copy -- Copy data to a USS file
 
 Synopsis
 --------
-- Copy data from Ansible control node to z/OS UNIX System Services (USS) file on the remote z/OS system.
+- Copy data from Ansible control node to a z/OS UNIX System Services (USS) file on the remote z/OS system.
 - If the target USS file already exists, it can be overwritten. If the target USS file does not exist, it can be created with mode 644.
 
 
@@ -444,7 +444,7 @@ Return Values
    
       
    file_checksum
-        The checksum of the USS file.
+        The checksum of the updated USS file.
 
 
         | **returned**: on success 

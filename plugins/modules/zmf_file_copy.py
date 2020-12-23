@@ -112,7 +112,6 @@ options:
             - This path can be absolute or relative. The module will fail if I(file_src) has no read permission.
             - The data is interpreted as one of binary, text or 'diff -e' format according to the value of I(file_data_type) and I(file_diff).
             - If I(file_content) is supplied and I(file_data_type=text), I(file_src) is ignored.
-            # TODO support copy dir
         required: false
         type: str
         default: null

@@ -18,9 +18,8 @@ DOCUMENTATION = r"""
 module: zmf_dataset_copy
 short_description: Copy data to z/OS data set or member
 description:
-    - Copy data from Ansible control node to an existing sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
-    - If the target data set or member already exists, it can be overwritten. If the target PDS or PDSE member does not exist, it can be created.
-    # TODO support create data set if not exist
+    - Copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
+    - If the target data set or member already exists, it can be overwritten. If the target data set or member does not exist, it can be created.
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
