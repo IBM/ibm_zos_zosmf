@@ -249,17 +249,7 @@ Sample Playbooks
    :maxdepth: 1
    :glob:
 
-   playbooks/sample_module_workflow
-   playbooks/sample_role_workflow_complete
-   playbooks/sample_role_cpm_manage_instance
-   playbooks/sample_role_cpm_provision
-   playbooks/sample_role_cpm_remove_instance
-   playbooks/sample_role_deploy_cics_application
-   playbooks/sample_role_job_complete
-   playbooks/sample_role_job_query
-   playbooks/sample_module_console_command
-   playbooks/sample_module_dataset_fetch
-   playbooks/sample_module_file_fetch
+   playbooks/*
 
 Run the Playbooks
 -----------------

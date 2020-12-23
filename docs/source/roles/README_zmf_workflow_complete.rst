@@ -83,7 +83,7 @@ complete_check_times
   | **default**: 10
 
 complete_check_delay
-  The interval time between periodic checks of the workflow status.
+  The interval time (seconds) between periodic checks of the workflow status.
 
   | **required**: False
   | **type**: int
@@ -123,6 +123,8 @@ workflow_vars_file
 
 workflow_vars
   Values of one or more workflow variables in JSON format.
+
+  For example, ``{"user_to_list":"DEBUG1", "tsocmd_to_issue":"TIME"}``
 
   | **required**: False
   | **type**: dict
