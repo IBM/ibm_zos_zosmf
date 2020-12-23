@@ -83,7 +83,7 @@ complete_check_times
   | **default**: 10
 
 complete_check_delay
-  The interval time between periodic checks of the workflow status.
+  The interval time (seconds) between periodic checks of the workflow status.
 
   | **required**: False
   | **type**: int
