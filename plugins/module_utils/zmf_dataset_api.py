@@ -51,6 +51,12 @@ def __get_dataset_apis():
             },
             ok_rcode=204
         ),
+        # create a data set
+        create=dict(
+            method='post',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_name}',
+            ok_rcode=201
+        ),
         # list the data set
         list_ds=dict(
             method='get',

@@ -18,9 +18,9 @@ DOCUMENTATION = r"""
 module: zmf_dataset_copy
 short_description: Copy data to z/OS data set or member
 description:
-    - Copy data from Ansible control node to an existing sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
+    - Copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
     - If the target data set or member already exists, it can be overwritten. If the target member does not exist, it can be created.
-    # TODO support create sequential data set if not exist
+    - If the target data set does not exist, it can be created based on I(dataset_model) or the size of the source.
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
@@ -132,7 +132,6 @@ options:
         required: true
         type: str
         default: null
-    # dataset-model: vs auto-template
     dataset_force:
         description:
             - Specifies whether the target data set must always be overwritten.
@@ -141,6 +140,10 @@ options:
         required: false
         type: bool
         default: true
+    # TODO:
+    dataset_model:
+        description:
+            - a cataloged data set?
     dataset_data_type:
         description:
             - Specifies whether data conversion is to be performed on the data to be copied.
@@ -285,7 +288,7 @@ from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_dataset_api import (
     call_dataset_api
 )
-import json
+import json, os
 
 
 def validate_module_params(module):
@@ -293,6 +296,13 @@ def validate_module_params(module):
     if ((module.params['dataset_src'] is None or module.params['dataset_src'].strip() == '')
             and (module.params['dataset_content'] is None or module.params['dataset_content'].strip() == '')):
         module.fail_json(msg='Missing required argument or invalid argument: either dataset_src or dataset_content is required.')
+    elif module.params['dataset_src'] is not None and module.params['dataset_src'].strip() != '':
+        try:
+            if not os.path.isfile(module.params['dataset_src'].strip()):
+                module.fail_json(msg='dataset_src should be a path of a file.')
+        except OSError as ex:
+            module.fail_json(msg='Failed to copy data to the target data set ' + dataset + ' ---- OS error: ' + str(ex))
+
     # validate dataset_dest
     if not (module.params['dataset_dest'] is not None and module.params['dataset_dest'].strip() != ''):
         module.fail_json(msg='Missing required argument or invalid argument: dataset_dest.')
@@ -364,12 +374,16 @@ def copy_dataset(module):
     ds_v_name = ''
     ds_name = ''
     m_name = ''
+    has_volser = False
+    is_member = False
+    ds_exist = True
     if dataset.find('(') > 0:
         ds_name = dataset[:dataset.find('(')]
         m_name = dataset[dataset.find('(') + 1:dataset.find(')')]
     else:
         ds_name = dataset
     if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
+        has_volser = True
         ds_full_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + dataset
         ds_v_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + ds_name
     else:
@@ -382,19 +396,77 @@ def copy_dataset(module):
     copy_src = None
     if module.params['dataset_src'] is not None and module.params['dataset_src'].strip() != '':
         copy_src = module.params['dataset_src'].strip()
-    # step1 - check if the target data set or member exists when dataset_force=false
-    if module.params['dataset_force'] is False:
-        if module.params['m_name'] is not None and module.params['m_name'].strip() != '':
-            res_list = call_dataset_api(module, session, 'list_m')
+    
+    # step 1 - check if the target data set or member exists when dataset_force=false
+    if module.params['m_name'] is not None and module.params['m_name'].strip() != '':
+        is_member = True
+        res_list = call_dataset_api(module, session, 'list_m')
+    else:
+        res_list = call_dataset_api(module, session, 'list_ds')
+    if res_list.status_code == 200:
+        # PDS exists if dest is a member of PDS
+        res_content = json.loads(res_list.content)
+        if 'returnedRows' in res_content and res_content['returnedRows'] == 0 and not is_member:
+            ds_exist = False
+        elif 'returnedRows' in res_content and res_content['returnedRows'] != 0 and module.params['dataset_force'] is False:
+            # not fail - no data is copied since the target data set or member exists
+            copy_result['message'] = 'No data is copied since the target data set ' + dataset + ' exists and file_force is set to False.'
+            module.exit_json(**copy_result)
+    elif res_list.status_code == 404:
+        if 'Content-Type' in res_list.headers and res_list.headers['Content-Type'].startswith('application/json'):
+            res_json = res_list.json()
+            if 'category' in res_json and 'rc' in res_json and 'reason' in res_json 
+            and res_json['catgory'] == 4 and res_json['rc'] == 8 and res_json['reason'] == 0:
+                # PDS doesn't exist if dest is a member of PDS
+                ds_exist = False
+
+    # step 2 - create the DS or PDS if not exist
+    if not ds_exist:
+        create_vars = dict()
+        create_headers['Content-Type'] = 'application/json'
+        if module.params['dataset_model'] is not None and module.params['dataset_model'].strip() != '':
+            create_vars['like'] = module.params['dataset_model'].strip()
         else:
-            res_list = call_dataset_api(module, session, 'list_ds')
-        if res_list.status_code == 200:
-            res_content = json.loads(res_list.content)
-            if 'returnedRows' in res_content and res_content['returnedRows'] != 0:
-                # not fail - no data is copied since the target data set or member exists
-                copy_result['message'] = 'No data is copied since the target data set ' + dataset + ' exists and file_force is set to False.'
-                module.exit_json(**copy_result)
-    # step2 - read dataset_src or dataset_content
+            create_vars['recfm'] = 'FB'
+            create_vars['lrecl'] = 80
+            create_vars['unit'] = '3390'
+            file_size_byte = 0
+            primary_num = 0
+            secondary_num = 0
+            try:
+                file_size_byte = os.path.getsize(copy_src)
+            except OSError as ex:
+                module.fail_json(msg='Failed to copy data to the target data set ' + dataset + ' ---- OS error: ' + str(ex))
+            trk_size = 56664
+            cyl_size = 849960
+            if file_size_byte >= 5 * cyl_size:
+                alc_unit = 'CYL'
+                primary_num = math.ceil(float(file_size_byte)/cyl_size)
+            else:
+                alc_unit = 'TRK'
+                if file_size_byte >= cyl_size:
+                    primary_num = math.ceil(float(file_size_byte)/trk_size)
+                else: 
+                    primary_num = 15
+            create_vars['alcunit'] = alc_unit
+            create_vars['primary'] = primary_num
+            if is_member:
+                secondary_num = math.ceil(0.2 * primary_num)
+                create_vars['dsorg'] = 'PO'
+                create_vars['dsntype'] = 'LIBRARY'
+            else:
+                create_vars['dsorg'] = 'PS'
+                secondary_num = math.ceil(0.5 * primary_num)
+            create_vars['secondary'] = secondary_num
+            if has_volser:
+                create_vars['volser'] = module.params['dataset_volser'].strip().upper()
+        print('debug: create_vars'+ create_vars)
+        res_create = call_dataset_api(module, session, 'create', create_headers, json.dumps(create_vars))
+        if res_create.status_code != 201:
+            module.fail_json(msg='Failed to create the target data set ' + ds_name + ' ---- Http request error: '
+                + str(res_create.status_code) + ': ' + str(res_create.content)    
+
+    # step 3 - read dataset_src or dataset_content
     f_read = None
     request_body = None
     if module.params['dataset_data_type'] != 'text':
@@ -414,7 +486,7 @@ def copy_dataset(module):
                 module.fail_json(msg='Failed to copy data to the target data set ' + dataset + ' ---- OS error: ' + str(ex))
     if f_read is not None:
         f_read.close()
-    # step3 - combine request headers
+    # step 4 - combine request headers
     request_headers = dict()
     request_headers['X-IBM-Data-Type'] = module.params['dataset_data_type']
     request_headers['Content-Type'] = 'text/plain'
@@ -426,7 +498,7 @@ def copy_dataset(module):
             request_headers['Content-Type'] += ';charset=' + module.params['dataset_encoding']['from']
         if module.params['dataset_crlf'] is True:
             request_headers['X-IBM-Data-Type'] += ';crlf=true'
-    # step4 - copy data to the target data set
+    # step 5 - copy data to the target data set
     res_copy = call_dataset_api(module, session, 'copy', request_headers, request_body)
     res_cd = res_copy.status_code
     if res_cd != 201 and res_cd != 204:
@@ -466,6 +538,7 @@ def main():
         dataset_dest=dict(required=True, type='str'),
         dataset_volser=dict(required=False, type='str'),
         dataset_force=dict(required=False, type='bool', default=True),
+        dataset_model=dict(required=False, type='str'),
         dataset_data_type=dict(required=False, type='str', default='text', choices=['text', 'binary', 'record']),
         dataset_encoding=dict(required=False, type='dict'),
         dataset_crlf=dict(required=False, type='bool', default=False),
