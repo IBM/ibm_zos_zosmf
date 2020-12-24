@@ -32,7 +32,7 @@ Parameters
 file_checksum
   Specifies the checksum to be used to verify that the target USS file to copy to is not changed since the checksum was generated.
 
-  If the checksum is not matched which means the target USS file has been modified, the data won't be copied to the target USS file.
+  The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
 
   This variable only take effects when *file_force=true*.
 
@@ -61,6 +61,8 @@ file_content
      
 file_crlf
   Specifies whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).
+
+  If *file_crlf=true*, CRLF characters are used.
 
   This variable only take effects when *file_data_type=text*.
 
@@ -181,7 +183,9 @@ file_encoding
 file_force
   Specifies whether the target USS file must always be overwritten.
 
-  If *file_force=true*, the target USS file will always be overwritten.
+  If *file_force=true* and *file_checksum* is not supplied, the target USS file will always be overwritten.
+
+  If *file_force=true* and *file_checksum* is supplied, the target USS file will be overwritten only when the checksum is matched.
 
   If *file_force=false*, the data will only be copied if the target USS file does not exist.
 

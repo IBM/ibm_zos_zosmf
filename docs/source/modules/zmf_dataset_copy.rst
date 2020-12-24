@@ -32,7 +32,7 @@ Parameters
 dataset_checksum
   Specifies the checksum to be used to verify that the target data set to copy to is not changed since the checksum was generated.
 
-  If the checksum is not matched which means the target data set has been modified, the data won't be copied to the target data set.
+  The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
 
   This variable only take effects when *dataset_force=true*.
 
@@ -61,6 +61,8 @@ dataset_content
      
 dataset_crlf
   Specifies whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).
+
+  If *dataset_crlf=true*, CRLF characters are used.
 
   This variable only take effects when *dataset_data_type=text*.
 
@@ -123,7 +125,7 @@ dataset_dest
 
   This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
 
-  For example, specifying a data set like ``ZOSMF.ANSIBLE.DATA``, or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER``).
+  For example, specifying a data set like ``ZOSMF.ANSIBLE.DATA``, or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
 
 
   | **required**: True
@@ -201,7 +203,9 @@ dataset_encoding
 dataset_force
   Specifies whether the target data set must always be overwritten.
 
-  If *dataset_force=true*, the target data set will always be overwritten.
+  If *dataset_force=true* and *dataset_checksum* is not supplied, the target data set will always be overwritten.
+
+  If *dataset_force=true* and *dataset_checksum* is supplied, the target data set will be overwritten only when the checksum is matched.
 
   If *dataset_force=false*, the data will only be copied if the target PDS or PDSE member does not exist.
 
@@ -227,6 +231,18 @@ dataset_migrate_recall
   | **type**: str
   | **default**: wait
   | **choices**: wait, nowait, error
+
+
+ 
+     
+dataset_model
+  Specifies a model data set to allocate the destination data set when copying data to a non-existing PDS, PDSE or PS.
+
+  If this variable is not supplied, the destination data set will be allocated based on the size of the data to be copied.
+
+
+  | **required**: False
+  | **type**: str
 
 
  
