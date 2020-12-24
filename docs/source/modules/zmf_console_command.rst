@@ -44,7 +44,7 @@ console_broadcastmsg_detect_timeout
 console_broadcastmsg_keyword
   Specifies a keyword that you want to detect in broadcast messages. Case is not significant.
 
-  This value can be a string or a regular expression. To use a regular expression, you must also set *console_broadcastmsg_reg=Y*.
+  This value can be a string or a regular expression. To use a regular expression, you must also set *console_broadcastmsg_reg=true*.
 
   This parameter is designed to help user determine whether the broadcast messages issued after the command matches with user's expectation.
 
@@ -64,9 +64,8 @@ console_broadcastmsg_reg
 
 
   | **required**: False
-  | **type**: str
-  | **default**: N
-  | **choices**: Y, N
+  | **type**: bool
+  | **default**: false
 
 
  
@@ -84,7 +83,7 @@ console_cmd
 console_cmdresponse_keyword
   Specifies a keyword that you want to detect in the command response. Case is not significant.
 
-  This value can be a string or a regular expression. To use a regular expression, you must also set *console_cmdresponse_reg=Y*.
+  This value can be a string or a regular expression. To use a regular expression, you must also set *console_cmdresponse_reg=true*.
 
   This parameter is designed to help user determine whether the command response matches with user's expectation.
 
@@ -104,9 +103,8 @@ console_cmdresponse_reg
 
 
   | **required**: False
-  | **type**: str
-  | **default**: N
-  | **choices**: Y, N
+  | **type**: bool
+  | **default**: false
 
 
  

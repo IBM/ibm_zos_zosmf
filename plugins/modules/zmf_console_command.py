@@ -130,7 +130,7 @@ options:
     console_cmdresponse_keyword:
         description:
             - Specifies a keyword that you want to detect in the command response. Case is not significant.
-            - This value can be a string or a regular expression. To use a regular expression, you must also set I(console_cmdresponse_reg=Y).
+            - This value can be a string or a regular expression. To use a regular expression, you must also set I(console_cmdresponse_reg=true).
             - This parameter is designed to help user determine whether the command response matches with user's expectation.
             - If I(console_broadcastmsg_keyword) is not specified, the module will fail if the specified keyword can not be detected from the command response.
             - Otherwise, the module will fail if the specified keywords can not be detected from both command response and broadcast messages.
@@ -141,15 +141,12 @@ options:
         description:
             - If I(console_cmdresponse_keyword) is specified, this variable specifies whether I(console_cmdresponse_keyword) represents a regular expression.
         required: false
-        type: str
-        default: N
-        choices:
-            - Y
-            - N
+        type: bool
+        default: false
     console_broadcastmsg_keyword:
         description:
             - Specifies a keyword that you want to detect in broadcast messages. Case is not significant.
-            - This value can be a string or a regular expression. To use a regular expression, you must also set I(console_broadcastmsg_reg=Y).
+            - This value can be a string or a regular expression. To use a regular expression, you must also set I(console_broadcastmsg_reg=true).
             - This parameter is designed to help user determine whether the broadcast messages issued after the command matches with user's expectation.
             - If I(console_cmdresponse_keyword) is not specified, the module will fail if the specified keyword can not be detected from broadcast messages.
             - Otherwise, the module will fail if the specified keywords can not be detected from both command response and broadcast messages.
@@ -160,11 +157,8 @@ options:
         description:
             - If I(console_broadcastmsg_keyword) is specified, this variable specifies whether I(console_broadcastmsg_keyword) represents a regular expression.
         required: false
-        type: str
-        default: N
-        choices:
-            - Y
-            - N
+        type: bool
+        default: false
     console_broadcastmsg_detect_timeout:
         description:
             - Specifies how long, in seconds, the console attempts to detect the value of I(console_broadcastmsg_keyword) in broadcast messages.
@@ -371,7 +365,7 @@ def issue_command(module):
             if 'cmd-response' in response_getResponse and response_getResponse['cmd-response'].strip() != '':
                 # detect again
                 if 'cmdresponse_keyword_detected' in issue_result and issue_result['cmdresponse_keyword_detected'] is False:
-                    if (module.params['console_cmdresponse_reg'] == 'Y'
+                    if (module.params['console_cmdresponse_reg'] is True
                             and re.findall(module.params['console_cmdresponse_keyword'], response_issue['cmd-response'])):
                         issue_result['cmdresponse_keyword_detected'] = True
                     elif module.params['console_cmdresponse_keyword'].upper() in response_getResponse['cmd-response'].upper():

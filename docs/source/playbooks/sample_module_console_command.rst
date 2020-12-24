@@ -36,9 +36,9 @@ This `sample playbook`_ shows how to issue MVS command by using a system console
            console_cmd: "start pegasus"
            console_system: "{{ inventory_hostname }}"
            # console_cmdresponse_keyword: "SLP registration initiated" # The keyword that you want to detect in the command response. The module will fail if no specified keywords are detected in neither the command response nor broadcast messages
-           # console_cmdresponse_reg: "N" # Whether console_cmdresponse_keyword represents a regular expression. Default is 'N'
+           # console_cmdresponse_reg: false # Whether console_cmdresponse_keyword represents a regular expression. Default is false
            # console_broadcastmsg_keyword: "started CIM server" # The keyword that you want to detect in broadcast messages. The module will fail if no specified keywords are detected in neither the command response nor broadcast messages
-           # console_broadcastmsg_reg: "N" # Whether console_broadcastmsg_keyword represents a regular expression. Default is 'N'
+           # console_broadcastmsg_reg: false # Whether console_broadcastmsg_keyword represents a regular expression. Default is false
            # console_broadcastmsg_detect_timeout: 30 # How long, in seconds, the console attempts to detect the value of console_broadcastmsg_keyword in the broadcast messages. Default is 30
            # console_cmdresponse_retrieve_times: 1 # How many times the console attempts to retrieve the command response. Default is 1
            console_save_output_localpath: "/tmp/cmd_output" # The local path on control node where the command response will be saved to
