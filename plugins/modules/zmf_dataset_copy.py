@@ -19,7 +19,8 @@ module: zmf_dataset_copy
 short_description: Copy data to z/OS data set or member
 description:
     - Copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
-    - If the target data set or member already exists, it can be overwritten. If the target data set or member does not exist, it can be created.
+    - If the target data set or member already exists, it can be overwritten. If the target PDS or PDSE member does not exist, it can be created.
+    - If the target data set does not exist, it can be created based on I(dataset_model) or the size of the source.
 version_added: "2.9"
 author:
     - Yang Cao (@zosmf-Young)
@@ -451,45 +452,49 @@ def copy_dataset(module):
                 ds_exist = False
 
     # step 2 - create the DS or PDS if not exist
+    create_vars = dict()
     if not ds_exist:
-        create_vars = dict()
         create_headers = dict()
         create_headers['Content-Type'] = 'application/json'
         if module.params['dataset_model'] is not None and module.params['dataset_model'].strip() != '':
             create_vars['like'] = module.params['dataset_model'].strip()
         else:
-            create_vars['recfm'] = 'VB'
-            create_vars['lrecl'] = 80
-            create_vars['unit'] = '3390'
             file_size_byte = 0
+            create_vars['unit'] = '3390'
+            if module.params['dataset_data_type'] == 'text':
+                create_vars['recfm'] = 'FB'
+                create_vars['lrecl'] = 80
+                if module.params['dataset_content'] is not None and module.params['dataset_content'].strip() != '':
+                    file_size_byte = len(module.params['dataset_content'].encode())
+            else:
+                create_vars['recfm'] = 'U'
+            if file_size_byte == 0:
+                try:
+                    file_size_byte = os.path.getsize(copy_src)
+                except OSError as ex:
+                    module.fail_json(msg='Failed to copy data to the target data set ' + dataset + ' ---- OS error: ' + str(ex))
             primary_num = 0
             secondary_num = 0
-            try:
-                file_size_byte = os.path.getsize(copy_src)
-            except OSError as ex:
-                module.fail_json(msg='Failed to copy data to the target data set ' + dataset + ' ---- OS error: ' + str(ex))
             trk_size = 56664
             cyl_size = 849960
             if file_size_byte >= 5 * cyl_size:
                 alc_unit = 'CYL'
                 primary_num = math.ceil(float(file_size_byte)/cyl_size)
             else:
-                # alc_unit = 'TRK'
-                alc_unit = 'CYL'
-                if file_size_byte >= cyl_size:
-                    primary_num = math.ceil(float(file_size_byte)/cyl_size)
-                else: 
-                    # primary_num = 15
-                    primary_num = 1
-            create_vars['alcunit'] = alc_unit
-            create_vars['primary'] = primary_num
+                alc_unit = 'TRK'
+                primary_num = math.ceil(float(file_size_byte)/trk_size)
+                
+            primary_num *= 4
+            # primary_num *= 2
             if is_member:
                 secondary_num = math.ceil(0.2 * primary_num)
                 create_vars['dsorg'] = 'PO'
                 create_vars['dsntype'] = 'LIBRARY'
             else:
-                create_vars['dsorg'] = 'PS'
                 secondary_num = math.ceil(0.5 * primary_num)
+                create_vars['dsorg'] = 'PS'
+            create_vars['alcunit'] = alc_unit
+            create_vars['primary'] = primary_num
             create_vars['secondary'] = secondary_num
             if has_volser:
                 create_vars['volser'] = module.params['dataset_volser'].strip().upper()
