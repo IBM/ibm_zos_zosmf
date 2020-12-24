@@ -134,7 +134,8 @@ options:
     file_force:
         description:
             - Specifies whether the target USS file must always be overwritten.
-            - If I(file_force=true), the target USS file will always be overwritten.
+            - If I(file_force=true) and I(file_checksum) is not supplied, the target USS file will always be overwritten.
+            - If I(file_force=true) and I(file_checksum) is supplied, the target USS file will be overwritten only when the checksum is matched.
             - If I(file_force=false), the data will only be copied if the target USS file does not exist.
         required: false
         type: bool
@@ -179,6 +180,7 @@ options:
     file_crlf:
         description:
             - Specifies whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).
+            - If I(file_crlf=true), CRLF characters are used.
             - This variable only take effects when I(file_data_type=text).
         required: false
         type: bool
@@ -201,7 +203,7 @@ options:
     file_checksum:
         description:
             - Specifies the checksum to be used to verify that the target USS file to copy to is not changed since the checksum was generated.
-            - If the checksum is not matched which means the target USS file has been modified, the data won't be copied to the target USS file.
+            - The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
             - This variable only take effects when I(file_force=true).
         required: False
         type: str
@@ -305,6 +307,8 @@ def validate_module_params(module):
             module.fail_json(msg='file_diff is valid only when file_data_type=text.')
         if not (module.params['file_src'] is not None and module.params['file_src'].strip() != ''):
             module.fail_json(msg='file_src is required when file_data_type=binary.')
+        if module.params['file_content'] is not None and module.params['file_content'].strip() != '':
+            module.fail_json(msg='file_content is valid only when file_data_type=text.')
     # validate file_encoding
     if module.params['file_encoding'] is not None:
         if isinstance(module.params['file_encoding'], dict):
