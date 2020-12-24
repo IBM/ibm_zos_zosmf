@@ -17,7 +17,7 @@ To use the modules and roles which supplied to interact with **z/OS console REST
 
    .. note::
 
-      * To use the detect keywords function by regular expression in the command response or broadcast messages (by specifying `console_cmdresponse_reg=Y` or `console_broadcastmsg_reg=Y`) for module: `zmf_console_command`_, it also requires: **z/OSMF APAR PH24072 (PTF UI69958 for V2R3, PTF UI69959 for V2R4)**
+      * To use the detect keywords function by regular expression in the command response or broadcast messages (by specifying `console_cmdresponse_reg=True` or `console_broadcastmsg_reg=True`) for module: `zmf_console_command`_, it also requires: **z/OSMF APAR PH24072 (PTF UI69958 for V2R3, PTF UI69959 for V2R4)**
 
 
 .. _Overall Requirements:

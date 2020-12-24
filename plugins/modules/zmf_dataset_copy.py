@@ -129,7 +129,7 @@ options:
         description:
             - Data set or the name of the PDS or PDSE member on the remote z/OS system where the data should be copied to.
             - This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
-            - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATA), or a PDS or PDSE member like C(ZOSMF.ANSIBLE.PDS(MEMBER)).
+            - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATA), or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
         required: true
         type: str
         default: null
@@ -143,15 +143,19 @@ options:
     dataset_force:
         description:
             - Specifies whether the target data set must always be overwritten.
-            - If I(dataset_force=true), the target data set will always be overwritten.
+            - If I(dataset_force=true) and I(dataset_checksum) is not supplied, the target data set will always be overwritten.
+            - If I(dataset_force=true) and I(dataset_checksum) is supplied, the target data set will be overwritten only when the checksum is matched.
             - If I(dataset_force=false), the data will only be copied if the target PDS or PDSE member does not exist.
         required: false
         type: bool
         default: true
-    # TODO:
     dataset_model:
         description:
-            - a cataloged data set?
+            - Specifies a model data set to allocate the destination data set when copying data to a non-existing PDS, PDSE or PS.
+            - If this variable is not supplied, the destination data set will be allocated based on the size of the data to be copied.
+        required: False
+        type: str
+        default: null
     dataset_data_type:
         description:
             - Specifies whether data conversion is to be performed on the data to be copied.
@@ -202,6 +206,7 @@ options:
     dataset_crlf:
         description:
             - Specifies whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).
+            - If I(dataset_crlf=true), CRLF characters are used.
             - This variable only take effects when I(dataset_data_type=text).
         required: false
         type: bool
@@ -237,7 +242,7 @@ options:
     dataset_checksum:
         description:
             - Specifies the checksum to be used to verify that the target data set to copy to is not changed since the checksum was generated.
-            - If the checksum is not matched which means the target data set has been modified, the data won't be copied to the target data set.
+            - The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
             - This variable only take effects when I(dataset_force=true).
         required: False
         type: str
@@ -319,7 +324,9 @@ from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_dataset_api import (
     call_dataset_api
 )
-import json, os, math
+import json
+import os
+import math
 
 
 def validate_module_params(module):
@@ -350,6 +357,8 @@ def validate_module_params(module):
             module.fail_json(msg='dataset_diff is valid only when dataset_data_type=text.')
         if not (module.params['dataset_src'] is not None and module.params['dataset_src'].strip() != ''):
             module.fail_json(msg='dataset_src is required when dataset_data_type=binary or dataset_data_type=record.')
+        if module.params['dataset_content'] is not None and module.params['dataset_content'].strip() != '':
+            module.fail_json(msg='dataset_content is valid only when dataset_data_type=text.')
     # validate dataset_encoding
     if module.params['dataset_encoding'] is not None:
         if isinstance(module.params['dataset_encoding'], dict):
@@ -427,7 +436,7 @@ def copy_dataset(module):
     copy_src = None
     if module.params['dataset_src'] is not None and module.params['dataset_src'].strip() != '':
         copy_src = module.params['dataset_src'].strip()
-    
+
     # step 1 - check if the target data set or member exists when dataset_force=false
     if module.params['m_name'] is not None and module.params['m_name'].strip() != '':
         is_member = True
@@ -446,8 +455,8 @@ def copy_dataset(module):
     elif res_list.status_code == 404:
         if 'Content-Type' in res_list.headers and res_list.headers['Content-Type'].startswith('application/json'):
             res_json = res_list.json()
-            if 'category' in res_json and 'rc' in res_json and 'reason' in res_json \
-            and res_json['category'] == 4 and res_json['rc'] == 8 and res_json['reason'] == 0:
+            if ('category' in res_json and 'rc' in res_json and 'reason' in res_json
+                    and res_json['category'] == 4 and res_json['rc'] == 8 and res_json['reason'] == 0):
                 # PDS doesn't exist if dest is a member of PDS
                 ds_exist = False
 
@@ -479,10 +488,10 @@ def copy_dataset(module):
             cyl_size = 849960
             if file_size_byte >= 5 * cyl_size:
                 alc_unit = 'CYL'
-                primary_num = math.ceil(float(file_size_byte)/cyl_size)
+                primary_num = math.ceil(float(file_size_byte) / cyl_size)
             else:
                 alc_unit = 'TRK'
-                primary_num = math.ceil(float(file_size_byte)/trk_size)
+                primary_num = math.ceil(float(file_size_byte) / trk_size)
                 
             primary_num *= 4
             # primary_num *= 2
@@ -498,12 +507,14 @@ def copy_dataset(module):
             create_vars['secondary'] = secondary_num
             if has_volser:
                 create_vars['volser'] = module.params['dataset_volser'].strip().upper()
-        print('debug: create_vars'+ json.dumps(create_vars))
+        print('debug: create_vars' + json.dumps(create_vars))
         res_create = call_dataset_api(module, session, 'create', create_headers, json.dumps(create_vars))
         if res_create.status_code != 201:
-            module.fail_json(msg='Failed to create the target date set ' + ds_name + ' ---- Http request error: ' 
-                + str(res_create.status_code) + ': ' + str(res_create.content))
-    
+            module.fail_json(
+                msg='Failed to create the target date set ' + ds_name + ' ---- Http request error: '
+                + str(res_create.status_code) + ': ' + str(res_create.content)
+            )
+
     # step 3 - read dataset_src or dataset_content
     f_read = None
     request_body = None

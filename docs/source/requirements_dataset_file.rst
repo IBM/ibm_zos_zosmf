@@ -17,6 +17,8 @@ To use the modules and roles which supplied to interact with **z/OS data set and
 
    * module: `zmf_dataset_fetch`_
    * module: `zmf_file_fetch`_
+   * module: `zmf_dataset_copy`_
+   * module: `zmf_file_copy`_
 
    .. note::
 
