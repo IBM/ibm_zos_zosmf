@@ -492,7 +492,7 @@ def copy_dataset(module):
             else:
                 alc_unit = 'TRK'
                 primary_num = math.ceil(float(file_size_byte) / trk_size)
-                
+
             primary_num *= 4
             # primary_num *= 2
             if is_member:
