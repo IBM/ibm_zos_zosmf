@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v2.4.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.4.0) - 2020-12-30
+### Added
+- add modules: `zmf_dataset_copy`, `zmf_file_copy`
+### Fixed
+- fix for role `zmf_workflow_complete`: refine final_result
+- fix for module `zmf_console_command`: console_cmdresponse_reg and console_broadcastmsg_reg should be bool type
+
 ## [v2.3.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.3.0) - 2020-12-18
 ### Added
 - add modules: `zmf_dataset_fetch`, `zmf_file_fetch`
