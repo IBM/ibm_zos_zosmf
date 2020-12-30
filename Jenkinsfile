@@ -43,15 +43,15 @@ pipeline {
 			echo "Remote workspace is ${remoteWorkspace}"
 			
 			dir("${remoteWorkspace}") {
-				if (fileExists('ibm-ibm_zos_zosmf-2.3.0.tar.gz')) {
-					echo "ibm-ibm_zos_zosmf-2.3.0.tar.gz existed"
-					sh 'rm ibm-ibm_zos_zosmf-2.3.0.tar.gz'
+				if (fileExists('ibm-ibm_zos_zosmf-2.4.0.tar.gz')) {
+					echo "ibm-ibm_zos_zosmf-2.4.0.tar.gz existed"
+					sh 'rm ibm-ibm_zos_zosmf-2.4.0.tar.gz'
 					sh '/usr/local/bin/ansible-galaxy collection build'
 				} else {
 					sh '/usr/local/bin/ansible-galaxy collection build'
 				}
 				sh "pwd"
-				sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.3.0.tar.gz'
+				sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.4.0.tar.gz'
 			}
 		}
             }
@@ -102,6 +102,14 @@ pipeline {
 		echo 'FileAPI Fetch BVT'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook FVT-FIle-Fetch-CICD1.yml'
+		}
+		echo 'DatasetAPI Copy BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook FVT-Dataset-Copy-CICD1.yml'
+		}
+		echo 'FileAPI Copy BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook FVT-FIle-Copy-CICD1.yml'
 		}
 		echo 'CICD test successfully!'
             }

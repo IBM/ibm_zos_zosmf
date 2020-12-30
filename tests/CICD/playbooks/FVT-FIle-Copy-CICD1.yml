@@ -1,0 +1,35 @@
+# Copyright (c) IBM Corporation 2020 
+
+# This sample playbook demonstrates using module `zmf_console_command` to issue MVS command by using a system console.
+# Example:
+# ansible-playbook -i hosts sample_module_console_command.yml
+
+- name: sample of issuing MVS command by using a system console
+  hosts: file
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  tasks:
+    - zmf_authenticate:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+      register: result_auth
+      delegate_to: localhost
+    - zmf_file_copy:
+        zmf_credential: "{{ result_auth }}"
+        file_src: "files/job_sample_jcl.jcl"
+        # file_content: "Sample profile\nTZ=EST5EDT\n"
+        file_dest: "/var/zosmf/data/sample"
+        # file_force: true
+        # file_data_type: "text"
+        # file_encoding:
+        #   from: ISO8859-1
+        #   to: IBM-1047
+        # file_crlf: false
+        # file_diff: false
+        # file_checksum: "93822124D6E66E2213C64B0D10800224"
+      register: result
+      delegate_to: localhost
+    - debug: var=result

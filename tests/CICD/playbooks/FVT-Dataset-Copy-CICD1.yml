@@ -1,0 +1,38 @@
+# Copyright (c) IBM Corporation 2020 
+
+# This sample playbook demonstrates using module `zmf_dataset_fetch` to fetch data set from z/OS.
+# Example:
+# ansible-playbook -i hosts sample_module_dataset_fetch.yml
+
+- name: sample of fetching data set from z/OS
+  hosts: dataset
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  tasks:
+    - zmf_authenticate:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+      register: result_auth
+      delegate_to: localhost
+    - zmf_dataset_fetch:
+        zmf_credential: "{{ result_auth }}"
+        dataset_src: "files/job_sample_jcl.jcl"
+        # dataset_content: "Sample profile\nTZ=EST5EDT\n"
+        dataset_dest: "ZOSMF.CICD.PDS(SAMPLE)"
+        # dataset_model: "ZOSMF.YUN.PDS"
+        # dataset_volser: "PEVTS2"
+        # dataset_force: true
+        # dataset_data_type: "text"
+        # dataset_encoding:
+        #   from: ISO8859-1
+        #   to: IBM-1047
+        # dataset_crlf: false
+        # dataset_diff: false
+        # dataset_migrate_recall: "wait"
+        # dataset_checksum: "93822124D6E66E2213C64B0D10800224"
+      register: result
+      delegate_to: localhost
+    - debug: var=result
