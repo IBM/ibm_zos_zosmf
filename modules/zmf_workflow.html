@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_workflow – Operate z/OS workflows &mdash; IBM z/OSMF Collection 2.3.0 documentation</title>
+  <title>zmf_workflow – Operate z/OS workflows &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
   
 
   
@@ -92,7 +92,9 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module Reference</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
-<li class="toctree-l3"><a class="reference internal" href="zmf_dataset_fetch.html">zmf_dataset_fetch – Operates a z/OS data set or member</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset_copy.html">zmf_dataset_copy – Copy data to z/OS data set or member</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset_fetch.html">zmf_dataset_fetch – Fetch z/OS data set or member from z/OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_file_copy.html">zmf_file_copy – Copy data to z/OS USS file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_workflow – Operate z/OS workflows</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
@@ -355,6 +357,7 @@
 </div>
 </dd>
 <dt>workflow_vars</dt><dd><p>Values of one or more workflow variables in JSON format.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">{&quot;user_to_list&quot;:&quot;DEBUG1&quot;,</span> <span class="pre">&quot;tsocmd_to_issue&quot;:&quot;TIME&quot;}</span></code></p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: dict</div>
@@ -606,18 +609,19 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.3.0
+        v: v2.4.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../v2.4.0/modules/zmf_workflow.html">v2.4.0</a></dd>
             <dd><a href="../v2.3.0/modules/zmf_workflow.html">v2.3.0</a></dd>
             <dd><a href="../v2.2.1/modules/zmf_workflow.html">v2.2.1</a></dd>
             <dd><a href="../v2.2.0/modules/zmf_workflow.html">v2.2.0</a></dd>
             <dd><a href="../v2.1.0/modules/zmf_workflow.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/modules/zmf_workflow.html">v2.0.1</a></dd>
-            <dd><a href="../v2.0.0/modules/zmf_workflow.html">v2.0.0</a></dd>
+            <dd><a href="../v2.0.1/index.html">v2.0.1</a></dd>
+            <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
         </dl>
     </div>
 </div>

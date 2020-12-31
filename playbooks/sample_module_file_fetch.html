@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sample_module_file_fetch &mdash; IBM z/OSMF Collection 2.3.0 documentation</title>
+  <title>sample_module_file_fetch &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributing" href="../community_guides.html" />
-    <link rel="prev" title="sample_module_dataset_fetch" href="sample_module_dataset_fetch.html" /> 
+    <link rel="next" title="sample_module_workflow" href="sample_module_workflow.html" />
+    <link rel="prev" title="sample_module_file_copy" href="sample_module_file_copy.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,17 +97,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#host-vars">Host Vars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#group-vars">Group Vars</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../playbooks.html#sample-playbooks">Sample Playbooks</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sample_module_console_command.html">sample_module_console_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_module_dataset_copy.html">sample_module_dataset_copy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_module_dataset_fetch.html">sample_module_dataset_fetch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_module_file_copy.html">sample_module_file_copy</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sample_module_file_fetch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_workflow.html">sample_module_workflow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sample_role_workflow_complete.html">sample_role_workflow_complete</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_manage_instance.html">sample_role_cpm_manage_instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_provision.html">sample_role_cpm_provision</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_remove_instance.html">sample_role_cpm_remove_instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_job_complete.html">sample_role_job_complete</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_job_query.html">sample_role_job_query</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sample_module_console_command.html">sample_module_console_command</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sample_module_dataset_fetch.html">sample_module_dataset_fetch</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sample_module_file_fetch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_role_workflow_complete.html">sample_role_workflow_complete</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#run-the-playbooks">Run the Playbooks</a></li>
@@ -180,7 +182,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.3.0/docs/source/playbooks/sample_module_file_fetch.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.4.0/docs/source/playbooks/sample_module_file_fetch.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -240,7 +242,7 @@
         <span class="c1">#   keyword: &quot;Health Checker&quot;</span>
         <span class="c1">#   insensitive: true</span>
         <span class="c1">#   maxreturnsize: 100</span>
-        <span class="c1"># file_checksum: &quot;93822124D6E66E2213C64B0D10800224&quot; # the checksum to be used to verify that the USS file to be fetched is not changed since the checksum was generated</span>
+        <span class="c1"># file_checksum: &quot;93822124D6E66E2213C64B0D10800224&quot; # The checksum to be used to verify that the USS file to be fetched is not changed since the checksum was generated</span>
       <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
       <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
     <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
@@ -266,10 +268,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../community_guides.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sample_module_workflow.html" class="btn btn-neutral float-right" title="sample_module_workflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sample_module_dataset_fetch.html" class="btn btn-neutral float-left" title="sample_module_dataset_fetch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sample_module_file_copy.html" class="btn btn-neutral float-left" title="sample_module_file_copy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -296,12 +298,13 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.3.0
+        v: v2.4.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="../v2.4.0/playbooks/sample_module_file_fetch.html">v2.4.0</a></dd>
             <dd><a href="../v2.3.0/playbooks/sample_module_file_fetch.html">v2.3.0</a></dd>
             <dd><a href="../v2.2.1/index.html">v2.2.1</a></dd>
             <dd><a href="../v2.2.0/index.html">v2.2.0</a></dd>

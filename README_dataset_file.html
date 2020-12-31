@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Operate z/OS Data Sets and UNIX Files &mdash; IBM z/OSMF Collection 2.3.0 documentation</title>
+  <title>Operate z/OS Data Sets and UNIX Files &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
   
 
   
@@ -174,7 +174,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.3.0/docs/source/README_dataset_file.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.4.0/docs/source/README_dataset_file.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -196,7 +196,7 @@
 
 <div class="section" id="operate-z-os-data-sets-and-unix-files">
 <h1>Operate z/OS Data Sets and UNIX Files<a class="headerlink" href="#operate-z-os-data-sets-and-unix-files" title="Permalink to this headline">¶</a></h1>
-<p><strong>IBM z/OSMF collection</strong> provides several modules to work with z/OS data sets and UNIX files. You can use these modules to retrieve the contents of a sequential data set, a member of a partitioned data set (PDS or PDSE), or the contents of a z/OS UNIX System Services (USS) file from the remote z/OS system, and save them on Ansible control node.</p>
+<p><strong>IBM z/OSMF collection</strong> provides several modules to work with z/OS data sets and UNIX files. You can use these modules to fetch z/OS data sets and UNIX files from the remote z/OS system to Ansible control node, and copy z/OS data sets and UNIX files from Ansible control node to the remote z/OS system.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -214,6 +214,16 @@
 <li><p><a class="reference external" href="modules/zmf_file_fetch.html">zmf_file_fetch</a>:</p>
 <blockquote>
 <div><p>This module can be used to retrieve the contents of a z/OS UNIX System Services (USS) file from the remote z/OS system, and save them on Ansible control node.</p>
+</div></blockquote>
+</li>
+<li><p><a class="reference external" href="modules/zmf_dataset_copy.html">zmf_dataset_copy</a>:</p>
+<blockquote>
+<div><p>This module can be used to copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.</p>
+</div></blockquote>
+</li>
+<li><p><a class="reference external" href="modules/zmf_file_copy.html">zmf_file_copy</a>:</p>
+<blockquote>
+<div><p>This module can be used to copy data from Ansible control node to a z/OS UNIX System Services (USS) file on the remote z/OS system.</p>
 </div></blockquote>
 </li>
 </ul>
@@ -266,12 +276,13 @@
 <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
         <span class="fa fa-book"> Other Versions</span>
-        v: v2.3.0
+        v: v2.4.0
         <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
         <dl>
             <dt>Tags</dt>
+            <dd><a href="v2.4.0/README_dataset_file.html">v2.4.0</a></dd>
             <dd><a href="v2.3.0/README_dataset_file.html">v2.3.0</a></dd>
             <dd><a href="v2.2.1/index.html">v2.2.1</a></dd>
             <dd><a href="v2.2.0/index.html">v2.2.0</a></dd>
