@@ -512,7 +512,6 @@ def copy_dataset(module):
         create_vars['unit'] = '3390'
         if has_volser:
             create_vars['volser'] = module.params['dataset_volser'].strip().upper()
-        print('debug: create_vars' + json.dumps(create_vars))
         res_create = call_dataset_api(module, session, 'create', create_headers, json.dumps(create_vars))
         if res_create.status_code != 201:
             module.fail_json(
