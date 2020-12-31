@@ -17,7 +17,8 @@ zmf_dataset_copy -- Copy data to z/OS data set or member
 Synopsis
 --------
 - Copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
-- If the target data set or member already exists, it can be overwritten. If the target data set or member does not exist, it can be created.
+- If the target data set or member already exists, it can be overwritten. If the target PDS or PDSE member does not exist, it can be created.
+- If the target data set does not exist, it can be created based on *dataset_model* or the size of the source.
 
 
 
@@ -124,6 +125,8 @@ dataset_dest
   Data set or the name of the PDS or PDSE member on the remote z/OS system where the data should be copied to.
 
   This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
+
+  If *dataset_dest* is a nonexistent data set, it will be allocated.
 
   For example, specifying a data set like ``ZOSMF.ANSIBLE.DATA``, or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
 
@@ -236,9 +239,17 @@ dataset_migrate_recall
  
      
 dataset_model
-  Specifies a model data set to allocate the destination data set when copying data to a non-existing PDS, PDSE or PS.
+  When copying a local file to a non-existing PDS, PDSE or PS, specify a model data set to allocate the target data set.
 
-  If this variable is not supplied, the destination data set will be allocated based on the size of the data to be copied.
+  For example, specifying a data set like ``ZOSMF.ANSIBLE.DATALIB``, member name should not be provided in this parameter.
+
+  If this parameter is not provided, the destination data set will be allocated based on the size of the local file or *dataset_content*.
+
+  The primary extent tracks will be specified as 4 times the size of the local file or *dataset_content*.
+
+  If *dataset_data_type=text*, then ``RECFM=FB`` and ``LRECL=80`` will be used to allocate the data set.
+
+  If *dataset_data_type=binary* or *dataset_data_type=record*, (RECFM=U) will be used to allocate the data set.
 
 
   | **required**: False

@@ -155,8 +155,8 @@ options:
             - When copying a local file to a non-existing PDS, PDSE or PS, specify a model data set to allocate the target data set.
             - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATALIB), member name should not be provided in this parameter.
             - If this parameter is not provided, the destination data set will be allocated based on the size of the local file or I(dataset_content).
-            - The primary extent tracks will be specified as 4 times the size of the local file or I(dataset_content). 
-            - If I(dataset_data_type=text), then C(RECFM=FB) and C(LRECL=80) will be used to allocate the data set. 
+            - The primary extent tracks will be specified as 4 times the size of the local file or I(dataset_content).
+            - If I(dataset_data_type=text), then C(RECFM=FB) and C(LRECL=80) will be used to allocate the data set.
             - If I(dataset_data_type=binary) or I(dataset_data_type=record), (RECFM=U) will be used to allocate the data set.
         required: False
         type: str
@@ -441,7 +441,7 @@ def copy_dataset(module):
     copy_src = None
     if module.params['dataset_src'] is not None and module.params['dataset_src'].strip() != '':
         copy_src = module.params['dataset_src'].strip()
-    
+
     # step 1 - check if the target data set or member exists when dataset_force=false
     if module.params['m_name'] is not None and module.params['m_name'].strip() != '':
         is_member = True
