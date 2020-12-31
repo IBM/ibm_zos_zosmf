@@ -5,7 +5,6 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import handle_request_raw
-import json
 import re
 
 
@@ -18,30 +17,61 @@ def __get_dataset_apis():
         # read a data set or member
         fetch=dict(
             method='get',
-            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{dataset_name}',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_full_name}',
             args={
                 'research': dict(required=False, type='str', nickname='dataset_search.keyword'),
                 'insensitive': dict(required=False, type='bool', default=True, nickname='dataset_search.insensitive'),
                 'maxreturnsize': dict(required=False, type='int', default=100, nickname='dataset_search.maxreturnsize')
             },
             headers={
-                'X-IBM-Data-Type': dict(
-                    required=False,
-                    type='str',
-                    choices=['text', 'binary', 'record'],
-                    nickname='dataset_data_type',
-                    default='text'),
+                'X-IBM-Data-Type': dict(required=False, type='str', default='text', choices=['text', 'binary', 'record'], nickname='dataset_data_type'),
                 # 'X-IBM-Return-Etag': dict(
                 #     required=False,
                 #     type='bool',
                 #     nickname='dataset_return_checksum_when_large'),
                 'X-IBM-Migrated-Recall': dict(
-                    required=False,
-                    type='str',
-                    choices=['wait', 'nowait', 'error'],
-                    nickname='dataset_migrate_recall',
-                    default='wait'),
+                    required=False, type='str', default='wait', choices=['wait', 'nowait', 'error'], nickname='dataset_migrate_recall'
+                ),
                 'If-None-Match': dict(required=False, type='str', nickname='dataset_checksum')
+            },
+            ok_rcode=200
+        ),
+        # write data to a data set or member
+        copy=dict(
+            method='put',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_full_name}',
+            args={},
+            headers={
+                'Content-Type': dict(required=False, type='str', default='text/plain', nickname=''),
+                'X-IBM-Data-Type': dict(required=False, type='str', default='text', choices=['text', 'binary', 'record'], nickname='dataset_data_type'),
+                'X-IBM-Migrated-Recall': dict(
+                    required=False, type='str', default='wait', choices=['wait', 'nowait', 'error'], nickname='dataset_migrate_recall'
+                ),
+                'If-Match': dict(required=False, type='str', nickname='dataset_checksum')
+            },
+            ok_rcode=204
+        ),
+        # create a data set
+        create=dict(
+            method='post',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_name}',
+            ok_rcode=201
+        ),
+        # list the data set
+        list_ds=dict(
+            method='get',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds?dslevel={ds_name}',
+            args={
+                'volser': dict(required=False, type='str', nickname='dataset_volser')
+            },
+            ok_rcode=200
+        ),
+        # list the member
+        list_m=dict(
+            method='get',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_v_name}/member',
+            args={
+                'pattern': dict(required=False, type='str', nickname='m_name')
             },
             ok_rcode=200
         )
@@ -64,8 +94,6 @@ def __get_dataset_api_url(module, url):
     Return the parsed URL of the specific dataset API.
     :param AnsibleModule module: the ansible module
     :param str url: the initial URL of API
-    :param str response_key: the response key that can be used to retrieve the command response
-    :param str detection_key: the detection key that can be used to retrieve the detect result for broadcast messages
     :rtype: str
     """
     # format the input for zmf_port
@@ -74,18 +102,10 @@ def __get_dataset_api_url(module, url):
         module.params['zmf_port'] = ''
     else:
         module.params['zmf_port'] = str(module.params['zmf_port']).strip()
-    # set up full name of data set
-    dataset_name = ''
-    if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
-        dataset_name = '-(' + module.params['dataset_volser'].strip() + ')/' + module.params['dataset_src'].strip()
-    else:
-        dataset_name = module.params['dataset_src'].strip()
     matchObj = re.findall('{(.+?)}', url)
     for x in matchObj:
         if x == 'zmf_port' and module.params[x] == '':
             url = re.sub(':{' + x + '}', module.params[x], url)
-        elif x == 'dataset_name':
-            url = re.sub('{' + x + '}', dataset_name, url)
         else:
             url = re.sub('{' + x + '}', module.params[x].strip(), url)
     return url
@@ -135,45 +155,24 @@ def __get_dataset_api_params(module, args):
     return params
 
 
-def call_dataset_api(module, session, api, customHeaders):
+def call_dataset_api(module, session, api, headers=None, body=None):
     """
     Return the response or error message of the specific dataset API.
     :param AnsibleModule module: the ansible module
     :param Session session: the current connection session
     :param str api: the name of API
+    :param dict headers: the header of HTTP request
+    :param str body: the body of HTTP PUT request
     :rtype: dict or str
     """
     zmf_api = __get_dataset_api_argument_spec(api)
     zmf_api_url = __get_dataset_api_url(module, zmf_api['url'])
-    zmf_api_params = None
-    zmf_api_headers = None
+    zmf_api_params = dict()
+    zmf_api_headers = dict()
     if 'args' in zmf_api:
         zmf_api_params = __get_dataset_api_params(module, zmf_api['args'])
     if 'headers' in zmf_api:
         zmf_api_headers = __get_dataset_api_params(module, zmf_api['headers'])
-    if customHeaders is not None:
-        zmf_api_headers.update(customHeaders)
-    return handle_request_raw(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, zmf_api_headers)
-
-
-def get_request_argument_spec():
-    """
-    Return the arguments of ansible module used for dataset APIs.
-    :rtype: (dict[str, dict])
-    """
-    argument_spec = dict()
-    dataset_apis = __get_dataset_apis()
-    for k, v in dataset_apis.items():
-        variables = dict()
-        if v['args'] is not None:
-            variables.update(v['args'])
-        if 'headers' in v.keys() and v['headers'] is not None:
-            variables.update(v['headers'])
-        for kk, vv in variables.items():
-            if 'nickname' in vv and vv['nickname'] is not None and vv['nickname'] != '':
-                argument_spec[vv['nickname']] = dict(required=False, type=vv['type'])
-                if 'choices' in vv:
-                    argument_spec[vv['nickname']].update(choices=vv['choices'])
-                if 'default' in vv:
-                    argument_spec[vv['nickname']].update(default=vv['default'])
-    return argument_spec
+    if headers is not None:
+        zmf_api_headers.update(headers)
+    return handle_request_raw(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, zmf_api_headers, body)

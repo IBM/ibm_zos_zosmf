@@ -23,14 +23,8 @@ def __get_console_apis():
                 'cmd': dict(required=True, type='str', nickname='console_cmd'),
                 'sol-key': dict(required=False, type='str', nickname='console_cmdresponse_keyword'),
                 'unsol-key': dict(required=False, type='str', nickname='console_broadcastmsg_keyword'),
-                'solKeyReg': dict(
-                    required=False, type='str', default='N', nickname='console_cmdresponse_reg',
-                    choices=['Y', 'N']
-                ),
-                'unsolKeyReg': dict(
-                    required=False, type='str', default='N', nickname='console_broadcastmsg_reg',
-                    choices=['Y', 'N']
-                ),
+                'solKeyReg': dict(required=False, type='bool', default=False, nickname='console_cmdresponse_reg'),
+                'unsolKeyReg': dict(required=False, type='bool', default=False, nickname='console_broadcastmsg_reg'),
                 'async': dict(required=False, type='str', default='N', nickname=''),
                 'unsol-detect-sync': dict(required=False, type='str', default='Y', nickname=''),
                 'detect-time': dict(required=False, type='int', default='30', nickname='console_broadcastmsg_detect_timeout'),

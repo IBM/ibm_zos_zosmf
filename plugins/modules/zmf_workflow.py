@@ -170,6 +170,7 @@ options:
     workflow_vars:
         description:
             - Values of one or more workflow variables in JSON format.
+            - For example, C({"user_to_list":"DEBUG1", "tsocmd_to_issue":"TIME"})
         required: false
         type: dict
         default: null

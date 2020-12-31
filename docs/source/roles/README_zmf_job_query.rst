@@ -135,7 +135,7 @@ complete_check_times
   | **default**: 10
 
 complete_check_delay
-  The interval time between periodic checks of the job status.
+  The interval time (seconds) between periodic checks of the job status.
 
   | **required**: False
   | **type**: int

@@ -7,7 +7,7 @@ namespace: ibm
 name: ibm_zos_zosmf
 
 # The collection version
-version: 2.3.0
+version: 2.4.0
 
 # Collection README file
 readme: README.md

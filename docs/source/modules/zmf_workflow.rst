@@ -259,6 +259,8 @@ workflow_step_name
 workflow_vars
   Values of one or more workflow variables in JSON format.
 
+  For example, ``{"user_to_list":"DEBUG1", "tsocmd_to_issue":"TIME"}``
+
 
   | **required**: False
   | **type**: dict
