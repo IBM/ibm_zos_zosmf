@@ -279,6 +279,8 @@ dataset_volser
 
   The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
 
+  If this parameter is provided and *dataset_dest* is a nonexistent data set, *dataset_volser* must point to a volume on a 3390 device.
+
 
   | **required**: False
   | **type**: str

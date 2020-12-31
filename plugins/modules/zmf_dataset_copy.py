@@ -138,6 +138,7 @@ options:
         description:
             - The volume serial to identify the volume to be searched for an uncataloged data set or member.
             - The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
+            - If this parameter is provided and I(dataset_dest) is a nonexistent data set, I(dataset_volser) must point to a volume on a 3390 device.
         required: false
         type: str
         default: null
@@ -474,7 +475,6 @@ def copy_dataset(module):
             create_vars['like'] = module.params['dataset_model'].strip()
         else:
             file_size_byte = 0
-            create_vars['unit'] = '3390'
             if module.params['dataset_data_type'] == 'text':
                 create_vars['recfm'] = 'FB'
                 create_vars['lrecl'] = 80
@@ -509,8 +509,9 @@ def copy_dataset(module):
             create_vars['alcunit'] = alc_unit
             create_vars['primary'] = primary_num
             create_vars['secondary'] = secondary_num
-            if has_volser:
-                create_vars['volser'] = module.params['dataset_volser'].strip().upper()
+        create_vars['unit'] = '3390'
+        if has_volser:
+            create_vars['volser'] = module.params['dataset_volser'].strip().upper()
         print('debug: create_vars' + json.dumps(create_vars))
         res_create = call_dataset_api(module, session, 'create', create_headers, json.dumps(create_vars))
         if res_create.status_code != 201:
