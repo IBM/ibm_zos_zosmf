@@ -355,7 +355,7 @@ import os
 
 def validate_module_params(module):
     # validate file_src
-    if not (module.params['file_src'] is not None and module.params['file_src'].strip() != ''):
+    if not (module.params['file_src'] is not None and module.params['file_src'].strip() != '' and not module.params['file_src'].strip().endswith('/')):
         module.fail_json(msg='Missing required argument or invalid argument: file_src.')
     # validate file_dest
     if not (module.params['file_dest'] is not None and module.params['file_dest'].strip() != ''):
@@ -496,6 +496,13 @@ def fetch_file(module):
     fetch_src = file
     if not fetch_src.startswith('/'):
         fetch_src = '/' + fetch_src
+    # setup file parent path and file name
+    f_path = fetch_src[:fetch_src.rfind('/')]
+    f_name = fetch_src[fetch_src.rfind('/') + 1:]
+    if f_path.startswith('/'):
+        f_path = f_path[1:]
+    module.params['f_path'] = f_path
+    module.params['f_name'] = f_name
     # step1 - combine request headers
     request_headers = dict()
     if module.params['file_data_type'] == 'text' and module.params['file_encoding'] is not None:
