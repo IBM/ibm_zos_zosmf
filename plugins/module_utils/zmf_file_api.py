@@ -17,7 +17,7 @@ def __get_file_apis():
         # retrieve the contents of a USS file
         fetch=dict(
             method='get',
-            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{file_src}',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{f_path}/{f_name}',
             args={
                 'research': dict(required=False, type='str', nickname='file_search.keyword'),
                 'insensitive': dict(required=False, type='bool', default=True, nickname='file_search.insensitive'),
@@ -35,7 +35,7 @@ def __get_file_apis():
         # write data to a USS file
         copy=dict(
             method='put',
-            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{file_dest}',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{f_path}/{f_name}',
             args={},
             headers={
                 'Content-Type': dict(required=False, type='str', default='text/plain', nickname=''),
@@ -47,12 +47,39 @@ def __get_file_apis():
         # list the USS files and directories
         list=dict(
             method='get',
-            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs?path=/{file_dest}',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs?path=/{f_path}',
             args={
-                'name': dict(required=False, type='str', nickname='')
+                'name': dict(required=False, type='str', nickname='f_name')
             },
             ok_rcode=200
-        )
+        ),
+        # create a USS file or directory
+        create=dict(
+            method='post',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{f_path}/{f_name}',
+            args={
+                'type': dict(required=True, type='str', nickname='f_create_type'),
+                'mode': dict(required=True, type='str', nickname='f_create_mode')
+            },
+            ok_rcode=201
+        ),
+        # delete a USS file or directory
+        delete=dict(
+            method='delete',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{f_path}/{f_name}',
+            args={},
+            ok_rcode=204
+        ),
+        # operate a USS file or directory
+        operate=dict(
+            method='put',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{f_path}/{f_name}',
+            args={},
+            headers={
+                'X-IBM-BPXK-AUTOCVT': dict(required=False, type='str', choices=['on', 'off'], nickname='')  # TODO
+            },
+            ok_rcode=200
+        ),
     )
 
 
@@ -79,11 +106,6 @@ def __get_file_api_url(module, url):
         module.params['zmf_port'] = ''
     else:
         module.params['zmf_port'] = str(module.params['zmf_port']).strip()
-    # format the input for file_src & file_dest
-    if module.params['file_src'] is not None and module.params['file_src'].strip().startswith('/'):
-        module.params['file_src'] = (module.params['file_src'].strip())[1:]
-    if module.params['file_dest'] is not None and module.params['file_dest'].strip().startswith('/'):
-        module.params['file_dest'] = (module.params['file_dest'].strip())[1:]
     matchObj = re.findall('{(.+?)}', url)
     for x in matchObj:
         if x == 'zmf_port' and module.params[x] == '':
@@ -126,7 +148,7 @@ def __get_file_api_params(module, args):
                     if found is False:
                         module.fail_json(
                             msg='Missing required argument or invalid argument: ' + v['nickname']
-                            + '. The following values are valid: ' + str(v['choices']) + '.'
+                                + '. The following values are valid: ' + str(v['choices']) + '.'
                         )
                 else:
                     params[k] = str(input_v).strip()
@@ -149,5 +171,12 @@ def call_file_api(module, session, api, headers=None, body=None):
     """
     zmf_api = __get_file_api_argument_spec(api)
     zmf_api_url = __get_file_api_url(module, zmf_api['url'])
-    zmf_api_params = __get_file_api_params(module, zmf_api['args'])
-    return handle_request_raw(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, headers, body)
+    zmf_api_params = dict()
+    zmf_api_headers = dict()
+    if 'args' in zmf_api:
+        zmf_api_params = __get_file_api_params(module, zmf_api['args'])
+    if 'headers' in zmf_api:
+        zmf_api_headers = __get_file_api_params(module, zmf_api['headers'])
+    if headers is not None:
+        zmf_api_headers.update(headers)
+    return handle_request_raw(module, session, zmf_api['method'], zmf_api_url, zmf_api_params, zmf_api_headers, body)
