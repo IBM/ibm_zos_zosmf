@@ -314,7 +314,7 @@ message:
     sample:
         sample1: "The target data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is created and updated successfully."
         sample2: "The target data set ZOSMF.ANSIBLE.SAMPLE is updated successfully."
-        sample7: "No data is copied since the target data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) exists and dataset_force is set to False."
+        sample7: "No data is copied since the target data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) already exists and dataset_force is set to False."
 dataset_checksum:
     description: The checksum of the updated data set.
     returned: on success
@@ -346,7 +346,6 @@ def validate_module_params(module):
                 module.fail_json(msg='dataset_src should be a path of a file.')
         except OSError as ex:
             module.fail_json(msg='Failed to read content of dataset_src ' + module.params['dataset_src'].strip() + ' ---- OS error: ' + str(ex))
-
     # validate dataset_dest
     if not (module.params['dataset_dest'] is not None and module.params['dataset_dest'].strip() != ''):
         module.fail_json(msg='Missing required argument or invalid argument: dataset_dest.')
@@ -456,7 +455,7 @@ def copy_dataset(module):
             ds_exist = False
         elif 'returnedRows' in res_content and res_content['returnedRows'] != 0 and module.params['dataset_force'] is False:
             # not fail - no data is copied since the target data set or member exists
-            copy_result['message'] = 'No data is copied since the target data set ' + dataset + ' exists and file_force is set to False.'
+            copy_result['message'] = 'No data is copied since the target data set ' + dataset + ' already exists and dataset_force is set to False.'
             module.exit_json(**copy_result)
     elif res_list.status_code == 404:
         if 'Content-Type' in res_list.headers and res_list.headers['Content-Type'].startswith('application/json'):
@@ -516,7 +515,7 @@ def copy_dataset(module):
         if res_create.status_code != 201:
             module.fail_json(
                 msg='Failed to create the target date set ' + ds_name + ' ---- Http request error: '
-                + str(res_create.status_code) + ': ' + str(res_create.content)
+                    + str(res_create.status_code) + ': ' + str(res_create.content)
             )
 
     # step 3 - read dataset_src or dataset_content
@@ -560,14 +559,14 @@ def copy_dataset(module):
             # fail - data set has been modified when dataset_checksum is specified (412)
             module.fail_json(
                 msg='Failed to copy data to the target data set ' + dataset + ' ---- the target data set has been modified and its checksum is: '
-                + res_copy.headers['Etag']
+                    + res_copy.headers['Etag']
             )
         else:
             # fail - return JSON error report
             res_error = res_copy.json()
             module.fail_json(
                 msg='Failed to copy data to the target data set ' + dataset + ' ---- Http request error: '
-                + str(res_cd) + ': ' + str(res_error) + json.dumps(create_vars)
+                    + str(res_cd) + ': ' + str(res_error) + json.dumps(create_vars)
             )
     else:
         # handle response

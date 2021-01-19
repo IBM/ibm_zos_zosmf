@@ -144,7 +144,7 @@ def __get_dataset_api_params(module, args):
                     if found is False:
                         module.fail_json(
                             msg='Missing required argument or invalid argument: ' + v['nickname']
-                            + '. The following values are valid: ' + str(v['choices']) + '.'
+                                + '. The following values are valid: ' + str(v['choices']) + '.'
                         )
                 else:
                     params[k] = str(input_v).strip()
