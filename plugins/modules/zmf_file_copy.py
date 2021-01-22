@@ -384,7 +384,7 @@ def copy_file(module):
         res_list = call_file_api(module, session, 'list')
         if res_list.status_code == 200:
             res_content = json.loads(res_list.content)
-            if 'returnedRows' in res_content and res_content['returnedRows'] == 1:
+            if 'returnedRows' in res_content and res_content['returnedRows'] > 0:
                 # not fail - no data is copied since the target USS file exists
                 copy_result['message'] = 'No data is copied since the target USS file ' + copy_dest + ' already exists and file_force is set to False.'
                 module.exit_json(**copy_result)
