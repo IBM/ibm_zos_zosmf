@@ -271,8 +271,8 @@ EXAMPLES = r"""
         mode: "644"
         recursive: false
     file_owner:
-        owner: "ibmuser"
-        group: "ibmuser"
+        owner: "500000"
+        group: "0"
         recursive: true
     file_tag:
         tag: "text"
@@ -308,6 +308,22 @@ message:
         sample3: "The file or directory /etc/profile does not exist."
         sample4: "The file /etc/profile already exists."
         sample5: "The file /etc/profile is updated successfully."
+        sample6: "The file /etc/profile is successfully renamed to /etc/profile.bak."
+file_properties:
+    description: The properties of the created or updated USS file or directory.
+    returned: on success
+    type: dict
+    sample: {
+        "gid": 0,
+        "group": "OPERATOR",
+        "mode": "-rwxr-xr-x",
+        "mtime": "2021-01-21T01:24:04",
+        "name": "profile",
+        "size": 0,
+        "tag": "t IBM-1047    T=on  /etc/profile",
+        "uid": 500000,
+        "user": "IBMUSER"
+    }
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -512,8 +528,8 @@ def file_exist(module):
     res_list = call_file_api(module, session, 'list')
     if res_list.status_code == 200:
         res_content = json.loads(res_list.content)
-        if 'returnedRows' in res_content and res_content['returnedRows'] == 1:
-            exist_result['properties'] = res_content['items'][0]
+        if 'returnedRows' in res_content and res_content['returnedRows'] > 0:
+            exist_result['file_properties'] = res_content['items'][0]
             if res_content['items'][0]['mode'].startswith('d'):
                 exist_result['type'] = 'directory'
             else:
@@ -528,7 +544,7 @@ def file_exist(module):
             if res_operate.status_code == 200:
                 res_content = json.loads(res_operate.content)
                 if 'stdout' in res_content:
-                    exist_result['properties']['tag'] = res_content['stdout'][0]
+                    exist_result['file_properties']['tag'] = res_content['stdout'][0]
     else:
         res_json = res_list.json()
         if (res_list.status_code == 404 and 'category' in res_json and 'rc' in res_json and 'reason' in res_json
@@ -567,8 +583,8 @@ def create_file(module, session, target):
         operate_result = operate_file(module, session, target, None)
         if operate_result['message'] != '':
             create_result['message'] += ' ' + operate_result['message']
-        if 'properties' in operate_result:
-            create_result['properties'] = operate_result['properties']
+        if 'file_properties' in operate_result:
+            create_result['file_properties'] = operate_result['file_properties']
         if 'errors' not in operate_result:
             module.exit_json(**create_result)
         else:
@@ -618,7 +634,7 @@ def operate_file(module, session, target, old_properties):
     """
     Operate on a USS file or directory
     Return the message to indicate whether the USS file or directory is updated successfully.
-    Return the properties of the updated USS file or directory.
+    Return the file_properties of the updated USS file or directory.
     :param AnsibleModule module: the ansible module
     :param Session session: the current connection session
     :param str target: the USS file or directory to be operated
@@ -671,15 +687,15 @@ def operate_file(module, session, target, old_properties):
             operate_result['errors'].append('Failed to rename for the ' + module.params['file_state'] + ' ' + target + rename['error'])
     # step2 - return the roperties of the USS file or directory
     if old_properties is not None and (need_update is not True and need_rename is not True):
-        operate_result['properties'] = old_properties
+        operate_result['file_properties'] = old_properties
         operate_result['message'] = 'The ' + module.params['file_state'] + ' ' + target + ' already exists.'
         module.exit_json(**operate_result)
     else:
         res_list = call_file_api(module, session, 'list')
         if res_list.status_code == 200:
             res_content = json.loads(res_list.content)
-            if 'returnedRows' in res_content and res_content['returnedRows'] == 1:
-                operate_result['properties'] = res_content['items'][0]
+            if 'returnedRows' in res_content and res_content['returnedRows'] > 0:
+                operate_result['file_properties'] = res_content['items'][0]
                 # list tag of the target USS file or directory
                 request_body = dict()
                 request_body['request'] = 'chtag'
@@ -690,7 +706,7 @@ def operate_file(module, session, target, old_properties):
                 if res_operate.status_code == 200:
                     res_content = json.loads(res_operate.content)
                     if 'stdout' in res_content:
-                        operate_result['properties']['tag'] = res_content['stdout'][0]
+                        operate_result['file_properties']['tag'] = res_content['stdout'][0]
         if need_update is True:
             if 'errors' not in operate_result:
                 operate_result['message'] = 'The ' + module.params['file_state'] + ' ' + target + ' is updated successfully. '
@@ -817,14 +833,14 @@ def main():
         if module.params['file_state'] == 'absent':
             delete_file(module, exist_result['session'], exist_result['target'], True)
         elif module.params['file_state'] == 'file':
-            operate_file(module, exist_result['session'], exist_result['target'], exist_result['properties'])
+            operate_file(module, exist_result['session'], exist_result['target'], exist_result['file_properties'])
         else:
             module.fail_json(msg='Failed to create directory ' + exist_result['target'] + ' ---- A file with same name already exists.')
     elif exist_result['type'] == 'directory':
         if module.params['file_state'] == 'absent':
             delete_file(module, exist_result['session'], exist_result['target'], True)
         elif module.params['file_state'] == 'directory':
-            operate_file(module, exist_result['session'], exist_result['target'], exist_result['properties'])
+            operate_file(module, exist_result['session'], exist_result['target'], exist_result['file_properties'])
         else:
             module.fail_json(msg='Failed to create file ' + exist_result['target'] + ' ---- A directory with same name already exists.')
     elif exist_result['type'] == 'error':

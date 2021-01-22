@@ -32,8 +32,8 @@
         #   mode: "755"
         #   recursive: false
         # file_owner:
-        #   owner: "ibmuser"
-        #   group: "ibmuser"
+        #   owner: "500000"
+        #   group: "0"
         #   recursive: false
         # file_tag:
         #   tag: "mixed"
