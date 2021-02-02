@@ -51,7 +51,6 @@ options:
                 description: Hostname of the z/OSMF server.
                 required: true
                 type: str
-                default: null
             zmf_port:
                 description: Port number of the z/OSMF server.
                 required: false
@@ -117,22 +116,22 @@ options:
         description:
             - The final state desired for specified USS file or directory.
             - >
-              If I(state=file) and I(file_path) does not exist,
+              If I(file_state=file) and I(file_path) does not exist,
               I(file_path) is created as a USS file, the module completes successfully with C(changed=True).
             - >
-              If I(state=directory) and I(file_path) does not exist,
+              If I(file_state=directory) and I(file_path) does not exist,
               I(file_path) is created as a directory, the module completes successfully with C(changed=True).
             - >
-              If I(state=file) or I(state=directory), and I(file_path) exists,
+              If I(file_state=file) or I(file_state=directory), and I(file_path) exists,
               I(file_path) is modified with other supplied variables (e.g., I(file_mode)), the module completes successfully with C(changed=True).
             - >
-              If I(state=file) or I(state=directory), and I(file_path) exists,
+              If I(file_state=file) or I(file_state=directory), and I(file_path) exists,
               no action taken if no other variables are supplied (e.g., I(file_mode)), the module completes successfully with C(changed=False).
             - >
-              If I(state=absent) and I(file_path) does not exist,
+              If I(file_state=absent) and I(file_path) does not exist,
               no action taken, the module completes successfully with C(changed=False).
             - >
-              If I(state=absent) and I(file_path) exists,
+              If I(file_state=absent) and I(file_path) exists,
               the existing I(file_path) is deleted, the module completes successfully with C(changed=True).
         required: true
         type: str
@@ -143,14 +142,14 @@ options:
     file_rename:
         description:
             - Specifies the new name of the USS file or directory.
-            - This variable only take effects when I(state=file) or I(state=directory).
+            - This variable only take effects when I(file_state=file) or I(file_state=directory).
         required: false
         type: str
         default: null
     file_mode:
         description:
             - Specifies the permission the resulting USS file or directory should have.
-            - This variable only take effects when I(state=file) or I(state=directory).
+            - This variable only take effects when I(file_state=file) or I(file_state=directory).
             - If I(file_path) does not exist, this value is used in creating I(file_path). If this value is omitted, 755 is used by default.
             - If I(file_path) exists, this value is used in changing mode of I(file_path).
         required: false
@@ -165,7 +164,7 @@ options:
                 type: str
             recursive:
                 description:
-                    - This variable only take effects when I(state=directory).
+                    - This variable only take effects when I(file_state=directory).
                     - When I(recursive=true), the file mode bits of the directory and all files in the file hierarchy below it are changed (chmod -R).
                 required: false
                 type: bool
@@ -173,7 +172,7 @@ options:
     file_owner:
         description:
             - Indicates the function change owner.
-            - This variable only take effects when I(state=file) or I(state=directory).
+            - This variable only take effects when I(file_state=file) or I(file_state=directory).
         required: false
         type: dict
         default: null
@@ -189,7 +188,7 @@ options:
                 default: null
             recursive:
                 description:
-                    - This variable only take effects when I(state=directory).
+                    - This variable only take effects when I(file_state=directory).
                     - When I(recursive=true), changes all the files and subdirectories in that directory to belong to the specified owner and group (chown -R).
                 required: false
                 type: bool
@@ -197,7 +196,7 @@ options:
     file_tag:
         description:
             - Indicates the function change tag.
-            - This variable only take effects when I(state=file) or I(state=directory).
+            - This variable only take effects when I(file_state=file) or I(file_state=directory).
         required: false
         type: dict
         default: null
@@ -224,7 +223,7 @@ options:
                 default: null
             recursive:
                 description:
-                    - This variable only take effects when I(state=directory).
+                    - This variable only take effects when I(file_state=directory).
                     - When I(recursive=true), tags all the files and subdirectories in that directory (chtag -R).
                 required: false
                 type: bool
@@ -256,8 +255,8 @@ EXAMPLES = r"""
     file_mode:
         mode: "644"
     file_owner:
-        owner: "ibmuser"
-        group: "ibmuser"
+        owner: "500000"
+        group: "0"
     file_tag:
         tag: "text"
         codeset: "IBM-1047"
@@ -310,7 +309,7 @@ message:
         sample5: "The file /etc/profile is updated successfully."
         sample6: "The file /etc/profile is successfully renamed to /etc/profile.bak."
 file_properties:
-    description: The properties of the created or updated USS file or directory.
+    description: The properties of the present USS file or directory.
     returned: on success
     type: dict
     sample: {
@@ -461,14 +460,17 @@ def validate_module_params(module):
             for k, v in module.params['file_tag'].items():
                 if k == 'tag':
                     has_tag = True
-                    if (v is not None and str(v).strip() != ''
-                            and (str(v).strip() == 'mixed' or str(v).strip() == 'text' or str(v).strip() == 'binary' or str(v).strip() == 'absent')):
-                        module.params['file_tag']['tag'] = str(v).strip()
+                    if v is not None and str(v).strip() != '':
+                        if (str(v).strip().lower() == 'mixed' or str(v).strip().lower() == 'text'
+                                or str(v).strip().lower() == 'binary' or str(v).strip().lower() == 'absent'):
+                            module.params['file_tag']['tag'] = str(v).strip().lower()
+                        else:
+                            module.fail_json(
+                                msg='Invalid argument: file_tag. Missing required suboption or invalid suboption: tag, the following values are valid: '
+                                    + '[mixed, text, binary, absent].'
+                            )
                     else:
-                        module.fail_json(
-                            msg='Invalid argument: file_tag. Missing required suboption or invalid suboption: tag, the following values are valid: '
-                                + '[mixed, text, binary, absent].'
-                        )
+                        has_tag = False
                 elif k == 'codeset':
                     if v is not None and str(v).strip() != '':
                         module.params['file_tag']['codeset'] = str(v).strip()
@@ -592,7 +594,7 @@ def create_file(module, session, target):
             module.fail_json(msg=str(create_result))
     else:
         module.fail_json(
-            msg='Failed to create ' + module.params['file_state'] + ' ' + target + ' ---- Http request error: '
+            msg='Failed to create the ' + module.params['file_state'] + ' ' + target + ' ---- Http request error: '
                 + str(res_create.status_code) + ': ' + str(res_create.json())
         )
 
@@ -684,7 +686,7 @@ def operate_file(module, session, target, old_properties):
         else:
             if 'errors' not in operate_result:
                 operate_result['errors'] = []
-            operate_result['errors'].append('Failed to rename for the ' + module.params['file_state'] + ' ' + target + rename['error'])
+            operate_result['errors'].append('Failed to rename the ' + module.params['file_state'] + ' ' + target + rename['error'])
     # step2 - return the roperties of the USS file or directory
     if old_properties is not None and (need_update is not True and need_rename is not True):
         operate_result['file_properties'] = old_properties
@@ -835,19 +837,19 @@ def main():
         elif module.params['file_state'] == 'file':
             operate_file(module, exist_result['session'], exist_result['target'], exist_result['file_properties'])
         else:
-            module.fail_json(msg='Failed to create directory ' + exist_result['target'] + ' ---- A file with same name already exists.')
+            module.fail_json(msg='Failed to create the directory ' + exist_result['target'] + ' ---- A file with same name already exists.')
     elif exist_result['type'] == 'directory':
         if module.params['file_state'] == 'absent':
             delete_file(module, exist_result['session'], exist_result['target'], True)
         elif module.params['file_state'] == 'directory':
             operate_file(module, exist_result['session'], exist_result['target'], exist_result['file_properties'])
         else:
-            module.fail_json(msg='Failed to create file ' + exist_result['target'] + ' ---- A directory with same name already exists.')
+            module.fail_json(msg='Failed to create the file ' + exist_result['target'] + ' ---- A directory with same name already exists.')
     elif exist_result['type'] == 'error':
         if module.params['file_state'] == 'absent':
             delete_file(module, exist_result['session'], exist_result['target'], False)
         else:
-            module.fail_json(msg='Failed to create ' + module.params['file_state'] + ' ' + exist_result['target'] + ' ---- Parent path not found.')
+            module.fail_json(msg='Failed to create the ' + module.params['file_state'] + ' ' + exist_result['target'] + ' ---- Parent path not found.')
     else:
         if module.params['file_state'] == 'absent':
             delete_file(module, exist_result['session'], exist_result['target'], False)

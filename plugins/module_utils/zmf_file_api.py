@@ -76,10 +76,10 @@ def __get_file_apis():
             url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/fs/{f_path}/{f_name}',
             args={},
             headers={
-                'X-IBM-BPXK-AUTOCVT': dict(required=False, type='str', choices=['on', 'off'], nickname='')  # TODO
+                'X-IBM-BPXK-AUTOCVT': dict(required=False, type='str', choices=['on', 'off'], nickname='')
             },
             ok_rcode=200
-        ),
+        )
     )
 
 
