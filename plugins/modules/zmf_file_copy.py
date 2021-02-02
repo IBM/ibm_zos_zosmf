@@ -51,7 +51,6 @@ options:
                 description: Hostname of the z/OSMF server.
                 required: true
                 type: str
-                default: null
             zmf_port:
                 description: Port number of the z/OSMF server.
                 required: false
@@ -130,7 +129,6 @@ options:
             - This variable must consist of a fully qualified path and file name. For example, C(/etc/profile).
         required: true
         type: str
-        default: null
     file_force:
         description:
             - Specifies whether the target USS file must always be overwritten.
@@ -160,7 +158,7 @@ options:
     file_encoding:
         description:
             - Specifies which encodings the data to be copied should be converted from and to.
-            - These parameters only take effects when I(file_data_type=text) and I(file_diff=false).
+            - This variable only take effects when I(file_data_type=text) and I(file_diff=false).
         required: false
         type: dict
         default: null
@@ -205,7 +203,7 @@ options:
             - Specifies the checksum to be used to verify that the target USS file to copy to is not changed since the checksum was generated.
             - The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
             - This variable only take effects when I(file_force=true).
-        required: False
+        required: false
         type: str
         default: null
 requirements:

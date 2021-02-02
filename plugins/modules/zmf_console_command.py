@@ -52,7 +52,6 @@ options:
                 description: Hostname of the z/OSMF server.
                 required: true
                 type: str
-                default: null
             zmf_port:
                 description: Port number of the z/OSMF server.
                 required: false
@@ -112,14 +111,12 @@ options:
             - Specifies the command to issue.
         required: true
         type: str
-        default: null
     console_system:
         description:
             - Nickname of the target z/OS system in the same sysplex that the command is routed to.
             - This variable should be specified as C({{ inventory_hostname }}), and its value should be specified in the inventory file as a managed node.
         required: true
         type: str
-        default: null
     console_name:
         description:
             - Name of the EMCS console that is used to issue the command.

@@ -52,7 +52,6 @@ options:
                 description: Hostname of the z/OSMF server.
                 required: true
                 type: str
-                default: null
             zmf_port:
                 description: Port number of the z/OSMF server.
                 required: false
@@ -133,7 +132,6 @@ options:
             - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATA), or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
         required: true
         type: str
-        default: null
     dataset_volser:
         description:
             - The volume serial to identify the volume to be searched for an uncataloged data set or member.
@@ -154,12 +152,12 @@ options:
     dataset_model:
         description:
             - When copying a local file to a non-existing PDS, PDSE or PS, specify a model data set to allocate the target data set.
-            - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATALIB), member name should not be provided in this parameter.
+            - For example, specifying a model data set like C(ZOSMF.ANSIBLE.DATALIB), member name should not be provided in this parameter.
             - If this parameter is not provided, the destination data set will be allocated based on the size of the local file or I(dataset_content).
             - The primary extent tracks will be specified as 4 times the size of the local file or I(dataset_content).
             - If I(dataset_data_type=text), then C(RECFM=FB) and C(LRECL=80) will be used to allocate the data set.
-            - If I(dataset_data_type=binary) or I(dataset_data_type=record), (RECFM=U) will be used to allocate the data set.
-        required: False
+            - If I(dataset_data_type=binary) or I(dataset_data_type=record), C(RECFM=U) will be used to allocate the data set.
+        required: false
         type: str
         default: null
     dataset_data_type:
@@ -192,7 +190,7 @@ options:
     dataset_encoding:
         description:
             - Specifies which encodings the data to be copied should be converted from and to.
-            - These parameters only take effects when I(dataset_data_type=text) and I(dataset_diff=false).
+            - This variable only take effects when I(dataset_data_type=text) and I(dataset_diff=false).
         required: false
         type: dict
         default: null
@@ -234,7 +232,7 @@ options:
         default: false
     dataset_migrate_recall:
         description:
-            - Specify how a migrated data set is handled.
+            - Specifies how a migrated data set is handled.
             - When I(dataset_migrate_recall=wait), the migrated data set is recalled synchronously.
             - When I(dataset_migrate_recall=nowait), request the migrated data set to be recalled, but do not wait.
             - When I(dataset_migrate_recall=error), do not attempt to recall the migrated data set.
@@ -250,7 +248,7 @@ options:
             - Specifies the checksum to be used to verify that the target data set to copy to is not changed since the checksum was generated.
             - The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
             - This variable only take effects when I(dataset_force=true).
-        required: False
+        required: false
         type: str
         default: null
 requirements:
@@ -566,7 +564,7 @@ def copy_dataset(module):
             res_error = res_copy.json()
             module.fail_json(
                 msg='Failed to copy data to the target data set ' + dataset + ' ---- Http request error: '
-                    + str(res_cd) + ': ' + str(res_error) + json.dumps(create_vars)
+                    + str(res_cd) + ': ' + str(res_error)
             )
     else:
         # handle response

@@ -52,7 +52,6 @@ options:
                 description: Hostname of the z/OSMF server.
                 required: true
                 type: str
-                default: null
             zmf_port:
                 description: Port number of the z/OSMF server.
                 required: false
@@ -141,7 +140,7 @@ options:
     dataset_search:
         description:
             - Specifies a series of parameters that are used to search the content of data set.
-            - These parameters only take effects when I(dataset_data_type=text).
+            - This variable only take effects when I(dataset_data_type=text).
             - If this variable is specified, only the matched records in the data set will be fetched to the destination directory.
             - Records are returned starting with the first matching record. The I(dataset_range) may be used to specify the range of records to be searched.
             - The matched contents in the data set will be saved as C({{ dataset_dest }}/{{ zmf_host }}/{{ dataset_src }}.search) on control node.
@@ -192,7 +191,7 @@ options:
     dataset_encoding:
         description:
             - Specifies which encodings the fetched data set should be converted from and to.
-            - These parameters only take effects when I(dataset_data_type=text).
+            - This variable only take effects when I(dataset_data_type=text).
         required: false
         type: dict
         default: null
@@ -202,13 +201,11 @@ options:
                     - The character set of the source data set. Select an alternate EBCDIC code page.
                 required: true
                 type: str
-                default: IBM-1047
             to:
                 description:
                     - The destination character set for the output to be written as.
                 required: true
                 type: str
-                default: ISO8859-1
     dataset_range:
         description:
             - Specifies a range that is used to retrieve records of the data set.
@@ -233,7 +230,7 @@ options:
                 type: int
     dataset_migrate_recall:
         description:
-            - Specify how a migrated data set is handled.
+            - Specifies how a migrated data set is handled.
             - When I(dataset_migrate_recall=wait), the migrated data set is recalled synchronously.
             - When I(dataset_migrate_recall=nowait), request the migrated data set to be recalled, but do not wait.
             - When I(dataset_migrate_recall=error), do not attempt to recall the migrated data set.
