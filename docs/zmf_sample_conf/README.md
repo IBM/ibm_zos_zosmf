@@ -8,6 +8,8 @@ z/OSMF Ansible collection **ibm_zos_zosmf** is designed to unleash the z/OSMF ca
 
 - **zmf_console_XXX** requires z/OSMF REST Console services and REST TSO services
 
+- **zmf_dataset_XXX** or **zmf_file_XXX** requires z/OSMF REST data set and file services
+
 If you already setup z/OSMF Core before, the above z/OSMF dependencies should already be there. Please skip below content. You could also use z/OSMF Security Configuration Assistant to validate security setup for the above z/OSMF services. 
 
 If you haven't setup z/OSMF before, here is an approach to quickly enable z/OSMF in DEV/TEST system in order to try z/OSMF Ansible collection. Please be noticed, for Production system, please refer to z/OSMF Configuration Guide.
