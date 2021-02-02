@@ -57,6 +57,26 @@ def __get_dataset_apis():
             url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_name}',
             ok_rcode=201
         ),
+        # delete a data set or member
+        delete=dict(
+            method='delete',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_full_name}',
+            args={},
+            ok_rcode=204
+        ),
+        # operate a data set or member
+        operate=dict(
+            method='put',
+            url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_full_name}',
+            args={},
+            headers={
+                'X-IBM-BPXK-AUTOCVT': dict(required=False, type='str', choices=['on', 'off'], nickname=''),
+                'X-IBM-Migrated-Recall': dict(
+                    required=False, type='str', default='wait', choices=['wait', 'nowait', 'error'], nickname='dataset_migrate_recall'
+                )
+            },
+            ok_rcode=200
+        ),
         # list the data set
         list_ds=dict(
             method='get',
@@ -72,6 +92,11 @@ def __get_dataset_apis():
             url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds/{ds_v_name}/member',
             args={
                 'pattern': dict(required=False, type='str', nickname='m_name')
+            },
+            headers={
+                'X-IBM-Migrated-Recall': dict(
+                    required=False, type='str', default='wait', choices=['wait', 'nowait', 'error'], nickname='dataset_migrate_recall'
+                )
             },
             ok_rcode=200
         )
@@ -129,9 +154,11 @@ def __get_dataset_api_params(module, args):
                     input_v = module.params[v['nickname'][0:s]][v['nickname'][s + 1:]]
                 else:
                     input_v = None
-            else:
+            elif v['nickname'] in module.params:
                 # key <==> module argument
                 input_v = module.params[v['nickname']]
+            else:
+                input_v = None
             # mapping the value of args with module argument
             if input_v is not None and str(input_v).strip() != '':
                 if 'choices' in v:
