@@ -8,11 +8,22 @@
   include_tasks: instance_dir_util.yml
   run_once: true
 
+
+# Support input_vars to be provided via playbook. If input_vars isn't set then set default below
+- name: Set input_vars as fact
+  set_fact:
+    input_vars: ""
+  when: input_vars is not defined
+
 # Allow zmf_body to be set in previous tasks. If zmf_body isn't set then set default below
 - name: Set zmf_body as fact
   set_fact:
-    zmf_body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}","systems-nicknames":["{{ systems_nicknames }}"]}'
+    zmf_body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}","systems-nicknames":["{{ systems_nicknames }}"],"input-variables":[{{ input_vars }}]}'
   when: zmf_body is not defined
+
+- name: Print provision body
+  debug:
+    msg="{{ zmf_body }}"
 
 - name: Provision template
   uri:

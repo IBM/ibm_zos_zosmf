@@ -23,3 +23,4 @@
         domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
         tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
         systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+        input_vars: "<input-vars>" # Json objects of variable name and value, delimited by comma.
