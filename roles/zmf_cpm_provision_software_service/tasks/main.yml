@@ -21,10 +21,6 @@
     zmf_body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}","systems-nicknames":["{{ systems_nicknames }}"],"input-variables":[{{ input_vars }}]}'
   when: zmf_body is not defined
 
-- name: Print provision body
-  debug:
-    msg="{{ zmf_body }}"
-
 - name: Provision template
   uri:
     url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/psc/{{ cpm_template_name }}/actions/run"
