@@ -36,7 +36,6 @@
     validate_certs: no
     body_format: json
     body: "{{ zmf_body }}"
-    timeout: 120
   delegate_to: localhost
   register: provision_results
 
