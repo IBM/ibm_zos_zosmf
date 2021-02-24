@@ -18,7 +18,8 @@
 # Allow zmf_body to be set in previous tasks. If zmf_body isn't set then set default below
 - name: Set zmf_body as fact
   set_fact:
-    zmf_body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}","systems-nicknames":["{{ systems_nicknames }}"],"input-variables":{{ input_vars }}}'
+    zmf_body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}",
+      "systems-nicknames":["{{ systems_nicknames }}"],"input-variables":{{ input_vars }}}'
   when: zmf_body is not defined
 
 - name: Provision template
@@ -59,6 +60,10 @@
   include_tasks: loop_instance_provision_step_state.yml
   vars:
     instance_object_id: "{{ provision_results.json['registry-info']['object-id'] }}"
+
+- name: Set full_instance_json as fact
+  set_fact:
+    full_instance_json: ""
 
 - name: Get provisioned instance information
   uri:
