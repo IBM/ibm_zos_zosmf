@@ -26,9 +26,10 @@
       delegate_to: localhost
     - zmf_dataset:
         zmf_credential: "{{ result_auth }}"
-        dataset_name: "ZOSMF.ANSIBLE.SAMPLE"
+        dataset_name: "ZOSMF.ANSIBLE.PS"
         dataset_state: "present"
         # dataset_volser: "VOL001"
+        # dataset_type: "PS"
         # dataset_replace: false
         # dataset_create:
         #   recfm: "FB"
@@ -37,8 +38,8 @@
         #   primary: 10
         #   secondary: 5
         #   unit: "3390"
-        # dataset_model: "ZOSMF.ANSIBLE.LIB"
-        # dataset_rename: "ZOSMF.ANSIBLE.SAMPLE01"
+        # dataset_model: "ZOSMF.ANSIBLE.MODEL"
+        # dataset_rename: "ZOSMF.ANSIBLE.PS01"
         # dataset_migrate_recall: "wait"
       register: result
       delegate_to: localhost
