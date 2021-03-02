@@ -82,7 +82,7 @@ def __get_dataset_apis():
             method='get',
             url='https://{zmf_host}:{zmf_port}/zosmf/restfiles/ds?dslevel={ds_name}',
             args={
-                'volser': dict(required=False, type='str', nickname='dataset_volser')
+                'volser': dict(required=False, type='str', nickname='v_name')
             },
             ok_rcode=200
         ),
