@@ -146,7 +146,7 @@ file_diff
 file_encoding
   Specifies which encodings the data to be copied should be converted from and to.
 
-  These parameters only take effects when *file_data_type=text* and *file_diff=false*.
+  This variable only take effects when *file_data_type=text* and *file_diff=false*.
 
 
   | **required**: False
@@ -441,7 +441,7 @@ Return Values
 
                   "The target USS file /etc/profile is updated successfully."
 
-                  "No data is copied since the target USS file /etc/profile exists and file_force is set to False."
+                  "No data is copied since the target USS file /etc/profile already exists and file_force is set to False."
 
 
 

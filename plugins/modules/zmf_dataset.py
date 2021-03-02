@@ -110,7 +110,7 @@ options:
         description:
             - Name of the data set or member being managed.
             - This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
-            - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATA), or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
+            - For example, specifying a data set like C(ZOSMF.ANSIBLE.PS), or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
         required: true
         type: str
     dataset_volser:
@@ -289,7 +289,7 @@ options:
     dataset_model:
         description:
             - Specifies the model data set to be used to create a sequential or partitioned data set.
-            - For example, specifying a model data set like C(ZOSMF.ANSIBLE.DATALIB), member name should not be provided in this parameter.
+            - For example, specifying a model data set like C(ZOSMF.ANSIBLE.MODEL), member name should not be provided in this variable.
             - This variable only take effects when I(dataset_state=present).
             - This variable only take effects when I(dataset_type=PS) or I(dataset_type=PDS) or I(dataset_type=PDSE).
             - If both I(dataset_create) and I(dataset_model) are supplied, I(dataset_model) is ignored.
@@ -325,65 +325,73 @@ requirements:
 """
 
 EXAMPLES = r"""
-- name: Create a sequential data set ZOSMF.ANSIBLE.LIB if it does not exist
+- name: Create a sequential data set ZOSMF.ANSIBLE.PS if it does not exist
   zmf_dataset:
     zmf_host: "sample.ibm.com"
-    dataset_name: "ZOSMF.ANSIBLE.LIB"
+    dataset_name: "ZOSMF.ANSIBLE.PS"
     dataset_state: "present"
     dataset_type: "PS"
     dataset_create:
       primary: 10
 
-- name: Replace a partitioned data set ZOSMF.ANSIBLE.SAMPLE if it exists
+- name: Create a sequential data set ZOSMF.ANSIBLE.PS depending on the model data set ZOSMF.ANSIBLE.MODEL
   zmf_dataset:
     zmf_host: "sample.ibm.com"
-    dataset_name: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_name: "ZOSMF.ANSIBLE.PS"
+    dataset_state: "present"
+    dataset_type: "PS"
+    dataset_model: "ZOSMF.ANSIBLE.MODEL"
+
+- name: Replace a partitioned data set ZOSMF.ANSIBLE.PDS if it exists
+  zmf_dataset:
+    zmf_host: "sample.ibm.com"
+    dataset_name: "ZOSMF.ANSIBLE.PDS"
     dataset_state: "present"
     dataset_type: "PDS"
     dataset_replace: true
     dataset_create:
       primary: 10
 
-- name: Create a data set member ZOSMF.ANSIBLE.SAMPLE(MEMBER01) to an existing PDS, replace if member exists
+- name: Create a data set member ZOSMF.ANSIBLE.PDS(MEMBER) to an existing PDS, replace if member exists
   zmf_dataset:
     zmf_host: "sample.ibm.com"
-    dataset_name: "ZOSMF.ANSIBLE.SAMPLE(MEMBER01)"
+    dataset_name: "ZOSMF.ANSIBLE.PDS(MEMBER)"
     dataset_state: "present"
     dataset_type: "MEMBER"
     dataset_replace: true
 
-- name: Rename a data set ZOSMF.ANSIBLE.LIB to ZOSMF.ANSIBLE.LIB01
+- name: Rename a data set ZOSMF.ANSIBLE.PS to ZOSMF.ANSIBLE.PS01
   zmf_dataset:
     zmf_host: "sample.ibm.com"
-    dataset_name: "ZOSMF.ANSIBLE.LIB"
+    dataset_name: "ZOSMF.ANSIBLE.PS"
     dataset_state: "present"
     dataset_type: "PS"
-    dataset_rename: "ZOSMF.ANSIBLE.LIB01"
+    dataset_rename: "ZOSMF.ANSIBLE.PS01"
 
-- name: Rename a data set member ZOSMF.ANSIBLE.SAMPLE(MEMBER01) to ZOSMF.ANSIBLE.SAMPLE(MEMBER02)
+- name: Rename a data set member ZOSMF.ANSIBLE.PDS(MEMBER) to ZOSMF.ANSIBLE.PDS(MEMBER01)
   zmf_dataset:
     zmf_host: "sample.ibm.com"
-    dataset_name: "ZOSMF.ANSIBLE.SAMPLE(MEMBER01)"
+    dataset_name: "ZOSMF.ANSIBLE.PDS(MEMBER)"
     dataset_state: "present"
     dataset_type: "MEMBER"
-    dataset_rename: "ZOSMF.ANSIBLE.SAMPLE(MEMBER02)"
+    dataset_rename: "ZOSMF.ANSIBLE.PDS(MEMBER01)"
 
-- name: Delete a data set ZOSMF.ANSIBLE.LIB
+- name: Delete a data set ZOSMF.ANSIBLE.PS
   zmf_dataset:
     zmf_host: "sample.ibm.com"
-    dataset_name: "ZOSMF.ANSIBLE.LIB"
+    dataset_name: "ZOSMF.ANSIBLE.PS"
     dataset_state: "absent"
 
-- name: Migrate a data set ZOSMF.ANSIBLE.LIB
+- name: Migrate a data set ZOSMF.ANSIBLE.PS
   zmf_dataset:
     zmf_host: "sample.ibm.com"
-    dataset_name: "ZOSMF.ANSIBLE.LIB"
+    dataset_name: "ZOSMF.ANSIBLE.PS"
     dataset_state: "migrated"
 
-- name: Recall a data set ZOSMF.ANSIBLE.LIB and wait for the completion of the request
+- name: Recall a data set ZOSMF.ANSIBLE.PS and wait for the completion of the request
   zmf_dataset:
     zmf_host: "sample.ibm.com"
-    dataset_name: "ZOSMF.ANSIBLE.LIB"
+    dataset_name: "ZOSMF.ANSIBLE.PS"
     dataset_state: "recalled"
     dataset_migrate_recall: "wait"
 """
@@ -398,19 +406,19 @@ message:
     returned: on success
     type: str
     sample:
-        sample1: "The data set ZOSMF.ANSIBLE.SAMPLE is created successfully."
-        sample2: "The data set member ZOSMF.ANSIBLE.SAMPLE(MEMBER) is deleted successfully."
-        sample3: "The data set ZOSMF.ANSIBLE.SAMPLE does not exist."
-        sample4: "The data set member ZOSMF.ANSIBLE.SAMPLE(MEMBER) already exists."
-        sample5: "The data set ZOSMF.ANSIBLE.SAMPLE is successfully renamed to /ZOSMF.ANSIBLE.SAMPLE01."
-        sample6: "The data set ZOSMF.ANSIBLE.SAMPLE is migrated successfully."
-        sample7: "The data set ZOSMF.ANSIBLE.SAMPLE is recalled successfully."
+        sample1: "The data set ZOSMF.ANSIBLE.PS is created successfully."
+        sample2: "The data set member ZOSMF.ANSIBLE.PDS(MEMBER) is deleted successfully."
+        sample3: "The data set ZOSMF.ANSIBLE.PS does not exist."
+        sample4: "The data set member ZOSMF.ANSIBLE.PDS(MEMBER) already exists."
+        sample5: "The data set ZOSMF.ANSIBLE.PS is successfully renamed to /ZOSMF.ANSIBLE.PS01."
+        sample6: "The data set ZOSMF.ANSIBLE.PS is migrated successfully."
+        sample7: "The data set ZOSMF.ANSIBLE.PS is recalled successfully."
 dataset_properties:
     description: The properties of the present data set.
     returned: on success
     type: dict
     sample: {
-        "dsname": "ZOSMF.ANSIBLE.SAMPLE",
+        "dsname": "ZOSMF.ANSIBLE.PS",
         "blksz": "80",
         "catnm": "CATALOG.SVPLEX.MASTER",
         "cdate": "2021/01/21",
@@ -738,6 +746,7 @@ def dataset_exist(module):
     ds_v_name = ''
     ds_name = ''
     m_name = ''
+    v_name = ''
     if target.find('(') > 0:
         exist_result['is_member'] = True
         ds_name = target[:target.find('(')]
@@ -745,8 +754,9 @@ def dataset_exist(module):
     else:
         ds_name = target
     if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
-        ds_full_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + target
-        ds_v_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + ds_name
+        v_name = module.params['dataset_volser'].strip().upper()
+        ds_full_name = '-(' + v_name + ')/' + target
+        ds_v_name = '-(' + v_name + ')/' + ds_name
     else:
         ds_full_name = target
         ds_v_name = ds_name
@@ -754,6 +764,7 @@ def dataset_exist(module):
     module.params['ds_v_name'] = ds_v_name
     module.params['ds_name'] = ds_name
     module.params['m_name'] = m_name
+    module.params['v_name'] = v_name
     # step 1 - combine request headers
     request_headers = dict()
     request_headers['X-IBM-Attributes'] = 'base'
@@ -813,6 +824,9 @@ def create_dataset(module, session, target, is_member):
                 request_body['volser'] = module.params['dataset_volser'].strip().upper()
         elif module.params['dataset_model'] is not None and module.params['dataset_model'].strip() != '':
             request_body['like'] = module.params['dataset_model'].strip()
+            if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
+                request_body['volser'] = module.params['dataset_volser'].strip().upper()
+                request_body['unit'] = '3390'
         else:
             module.fail_json(
                 msg='Failed to create the data set ' + target
@@ -1048,14 +1062,16 @@ def operate_dataset_action(module, session, action, target):
         ds_v_name = ''
         ds_name = ''
         m_name = ''
+        v_name = ''
         if new.find('(') > 0:
             ds_name = new[:new.find('(')]
             m_name = new[new.find('(') + 1:new.find(')')]
         else:
             ds_name = new
         if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
-            ds_full_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + new
-            ds_v_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + ds_name
+            v_name = module.params['dataset_volser'].strip().upper()
+            ds_full_name = '-(' + v_name + ')/' + new
+            ds_v_name = '-(' + v_name + ')/' + ds_name
         else:
             ds_full_name = new
             ds_v_name = ds_name
@@ -1063,6 +1079,7 @@ def operate_dataset_action(module, session, action, target):
         module.params['ds_v_name'] = ds_v_name
         module.params['ds_name'] = ds_name
         module.params['m_name'] = m_name
+        module.params['v_name'] = v_name
         request_body['from-dataset'] = dict()
         request_body['from-dataset']['dsn'] = old_ds_name
         if old_m_name is not None and old_m_name != '':

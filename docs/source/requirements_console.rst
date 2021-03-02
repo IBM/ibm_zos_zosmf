@@ -2,8 +2,8 @@
 .. Copyright (c) IBM Corporation 2020                                        .
 .. ...........................................................................
 
-Requirements - MVS Command Operations
-=====================================
+Requirements - Operate MVS Commands
+===================================
 
 To use the modules and roles which supplied to interact with **z/OS console REST services** in your playbook, besides the `Overall Requirements`_, the following nodes require specific versions of software:
 

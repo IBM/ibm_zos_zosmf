@@ -110,7 +110,7 @@ options:
         description:
             - Data set or the name of the PDS or PDSE member on the remote z/OS system to fetch.
             - This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
-            - For example, specifying a data set like C(ZOSMF.ANSIBLE.DATA), or a PDS or PDSE member like C(ZOSMF.ANSIBLE.PDS(MEMBER)).
+            - For example, specifying a data set like C(ZOSMF.ANSIBLE.PS), or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
         required: true
         type: str
     dataset_dest:
@@ -118,8 +118,8 @@ options:
             - The local directory on control node where the data set or member should be saved to. For example, C(/tmp/dataset).
             - This directory can be absolute or relative. The module will fail if the parent directory of I(dataset_dest) is a read-only file system.
             - The directory C({{ dataset_dest }}/{{ zmf_host }}/) will be created to save the data set, where I(zmf_host) is the hostname of the z/OSMF server.
-            - If I(zmf_host=zosmf.ibm.com), a data set named C(ZOSMF.ANSIBLE.DATA) would be saved into C({{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.DATA).
-            - If I(dataset_volser=VOL001), the above data set would be saved into C({{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.DATA).
+            - If I(zmf_host=zosmf.ibm.com), a data set named C(ZOSMF.ANSIBLE.PS) would be saved into C({{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.PS).
+            - If I(dataset_volser=VOL001), the above data set would be saved into C({{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.PS).
         required: true
         type: str
     dataset_volser:
@@ -133,7 +133,7 @@ options:
         description:
             - Specifies whether to override the default behavior of appending I(zmf_host) to the destination.
             - If I(dataset_flat=true), the data set will be fetched to the destination directory using its name without appending I(zmf_host).
-            - For example, if I(dataset_dest=/tmp/dataset), a data set named C(ZOSMF.ANSIBLE.DATA) would be saved into C(/tmp/dataset/ZOSMF.ANSIBLE.DATA).
+            - For example, if I(dataset_dest=/tmp/dataset), a data set named C(ZOSMF.ANSIBLE.PS) would be saved into C(/tmp/dataset/ZOSMF.ANSIBLE.PS).
         required: false
         type: bool
         default: false
@@ -144,7 +144,7 @@ options:
             - If this variable is specified, only the matched records in the data set will be fetched to the destination directory.
             - Records are returned starting with the first matching record. The I(dataset_range) may be used to specify the range of records to be searched.
             - The matched contents in the data set will be saved as C({{ dataset_dest }}/{{ zmf_host }}/{{ dataset_src }}.search) on control node.
-            - For example, the matched contents in the data set named C(ZOSMF.ANSIBLE.DATA) would be saved as C(/tmp/dataset/ZOSMF.ANSIBLE.DATA.search).
+            - For example, the matched contents in the data set named C(ZOSMF.ANSIBLE.PS) would be saved as C(/tmp/dataset/ZOSMF.ANSIBLE.PS.search).
         required: false
         type: dict
         default: null
@@ -211,7 +211,7 @@ options:
             - Specifies a range that is used to retrieve records of the data set.
             - If this variable is specified, only the retrieved range of the data set will be fetched to the destination directory.
             - The retrieved range of the data set will be saved as C({{ dataset_dest }}/{{ zmf_host }}/{{ dataset_src }}.range) on control node.
-            - For example, the retrieved range of the dat set named C(ZOSMF.ANSIBLE.DATA) would be saved as C(/tmp/dataset/ZOSMF.ANSIBLE.DATA.range).
+            - For example, the retrieved range of the dat set named C(ZOSMF.ANSIBLE.PS) would be saved as C(/tmp/dataset/ZOSMF.ANSIBLE.PS.range).
         required: false
         type: dict
         default: null
@@ -253,44 +253,44 @@ requirements:
 """
 
 EXAMPLES = r"""
-- name: Fetch a data set and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE
+- name: Fetch a data set and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.PS
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_src: "ZOSMF.ANSIBLE.PS"
     dataset_dest: "/tmp/dataset"
 
-- name: Fetch a PDS member and store in /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER
+- name: Fetch a PDS member and store in /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.PDS(MEMBER)"
     dataset_dest: "/tmp/dataset"
     dataset_flat: true
 
-- name: Fetch an uncataloged PDS member and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE/MEMBER
+- name: Fetch an uncataloged PDS member and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.PDS/MEMBER
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+    dataset_src: "ZOSMF.ANSIBLE.PDS(MEMBER)"
     dataset_volser: "VOL001"
     dataset_dest: "/tmp/dataset"
 
 - name: Fetch a data set as binary
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_src: "ZOSMF.ANSIBLE.PS"
     dataset_dest: "/tmp/dataset"
     dataset_data_type: "binary"
 
 - name: Fetch a data set in record format
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_src: "ZOSMF.ANSIBLE.PS"
     dataset_dest: "/tmp/dataset"
     dataset_data_type: "record"
 
 - name: Fetch a data set and convert it from IBM-037 to ISO8859-1
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_src: "ZOSMF.ANSIBLE.PS"
     dataset_dest: "/tmp/dataset"
     dataset_encoding:
         from: IBM-037
@@ -299,7 +299,7 @@ EXAMPLES = r"""
 - name: Fetch a range of records from a data set (the first 500 lines)
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_src: "ZOSMF.ANSIBLE.PS"
     dataset_dest: "/tmp/dataset"
     dataset_range:
         start: 0
@@ -308,7 +308,7 @@ EXAMPLES = r"""
 - name: Fetch a range of records from a data set (the final 500 lines)
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_src: "ZOSMF.ANSIBLE.PS"
     dataset_dest: "/tmp/dataset"
     dataset_range:
         end: 500
@@ -316,7 +316,7 @@ EXAMPLES = r"""
 - name: Fetch 100 lines of records from the first matched line that contains "ansible" in a data set
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_src: "ZOSMF.ANSIBLE.PS"
     dataset_dest: "/tmp/dataset"
     dataset_search:
         keyword: "ansible"
@@ -325,7 +325,7 @@ EXAMPLES = r"""
 - name: Fetch a data set and validate its checksum
   zmf_dataset_fetch:
     zmf_host: "sample.ibm.com"
-    dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+    dataset_src: "ZOSMF.ANSIBLE.PS"
     dataset_dest: "/tmp/dataset"
     dataset_checksum: "93822124D6E66E2213C64B0D10800224"
 """
@@ -340,14 +340,14 @@ message:
     returned: on success
     type: str
     sample:
-        sample1: "The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER."
-        sample2: "The matched contents in the data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: \
-            /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER.serarch."
-        sample3: "The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since no matched contents is found with the specified search keyword."
-        sample4: "A range of records in the data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: \
-            /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER.range."
-        sample6: "The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since no contents is returned in the specified range."
-        sample7: "The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since it is not changed."
+        sample1: "The data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER."
+        sample2: "The matched contents in the data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: \
+            /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER.serarch."
+        sample3: "The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since no matched contents is found with the specified search keyword."
+        sample4: "A range of records in the data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: \
+            /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER.range."
+        sample6: "The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since no contents is returned in the specified range."
+        sample7: "The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since it is not changed."
 dataset_content:
     description: The retrieved content of the data set.
     returned: on success when I(dataset_data_type=text)
@@ -500,14 +500,16 @@ def fetch_dataset(module):
     ds_v_name = ''
     ds_name = ''
     m_name = ''
+    v_name = ''
     if dataset.find('(') > 0:
         ds_name = dataset[:dataset.find('(')]
         m_name = dataset[dataset.find('(') + 1:dataset.find(')')]
     else:
         ds_name = dataset
     if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
-        ds_full_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + dataset
-        ds_v_name = '-(' + module.params['dataset_volser'].strip().upper() + ')/' + ds_name
+        v_name = module.params['dataset_volser'].strip().upper()
+        ds_full_name = '-(' + v_name + ')/' + dataset
+        ds_v_name = '-(' + v_name + ')/' + ds_name
     else:
         ds_full_name = dataset
         ds_v_name = ds_name
@@ -515,6 +517,7 @@ def fetch_dataset(module):
     module.params['ds_v_name'] = ds_v_name
     module.params['ds_name'] = ds_name
     module.params['m_name'] = m_name
+    module.params['v_name'] = v_name
     # fetch data set
     response_fetch = call_dataset_api(module, session, 'fetch', request_headers)
     status_code = response_fetch.status_code
