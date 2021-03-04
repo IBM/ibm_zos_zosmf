@@ -22,7 +22,7 @@
         dataset_src: "files/job_sample_jcl.jcl"
         # dataset_content: "Sample profile\nTZ=EST5EDT\n"
         dataset_dest: "ZOSMF.CICD.PDS(SAMPLE)"
-        # dataset_model: "ZOSMF.YUN.PDS"
+        # dataset_create_like: "ZOSMF.YUN.PDS"
         # dataset_volser: "PEVTS2"
         # dataset_force: true
         # dataset_data_type: "text"

@@ -18,10 +18,10 @@ DOCUMENTATION = r"""
 module: zmf_dataset_copy
 short_description: Copy data to z/OS data set or member
 description:
-    - Copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
-    - Copy file or data set from the remote z/OS system to a data set or member on the remote z/OS system.
+    - Copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on z/OS system.
+    - Copy file or data set from z/OS system to a data set or member on z/OS system.
     - If the target data set or member already exists, it can be overwritten.
-    - If the target data set does not exist, it can be allocated based on I(dataset_model), the size of the local data, or the remote source data set.
+    - If the target data set does not exist, it can be allocated based on I(dataset_create_like), the size of the local data, or the source data set.
     - If the target member does not exist, it can be created.
 version_added: "2.9"
 author:
@@ -111,24 +111,24 @@ options:
     dataset_src:
         description:
             - >
-              If I(dataset_remote=false), this variable specifies the local path on control node of the data to be copied to.
+              If I(dataset_src_zos=false), this variable specifies the local path on control node of the data to be copied to.
               For example, C(/tmp/dataset_input/member01).
               This path can be absolute or relative. The module will fail if I(dataset_src) has no read permission.
               The data is interpreted as one of binary, text, record or 'diff -e' format according to the value of I(dataset_data_type) and I(dataset_diff).
               If I(dataset_content) is supplied and I(dataset_data_type=text), I(dataset_src) is ignored.
             - >
-              If I(dataset_remote=true), this variable specifies the source file or data set from the remote z/OS system to be copied to.
+              If I(dataset_src_zos=true), this variable specifies the source file or data set from z/OS system to be copied to.
               If this variable specifies the source file, it should be the absolute source file name, for example, C(/etc/profile).
               If this variable specifies the source data set, it should be the name of the data set or member,
               for example, C(ZOSMF.ANSIBLE.PS) or ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
-              If the source data set is uncataloged, you can use I(dataset_remote_volser) to specify the volume of the  uncataloged source data set.
+              If the source data set is uncataloged, you can use I(dataset_src_volser) to specify the volume of the  uncataloged source data set.
         required: false
         type: str
         default: null
     dataset_content:
         description:
             - The contents to be copied to the target data set or member. This variable is used instead of I(dataset_src).
-            - This variable only take effects when I(dataset_remote=false).
+            - This variable only take effects when I(dataset_src_zos=false).
             - This variable only take effects when I(dataset_data_type=text).
             - Each line of the contents should be terminated with C(\n). For example, C(Sample profile\nTZ=EST5EDT\n).
             - If I(dataset_content) is supplied and I(dataset_data_type=text), I(dataset_src) is ignored.
@@ -137,52 +137,52 @@ options:
         default: null
     dataset_dest:
         description:
-            - Data set or the name of the PDS or PDSE member on the remote z/OS system where the data should be copied to.
+            - Data set or the name of the PDS or PDSE member on z/OS system where the data should be copied to.
             - This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
             - For example, specifying a data set like C(ZOSMF.ANSIBLE.PS), or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
             - >
-              If I(dataset_remote=false),
-              I(dataset_dest) should be a sequential data set or a member of a partitioned data set on the remote z/OS system.
-              If I(dataset_dest) does not exist, it will be allocated based on I(dataset_model) if supplied, or the size of the local data.
+              If I(dataset_src_zos=false),
+              I(dataset_dest) should be a sequential data set or a member of a partitioned data set on z/OS system.
+              If I(dataset_dest) does not exist, it will be allocated based on I(dataset_create_like) if supplied, or the size of the local data.
             - >
-              If I(dataset_remote=true) and I(dataset_src) specifies a USS file,
-              I(dataset_dest) should be a sequential data set or a member of an existing partitioned data set on the remote z/OS system.
+              If I(dataset_src_zos=true) and I(dataset_src) specifies a USS file,
+              I(dataset_dest) should be a sequential data set or a member of an existing partitioned data set on z/OS system.
               If I(dataset_dest) specifies a nonexistent sequential data set, it will be allocated.
             - >
-              If I(dataset_remote=true) and I(dataset_src) specifies a sequential data set,
-              I(dataset_dest) should also be a sequential data set on the remote z/OS system.
+              If I(dataset_src_zos=true) and I(dataset_src) specifies a sequential data set,
+              I(dataset_dest) should also be a sequential data set on z/OS system.
               If I(dataset_dest) does not exist, it will be allocated based on I(dataset_src).
             - >
-              If I(dataset_remote=true) and I(dataset_src) specifies a partitioned data set,
-              I(dataset_dest) should also be a partitioned data set without specific member provided on the remote z/OS system.
+              If I(dataset_src_zos=true) and I(dataset_src) specifies a partitioned data set,
+              I(dataset_dest) should also be a partitioned data set without specific member provided on z/OS system.
               If I(dataset_dest) does not exist, it will be allocated based on I(dataset_src).
             - >
-              If I(dataset_remote=true) and I(dataset_src) specifies a member of a partitioned data set,
-              I(dataset_dest) should be an existing sequential data set or a member of a partitioned data set on the remote z/OS system.
+              If I(dataset_src_zos=true) and I(dataset_src) specifies a member of a partitioned data set,
+              I(dataset_dest) should be an existing sequential data set or a member of a partitioned data set on z/OS system.
               If I(dataset_dest) specifies a member of a nonexistent partitioned data set, it will be allocated based on I(dataset_src).
         required: true
         type: str
-    dataset_remote:
+    dataset_src_zos:
         description:
-            - Specifies whether copy file or data set from the remote z/OS system to a data set or member on the remote z/OS system.
-            - If I(dataset_remote=false), the local data from Ansible control node will be copied to the target data set or member.
-            - If I(dataset_remote=true), the remote source file or data set from the remote z/OS system will be copied to the target data set or member.
+            - Specifies whether the source file or data set from z/OS system will be copied.
+            - If I(dataset_src_zos=false), the local data from Ansible control node will be copied to the target data set or member.
+            - If I(dataset_src_zos=true), the source file or data set from z/OS system will be copied to the target data set or member.
         required: false
         type: bool
         default: false
-    dataset_volser:
+    dataset_dest_volser:
         description:
             - The volume serial to identify the volume to be searched for an uncataloged target data set or member.
             - The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
-            - If this variable is provided and I(dataset_dest) is a nonexistent data set, I(dataset_volser) must point to a volume on a 3390 device.
+            - If this variable is provided and I(dataset_dest) is a nonexistent data set, I(dataset_dest_volser) must point to a volume on a 3390 device.
         required: false
         type: str
         default: null
-    dataset_remote_volser:
+    dataset_src_volser:
         description:
             - The volume serial to identify the volume to be searched for an uncataloged source data set or member.
             - The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
-            - This variable only take effects when I(dataset_remote=true).
+            - This variable only take effects when I(dataset_src_zos=true).
         required: false
         type: str
         default: null
@@ -195,11 +195,11 @@ options:
         required: false
         type: bool
         default: true
-    dataset_model:
+    dataset_create_like:
         description:
             - When copying a local data to a non-existing PDS, PDSE or PS, specify a model data set to allocate the target data set.
             - For example, specifying a model data set like C(ZOSMF.ANSIBLE.MODEL), member name should not be provided in this variable.
-            - This variable only take effects when I(dataset_remote=false).
+            - This variable only take effects when I(dataset_src_zos=false).
             - If this variable is not supplied, the target data set will be allocated based on the size of the local data.
             - The primary extent tracks will be specified as 4 times the size of the local data specified by I(dataset_src) or I(dataset_content).
             - If I(dataset_data_type=text), then C(RECFM=FB) and C(LRECL=80) will be used to allocate the target data set.
@@ -210,7 +210,7 @@ options:
     dataset_data_type:
         description:
             - Specifies whether data conversion is to be performed on the data to be copied.
-            - This variable only take effects when I(dataset_remote=false).
+            - This variable only take effects when I(dataset_src_zos=false).
             - When I(dataset_data_type=text), data conversion is performed.
             - You can use I(dataset_encoding) to specify which encodings the data to be copied should be converted from and to.
             - Each line of data, delimited by a Line Feed (LF), is converted and written as a record to the target data set.
@@ -238,7 +238,7 @@ options:
     dataset_encoding:
         description:
             - Specifies which encodings the data to be copied should be converted from and to.
-            - This variable only take effects when I(dataset_remote=false).
+            - This variable only take effects when I(dataset_src_zos=false).
             - This variable only take effects when I(dataset_data_type=text) and I(dataset_diff=false).
         required: false
         type: dict
@@ -260,7 +260,7 @@ options:
         description:
             - Specifies whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).
             - If I(dataset_crlf=true), CRLF characters are used.
-            - This variable only take effects when I(dataset_remote=false).
+            - This variable only take effects when I(dataset_src_zos=false).
             - This variable only take effects when I(dataset_data_type=text).
         required: false
         type: bool
@@ -276,7 +276,7 @@ options:
             - opt C(g|<n>), where C(g) means global, C(n) means search and replace C(n) times.
             - Each command may be optionally preceded by a line or line range, as allowed by the z/OS UNIX 'ed' command.
             - The module will fail if an error is detected while processing a command.
-            - This variable only take effects when I(dataset_remote=false).
+            - This variable only take effects when I(dataset_src_zos=false).
             - This variable only take effects when I(dataset_data_type=text).
         required: false
         type: bool
@@ -298,7 +298,7 @@ options:
         description:
             - Specifies the checksum to be used to verify that the target data set to copy to is not changed since the checksum was generated.
             - The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
-            - This variable only take effects when I(dataset_remote=false).
+            - This variable only take effects when I(dataset_src_zos=false).
             - This variable only take effects when I(dataset_force=true).
         required: false
         type: str
@@ -332,7 +332,7 @@ EXAMPLES = r"""
     zmf_host: "sample.ibm.com"
     dataset_src: "/tmp/dataset_input/member01"
     dataset_dest: "ZOSMF.ANSIBLE.PDS(MEMBER)"
-    dataset_volser: "VOL001"
+    dataset_dest_volser: "VOL001"
     dataset_data_type: "binary"
 
 - name: Copy a local file to data set ZOSMF.ANSIBLE.PS and convert from ISO8859-1 to IBM-037
@@ -356,14 +356,14 @@ EXAMPLES = r"""
     zmf_host: "sample.ibm.com"
     dataset_src: "/etc/profile"
     dataset_dest: "ZOSMF.ANSIBLE.PS"
-    dataset_remote: true
+    dataset_src_zos: true
 
 - name: Copy a remote file to data set ZOSMF.ANSIBLE.PDS(MEMBER) only if it does not exist
   zmf_dataset_copy:
     zmf_host: "sample.ibm.com"
     dataset_src: "/etc/profile"
     dataset_dest: "ZOSMF.ANSIBLE.PDS(MEMBER)"
-    dataset_remote: true
+    dataset_src_zos: true
     dataset_force: false
 
 - name: Copy a remote sequential data set to data set ZOSMF.ANSIBLE.PS
@@ -371,14 +371,14 @@ EXAMPLES = r"""
     zmf_host: "sample.ibm.com"
     dataset_src: "ZOSMF.ANSIBLE.REMOTE.PS"
     dataset_dest: "ZOSMF.ANSIBLE.PS"
-    dataset_remote: true
+    dataset_src_zos: true
 
 - name: Copy a remote partitioned data set to data set ZOSMF.ANSIBLE.PDS without the like-named members
   zmf_dataset_copy:
     zmf_host: "sample.ibm.com"
     dataset_src: "ZOSMF.ANSIBLE.REMOTE.PDS"
     dataset_dest: "ZOSMF.ANSIBLE.PDS"
-    dataset_remote: true
+    dataset_src_zos: true
     dataset_force: false
 """
 
@@ -422,27 +422,27 @@ def validate_module_params(module):
     # validate dataset_dest
     if not (module.params['dataset_dest'] is not None and module.params['dataset_dest'].strip() != ''):
         module.fail_json(msg='Missing required argument or invalid argument: dataset_dest.')
-    # validate dataset_remote
-    if module.params['dataset_remote'] is True:
+    # validate dataset_src_zos
+    if module.params['dataset_src_zos'] is True:
         if module.params['dataset_src'] is None or module.params['dataset_src'].strip() == '':
-            module.fail_json(msg='Missing required argument or invalid argument: dataset_src is required when dataset_remote=true.')
+            module.fail_json(msg='Missing required argument or invalid argument: dataset_src is required when dataset_src_zos=true.')
         if module.params['dataset_content'] is not None and module.params['dataset_content'].strip() != '':
-            module.fail_json(msg='dataset_content is valid only when dataset_remote=false.')
-        if module.params['dataset_model'] is not None and module.params['dataset_model'].strip() != '':
-            module.fail_json(msg='dataset_model is valid only when dataset_remote=false.')
+            module.fail_json(msg='dataset_content is valid only when dataset_src_zos=false.')
+        if module.params['dataset_create_like'] is not None and module.params['dataset_create_like'].strip() != '':
+            module.fail_json(msg='dataset_create_like is valid only when dataset_src_zos=false.')
         if module.params['dataset_data_type'] != 'text':
-            module.fail_json(msg='dataset_data_type is valid only when dataset_remote=false.')
+            module.fail_json(msg='dataset_data_type is valid only when dataset_src_zos=false.')
         if module.params['dataset_encoding'] is not None:
-            module.fail_json(msg='dataset_encoding is valid only when dataset_remote=false.')
+            module.fail_json(msg='dataset_encoding is valid only when dataset_src_zos=false.')
         if module.params['dataset_crlf'] is True:
-            module.fail_json(msg='dataset_crlf is valid only when dataset_remote=false.')
+            module.fail_json(msg='dataset_crlf is valid only when dataset_src_zos=false.')
         if module.params['dataset_diff'] is True:
-            module.fail_json(msg='dataset_diff is valid only when dataset_remote=false.')
+            module.fail_json(msg='dataset_diff is valid only when dataset_src_zos=false.')
         if module.params['dataset_checksum'] is not None and module.params['dataset_checksum'].strip() != '':
-            module.fail_json(msg='dataset_checksum is valid only when dataset_remote=false.')
+            module.fail_json(msg='dataset_checksum is valid only when dataset_src_zos=false.')
     else:
-        if module.params['dataset_remote_volser'] is not None and module.params['dataset_remote_volser'].strip() != '':
-            module.fail_json(msg='dataset_remote_volser is valid only when dataset_remote=true.')
+        if module.params['dataset_src_volser'] is not None and module.params['dataset_src_volser'].strip() != '':
+            module.fail_json(msg='dataset_src_volser is valid only when dataset_src_zos=true.')
         # validate dataset_src and dataset_content
         if ((module.params['dataset_src'] is None or module.params['dataset_src'].strip() == '')
                 and (module.params['dataset_content'] is None or module.params['dataset_content'].strip() == '')):
@@ -532,9 +532,9 @@ def copy_dataset(module):
         m_name = dataset[dataset.find('(') + 1:dataset.find(')')]
     else:
         ds_name = dataset
-    if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
+    if module.params['dataset_dest_volser'] is not None and module.params['dataset_dest_volser'].strip() != '':
         has_volser = True
-        v_name = module.params['dataset_volser'].strip().upper()
+        v_name = module.params['dataset_dest_volser'].strip().upper()
         ds_full_name = '-(' + v_name + ')/' + dataset
         ds_v_name = '-(' + v_name + ')/' + ds_name
     else:
@@ -577,10 +577,10 @@ def copy_dataset(module):
     if not ds_exist:
         create_headers = dict()
         create_headers['Content-Type'] = 'application/json'
-        if module.params['dataset_model'] is not None and module.params['dataset_model'].strip() != '':
-            create_vars['like'] = module.params['dataset_model'].strip()
+        if module.params['dataset_create_like'] is not None and module.params['dataset_create_like'].strip() != '':
+            create_vars['like'] = module.params['dataset_create_like'].strip()
             if has_volser:
-                create_vars['volser'] = module.params['dataset_volser'].strip().upper()
+                create_vars['volser'] = module.params['dataset_dest_volser'].strip().upper()
                 create_vars['unit'] = '3390'
         else:
             file_size_byte = 0
@@ -620,7 +620,7 @@ def copy_dataset(module):
             create_vars['secondary'] = secondary_num
             create_vars['unit'] = '3390'
             if has_volser:
-                create_vars['volser'] = module.params['dataset_volser'].strip().upper()
+                create_vars['volser'] = module.params['dataset_dest_volser'].strip().upper()
         res_create = call_dataset_api(module, session, 'create', create_headers, json.dumps(create_vars))
         if res_create.status_code != 201:
             module.fail_json(
@@ -719,7 +719,7 @@ def copy_remote_dataset(module):
     # create session
     session = get_connect_session(module)
     dataset = module.params['dataset_dest'].strip().upper()
-    # step 1 - check if the remote source file or data set exists
+    # step 1 - check if the source file or data set exists
     request_body = dict()
     request_body['request'] = 'copy'
     request_body['replace'] = True
@@ -745,12 +745,12 @@ def copy_remote_dataset(module):
                 if res_content['items'][0]['mode'].startswith('d'):
                     module.fail_json(
                         msg='Failed to copy data to the target data set ' + dataset
-                            + ' ---- The remote file ' + copy_src + ' is a directory, a USS file is expected.'
+                            + ' ---- the source file ' + copy_src + ' is a directory, a USS file is expected.'
                     )
         if copy_src_exist is False:
             module.fail_json(
                 msg='Failed to copy data to the target data set ' + dataset
-                    + ' ---- The remote file ' + copy_src + ' does not exist.'
+                    + ' ---- the source file ' + copy_src + ' does not exist.'
             )
         else:
             request_body['from-file'] = dict()
@@ -776,8 +776,8 @@ def copy_remote_dataset(module):
         else:
             ds_name = copy_src.upper()
             ds_full_name = ds_name
-        if module.params['dataset_remote_volser'] is not None and module.params['dataset_remote_volser'].strip() != '':
-            v_name = module.params['dataset_remote_volser'].strip().upper()
+        if module.params['dataset_src_volser'] is not None and module.params['dataset_src_volser'].strip() != '':
+            v_name = module.params['dataset_src_volser'].strip().upper()
             ds_full_name = '-(' + v_name + ')/' + ds_full_name
             ds_v_name = '-(' + v_name + ')/' + ds_name
         else:
@@ -806,18 +806,18 @@ def copy_remote_dataset(module):
         if from_ds_exist is False:
             module.fail_json(
                 msg='Failed to copy data to the target data set ' + dataset
-                    + ' ---- The remote data set ' + ds_name + ' does not exist.'
+                    + ' ---- the source data set ' + ds_name + ' does not exist.'
             )
         elif (from_is_pds is False and
                 (from_one_member is True or copy_src.find('(*)') > 0)):
             module.fail_json(
                 msg='Failed to copy data to the target data set ' + dataset
-                    + ' ---- The remote data set ' + ds_name + ' is a sequential data set, member name should not be provided.'
+                    + ' ---- the source data set ' + ds_name + ' is a sequential data set, member name should not be provided.'
             )
         elif from_one_member is True and from_m_exist is False:
             module.fail_json(
                 msg='Failed to copy data to the target data set ' + dataset
-                    + ' ---- The remote data set member ' + ds_name + '(' + m_name + ') does not exist.'
+                    + ' ---- the source data set member ' + ds_name + '(' + m_name + ') does not exist.'
             )
         else:
             request_body['from-dataset'] = dict()
@@ -826,8 +826,8 @@ def copy_remote_dataset(module):
                 request_body['from-dataset']['member'] = m_name
             elif from_is_pds is True:
                 request_body['from-dataset']['member'] = '*'
-            if module.params['dataset_remote_volser'] is not None and module.params['dataset_remote_volser'].strip() != '':
-                request_body['from-dataset']['volser'] = module.params['dataset_remote_volser'].strip().upper()
+            if module.params['dataset_src_volser'] is not None and module.params['dataset_src_volser'].strip() != '':
+                request_body['from-dataset']['volser'] = module.params['dataset_src_volser'].strip().upper()
     # step 2 - setup data set full name, data set name and member name
     ds_full_name = ''
     ds_v_name = ''
@@ -845,8 +845,8 @@ def copy_remote_dataset(module):
             )
     else:
         ds_name = dataset
-    if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
-        v_name = module.params['dataset_volser'].strip().upper()
+    if module.params['dataset_dest_volser'] is not None and module.params['dataset_dest_volser'].strip() != '':
+        v_name = module.params['dataset_dest_volser'].strip().upper()
         ds_full_name = '-(' + v_name + ')/' + dataset
         ds_v_name = '-(' + v_name + ')/' + ds_name
     else:
@@ -878,7 +878,7 @@ def copy_remote_dataset(module):
             msg='Failed to copy data to the target data set ' + dataset
                 + ' ---- The target data set is a sequential data set, member name should not be provided.'
         )
-    # step 4 - validate the remote source file or data set VS the target data set
+    # step 4 - validate the source file or data set VS the target data set
     already_exists = False
     need_create_like = ''
     if from_dataset is False:
@@ -886,7 +886,7 @@ def copy_remote_dataset(module):
         if ((to_ds_exist is True and to_is_pds is True and to_one_member is False)
                 or (to_ds_exist is False and to_one_member is True)):
             module.fail_json(
-                msg='Failed to copy the remote file ' + copy_src + ' to the target data set ' + dataset
+                msg='Failed to copy the source file ' + copy_src + ' to the target data set ' + dataset
                     + ' ---- The target data set should be a sequential data set or a member of an existing partitioned data set.'
             )
         elif (module.params['dataset_force'] is False and to_ds_exist is True
@@ -899,8 +899,8 @@ def copy_remote_dataset(module):
             if ((to_ds_exist is True and to_is_pds is True)
                     or (to_ds_exist is False and to_one_member is True)):
                 module.fail_json(
-                    msg='Failed to copy the remote data set ' + copy_src.upper() + ' to the target data set ' + dataset
-                        + ' ---- The remote data set is a sequential data set, so the target data set should also be a sequential data set.'
+                    msg='Failed to copy the source data set ' + copy_src.upper() + ' to the target data set ' + dataset
+                        + ' ---- the source data set is a sequential data set, so the target data set should also be a sequential data set.'
                 )
             elif module.params['dataset_force'] is False and to_ds_exist is True:
                 already_exists = True
@@ -911,8 +911,8 @@ def copy_remote_dataset(module):
             if ((to_ds_exist is True and (to_is_pds is False or to_one_member is True))
                     or (to_ds_exist is False and to_one_member is True)):
                 module.fail_json(
-                    msg='Failed to copy the remote data set ' + copy_src.upper() + ' to the target data set ' + dataset
-                        + ' ---- The remote data set is a partitioned data set, so the target data set should also be a partitioned data set '
+                    msg='Failed to copy the source data set ' + copy_src.upper() + ' to the target data set ' + dataset
+                        + ' ---- the source data set is a partitioned data set, so the target data set should also be a partitioned data set '
                         + 'without specific member provided.'
                 )
             elif module.params['dataset_force'] is False and to_ds_exist is True:
@@ -927,8 +927,8 @@ def copy_remote_dataset(module):
             if ((to_ds_exist is True and to_is_pds is True and to_one_member is False)
                     or (to_ds_exist is False and to_one_member is False)):
                 module.fail_json(
-                    msg='Failed to copy the remote data set ' + copy_src.upper() + ' to the target data set ' + dataset
-                        + ' ---- The remote data set is a member of a partitioned data set, so the target data set should be an existing sequential data set '
+                    msg='Failed to copy the source data set ' + copy_src.upper() + ' to the target data set ' + dataset
+                        + ' ---- the source data set is a member of a partitioned data set, so the target data set should be an existing sequential data set '
                         + 'or a member of a partitioned data set.'
                 )
             elif (module.params['dataset_force'] is False and to_ds_exist is True
@@ -958,7 +958,7 @@ def copy_remote_dataset(module):
                 msg='Failed to create the target date set ' + ds_name + ' ---- Http request error: '
                     + str(res_create.status_code) + ': ' + str(res_create.content)
             )
-    # step 6 - copy the remote source file or data set to the target data set or member
+    # step 6 - copy the source file or data set to the target data set or member
     request_headers = dict()
     request_headers['Content-Type'] = 'application/json'
     res_operate = call_dataset_api(module, session, 'operate', request_headers, json.dumps(request_body))
@@ -1002,11 +1002,11 @@ def main():
         dataset_src=dict(required=False, type='str'),
         dataset_content=dict(required=False, type='str'),
         dataset_dest=dict(required=True, type='str'),
-        dataset_remote=dict(required=False, type='bool', default=False),
-        dataset_volser=dict(required=False, type='str'),
-        dataset_remote_volser=dict(required=False, type='str'),
+        dataset_src_zos=dict(required=False, type='bool', default=False),
+        dataset_dest_volser=dict(required=False, type='str'),
+        dataset_src_volser=dict(required=False, type='str'),
         dataset_force=dict(required=False, type='bool', default=True),
-        dataset_model=dict(required=False, type='str'),
+        dataset_create_like=dict(required=False, type='str'),
         dataset_data_type=dict(required=False, type='str', default='text', choices=['text', 'binary', 'record']),
         dataset_encoding=dict(required=False, type='dict'),
         dataset_crlf=dict(required=False, type='bool', default=False),
@@ -1023,7 +1023,7 @@ def main():
     # validate params
     validate_module_params(module)
     # check if copy from remote
-    if module.params['dataset_remote'] is True:
+    if module.params['dataset_src_zos'] is True:
         copy_remote_dataset(module)
     else:
         copy_dataset(module)

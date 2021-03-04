@@ -7,7 +7,7 @@ sample_module_dataset
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This `sample playbook`_ shows how to manage z/OS data set or member on the remote z/OS system via z/OSMF.
+This `sample playbook`_ shows how to manage z/OS data set or member on z/OS system via z/OSMF.
 
 .. code-block:: yaml
 
@@ -38,15 +38,15 @@ This `sample playbook`_ shows how to manage z/OS data set or member on the remot
            # dataset_volser: "VOL001" # The volume serial to identify the volume to be searched for an uncataloged data set or member
            # dataset_type: "PS" # The type to be used when creating a data set or member. Default is PS
            # dataset_replace: false # Whether the existing data set or member will be replaced. Default is false
-           # dataset_create: # The attributes to be used to create a sequential or partitioned data set
+           # dataset_create_attributes: # The attributes to be used to create a sequential or partitioned data set
            #   recfm: "FB"
            #   lrecl: 80
            #   alcunit: "TRK"
            #   primary: 10
            #   secondary: 5
            #   unit: "3390"
-           # dataset_model: "ZOSMF.ANSIBLE.MODEL" # The model data set to be used to create a sequential or partitioned data set. If both dataset_create and dataset_model are supplied, dataset_model is ignored
-           # dataset_rename: "ZOSMF.ANSIBLE.PS01" # The new name of the data set or member
+           # dataset_create_like: "ZOSMF.ANSIBLE.MODEL" # The model data set to be used to create a sequential or partitioned data set. If both dataset_create_attributes and dataset_create_like are supplied, dataset_create_like is ignored
+           # dataset_new_name: "ZOSMF.ANSIBLE.PS01" # The new name of the data set or member
            # dataset_migrate_recall: "wait" # How a migrated data set is handled. Default is wait
          register: result
          delegate_to: localhost

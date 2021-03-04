@@ -31,15 +31,15 @@
         # dataset_volser: "VOL001"
         # dataset_type: "PS"
         # dataset_replace: false
-        # dataset_create:
+        # dataset_create_attributes:
         #   recfm: "FB"
         #   lrecl: 80
         #   alcunit: "TRK"
         #   primary: 10
         #   secondary: 5
         #   unit: "3390"
-        # dataset_model: "ZOSMF.ANSIBLE.MODEL"
-        # dataset_rename: "ZOSMF.ANSIBLE.PS01"
+        # dataset_create_like: "ZOSMF.ANSIBLE.MODEL"
+        # dataset_new_name: "ZOSMF.ANSIBLE.PS01"
         # dataset_migrate_recall: "wait"
       register: result
       delegate_to: localhost

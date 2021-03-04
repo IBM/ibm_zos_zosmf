@@ -29,11 +29,11 @@
         dataset_src: "/tmp/dataset_input/member01"
         # dataset_content: "Sample profile\nTZ=EST5EDT\n"
         dataset_dest: "ZOSMF.ANSIBLE.PDS(MEMBER)"
-        # dataset_remote: false
-        # dataset_volser: "VOL001"
-        # dataset_remote_volser: "VOL002"
+        # dataset_src_zos: false
+        # dataset_dest_volser: "VOL001"
+        # dataset_src_volser: "VOL002"
         # dataset_force: true
-        # dataset_model: "ZOSMF.ANSIBLE.MODEL"
+        # dataset_create_like: "ZOSMF.ANSIBLE.MODEL"
         # dataset_data_type: "text"
         # dataset_encoding:
         #   from: ISO8859-1

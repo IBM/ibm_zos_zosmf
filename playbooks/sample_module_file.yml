@@ -39,7 +39,7 @@
         #   tag: "mixed"
         #   codeset: "IBM-1047"
         #   recursive: false
-        # file_rename: "/etc/profile.bak"
+        # file_new_name: "/etc/profile.bak"
       register: result
       delegate_to: localhost
     - debug: var=result

@@ -16,7 +16,7 @@ zmf_dataset_fetch -- Fetch z/OS data set or member from z/OS
 
 Synopsis
 --------
-- Retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from the remote z/OS system.
+- Retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from z/OS system.
 - Save the retrieved data set or member on Ansible control node.
 - Data set or member that already exists at *dataset_dest* will be overwritten if it is different than the *dataset_src*.
 
@@ -255,7 +255,7 @@ dataset_search
  
      
 dataset_src
-  Data set or the name of the PDS or PDSE member on the remote z/OS system to fetch.
+  Data set or the name of the PDS or PDSE member on z/OS system to fetch.
 
   This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
 

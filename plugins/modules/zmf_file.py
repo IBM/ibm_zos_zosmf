@@ -18,7 +18,7 @@ DOCUMENTATION = r"""
 module: zmf_file
 short_description: Manage z/OS USS file or directory
 description:
-    - Create, delete and operate on a z/OS UNIX System Services (USS) file or a directory on the remote z/OS system.
+    - Create, delete and operate on a z/OS UNIX System Services (USS) file or a directory on z/OS system.
     - The available operations include rename, change mode, change owner and change tag.
 version_added: "2.9"
 author:
@@ -139,7 +139,7 @@ options:
             - file
             - directory
             - absent
-    file_rename:
+    file_new_name:
         description:
             - Specifies the new name of the USS file or directory.
             - This variable only take effects when I(file_state=file) or I(file_state=directory).
@@ -283,7 +283,7 @@ EXAMPLES = r"""
     zmf_host: "sample.ibm.com"
     file_path: "/etc/profile"
     file_state: "file"
-    file_rename: "/etc/profile.bak"
+    file_new_name: "/etc/profile.bak"
 
 - name: Delete a USS file /etc/profile
   zmf_file:
@@ -378,8 +378,8 @@ def validate_module_params(module):
         module.fail_json(msg='Missing required argument or invalid argument: file_path.')
     # validate file_state
     if module.params['file_state'] == 'absent':
-        if module.params['file_rename'] is not None and module.params['file_rename'].strip() != '':
-            module.fail_json(msg='file_rename is valid only when file_state=file or file_state=directory.')
+        if module.params['file_new_name'] is not None and module.params['file_new_name'].strip() != '':
+            module.fail_json(msg='file_new_name is valid only when file_state=file or file_state=directory.')
         if module.params['file_mode'] is not None:
             module.fail_json(msg='file_mode is valid only when file_state=file or file_state=directory.')
         if module.params['file_owner'] is not None:
@@ -677,7 +677,7 @@ def operate_file(module, session, target, old_properties):
             if 'errors' not in operate_result:
                 operate_result['errors'] = []
             operate_result['errors'].append('Failed to change tag for the ' + module.params['file_state'] + ' ' + target + chtag['error'])
-    if module.params['file_rename'] is not None and module.params['file_rename'].strip() != '':
+    if module.params['file_new_name'] is not None and module.params['file_new_name'].strip() != '':
         need_rename = True
         rename = operate_file_action(module, session, 'move', target)
         if rename['updated'] is True:
@@ -771,7 +771,7 @@ def operate_file_action(module, session, action, target):
             request_body['recursive'] = module.params['file_tag']['recursive']
     elif action == 'move':
         # rename
-        new = module.params['file_rename'].strip()
+        new = module.params['file_new_name'].strip()
         if not new.startswith('/'):
             new = '/' + new
         # setup file parent path and file name
@@ -810,7 +810,7 @@ def main():
     argument_spec.update(
         file_path=dict(required=True, type='str'),
         file_state=dict(required=True, type='str', choices=['file', 'directory', 'absent']),
-        file_rename=dict(required=False, type='str'),
+        file_new_name=dict(required=False, type='str'),
         file_mode=dict(required=False, type='dict'),
         file_owner=dict(required=False, type='dict'),
         file_tag=dict(required=False, type='dict')

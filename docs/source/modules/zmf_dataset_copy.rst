@@ -16,10 +16,10 @@ zmf_dataset_copy -- Copy data to z/OS data set or member
 
 Synopsis
 --------
-- Copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
-- Copy file or data set from the remote z/OS system to a data set or member on the remote z/OS system.
+- Copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on z/OS system.
+- Copy file or data set from z/OS system to a data set or member on z/OS system.
 - If the target data set or member already exists, it can be overwritten.
-- If the target data set does not exist, it can be allocated based on *dataset_model*, the size of the local data, or the remote source data set.
+- If the target data set does not exist, it can be allocated based on *dataset_create_like*, the size of the local data, or the source data set.
 - If the target member does not exist, it can be created.
 
 
@@ -37,7 +37,7 @@ dataset_checksum
 
   The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
 
-  This variable only take effects when *dataset_remote=false*.
+  This variable only take effects when *dataset_src_zos=false*.
 
   This variable only take effects when *dataset_force=true*.
 
@@ -51,7 +51,7 @@ dataset_checksum
 dataset_content
   The contents to be copied to the target data set or member. This variable is used instead of *dataset_src*.
 
-  This variable only take effects when *dataset_remote=false*.
+  This variable only take effects when *dataset_src_zos=false*.
 
   This variable only take effects when *dataset_data_type=text*.
 
@@ -66,12 +66,34 @@ dataset_content
 
  
      
+dataset_create_like
+  When copying a local data to a non-existing PDS, PDSE or PS, specify a model data set to allocate the target data set.
+
+  For example, specifying a model data set like ``ZOSMF.ANSIBLE.MODEL``, member name should not be provided in this variable.
+
+  This variable only take effects when *dataset_src_zos=false*.
+
+  If this variable is not supplied, the target data set will be allocated based on the size of the local data.
+
+  The primary extent tracks will be specified as 4 times the size of the local data specified by *dataset_src* or *dataset_content*.
+
+  If *dataset_data_type=text*, then ``RECFM=FB`` and ``LRECL=80`` will be used to allocate the target data set.
+
+  If *dataset_data_type=binary* or *dataset_data_type=record*, then ``RECFM=U`` will be used to allocate the target data set.
+
+
+  | **required**: False
+  | **type**: str
+
+
+ 
+     
 dataset_crlf
   Specifies whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).
 
   If *dataset_crlf=true*, CRLF characters are used.
 
-  This variable only take effects when *dataset_remote=false*.
+  This variable only take effects when *dataset_src_zos=false*.
 
   This variable only take effects when *dataset_data_type=text*.
 
@@ -86,7 +108,7 @@ dataset_crlf
 dataset_data_type
   Specifies whether data conversion is to be performed on the data to be copied.
 
-  This variable only take effects when *dataset_remote=false*.
+  This variable only take effects when *dataset_src_zos=false*.
 
   When *dataset_data_type=text*, data conversion is performed.
 
@@ -132,29 +154,43 @@ dataset_data_type
  
      
 dataset_dest
-  Data set or the name of the PDS or PDSE member on the remote z/OS system where the data should be copied to.
+  Data set or the name of the PDS or PDSE member on z/OS system where the data should be copied to.
 
   This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
 
   For example, specifying a data set like ``ZOSMF.ANSIBLE.PS``, or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
 
-  If *dataset_remote=false*, *dataset_dest* should be a sequential data set or a member of a partitioned data set on the remote z/OS system. If *dataset_dest* does not exist, it will be allocated based on *dataset_model* if supplied, or the size of the local data.
+  If *dataset_src_zos=false*, *dataset_dest* should be a sequential data set or a member of a partitioned data set on z/OS system. If *dataset_dest* does not exist, it will be allocated based on *dataset_create_like* if supplied, or the size of the local data.
 
 
-  If *dataset_remote=true* and *dataset_src* specifies a USS file, *dataset_dest* should be a sequential data set or a member of an existing partitioned data set on the remote z/OS system. If *dataset_dest* specifies a nonexistent sequential data set, it will be allocated.
+  If *dataset_src_zos=true* and *dataset_src* specifies a USS file, *dataset_dest* should be a sequential data set or a member of an existing partitioned data set on z/OS system. If *dataset_dest* specifies a nonexistent sequential data set, it will be allocated.
 
 
-  If *dataset_remote=true* and *dataset_src* specifies a sequential data set, *dataset_dest* should also be a sequential data set on the remote z/OS system. If *dataset_dest* does not exist, it will be allocated based on *dataset_src*.
+  If *dataset_src_zos=true* and *dataset_src* specifies a sequential data set, *dataset_dest* should also be a sequential data set on z/OS system. If *dataset_dest* does not exist, it will be allocated based on *dataset_src*.
 
 
-  If *dataset_remote=true* and *dataset_src* specifies a partitioned data set, *dataset_dest* should also be a partitioned data set without specific member provided on the remote z/OS system. If *dataset_dest* does not exist, it will be allocated based on *dataset_src*.
+  If *dataset_src_zos=true* and *dataset_src* specifies a partitioned data set, *dataset_dest* should also be a partitioned data set without specific member provided on z/OS system. If *dataset_dest* does not exist, it will be allocated based on *dataset_src*.
 
 
-  If *dataset_remote=true* and *dataset_src* specifies a member of a partitioned data set, *dataset_dest* should be an existing sequential data set or a member of a partitioned data set on the remote z/OS system. If *dataset_dest* specifies a member of a nonexistent partitioned data set, it will be allocated based on *dataset_src*.
+  If *dataset_src_zos=true* and *dataset_src* specifies a member of a partitioned data set, *dataset_dest* should be an existing sequential data set or a member of a partitioned data set on z/OS system. If *dataset_dest* specifies a member of a nonexistent partitioned data set, it will be allocated based on *dataset_src*.
 
 
 
   | **required**: True
+  | **type**: str
+
+
+ 
+     
+dataset_dest_volser
+  The volume serial to identify the volume to be searched for an uncataloged target data set or member.
+
+  The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
+
+  If this variable is provided and *dataset_dest* is a nonexistent data set, *dataset_dest_volser* must point to a volume on a 3390 device.
+
+
+  | **required**: False
   | **type**: str
 
 
@@ -179,7 +215,7 @@ dataset_diff
 
   The module will fail if an error is detected while processing a command.
 
-  This variable only take effects when *dataset_remote=false*.
+  This variable only take effects when *dataset_src_zos=false*.
 
   This variable only take effects when *dataset_data_type=text*.
 
@@ -194,7 +230,7 @@ dataset_diff
 dataset_encoding
   Specifies which encodings the data to be copied should be converted from and to.
 
-  This variable only take effects when *dataset_remote=false*.
+  This variable only take effects when *dataset_src_zos=false*.
 
   This variable only take effects when *dataset_data_type=text* and *dataset_diff=false*.
 
@@ -265,20 +301,12 @@ dataset_migrate_recall
 
  
      
-dataset_model
-  When copying a local data to a non-existing PDS, PDSE or PS, specify a model data set to allocate the target data set.
+dataset_src
+  If *dataset_src_zos=false*, this variable specifies the local path on control node of the data to be copied to. For example, ``/tmp/dataset_input/member01``. This path can be absolute or relative. The module will fail if *dataset_src* has no read permission. The data is interpreted as one of binary, text, record or 'diff -e' format according to the value of *dataset_data_type* and *dataset_diff*. If *dataset_content* is supplied and *dataset_data_type=text*, *dataset_src* is ignored.
 
-  For example, specifying a model data set like ``ZOSMF.ANSIBLE.MODEL``, member name should not be provided in this variable.
 
-  This variable only take effects when *dataset_remote=false*.
+  If *dataset_src_zos=true*, this variable specifies the source file or data set from z/OS system to be copied to. If this variable specifies the source file, it should be the absolute source file name, for example, ``/etc/profile``. If this variable specifies the source data set, it should be the name of the data set or member, for example, ``ZOSMF.ANSIBLE.PS`` or ``ZOSMF.ANSIBLE.PDS(MEMBER)``. If the source data set is uncataloged, you can use *dataset_src_volser* to specify the volume of the  uncataloged source data set.
 
-  If this variable is not supplied, the target data set will be allocated based on the size of the local data.
-
-  The primary extent tracks will be specified as 4 times the size of the local data specified by *dataset_src* or *dataset_content*.
-
-  If *dataset_data_type=text*, then ``RECFM=FB`` and ``LRECL=80`` will be used to allocate the target data set.
-
-  If *dataset_data_type=binary* or *dataset_data_type=record*, then ``RECFM=U`` will be used to allocate the target data set.
 
 
   | **required**: False
@@ -287,59 +315,31 @@ dataset_model
 
  
      
-dataset_remote
-  Specifies whether copy file or data set from the remote z/OS system to a data set or member on the remote z/OS system.
+dataset_src_volser
+  The volume serial to identify the volume to be searched for an uncataloged source data set or member.
 
-  If *dataset_remote=false*, the local data from Ansible control node will be copied to the target data set or member.
+  The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
 
-  If *dataset_remote=true*, the remote source file or data set from the remote z/OS system will be copied to the target data set or member.
+  This variable only take effects when *dataset_src_zos=true*.
+
+
+  | **required**: False
+  | **type**: str
+
+
+ 
+     
+dataset_src_zos
+  Specifies whether the source file or data set from z/OS system will be copied.
+
+  If *dataset_src_zos=false*, the local data from Ansible control node will be copied to the target data set or member.
+
+  If *dataset_src_zos=true*, the source file or data set from z/OS system will be copied to the target data set or member.
 
 
   | **required**: False
   | **type**: bool
   | **default**: false
-
-
- 
-     
-dataset_remote_volser
-  The volume serial to identify the volume to be searched for an uncataloged source data set or member.
-
-  The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
-
-  This variable only take effects when *dataset_remote=true*.
-
-
-  | **required**: False
-  | **type**: str
-
-
- 
-     
-dataset_src
-  If *dataset_remote=false*, this variable specifies the local path on control node of the data to be copied to. For example, ``/tmp/dataset_input/member01``. This path can be absolute or relative. The module will fail if *dataset_src* has no read permission. The data is interpreted as one of binary, text, record or 'diff -e' format according to the value of *dataset_data_type* and *dataset_diff*. If *dataset_content* is supplied and *dataset_data_type=text*, *dataset_src* is ignored.
-
-
-  If *dataset_remote=true*, this variable specifies the source file or data set from the remote z/OS system to be copied to. If this variable specifies the source file, it should be the absolute source file name, for example, ``/etc/profile``. If this variable specifies the source data set, it should be the name of the data set or member, for example, ``ZOSMF.ANSIBLE.PS`` or ``ZOSMF.ANSIBLE.PDS(MEMBER)``. If the source data set is uncataloged, you can use *dataset_remote_volser* to specify the volume of the  uncataloged source data set.
-
-
-
-  | **required**: False
-  | **type**: str
-
-
- 
-     
-dataset_volser
-  The volume serial to identify the volume to be searched for an uncataloged target data set or member.
-
-  The length of the volume serial cannot exceed six characters. Wildcard characters are not supported. Indirect volume serials are not supported.
-
-  If this variable is provided and *dataset_dest* is a nonexistent data set, *dataset_volser* must point to a volume on a 3390 device.
-
-
-  | **required**: False
-  | **type**: str
 
 
  
@@ -517,7 +517,7 @@ Examples
        zmf_host: "sample.ibm.com"
        dataset_src: "/tmp/dataset_input/member01"
        dataset_dest: "ZOSMF.ANSIBLE.PDS(MEMBER)"
-       dataset_volser: "VOL001"
+       dataset_dest_volser: "VOL001"
        dataset_data_type: "binary"
 
    - name: Copy a local file to data set ZOSMF.ANSIBLE.PS and convert from ISO8859-1 to IBM-037
@@ -541,14 +541,14 @@ Examples
        zmf_host: "sample.ibm.com"
        dataset_src: "/etc/profile"
        dataset_dest: "ZOSMF.ANSIBLE.PS"
-       dataset_remote: true
+       dataset_src_zos: true
 
    - name: Copy a remote file to data set ZOSMF.ANSIBLE.PDS(MEMBER) only if it does not exist
      zmf_dataset_copy:
        zmf_host: "sample.ibm.com"
        dataset_src: "/etc/profile"
        dataset_dest: "ZOSMF.ANSIBLE.PDS(MEMBER)"
-       dataset_remote: true
+       dataset_src_zos: true
        dataset_force: false
 
    - name: Copy a remote sequential data set to data set ZOSMF.ANSIBLE.PS
@@ -556,14 +556,14 @@ Examples
        zmf_host: "sample.ibm.com"
        dataset_src: "ZOSMF.ANSIBLE.REMOTE.PS"
        dataset_dest: "ZOSMF.ANSIBLE.PS"
-       dataset_remote: true
+       dataset_src_zos: true
 
    - name: Copy a remote partitioned data set to data set ZOSMF.ANSIBLE.PDS without the like-named members
      zmf_dataset_copy:
        zmf_host: "sample.ibm.com"
        dataset_src: "ZOSMF.ANSIBLE.REMOTE.PDS"
        dataset_dest: "ZOSMF.ANSIBLE.PDS"
-       dataset_remote: true
+       dataset_src_zos: true
        dataset_force: false
 
 

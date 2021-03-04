@@ -7,7 +7,7 @@ sample_module_dataset_fetch
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This `sample playbook`_ shows how to fetch data set from the remote z/OS system via z/OSMF.
+This `sample playbook`_ shows how to fetch data set from z/OS system via z/OSMF.
 
 .. code-block:: yaml
 

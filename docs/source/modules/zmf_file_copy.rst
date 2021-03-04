@@ -16,7 +16,7 @@ zmf_file_copy -- Copy data to z/OS USS file
 
 Synopsis
 --------
-- Copy data from Ansible control node to a z/OS UNIX System Services (USS) file on the remote z/OS system.
+- Copy data from Ansible control node to a z/OS UNIX System Services (USS) file on z/OS system.
 - If the target USS file already exists, it can be overwritten. If the target USS file does not exist, it can be created with mode 644.
 
 
@@ -103,7 +103,7 @@ file_data_type
  
      
 file_dest
-  USS file on the remote z/OS system where the data should be copied to.
+  USS file on z/OS system where the data should be copied to.
 
   This variable must consist of a fully qualified path and file name. For example, ``/etc/profile``.
 

@@ -5,15 +5,19 @@
 Requirements - Operate MVS Commands
 ===================================
 
-To use the modules and roles which supplied to interact with **z/OS console REST services** in your playbook, besides the `Overall Requirements`_, the following nodes require specific versions of software:
+* module: `zmf_console_command`_
+
+To use above modules and roles, it needs to ensure **z/OS console REST services** is configured in z/OSMF. Please refer to `here`_ for a quick approach to set up z/OSMF dependencies. 
+
+Besides the `Overall Requirements`_, the following nodes require specific versions of software:
 
 **Control Node**:
 
 * `Requests library for Python`_: 2.23 or later
 
-   It is required when using:
-  
-   * module: `zmf_console_command`_
+**Managed Node**:
+
+* `z/OS Management Facility`_: V02.03.00 or later
 
    .. note::
 
@@ -26,3 +30,7 @@ To use the modules and roles which supplied to interact with **z/OS console REST
    https://requests.readthedocs.io/en/latest/
 .. _zmf_console_command:
    modules/zmf_console_command.html
+.. _here:
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/docs/zmf_sample_conf/README.md
+.. _z/OS Management Facility:
+   https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3.izua300/abstract.html

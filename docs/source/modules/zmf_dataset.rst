@@ -16,7 +16,7 @@ zmf_dataset -- Manage z/OS data set or member
 
 Synopsis
 --------
-- Create, delete and operate on a sequential or partitioned data set, or a member of partitioned data set (PDS or PDSE) on the remote z/OS system.
+- Create, delete and operate on a sequential or partitioned data set, or a member of partitioned data set (PDS or PDSE) on z/OS system.
 - The available operations include rename data set or member, migrate data set and recall the migrated data set.
 - When forcing data set replacement, contents will not be preserved.
 
@@ -30,14 +30,14 @@ Parameters
 
  
      
-dataset_create
+dataset_create_attributes
   Specifies the attributes to be used to create a sequential or partitioned data set.
 
   This variable only take effects when *dataset_state=present*.
 
   This variable only take effects when *dataset_type=PS* or *dataset_type=PDS* or *dataset_type=PDSE*.
 
-  If both *dataset_create* and *dataset_model* are supplied, *dataset_model* is ignored.
+  If both *dataset_create_attributes* and *dataset_create_like* are supplied, *dataset_create_like* is ignored.
 
 
   | **required**: False
@@ -179,6 +179,24 @@ dataset_create
 
  
      
+dataset_create_like
+  Specifies the model data set to be used to create a sequential or partitioned data set.
+
+  For example, specifying a model data set like ``ZOSMF.ANSIBLE.MODEL``, member name should not be provided in this variable.
+
+  This variable only take effects when *dataset_state=present*.
+
+  This variable only take effects when *dataset_type=PS* or *dataset_type=PDS* or *dataset_type=PDSE*.
+
+  If both *dataset_create_attributes* and *dataset_create_like* are supplied, *dataset_create_like* is ignored.
+
+
+  | **required**: False
+  | **type**: str
+
+
+ 
+     
 dataset_migrate_recall
   Specifies how a migrated data set is handled when *dataset_state=present*.
 
@@ -205,24 +223,6 @@ dataset_migrate_recall
 
  
      
-dataset_model
-  Specifies the model data set to be used to create a sequential or partitioned data set.
-
-  For example, specifying a model data set like ``ZOSMF.ANSIBLE.MODEL``, member name should not be provided in this variable.
-
-  This variable only take effects when *dataset_state=present*.
-
-  This variable only take effects when *dataset_type=PS* or *dataset_type=PDS* or *dataset_type=PDSE*.
-
-  If both *dataset_create* and *dataset_model* are supplied, *dataset_model* is ignored.
-
-
-  | **required**: False
-  | **type**: str
-
-
- 
-     
 dataset_name
   Name of the data set or member being managed.
 
@@ -237,7 +237,7 @@ dataset_name
 
  
      
-dataset_rename
+dataset_new_name
   Specifies the new name of the data set or member.
 
   This variable only take effects when *dataset_state=present*.
@@ -486,7 +486,7 @@ Examples
        dataset_name: "ZOSMF.ANSIBLE.PS"
        dataset_state: "present"
        dataset_type: "PS"
-       dataset_create:
+       dataset_create_attributes:
          primary: 10
 
    - name: Create a sequential data set ZOSMF.ANSIBLE.PS depending on the model data set ZOSMF.ANSIBLE.MODEL
@@ -495,7 +495,7 @@ Examples
        dataset_name: "ZOSMF.ANSIBLE.PS"
        dataset_state: "present"
        dataset_type: "PS"
-       dataset_model: "ZOSMF.ANSIBLE.MODEL"
+       dataset_create_like: "ZOSMF.ANSIBLE.MODEL"
 
    - name: Replace a partitioned data set ZOSMF.ANSIBLE.PDS if it exists
      zmf_dataset:
@@ -504,7 +504,7 @@ Examples
        dataset_state: "present"
        dataset_type: "PDS"
        dataset_replace: true
-       dataset_create:
+       dataset_create_attributes:
          primary: 10
 
    - name: Create a data set member ZOSMF.ANSIBLE.PDS(MEMBER) to an existing PDS, replace if member exists
@@ -521,7 +521,7 @@ Examples
        dataset_name: "ZOSMF.ANSIBLE.PS"
        dataset_state: "present"
        dataset_type: "PS"
-       dataset_rename: "ZOSMF.ANSIBLE.PS01"
+       dataset_new_name: "ZOSMF.ANSIBLE.PS01"
 
    - name: Rename a data set member ZOSMF.ANSIBLE.PDS(MEMBER) to ZOSMF.ANSIBLE.PDS(MEMBER01)
      zmf_dataset:
@@ -529,7 +529,7 @@ Examples
        dataset_name: "ZOSMF.ANSIBLE.PDS(MEMBER)"
        dataset_state: "present"
        dataset_type: "MEMBER"
-       dataset_rename: "ZOSMF.ANSIBLE.PDS(MEMBER01)"
+       dataset_new_name: "ZOSMF.ANSIBLE.PDS(MEMBER01)"
 
    - name: Delete a data set ZOSMF.ANSIBLE.PS
      zmf_dataset:

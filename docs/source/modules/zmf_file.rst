@@ -16,7 +16,7 @@ zmf_file -- Manage z/OS USS file or directory
 
 Synopsis
 --------
-- Create, delete and operate on a z/OS UNIX System Services (USS) file or a directory on the remote z/OS system.
+- Create, delete and operate on a z/OS UNIX System Services (USS) file or a directory on z/OS system.
 - The available operations include rename, change mode, change owner and change tag.
 
 
@@ -67,6 +67,18 @@ file_mode
     | **type**: bool
     | **default**: false
 
+
+
+ 
+     
+file_new_name
+  Specifies the new name of the USS file or directory.
+
+  This variable only take effects when *file_state=file* or *file_state=directory*.
+
+
+  | **required**: False
+  | **type**: str
 
 
  
@@ -126,18 +138,6 @@ file_path
 
 
   | **required**: True
-  | **type**: str
-
-
- 
-     
-file_rename
-  Specifies the new name of the USS file or directory.
-
-  This variable only take effects when *file_state=file* or *file_state=directory*.
-
-
-  | **required**: False
   | **type**: str
 
 
@@ -426,7 +426,7 @@ Examples
        zmf_host: "sample.ibm.com"
        file_path: "/etc/profile"
        file_state: "file"
-       file_rename: "/etc/profile.bak"
+       file_new_name: "/etc/profile.bak"
 
    - name: Delete a USS file /etc/profile
      zmf_file:

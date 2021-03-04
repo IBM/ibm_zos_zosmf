@@ -7,7 +7,7 @@ sample_module_file_copy
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This `sample playbook`_ shows how to copy data to a USS file on the remote z/OS system via z/OSMF.
+This `sample playbook`_ shows how to copy data to a USS file on z/OS system via z/OSMF.
 
 .. code-block:: yaml
 

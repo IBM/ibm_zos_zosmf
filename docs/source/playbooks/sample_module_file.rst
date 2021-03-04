@@ -7,7 +7,7 @@ sample_module_file
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This `sample playbook`_ shows how to manage USS file or directory on the remote z/OS system via z/OSMF.
+This `sample playbook`_ shows how to manage USS file or directory on z/OS system via z/OSMF.
 
 .. code-block:: yaml
 
@@ -46,7 +46,7 @@ This `sample playbook`_ shows how to manage USS file or directory on the remote 
            #   tag: "mixed"
            #   codeset: "IBM-1047"
            #   recursive: false
-           # file_rename: "/etc/profile.bak" # The new name of the USS file or directory
+           # file_new_name: "/etc/profile.bak" # The new name of the USS file or directory
          register: result
          delegate_to: localhost
        - debug: var=result

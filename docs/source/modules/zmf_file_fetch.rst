@@ -16,7 +16,7 @@ zmf_file_fetch -- Fetch USS file from z/OS
 
 Synopsis
 --------
-- Retrieve the contents of a z/OS UNIX System Services (USS) file from the remote z/OS system, and save them on Ansible control node.
+- Retrieve the contents of a z/OS UNIX System Services (USS) file from z/OS system, and save them on Ansible control node.
 - USS file that already exists at *file_dest* will be overwritten if it is different than the *file_src*.
 
 
@@ -236,7 +236,7 @@ file_search
  
      
 file_src
-  USS file on the remote z/OS system to fetch.
+  USS file on z/OS system to fetch.
 
   This variable must consist of a fully qualified path and file name. For example, ``/etc/profile``.
 

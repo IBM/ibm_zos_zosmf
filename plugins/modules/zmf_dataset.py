@@ -18,7 +18,7 @@ DOCUMENTATION = r"""
 module: zmf_dataset
 short_description: Manage z/OS data set or member
 description:
-    - Create, delete and operate on a sequential or partitioned data set, or a member of partitioned data set (PDS or PDSE) on the remote z/OS system.
+    - Create, delete and operate on a sequential or partitioned data set, or a member of partitioned data set (PDS or PDSE) on z/OS system.
     - The available operations include rename data set or member, migrate data set and recall the migrated data set.
     - When forcing data set replacement, contents will not be preserved.
 version_added: "2.9"
@@ -178,12 +178,12 @@ options:
         required: false
         type: bool
         default: false
-    dataset_create:
+    dataset_create_attributes:
         description:
             - Specifies the attributes to be used to create a sequential or partitioned data set.
             - This variable only take effects when I(dataset_state=present).
             - This variable only take effects when I(dataset_type=PS) or I(dataset_type=PDS) or I(dataset_type=PDSE).
-            - If both I(dataset_create) and I(dataset_model) are supplied, I(dataset_model) is ignored.
+            - If both I(dataset_create_attributes) and I(dataset_create_like) are supplied, I(dataset_create_like) is ignored.
         required: false
         type: dict
         default: null
@@ -286,17 +286,17 @@ options:
                 required: false
                 type: str
                 default: null
-    dataset_model:
+    dataset_create_like:
         description:
             - Specifies the model data set to be used to create a sequential or partitioned data set.
             - For example, specifying a model data set like C(ZOSMF.ANSIBLE.MODEL), member name should not be provided in this variable.
             - This variable only take effects when I(dataset_state=present).
             - This variable only take effects when I(dataset_type=PS) or I(dataset_type=PDS) or I(dataset_type=PDSE).
-            - If both I(dataset_create) and I(dataset_model) are supplied, I(dataset_model) is ignored.
+            - If both I(dataset_create_attributes) and I(dataset_create_like) are supplied, I(dataset_create_like) is ignored.
         required: false
         type: str
         default: null
-    dataset_rename:
+    dataset_new_name:
         description:
             - Specifies the new name of the data set or member.
             - This variable only take effects when I(dataset_state=present).
@@ -331,7 +331,7 @@ EXAMPLES = r"""
     dataset_name: "ZOSMF.ANSIBLE.PS"
     dataset_state: "present"
     dataset_type: "PS"
-    dataset_create:
+    dataset_create_attributes:
       primary: 10
 
 - name: Create a sequential data set ZOSMF.ANSIBLE.PS depending on the model data set ZOSMF.ANSIBLE.MODEL
@@ -340,7 +340,7 @@ EXAMPLES = r"""
     dataset_name: "ZOSMF.ANSIBLE.PS"
     dataset_state: "present"
     dataset_type: "PS"
-    dataset_model: "ZOSMF.ANSIBLE.MODEL"
+    dataset_create_like: "ZOSMF.ANSIBLE.MODEL"
 
 - name: Replace a partitioned data set ZOSMF.ANSIBLE.PDS if it exists
   zmf_dataset:
@@ -349,7 +349,7 @@ EXAMPLES = r"""
     dataset_state: "present"
     dataset_type: "PDS"
     dataset_replace: true
-    dataset_create:
+    dataset_create_attributes:
       primary: 10
 
 - name: Create a data set member ZOSMF.ANSIBLE.PDS(MEMBER) to an existing PDS, replace if member exists
@@ -366,7 +366,7 @@ EXAMPLES = r"""
     dataset_name: "ZOSMF.ANSIBLE.PS"
     dataset_state: "present"
     dataset_type: "PS"
-    dataset_rename: "ZOSMF.ANSIBLE.PS01"
+    dataset_new_name: "ZOSMF.ANSIBLE.PS01"
 
 - name: Rename a data set member ZOSMF.ANSIBLE.PDS(MEMBER) to ZOSMF.ANSIBLE.PDS(MEMBER01)
   zmf_dataset:
@@ -374,7 +374,7 @@ EXAMPLES = r"""
     dataset_name: "ZOSMF.ANSIBLE.PDS(MEMBER)"
     dataset_state: "present"
     dataset_type: "MEMBER"
-    dataset_rename: "ZOSMF.ANSIBLE.PDS(MEMBER01)"
+    dataset_new_name: "ZOSMF.ANSIBLE.PDS(MEMBER01)"
 
 - name: Delete a data set ZOSMF.ANSIBLE.PS
   zmf_dataset:
@@ -490,39 +490,39 @@ def validate_module_params(module):
     # validate dataset_state
     if module.params['dataset_state'] == 'present':
         if is_member:
-            if module.params['dataset_create'] is not None:
-                module.fail_json(msg='dataset_create is valid only when dataset_type=PS or dataset_type=PDS or dataset_type=PDSE.')
-            if module.params['dataset_model'] is not None and module.params['dataset_model'].strip() != '':
-                module.fail_json(msg='dataset_model is valid only when dataset_type=PS or dataset_type=PDS or dataset_type=PDSE.')
-        # validate dataset_rename
-        if module.params['dataset_rename'] is not None and module.params['dataset_rename'].strip() != '':
+            if module.params['dataset_create_attributes'] is not None:
+                module.fail_json(msg='dataset_create_attributes is valid only when dataset_type=PS or dataset_type=PDS or dataset_type=PDSE.')
+            if module.params['dataset_create_like'] is not None and module.params['dataset_create_like'].strip() != '':
+                module.fail_json(msg='dataset_create_like is valid only when dataset_type=PS or dataset_type=PDS or dataset_type=PDSE.')
+        # validate dataset_new_name
+        if module.params['dataset_new_name'] is not None and module.params['dataset_new_name'].strip() != '':
             is_rn_member = False
-            if module.params['dataset_rename'].strip().find('(') > 0:
+            if module.params['dataset_new_name'].strip().find('(') > 0:
                 is_rn_member = True
             if is_member and not is_rn_member:
                 module.fail_json(
-                    msg='Invalid argument: dataset_rename. '
-                        + 'dataset_name is specified as a member of partitioned data set, so dataset_rename should be the new name of the member.'
+                    msg='Invalid argument: dataset_new_name. '
+                        + 'dataset_name is specified as a member of partitioned data set, so dataset_new_name should be the new name of the member.'
                 )
             elif not is_member and is_rn_member:
                 module.fail_json(
-                    msg='Invalid argument: dataset_rename. '
-                        + 'dataset_name is specified as a sequential or partitioned data set, so dataset_rename should be the new name of the data set.'
+                    msg='Invalid argument: dataset_new_name. '
+                        + 'dataset_name is specified as a sequential or partitioned data set, so dataset_new_name should be the new name of the data set.'
                 )
     else:
         if module.params['dataset_replace'] is True:
             module.fail_json(msg='dataset_replace=True is valid only when dataset_state=present.')
-        if module.params['dataset_create'] is not None:
-            module.fail_json(msg='dataset_create is valid only when dataset_state=present.')
-        if module.params['dataset_model'] is not None and module.params['dataset_model'].strip() != '':
-            module.fail_json(msg='dataset_model is valid only when dataset_state=present.')
-        if module.params['dataset_rename'] is not None and module.params['dataset_rename'].strip() != '':
-            module.fail_json(msg='dataset_rename is valid only when dataset_state=present.')
+        if module.params['dataset_create_attributes'] is not None:
+            module.fail_json(msg='dataset_create_attributes is valid only when dataset_state=present.')
+        if module.params['dataset_create_like'] is not None and module.params['dataset_create_like'].strip() != '':
+            module.fail_json(msg='dataset_create_like is valid only when dataset_state=present.')
+        if module.params['dataset_new_name'] is not None and module.params['dataset_new_name'].strip() != '':
+            module.fail_json(msg='dataset_new_name is valid only when dataset_state=present.')
         if is_member and (module.params['dataset_state'] == 'migrated' or module.params['dataset_state'] == 'recalled'):
             module.fail_json(msg='dataset_state=migrated or dataset_state=recalled is valid only for data set.')
-    # validate dataset_create
-    if module.params['dataset_create'] is not None:
-        if isinstance(module.params['dataset_create'], dict):
+    # validate dataset_create_attributes
+    if module.params['dataset_create_attributes'] is not None:
+        if isinstance(module.params['dataset_create_attributes'], dict):
             has_recfm = False
             has_lrecl = False
             has_alcunit = False
@@ -535,7 +535,7 @@ def validate_module_params(module):
             has_storclass = False
             has_mgntclass = False
             has_dataclass = False
-            for k, v in module.params['dataset_create'].items():
+            for k, v in module.params['dataset_create_attributes'].items():
                 if k == 'recfm':
                     has_recfm = True
                     if v is not None and str(v).strip() != '':
@@ -545,10 +545,11 @@ def validate_module_params(module):
                                 or str(v).strip().upper() == 'VS' or str(v).strip().upper() == 'VBS'
                                 or str(v).strip().upper() == 'DS' or str(v).strip().upper() == 'DBS'
                                 or str(v).strip().upper() == 'FS' or str(v).strip().upper() == 'FBS'):
-                            module.params['dataset_create']['recfm'] = str(v).strip().upper()
+                            module.params['dataset_create_attributes']['recfm'] = str(v).strip().upper()
                         else:
                             module.fail_json(
-                                msg='Invalid argument: dataset_create. Invalid suboption: recfm, the following values are valid: '
+                                msg='Invalid argument: dataset_create_attributes. '
+                                    + 'Invalid suboption: recfm, the following values are valid: '
                                     + '[FB, VB, DB, F, V, D, U, VS, VBS, FS, FBS, DS, DBS].'
                             )
                     else:
@@ -559,13 +560,15 @@ def validate_module_params(module):
                         try:
                             if int(str(v)) < 0:
                                 module.fail_json(
-                                    msg='Invalid argument: dataset_create. Invalid suboption: lrecl, it must be a interger and equal or larger than 0.'
+                                    msg='Invalid argument: dataset_create_attributes. '
+                                        + 'Invalid suboption: lrecl, it must be a interger and equal or larger than 0.'
                                 )
                             else:
-                                module.params['dataset_create']['lrecl'] = int(str(v))
+                                module.params['dataset_create_attributes']['lrecl'] = int(str(v))
                         except Exception:
                             module.fail_json(
-                                msg='Invalid argument: dataset_create. Invalid suboption: lrecl, it must be a interger and equal or larger than 0.'
+                                msg='Invalid argument: dataset_create_attributes. '
+                                    + 'Invalid suboption: lrecl, it must be a interger and equal or larger than 0.'
                             )
                     else:
                         has_lrecl = False
@@ -573,10 +576,11 @@ def validate_module_params(module):
                     has_alcunit = True
                     if v is not None and str(v).strip() != '':
                         if str(v).strip().upper() == 'TRK' or str(v).strip().upper() == 'BLK' or str(v).strip().upper() == 'CYL':
-                            module.params['dataset_create']['alcunit'] = str(v).strip().upper()
+                            module.params['dataset_create_attributes']['alcunit'] = str(v).strip().upper()
                         else:
                             module.fail_json(
-                                msg='Invalid argument: dataset_create. Invalid suboption: alcunit, the following values are valid: [TRK, BLK, CYL].'
+                                msg='Invalid argument: dataset_create_attributes. '
+                                    + 'Invalid suboption: alcunit, the following values are valid: [TRK, BLK, CYL].'
                             )
                     else:
                         has_alcunit = False
@@ -586,13 +590,15 @@ def validate_module_params(module):
                         try:
                             if int(str(v)) <= 0:
                                 module.fail_json(
-                                    msg='Invalid argument: dataset_create. Invalid suboption: primary, it must be a interger and larger than 0.'
+                                    msg='Invalid argument: dataset_create_attributes. '
+                                        + 'Invalid suboption: primary, it must be a interger and larger than 0.'
                                 )
                             else:
-                                module.params['dataset_create']['primary'] = int(str(v))
+                                module.params['dataset_create_attributes']['primary'] = int(str(v))
                         except Exception:
                             module.fail_json(
-                                msg='Invalid argument: dataset_create. Invalid suboption: primary, it must be a interger and larger than 0.'
+                                msg='Invalid argument: dataset_create_attributes. '
+                                    + 'Invalid suboption: primary, it must be a interger and larger than 0.'
                             )
                     else:
                         has_primary = False
@@ -602,13 +608,15 @@ def validate_module_params(module):
                         try:
                             if int(str(v)) < 0:
                                 module.fail_json(
-                                    msg='Invalid argument: dataset_create. Invalid suboption: secondary, it must be a interger and equal or larger than 0.'
+                                    msg='Invalid argument: dataset_create_attributes. '
+                                        + 'Invalid suboption: secondary, it must be a interger and equal or larger than 0.'
                                 )
                             else:
-                                module.params['dataset_create']['secondary'] = int(str(v))
+                                module.params['dataset_create_attributes']['secondary'] = int(str(v))
                         except Exception:
                             module.fail_json(
-                                msg='Invalid argument: dataset_create. Invalid suboption: secondary, it must be a interger and equal or larger than 0.'
+                                msg='Invalid argument: dataset_create_attributes. '
+                                    + 'Invalid suboption: secondary, it must be a interger and equal or larger than 0.'
                             )
                     else:
                         has_secondary = False
@@ -618,13 +626,15 @@ def validate_module_params(module):
                         try:
                             if int(str(v)) < 0:
                                 module.fail_json(
-                                    msg='Invalid argument: dataset_create. Invalid suboption: dirblk, it must be a interger and equal or larger than 0.'
+                                    msg='Invalid argument: dataset_create_attributes. '
+                                        + 'Invalid suboption: dirblk, it must be a interger and equal or larger than 0.'
                                 )
                             else:
-                                module.params['dataset_create']['dirblk'] = int(str(v))
+                                module.params['dataset_create_attributes']['dirblk'] = int(str(v))
                         except Exception:
                             module.fail_json(
-                                msg='Invalid argument: dataset_create. Invalid suboption: dirblk, it must be a interger and equal or larger than 0.'
+                                msg='Invalid argument: dataset_create_attributes. '
+                                    + 'Invalid suboption: dirblk, it must be a interger and equal or larger than 0.'
                             )
                     else:
                         has_dirblk = False
@@ -634,13 +644,15 @@ def validate_module_params(module):
                         try:
                             if int(str(v)) < 0:
                                 module.fail_json(
-                                    msg='Invalid argument: dataset_create. Invalid suboption: avgblk, it must be a interger and equal or larger than 0.'
+                                    msg='Invalid argument: dataset_create_attributes. '
+                                        + 'Invalid suboption: avgblk, it must be a interger and equal or larger than 0.'
                                 )
                             else:
-                                module.params['dataset_create']['avgblk'] = int(str(v))
+                                module.params['dataset_create_attributes']['avgblk'] = int(str(v))
                         except Exception:
                             module.fail_json(
-                                msg='Invalid argument: dataset_create. Invalid suboption: avgblk, it must be a interger and equal or larger than 0.'
+                                msg='Invalid argument: dataset_create_attributes. '
+                                    + 'Invalid suboption: avgblk, it must be a interger and equal or larger than 0.'
                             )
                     else:
                         has_avgblk = False
@@ -650,73 +662,75 @@ def validate_module_params(module):
                         try:
                             if int(str(v)) < 0:
                                 module.fail_json(
-                                    msg='Invalid argument: dataset_create. Invalid suboption: blksize, it must be a interger and equal or larger than 0.'
+                                    msg='Invalid argument: dataset_create_attributes. '
+                                        + 'Invalid suboption: blksize, it must be a interger and equal or larger than 0.'
                                 )
                             else:
-                                module.params['dataset_create']['blksize'] = int(str(v))
+                                module.params['dataset_create_attributes']['blksize'] = int(str(v))
                         except Exception:
                             module.fail_json(
-                                msg='Invalid argument: dataset_create. Invalid suboption: blksize, it must be a interger and equal or larger than 0.'
+                                msg='Invalid argument: dataset_create_attributes. '
+                                    + 'Invalid suboption: blksize, it must be a interger and equal or larger than 0.'
                             )
                     else:
                         has_blksize = False
                 elif k == 'unit':
                     has_unit = True
                     if v is not None and str(v).strip() != '':
-                        module.params['dataset_create']['unit'] = str(v).strip()
+                        module.params['dataset_create_attributes']['unit'] = str(v).strip()
                     else:
                         has_unit = False
                 elif k == 'storclass':
                     has_storclass = True
                     if v is not None and str(v).strip() != '':
-                        module.params['dataset_create']['storclass'] = str(v).strip()
+                        module.params['dataset_create_attributes']['storclass'] = str(v).strip()
                     else:
                         has_storclass = False
                 elif k == 'mgntclass':
                     has_mgntclass = True
                     if v is not None and str(v).strip() != '':
-                        module.params['dataset_create']['mgntclass'] = str(v).strip()
+                        module.params['dataset_create_attributes']['mgntclass'] = str(v).strip()
                     else:
                         has_mgntclass = False
                 elif k == 'dataclass':
                     has_dataclass = True
                     if v is not None and str(v).strip() != '':
-                        module.params['dataset_create']['dataclass'] = str(v).strip()
+                        module.params['dataset_create_attributes']['dataclass'] = str(v).strip()
                     else:
                         has_dataclass = False
                 else:
                     module.fail_json(
-                        msg='Invalid argument: dataset_create. It should be a dict and contain the following suboptions only: '
+                        msg='Invalid argument: dataset_create_attributes. It should be a dict and contain the following suboptions only: '
                             + 'recfm, lrecl, alcunit, primary(required), secondary, '
                             + 'dirblk, avgblk, blksize, unit, storclass, mgntclass, dataclass.'
                     )
             if not has_recfm:
-                module.params['dataset_create']['recfm'] = 'FB'
+                module.params['dataset_create_attributes']['recfm'] = 'FB'
             if not has_lrecl:
-                module.params['dataset_create']['lrecl'] = 80
+                module.params['dataset_create_attributes']['lrecl'] = 80
             if not has_alcunit:
-                module.params['dataset_create']['alcunit'] = 'TRK'
+                module.params['dataset_create_attributes']['alcunit'] = 'TRK'
             if not has_primary:
-                module.fail_json(msg='Invalid argument: dataset_create. Missing required suboption or invalid suboption: primary.')
-            if 'secondary' in module.params['dataset_create'] and not has_secondary:
-                module.params['dataset_create'].pop('secondary')
-            if 'dirblk' in module.params['dataset_create'] and not has_dirblk:
-                module.params['dataset_create'].pop('dirblk')
-            if 'avgblk' in module.params['dataset_create'] and not has_avgblk:
-                module.params['dataset_create'].pop('avgblk')
-            if 'blksize' in module.params['dataset_create'] and not has_blksize:
-                module.params['dataset_create'].pop('blksize')
+                module.fail_json(msg='Invalid argument: dataset_create_attributes. Missing required suboption or invalid suboption: primary.')
+            if 'secondary' in module.params['dataset_create_attributes'] and not has_secondary:
+                module.params['dataset_create_attributes'].pop('secondary')
+            if 'dirblk' in module.params['dataset_create_attributes'] and not has_dirblk:
+                module.params['dataset_create_attributes'].pop('dirblk')
+            if 'avgblk' in module.params['dataset_create_attributes'] and not has_avgblk:
+                module.params['dataset_create_attributes'].pop('avgblk')
+            if 'blksize' in module.params['dataset_create_attributes'] and not has_blksize:
+                module.params['dataset_create_attributes'].pop('blksize')
             if not has_unit:
-                module.params['dataset_create']['unit'] = '3390'
-            if 'storclass' in module.params['dataset_create'] and not has_storclass:
-                module.params['dataset_create'].pop('storclass')
-            if 'mgntclass' in module.params['dataset_create'] and not has_mgntclass:
-                module.params['dataset_create'].pop('mgntclass')
-            if 'dataclass' in module.params['dataset_create'] and not has_dataclass:
-                module.params['dataset_create'].pop('dataclass')
+                module.params['dataset_create_attributes']['unit'] = '3390'
+            if 'storclass' in module.params['dataset_create_attributes'] and not has_storclass:
+                module.params['dataset_create_attributes'].pop('storclass')
+            if 'mgntclass' in module.params['dataset_create_attributes'] and not has_mgntclass:
+                module.params['dataset_create_attributes'].pop('mgntclass')
+            if 'dataclass' in module.params['dataset_create_attributes'] and not has_dataclass:
+                module.params['dataset_create_attributes'].pop('dataclass')
         else:
             module.fail_json(
-                msg='Invalid argument: dataset_create. It should be a dict and contain the following suboptions only: '
+                msg='Invalid argument: dataset_create_attributes. It should be a dict and contain the following suboptions only: '
                     + 'recfm, lrecl, alcunit, primary(required), secondary, '
                     + 'dirblk, avgblk, blksize, unit, storclass, mgntclass, dataclass.'
             )
@@ -803,8 +817,8 @@ def create_dataset(module, session, target, is_member):
     if not is_member:
         # step1 - setup request args
         request_body = dict()
-        if module.params['dataset_create'] is not None:
-            request_body = module.params['dataset_create']
+        if module.params['dataset_create_attributes'] is not None:
+            request_body = module.params['dataset_create_attributes']
             if module.params['dataset_type'] == 'PS':
                 request_body['dsorg'] = 'PS'
             elif module.params['dataset_type'] == 'PDS':
@@ -814,7 +828,7 @@ def create_dataset(module, session, target, is_member):
                 request_body['dsorg'] = 'PO'
                 request_body['dsntype'] = 'LIBRARY'
             else:
-                module.fail_json(msg='dataset_create is valid only when dataset_type=PS or dataset_type=PDS or dataset_type=PDSE.')
+                module.fail_json(msg='dataset_create_attributes is valid only when dataset_type=PS or dataset_type=PDS or dataset_type=PDSE.')
             if 'secondary' not in request_body:
                 if module.params['dataset_type'] == 'PS':
                     request_body['secondary'] = math.ceil(0.5 * int(request_body['primary']))
@@ -822,15 +836,15 @@ def create_dataset(module, session, target, is_member):
                     request_body['secondary'] = math.ceil(0.2 * int(request_body['primary']))
             if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
                 request_body['volser'] = module.params['dataset_volser'].strip().upper()
-        elif module.params['dataset_model'] is not None and module.params['dataset_model'].strip() != '':
-            request_body['like'] = module.params['dataset_model'].strip()
+        elif module.params['dataset_create_like'] is not None and module.params['dataset_create_like'].strip() != '':
+            request_body['like'] = module.params['dataset_create_like'].strip()
             if module.params['dataset_volser'] is not None and module.params['dataset_volser'].strip() != '':
                 request_body['volser'] = module.params['dataset_volser'].strip().upper()
                 request_body['unit'] = '3390'
         else:
             module.fail_json(
                 msg='Failed to create the data set ' + target
-                    + ' ---- Missing required argument or invalid argument: either dataset_create or dataset_model is required.'
+                    + ' ---- Missing required argument or invalid argument: either dataset_create_attributes or dataset_create_like is required.'
             )
         # step2 - setup request headers
         request_headers = dict()
@@ -961,7 +975,7 @@ def operate_dataset(module, session, target, is_member, old_properties, action):
                 operate_result['errors'] = []
             operate_result['errors'].append('Failed to recall the data set ' + target + recall['error'])
     elif action == 'rename':
-        if module.params['dataset_rename'] is not None and module.params['dataset_rename'].strip() != '':
+        if module.params['dataset_new_name'] is not None and module.params['dataset_new_name'].strip() != '':
             need_rename = True
             rename = operate_dataset_action(module, session, 'rename', target)
             if rename['updated'] is True:
@@ -1056,7 +1070,7 @@ def operate_dataset_action(module, session, action, target):
             request_body['wait'] = False
     elif action == 'rename':
         # rename
-        new = module.params['dataset_rename'].strip().upper()
+        new = module.params['dataset_new_name'].strip().upper()
         # setup data set full name, data set name and member name
         ds_full_name = ''
         ds_v_name = ''
@@ -1117,25 +1131,25 @@ def main():
         dataset_state=dict(required=True, type='str', choices=['present', 'absent', 'migrated', 'recalled']),
         dataset_type=dict(required=False, type='str', default='PS', choices=['PS', 'PDS', 'PDSE', 'MEMBER']),
         dataset_replace=dict(required=False, type='bool', default=False),
-        dataset_create=dict(required=False, type='dict'),
-        dataset_model=dict(required=False, type='str'),
-        dataset_rename=dict(required=False, type='str'),
+        dataset_create_attributes=dict(required=False, type='dict'),
+        dataset_create_like=dict(required=False, type='str'),
+        dataset_new_name=dict(required=False, type='str'),
         dataset_migrate_recall=dict(required=False, type='str', default='wait', choices=['wait', 'nowait', 'error'])
     )
-    argument_spec['dataset_create']['recfm'] = dict(
+    argument_spec['dataset_create_attributes']['recfm'] = dict(
         required=False, type='str', default='FB',
         choices=['FB', 'VB', 'DB', 'F', 'V', 'D', 'U', 'VS', 'VBS', 'FS', 'FBS', 'DS', 'DBS']),
-    argument_spec['dataset_create']['lrecl'] = dict(required=False, type='int', default=80)
-    argument_spec['dataset_create']['alcunit'] = dict(required=False, type='str', default='TRK', choices=['TRK', 'BLK', 'CYL'])
-    argument_spec['dataset_create']['primary'] = dict(required=True, type='int')
-    argument_spec['dataset_create']['secondary'] = dict(required=False, type='int')
-    argument_spec['dataset_create']['dirblk'] = dict(required=False, type='int')
-    argument_spec['dataset_create']['avgblk'] = dict(required=False, type='int')
-    argument_spec['dataset_create']['blksize'] = dict(required=False, type='int')
-    argument_spec['dataset_create']['unit'] = dict(required=False, type='str', default='3390')
-    argument_spec['dataset_create']['storclass'] = dict(required=False, type='str')
-    argument_spec['dataset_create']['mgntclass'] = dict(required=False, type='str')
-    argument_spec['dataset_create']['dataclass'] = dict(required=False, type='str')
+    argument_spec['dataset_create_attributes']['lrecl'] = dict(required=False, type='int', default=80)
+    argument_spec['dataset_create_attributes']['alcunit'] = dict(required=False, type='str', default='TRK', choices=['TRK', 'BLK', 'CYL'])
+    argument_spec['dataset_create_attributes']['primary'] = dict(required=True, type='int')
+    argument_spec['dataset_create_attributes']['secondary'] = dict(required=False, type='int')
+    argument_spec['dataset_create_attributes']['dirblk'] = dict(required=False, type='int')
+    argument_spec['dataset_create_attributes']['avgblk'] = dict(required=False, type='int')
+    argument_spec['dataset_create_attributes']['blksize'] = dict(required=False, type='int')
+    argument_spec['dataset_create_attributes']['unit'] = dict(required=False, type='str', default='3390')
+    argument_spec['dataset_create_attributes']['storclass'] = dict(required=False, type='str')
+    argument_spec['dataset_create_attributes']['mgntclass'] = dict(required=False, type='str')
+    argument_spec['dataset_create_attributes']['dataclass'] = dict(required=False, type='str')
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=False
