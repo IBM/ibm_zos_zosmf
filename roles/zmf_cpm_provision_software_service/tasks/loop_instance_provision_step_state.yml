@@ -72,14 +72,17 @@
         - provision_current_state != 'provisioned'
 
     - name: "Check over all provision process (ignore the failure of this task), skip if complete"
-      fail:
+      debug:
         msg: "Ignore and retry"
       when:
         - provision_current_state != 'provisioned'
 
-  rescue:
+  always:
     - name: "Failure exit on polling provision information"
       fail:
         msg: "Reached max retry limit {{ api_polling_retry_count }} while workflow still not at 100% complete, aborting..."
       when: retry_count|int == max_retry
+
     - include_tasks: loop_instance_provision_step_state.yml
+      when:
+        - provision_current_state != 'provisioned'
