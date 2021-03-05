@@ -43,15 +43,15 @@ pipeline {
 			echo "Remote workspace is ${remoteWorkspace}"
 			
 			dir("${remoteWorkspace}") {
-				if (fileExists('ibm-ibm_zos_zosmf-2.4.0.tar.gz')) {
-					echo "ibm-ibm_zos_zosmf-2.4.0.tar.gz existed"
-					sh 'rm ibm-ibm_zos_zosmf-2.4.0.tar.gz'
+				if (fileExists('ibm-ibm_zos_zosmf-2.5.0.tar.gz')) {
+					echo "ibm-ibm_zos_zosmf-2.5.0.tar.gz existed"
+					sh 'rm ibm-ibm_zos_zosmf-2.5.0.tar.gz'
 					sh '/usr/local/bin/ansible-galaxy collection build'
 				} else {
 					sh '/usr/local/bin/ansible-galaxy collection build'
 				}
 				sh "pwd"
-				sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.4.0.tar.gz'
+				sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.5.0.tar.gz'
 			}
 		}
             }
@@ -65,17 +65,17 @@ pipeline {
                     }
 	    }
 
-            steps {
-		echo 'sanity test'
-		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf") {
-                     sh "pwd"
+        steps {
+		         echo 'sanity test'
+		         dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf") {
+               sh "pwd"
 	             sh '/usr/local/bin/ansible-test sanity'
 	             sh '/usr/local/bin/ansible-lint roles/zmf_job_query'
 	             sh '/usr/local/bin/ansible-lint roles/zmf_job_complete'
 	             sh '/usr/local/bin/ansible-lint roles/zmf_workflow_complete'
 	             sh '/usr/local/bin/ansible-lint roles/zmf_cpm_manage_software_instance'
-		     sh '/usr/local/bin/ansible-lint roles/zmf_cpm_provision_software_service'
-		     sh '/usr/local/bin/ansible-lint roles/zmf_cpm_remove_software_instance'
+		           sh '/usr/local/bin/ansible-lint roles/zmf_cpm_provision_software_service'
+		           sh '/usr/local/bin/ansible-lint roles/zmf_cpm_remove_software_instance'
                 }
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars") {
 			sh "cp -p /Users/strangepear2019/ansible-tmp/p00.yml /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars/p00.yml"
@@ -107,12 +107,26 @@ pipeline {
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook FVT-Dataset-Copy-CICD1.yml'
 		}
-		echo 'FileAPI Copy BVT'
+    echo 'FileAPI Copy BVT'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook FVT-FIle-Copy-CICD1.yml'
+    }
+		echo 'Dataset Create/Rename/Delete/Remote Copy BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_copy_remote_PDS2PDS.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_create_mem.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_rename.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_delete.yml'
+		}
+		echo 'FileAPI Create/Rename/changemode/Delete BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook CICDtest_file_create_dir.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_file_create_file.yml'
+			sh '/usr/local/bin/ansible-playbook CICDTest_file_rename_file.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_file_changemode_dir.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_file_delete_dir.yml'
 		}
 		echo 'CICD test successfully!'
-            }
         }
     }
 }
