@@ -1,0 +1,246 @@
+//IZUANSEC  JOB MSGCLASS=C,MSGLEVEL=(1,1),USER=XXXXXXX,NOTIFY=XXXXXXX
+//********************************************************************
+//* PROPRIETARY STATEMENT:                                           *
+//*    Licensed Materials - Property of IBM                          *
+//*    5650-ZOS                                                      *
+//*    Copyright IBM Corp.   2020                                    *
+//*                                                                  *
+//*    STATUS=HSMA240                                                *
+//********************************************************************
+//* Please read below introduction before running this sample job:   *
+//*                                                                  *
+//* This security sample job is designed to help users quickly setup *
+//* required security in z/OS for below z/OSMF Ansible modules or    *
+//* roles:                                                           *
+//*   * Role "zmf_workflow_complete"                                 *
+//*   * Module "zmf_workflow"                                        *
+//*   * Role "zmf_job_complete"                                      *
+//*   * Role "zmf_job_query"                                         *
+//*   * Module "zmf_console_command"                                 *
+//*                                                                  *
+//* It's assumed that you have already setup z/OSMF nucleus which    *
+//* normally could be setup in about one or two hours. If you have   *
+//* not done that yet, please refer to section "Create a z/OSMF      *
+//* nucleus on your system" in the z/OSMF Configuration Guide to     *
+//* create z/OSMF nucleus first.                                     *
+//*                                                                  *
+//* Then with this sample job, you could setup required security for *
+//* below z/OSMF REST APIs which are driven by above z/OSMF Ansible  *
+//* modules or roles:                                                *
+//*   * REST Workflow services                                       *
+//*   * REST Jobs services                                           *
+//*   * REST data set and file services                              *
+//*   * REST Console services                                        *
+//*   * REST TSO services                                            *
+//*                                                                  *
+//* Please be noticed:                                               *
+//* 1. This sample job should only be used for trying z/OSMF Ansible *
+//* collection in DEV/TEST systems. For usage in Production system,  *
+//* please refer to z/OSMF Configuration Guide for required setup.   *
+//* 2. This sample job includes some commands which contain variables*
+//* need your inputs. Please read keyword "Please be noticed" in each*
+//* section below for the variable information.                      *
+//*                                                                  *
+//STEP1  EXEC PGM=IKJEFT01
+//SYSPRINT DD SYSOUT=*
+//SYSTSPRT DD SYSOUT=*
+//SYSTSIN  DD *
+ /******************************************************************/
+ /* Start security setup for component "zOSMF Workflows"           */
+ /*                                                                */
+ /* Please be noticed:                                             */
+ /* If you are using all default values of z/OSMF parmlib IZUPRMxx */
+ /* , there is nothing you need to update for below commands.      */
+ /* Otherwise, you need update below commands accordingly:         */
+ /* 1. If SAF_PREFIX is customized in IZUPRMxx                     */
+ /* "IZUDFLT" needs to be replaced with the value of SAF_PREFIX    */
+ /* 2. If SEC_GROUPS is customized in IZUPRMxx                     */
+ /* "IZUADMIN" and "IZUUSER" need to be replaced with the value    */
+ /* specified in SEC_GROUPS.                                       */
+ 
+ SETROPTS CLASSACT(ZMFAPLA)
+ SETROPTS RACLIST(ZMFAPLA) GENERIC(ZMFAPLA)
+ 
+ /*  Begin zOSMF Workflow Basic Setup                              */
+ /*  Profile definitions for "Workflows" task                      */
+ RDEFINE ZMFAPLA IZUDFLT.ZOSMF.WORKFLOW.WORKFLOWS UACC(NONE)
+ /*  Profile Definitions for "Workflow administrator role"         */
+ RDEFINE ZMFAPLA IZUDFLT.ZOSMF.WORKFLOW.ADMIN UACC(NONE)
+ /*  End zOSMF Workflow Basic Setup                                */
+
+ /*  Begin setup for zOSMF normal user group - IZUUSER by default  */
+ /*  Permit definitions for Workflow                               */
+ PERMIT IZUDFLT.ZOSMF.WORKFLOW.WORKFLOWS CLASS(ZMFAPLA) +
+   ID(IZUUSER) ACCESS(READ)
+ /*  End setup for zOSMF normal user group                         */
+
+ /*  Begin setup for zOSMF admin group - IZUADMIN by default       */
+ /*  Permit definitions for "Workflow administrator role"          */
+ PERMIT IZUDFLT.ZOSMF.WORKFLOW.WORKFLOWS CLASS(ZMFAPLA) +
+   ID(IZUADMIN) ACCESS(READ)
+ PERMIT IZUDFLT.ZOSMF.WORKFLOW.ADMIN CLASS(ZMFAPLA) +
+   ID(IZUADMIN) ACCESS(READ)
+ /*  End setup for zOSMF admin group                               */
+
+ SETROPTS RACLIST(ZMFAPLA) REFRESH
+ /*  End security setup for component "zOSMF Workflows"            */
+ /******************************************************************/
+
+ /******************************************************************/
+ /* Start security setup for component REST TSO service            */
+ /*                                                                */
+ /* Please be noticed:                                             */
+ /* If you are using all default values of z/OSMF parmlib IZUPRMxx */
+ /* , there is nothing you need to update for below commands.      */
+ /* Otherwise, you need update below commands accordingly:         */
+ /* 1. If "RESTAPI_FILE ACCT" or "COMMON_TSO ACCT"is customized in */
+ /* IZUPRMxx                                                       */
+ /* "IZUACCT" needs to be replaced with the value of               */
+ /* "RESTAPI_FILE ACCT" or "COMMON_TSO ACCT" in IZUPRMxx.          */
+ /* 2. If "RESTAPI_FILE PROC" or "COMMON_TSO PROC"is customized in */
+ /* IZUPRMxx                                                       */
+ /* "IZUFPROC" needs to be replaced with the value of              */
+ /* "RESTAPI_FILE PROC" or "COMMON_TSO PROC" in IZUPRMxx.          */
+ /* 3. If SEC_GROUPS is customized in IZUPRMxx                     */
+ /* "IZUADMIN" and "IZUUSER" need to be replaced with the value    */
+ /* specified in SEC_GROUPS.                                       */
+
+ /*********************** PART I ***********************************/
+ /* REST TSO service depends on CEA TSO launcher. Therefore, you   */
+ /* need to ensure CEA is setup properly and started. CEA is part  */
+ /* of z/OS and started during IPL normally. If CEA is not started */
+ /* on your system, please refer to SYS1.SAMPLIB(CEASEC) for       */
+ /* security setup of CEA.                                         */
+
+ /*********************** PART II **********************************/
+ /* Activate the ACCTNUM class                                     */
+ SETROPTS CLASSACT(ACCTNUM)
+ /* Activate the TSOPROC class                                     */
+ SETROPTS CLASSACT(TSOPROC)
+ /* Activate and RACLIST the SERVAUTH class                        */
+ SETROPTS CLASSACT(SERVAUTH)
+ SETROPTS RACLIST(SERVAUTH) GENERIC(SERVAUTH)
+
+ /*Define the Account Number resource profile                      */
+ RDEFINE ACCTNUM IZUACCT UACC(NONE)                            
+ PERMIT IZUACCT CLASS(ACCTNUM) ID(IZUADMIN) ACCESS(READ)
+ PERMIT IZUACCT CLASS(ACCTNUM) ID(IZUUSER) ACCESS(READ)            
+ 
+ /*Define the TSO Procedure resource profile                       */
+ RDEFINE TSOPROC IZUFPROC UACC(NONE)                             
+ PERMIT IZUFPROC CLASS(TSOPROC) ID(IZUADMIN) ACCESS(READ)          
+ PERMIT IZUFPROC CLASS(TSOPROC) ID(IZUUSER) ACCESS(READ)
+
+ /* Define the CEA resource profile required for z/OSMF server     */
+ RDEFINE SERVAUTH CEA.CEATSO.* UACC(NONE)
+ /* Permit z/OSMF admin group and user group to this profile       */
+ PERMIT CEA.CEATSO.* CLASS(SERVAUTH) ID(IZUADMIN) ACCESS(READ)
+ PERMIT CEA.CEATSO.* CLASS(SERVAUTH) ID(IZUUSER) ACCESS(READ)   
+
+ /* Permit the started task USERID to this profile                 */
+ PERMIT CEA.CEATSO.* CLASS(SERVAUTH) ID(IZUSVR) ACCESS(READ)
+
+ /* Profile for TSO RESTful API remote support                     */
+ RDEFINE SERVAUTH CEA.CEATSO.FLOW.* UACC(NONE)                   
+ PERMIT CEA.CEATSO.FLOW.* CLASS(SERVAUTH) ID(IZUADMIN) +         
+        ACCESS(READ)  
+ PERMIT CEA.CEATSO.FLOW.* CLASS(SERVAUTH) ID(IZUUSER) +         
+        ACCESS(READ)                                           
+
+ /* Refresh class                                                  */
+ SETROPTS RACLIST(ACCTNUM) REFRESH
+ SETROPTS RACLIST(TSOPROC) REFRESH
+ SETROPTS RACLIST(SERVAUTH) REFRESH
+ /* End security setup for component REST TSO service              */
+ /******************************************************************/
+
+ /******************************************************************/
+ /* Start security setup for component REST Jobs service           */
+ /*   Nothing needs to be setup for REST Jobs service              */
+ /* End security setup for component REST Jobs service             */
+ /******************************************************************/
+ 
+ /******************************************************************/
+ /* Start security setup for component REST data set and file API  */
+ /*   The setup required for REST data set and file API has been   */
+ /*   covered by prior section for REST TSO service.               */
+ /* End security setup for component REST data set and file API    */
+ /******************************************************************/
+ 
+ /******************************************************************/
+ /* Start security setup for component REST Console services       */
+ /*                                                                */
+ /* Please be noticed:                                             */
+ /* 1. If SEC_GROUPS is customized in IZUPRMxx                     */
+ /* "IZUADMIN" and "IZUUSER" in below commands need to be replaced */
+ /* with the value specified in SEC_GROUPS.                        */
+ /* 2. There are several commands below reference variable         */
+ /* <consolename> or <sysname>. Depends on what you are going to   */
+ /* use in your Ansible Playbook, you need to replay the           */
+ /* placeholders with your own values, then uncomment those        */
+ /* commands before running this job.                              */
+ SETROPTS CLASSACT(TSOAUTH)
+ RDEFINE TSOAUTH console UACC(NONE)
+ PERMIT console CLASS(TSOAUTH) ACCESS(read) ID(IZUADMIN)
+ PERMIT console CLASS(TSOAUTH) ACCESS(read) ID(IZUUSER)
+ SETROPTS RACLIST(TSOAUTH) REFRESH
+
+ /* Allows the user to create EMCS console with the specified name*/
+ SETROPTS CLASSACT(OPERCMDS)
+ RDEFINE OPERCMDS MVS.DISPLAY.EMCS UACC(NONE)                   
+ PERMIT MVS.DISPLAY.EMCS CLASS(OPERCMDS) +                      
+        ID(IZUADMIN) ACCESS(READ)                               
+ PERMIT MVS.DISPLAY.EMCS CLASS(OPERCMDS) +                      
+        ID(IZUUSER) ACCESS(READ)                               
+ RDEFINE OPERCMDS MVS.DISPLAY.TIMEDATE UACC(NONE)               
+ PERMIT MVS.DISPLAY.TIMEDATE CLASS(OPERCMDS) +                  
+          ID(IZUADMIN) ACCESS(READ)                              
+ PERMIT MVS.DISPLAY.TIMEDATE CLASS(OPERCMDS) +                  
+          ID(IZUUSER) ACCESS(READ)                              
+ RDEFINE OPERCMDS MVS.DISPLAY.OMVS  UACC(NONE)                  
+ PERMIT MVS.DISPLAY.OMVS CLASS(OPERCMDS) +                      
+        ID(IZUADMIN) ACCESS(READ)                              
+ PERMIT MVS.DISPLAY.OMVS CLASS(OPERCMDS) +                      
+        ID(IZUUSER) ACCESS(READ)      
+
+ /* Profile Definitions for "zOS Operator Consoles" task */
+ RDEFINE ZMFAPLA IZUDFLT.ZOSMF.CONSOLES.ZOSOPER UACC(NONE)
+ /* Permit definitions for "zOS Operator Consoles" task */
+ PERMIT IZUDFLT.ZOSMF.CONSOLES.ZOSOPER CLASS(ZMFAPLA) +
+   ID(IZUUSER) ACCESS(READ)
+ /* Permit definitions for "zOS Operator Consoles" task */
+ PERMIT IZUDFLT.ZOSMF.CONSOLES.ZOSOPER CLASS(ZMFAPLA) +
+   ID(IZUADMIN) ACCESS(READ)
+ SETROPTS RACLIST(ZMFAPLA) REFRESH
+
+ /* Allow user to start the EMCS console with <consolename> and    */
+ /* also make sure the <consolename> has proper setup. Please      */
+ /* replace <consolename> with your own console name used in       */
+ /* "console_name" in the Ansible playbook. The <sysname> should be*/
+ /* replaced with your local z/OS system name. Then uncomment below*/
+ /* commands.                                                      */
+
+ /*RDEFINE OPERCMDS mvs.mcsoper.<consolename> UACC(NONE)           */
+ /*PERMIT mvs.mcsoper.<consolename> CLASS(OPERCMDS) ACCESS(read) + */
+ /*    ID(IZUADMIN))                                               */
+ /*PERMIT mvs.mcsoper.<consolename> CLASS(OPERCMDS) ACCESS(read) + */
+ /*    ID(IZUUSER))                                                */
+ /*ADDUSER <consolename> OPERPARM(AUTH(master) ROUTCODE(all) +     */
+ /*     MSCOPE(<sysname>) AUTO(YES))                               */
+
+
+ /* Allows user to route command to remote system with name        */
+ /* <sysname>. Replace <sysname> with your own z/OS system names   */
+ /* you would like to drive from Ansible, then uncomment below     */
+ /* commands.                                                      */
+ /*RDEFINE OPERCMDS MVS.ROUTE.CMD.<sysname> UACC(NONE)             */
+ /*PERMIT MVS.ROUTE.CMD.<sysname> CLASS(OPERCMDS) ACCESS(read) +   */
+ /*    ID(IZUADMIN)                                                */
+ /*PERMIT MVS.ROUTE.CMD.<sysname> CLASS(OPERCMDS) ACCESS(read) +   */
+ /*    ID(IZUUSER)                                                 */
+ SETROPTS RACLIST(OPERCMDS) REFRESH
+ 
+ /* End security setup for component REST Console services         */
+ /******************************************************************/
+
+/*

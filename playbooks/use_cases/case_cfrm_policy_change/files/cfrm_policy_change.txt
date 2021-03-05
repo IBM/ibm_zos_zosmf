@@ -1,0 +1,15 @@
+# Copyright (c) IBM Corporation 2020
+
+{
+  "policy_name": "CTTEST1",
+  "changed_structures": {
+    "LIST02": {
+      "SIZE": "2120K",
+      "INITSIZE": "1102K"
+    },
+    "LIST32": {
+      "SIZE": "1120K",
+      "INITSIZE": "1002K"
+    }
+  }
+}

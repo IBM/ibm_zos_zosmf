@@ -65,17 +65,17 @@ pipeline {
                     }
 	    }
 
-            steps {
-		echo 'sanity test'
-		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf") {
-                     sh "pwd"
+        steps {
+		         echo 'sanity test'
+		         dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf") {
+               sh "pwd"
 	             sh '/usr/local/bin/ansible-test sanity'
 	             sh '/usr/local/bin/ansible-lint roles/zmf_job_query'
 	             sh '/usr/local/bin/ansible-lint roles/zmf_job_complete'
 	             sh '/usr/local/bin/ansible-lint roles/zmf_workflow_complete'
 	             sh '/usr/local/bin/ansible-lint roles/zmf_cpm_manage_software_instance'
-		     sh '/usr/local/bin/ansible-lint roles/zmf_cpm_provision_software_service'
-		     sh '/usr/local/bin/ansible-lint roles/zmf_cpm_remove_software_instance'
+		           sh '/usr/local/bin/ansible-lint roles/zmf_cpm_provision_software_service'
+		           sh '/usr/local/bin/ansible-lint roles/zmf_cpm_remove_software_instance'
                 }
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars") {
 			sh "cp -p /Users/strangepear2019/ansible-tmp/p00.yml /Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks/host_vars/p00.yml"
@@ -107,6 +107,10 @@ pipeline {
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook FVT-Dataset-Copy-CICD1.yml'
 		}
+    echo 'FileAPI Copy BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook FVT-FIle-Copy-CICD1.yml'
+    }
 		echo 'Dataset Create/Rename/Delete/Remote Copy BVT'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_copy_remote_PDS2PDS.yml'
@@ -123,7 +127,6 @@ pipeline {
 			sh '/usr/local/bin/ansible-playbook CICDtest_file_delete_dir.yml'
 		}
 		echo 'CICD test successfully!'
-            }
         }
     }
 }

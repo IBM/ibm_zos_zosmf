@@ -12,7 +12,7 @@ This `sample playbook`_ shows how to perform instance specific action on a provi
 .. code-block:: yaml
 
    - name: sample of managing software instance
-     hosts: zosmf1
+     hosts: cpmHost1
      gather_facts: no
      collections:
        - ibm.ibm_zos_zosmf

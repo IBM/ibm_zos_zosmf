@@ -1,0 +1,8 @@
+//********************************************************************
+//* Copyright (c) IBM Corporation 2020                               *
+//********************************************************************
+//POLUPD JOB ,,CLASS=A,MSGCLASS=X,MSGLEVEL=(1,1),NOTIFY=&SYSUID
+//CFRMPOL   EXEC PGM=IXCMIAPU                                  
+//SYSPRINT  DD  SYSOUT=*                                       
+//SYSIN     DD  DISP=SHR,DSN=ZOSMF.DEMO.JCL(CFRM00)            
+//*                                                             

@@ -1,6 +1,33 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v2.4.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.4.0) - 2020-12-30
+### Added
+- add modules: `zmf_dataset_copy`, `zmf_file_copy`
+### Fixed
+- fix for role `zmf_workflow_complete`: refine final_result
+- fix for module `zmf_console_command`: console_cmdresponse_reg and console_broadcastmsg_reg should be bool type
+
+## [v2.3.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.3.0) - 2020-12-18
+### Added
+- add modules: `zmf_dataset_fetch`, `zmf_file_fetch`
+
+## [v2.2.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.1) - 2020-09-23
+### Fixed
+- fix for module `zmf_console_command`: conflict route params
+- fix for module `zmf_console_command`: os issue when save output to local with python2.7
+- fix for roles `zmf_job_complete`, `zmf_job_query`: overridden matched contents
+
+## [v2.2.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.2.0) - 2020-08-21
+### Added
+- add modules: `zmf_authenticate`
+- support to save job output on Ansible control node for roles: `zmf_job_complete`, `zmf_job_query`
+- support to save command response on Ansible control node for module: `zmf_console_command`
+
+## [v2.1.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.1.0) - 2020-07-14
+### Added
+- add modules: `zmf_console_command`
+
 ## [v2.0.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.0.1) - 2020-05-29
 ### Added
 - support to search job output for roles: `zmf_job_complete`, `zmf_job_query`

@@ -1,0 +1,15 @@
+# Copyright (c) IBM Corporation 2020 
+
+- name: get the submitted time
+  set_fact:
+    nums: "{{ submit_jobs_item['exec-submitted'] | regex_findall('[0-9]{2}') }}"
+- set_fact:
+    item_submit_day: "{{ nums[0] }}{{ nums[1] }}-{{ nums[2] }}-{{ nums[3] }}"
+    item_submit_time: "{{ (nums[4] | int) * 60 + (nums[5] | int) }}"
+
+- name: get the matched jobs submitted this time
+  set_fact:
+    matched_jobs: "{{ matched_jobs + [submit_jobs_item] }}"
+  when:
+    - item_submit_day.find(submit_day) > -1
+    - item_submit_time|int >= submit_time|int

@@ -1,0 +1,6 @@
+# Copyright (c) IBM Corporation 2020
+
+ansible_host: linux.host 
+ansible_connection: ssh 
+ansible_user: username 
+ansible_password: password

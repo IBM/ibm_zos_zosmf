@@ -1,5 +1,6 @@
 # Copyright (c) IBM Corporation 2020 
 
+---
 force_complete: False
 complete_check_times: 10
 complete_check_delay: 5

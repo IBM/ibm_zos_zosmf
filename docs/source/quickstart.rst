@@ -45,7 +45,8 @@ Contents
    README_workflow
    README_cpm
    README_job
-
+   README_console
+   README_dataset_file
 
 
 .. _Installation:

@@ -16,9 +16,9 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r"""
 ---
 module: zmf_workflow
-short_description: Ansible module for running z/OS workflows
+short_description: Operate z/OS workflows
 description:
-    - Ansible module for running z/OS workflows by issuing z/OSMF workflow RESTful services.
+    - Operate z/OS workflows by issuing z/OSMF workflow RESTful services.
     - This module supports to compare, start, delete and check a workflow.
 version_added: "2.9"
 author:
@@ -44,44 +44,84 @@ options:
             - started
             - deleted
             - check
+    zmf_credential:
+        description:
+            - Authentication credentials, returned by module C(zmf_authenticate), for the successful authentication with z/OSMF server.
+            - If I(zmf_credential) is supplied, I(zmf_host), I(zmf_port), I(zmf_user), I(zmf_password), I(zmf_crt) and I(zmf_key) are ignored.
+        required: false
+        type: dict
+        default: null
+        suboptions:
+            LtpaToken2:
+                description:
+                    - The value of Lightweight Third Party Access (LTPA) token, which supports strong encryption.
+                    - If I(jwtToken) is not supplied, I(LtpaToken2) is required.
+                required: false
+                type: str
+                default: null
+            jwtToken:
+                description:
+                    - The value of JSON Web token, which supports strong encryption.
+                    - If I(LtpaToken2) is not supplied, I(jwtToken) is required.
+                required: false
+                type: str
+                default: null
+            zmf_host:
+                description: Hostname of the z/OSMF server.
+                required: true
+                type: str
+                default: null
+            zmf_port:
+                description: Port number of the z/OSMF server.
+                required: false
+                type: int
+                default: null
     zmf_host:
         description:
             - Hostname of the z/OSMF server.
-        required: true
+            - If I(zmf_credential) is supplied, I(zmf_host) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_host) is required.
+        required: false
         type: str
+        default: null
     zmf_port:
         description:
             - Port number of the z/OSMF server.
+            - If I(zmf_credential) is supplied, I(zmf_port) is ignored.
         required: false
         type: int
         default: null
     zmf_user:
         description:
             - User name to be used for authenticating with z/OSMF server.
-            - Required when I(zmf_crt) and I(zmf_key) are not supplied.
-            - If I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
+            - If I(zmf_credential) is supplied, I(zmf_user) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_user) is required when I(zmf_crt) and I(zmf_key) are not supplied.
+            - If I(zmf_credential) is not supplied and I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
         required: false
         type: str
         default: null
     zmf_password:
         description:
             - Password to be used for authenticating with z/OSMF server.
-            - Required when I(zmf_crt) and I(zmf_key) are not supplied.
-            - If I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
+            - If I(zmf_credential) is supplied, I(zmf_password) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_password) is required when I(zmf_crt) and I(zmf_key) are not supplied.
+            - If I(zmf_credential) is not supplied and I(zmf_crt) and I(zmf_key) are supplied, I(zmf_user) and I(zmf_password) are ignored.
         required: false
         type: str
         default: null
     zmf_crt:
         description:
             - Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.
-            - Required when I(zmf_user) and I(zmf_password) are not supplied.
+            - If I(zmf_credential) is supplied, I(zmf_crt) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_crt) is required when I(zmf_user) and I(zmf_password) are not supplied.
         required: false
         type: str
         default: null
     zmf_key:
         description:
             - Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.
-            - Required when I(zmf_user) and I(zmf_password) are not supplied.
+            - If I(zmf_credential) is supplied, I(zmf_key) is ignored.
+            - If I(zmf_credential) is not supplied, I(zmf_key) is required when I(zmf_user) and I(zmf_password) are not supplied.
         required: false
         type: str
         default: null
@@ -91,21 +131,19 @@ options:
             - It is recommended that you use the naming rule C(ansible_workflowName_{{ workflow_host }}) when I(state=started).
             - Required when I(state=existed).
             - Either I(workflow_name) or I(workflow_key) is required when I(state=started/deleted/check).
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_file:
         description:
             - Location of the workflow definition file.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_host:
         description:
-            - Nickname of the system on which the workflow is to be performed.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
+            - Nickname of the target z/OS system on which the workflow is to be performed.
+            - This variable should be specified as C({{ inventory_hostname }}), and its value should be specified in the inventory file as a managed node.
         required: false
         type: str
         default: null
@@ -113,14 +151,12 @@ options:
         description:
             - User name of the workflow owner.
             - If this value is omitted, I(zmf_user) is used as workflow owner.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_file_system:
         description:
             - Nickname of the system on which the specified workflow definition file and any related files reside.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
@@ -128,21 +164,19 @@ options:
         description:
             - Location of the optional properties file to be used to pre-specify the values of one or more variables
               that are defined in workflow definition file.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_vars:
         description:
             - Values of one or more workflow variables in JSON format.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
+            - For example, C({"user_to_list":"DEBUG1", "tsocmd_to_issue":"TIME"})
         required: false
         type: dict
         default: null
     workflow_resolve_global_conflict_by_using:
         description:
             - Version of the variable to be used if the supplied workflow variable conflicts with an existing global variable in z/OSMF Workflows task.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: global
@@ -152,21 +186,18 @@ options:
     workflow_comments:
         description:
             - User-specified information to be associated with the workflow at creation time.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_assign_to_owner:
         description:
             - Specifies whether the workflow steps are assigned to the workflow owner when the workflow is created.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
         default: true
     workflow_access_type:
         description:
             - Access type for the workflow when the workflow is created.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: Public
@@ -177,21 +208,18 @@ options:
     workflow_account_info:
         description:
             - For a workflow that submits a batch job, this variable specifies the account information for the JCL JOB statement.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_job_statement:
         description:
             - For a workflow that submits a batch job, this variable specifies the JOB statement JCL for the job.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_delete_completed_jobs:
         description:
             - For a workflow that submits a batch job, this variable specifies whether the job is deleted from the JES spool after it completes.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
         default: false
@@ -199,7 +227,6 @@ options:
         description:
             - Specifies how to handle variable conflicts if any are detected at workflow creation time.
             - Such conflicts can be found when z/OSMF Workflows task reads the output file from a step that runs a REXX exec or UNIX shell script.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: outputFileValue
@@ -210,28 +237,24 @@ options:
     workflow_step_name:
         description:
             - Name of the workflow step at which automation processing is to begin when the workflow is started.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_perform_subsequent:
         description:
             - Specifies whether the subsequent automated steps are performed when the workflow is started.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: bool
         default: true
     workflow_notification_url:
         description:
             - URL to be used for notification when the workflow is started.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
     workflow_category:
         description:
             - Category for the workflow.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         choices:
@@ -241,7 +264,6 @@ options:
     workflow_vendor:
         description:
             - Name of the vendor that provided the workflow definition file.
-            - For more information, see the documentation for the z/OSMF workflow REST services.
         required: false
         type: str
         default: null
@@ -269,9 +291,9 @@ EXAMPLES = r"""
   zmf_workflow:
     state: "started"
     zmf_host: "sample.ibm.com"
-    workflow_name: "ansible_sample_workflow_SY1"
+    workflow_name: "ansible_sample_workflow_{{ inventory_hostname }}"
     workflow_file: "/var/zosmf/workflow_def/workflow_sample_automation_steps.xml"
-    workflow_host: "SY1"
+    workflow_host: "{{ inventory_hostname }}"
 
 - name: Delete a workflow if it exists
   zmf_workflow:
@@ -337,7 +359,7 @@ deleted:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_workflow_util import (
+from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import (
     get_connect_argument_spec,
     get_connect_session,
     cmp_list

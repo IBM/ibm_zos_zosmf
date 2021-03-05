@@ -13,9 +13,9 @@ except Exception:
     LIB_IMP_ERR = traceback.format_exc()
 
 
-def get_connect_argument_spec():
+def get_auth_argument_spec():
     """
-    Return the arguments of ansible module used for session setup.
+    Return the arguments of ansible module used for authentication with z/OSMF server.
     :rtype: dict[str, dict]
     """
     return dict(
@@ -25,6 +25,22 @@ def get_connect_argument_spec():
         zmf_password=dict(required=False, type='str', no_log=True),
         zmf_crt=dict(required=False, type='str', no_log=True),
         zmf_key=dict(required=False, type='str', no_log=True)
+    )
+
+
+def get_connect_argument_spec():
+    """
+    Return the arguments of ansible module used for session setup.
+    :rtype: dict[str, dict]
+    """
+    return dict(
+        zmf_host=dict(required=False, type='str'),
+        zmf_port=dict(required=False, type='int'),
+        zmf_user=dict(required=False, type='str', no_log=True),
+        zmf_password=dict(required=False, type='str', no_log=True),
+        zmf_crt=dict(required=False, type='str', no_log=True),
+        zmf_key=dict(required=False, type='str', no_log=True),
+        zmf_credential=dict(required=False, type='dict', no_log=True)
     )
 
 
@@ -41,25 +57,39 @@ def get_connect_session(module):
     key = module.params['zmf_key']
     user = module.params['zmf_user']
     pw = module.params['zmf_password']
-    if (crt is not None and crt.strip() != '') and (key is not None and key.strip() != ''):
+    auth = None
+    if 'zmf_credential' in module.params:
+        auth = module.params['zmf_credential']
+    if auth is not None and ('LtpaToken2' in auth or 'jwtToken' in auth):
+        cookie = requests.cookies.RequestsCookieJar()
+        if 'LtpaToken2' in auth:
+            cookie.set('LtpaToken2', auth['LtpaToken2'])
+        else:
+            cookie.set('jwtToken', auth['jwtToken'])
+        session.cookies.update(cookie)
+        module.params['zmf_host'] = auth['zmf_host']
+        module.params['zmf_port'] = auth['zmf_port']
+        return session
+    elif (crt is not None and crt.strip() != '') and (key is not None and key.strip() != ''):
         session.cert = (crt.strip(), key.strip())
+        return session
     elif (user is not None and user.strip() != '') and (pw is not None and pw.strip() != ''):
         session.auth = (user.strip(), pw.strip())
+        return session
     else:
         # fail the module since auth is must for zosmf connection
         module.fail_json(msg='HTTP setup error: either zmf_user/zmf_password or zmf_crt/zmf_key are required.')
-    return session
 
 
 def __get_request_headers():
     """
-    Return the request headers for calling workflow APIs.
+    Return the request headers for calling z/OSMF APIs.
     :rtype: dict[str, str]
     """
-    return {'X-CSRF-ZOSMF-HEADER': 'TEST'}
+    return {'X-CSRF-ZOSMF-HEADER': 'ZOSMF'}
 
 
-def handle_request(module, session, method, url, params=None, rcode=200, timeout=30):
+def handle_request(module, session, method, url, params=None, rcode=200, header=None, timeout=30):
     """
     Return the response or error message of HTTP request.
     :param AnsibleModule module: the ansible module
@@ -69,17 +99,21 @@ def handle_request(module, session, method, url, params=None, rcode=200, timeout
     :param dict params: the params of HTTP request
     :param int rcode: the expected return code of HTTP request
     :param int timeout: the timeout of HTTP request
+    :param dict header: the header of HTTP request
     :rtype: dict or str
     """
+    headers = __get_request_headers()
+    if header is not None:
+        headers.update(header)
     try:
         if method == 'get':
-            response = session.get(url, params=params, headers=__get_request_headers(), verify=False, timeout=timeout)
+            response = session.get(url, params=params, headers=headers, verify=False, timeout=timeout)
         elif method == 'put':
-            response = session.put(url, data=json.dumps(params), headers=__get_request_headers(), verify=False, timeout=timeout)
+            response = session.put(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
         elif method == 'post':
-            response = session.post(url, data=json.dumps(params), headers=__get_request_headers(), verify=False, timeout=timeout)
+            response = session.post(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
         elif method == 'delete':
-            response = session.delete(url, headers=__get_request_headers(), verify=False, timeout=timeout)
+            response = session.delete(url, headers=headers, verify=False, timeout=timeout)
     except Exception as ex:
         module.fail_json(msg='HTTP request error: ' + repr(ex))
     else:
@@ -89,12 +123,45 @@ def handle_request(module, session, method, url, params=None, rcode=200, timeout
         else:
             response_content = dict()
         if response_code == rcode:
-            return response_content
+            if '/zosmf/services/authenticate' in url:
+                return dict(response.headers)
+            else:
+                return response_content
         else:
             if 'messageText' in response_content:
                 return 'HTTP request error: ' + str(response_code) + ' : ' + response_content['messageText']
+            elif 'errorMsg' in response_content:
+                return 'HTTP request error: ' + str(response_code) + ' : ' + response_content['errorMsg']
+            elif 'return-code' in response_content:
+                return 'HTTP request error: ' + str(response_code) + ' : return-code=' \
+                    + str(response_content['return-code']) + ' reason-code=' + str(response_content['reason-code']) + ' reason=' + response_content['reason']
             else:
                 return 'HTTP request error: ' + str(response_code)
+
+
+def handle_request_raw(module, session, method, url, params=None, header=None, body=None, timeout=30):
+    headers = __get_request_headers()
+    if header is not None:
+        headers.update(header)
+    try:
+        if method == 'get':
+            response = session.get(url, params=params, headers=headers, verify=False, timeout=timeout)
+        elif method == 'put':
+            if body is not None:
+                response = session.put(url, data=body, headers=headers, verify=False, timeout=timeout)
+            else:
+                response = session.put(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
+        elif method == 'post':
+            if body is not None:
+                response = session.post(url, data=body, headers=headers, verify=False, timeout=timeout)
+            else:
+                response = session.post(url, data=json.dumps(params), headers=headers, verify=False, timeout=timeout)
+        elif method == 'delete':
+            response = session.delete(url, headers=headers, verify=False, timeout=timeout)
+    except Exception as ex:
+        module.fail_json(msg='HTTP request error: ' + repr(ex))
+    else:
+        return response
 
 
 def cmp_list(list1, list2):

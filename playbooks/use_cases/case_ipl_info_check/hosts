@@ -1,0 +1,6 @@
+# Copyright (c) IBM Corporation 2020
+
+# this group is used for demo playbooks
+[mySystems]
+system1
+system2

@@ -1,0 +1,32 @@
+# Copyright (c) IBM Corporation 2020 
+# Apache License, Version 2.0 (see https://opensource.org/licenses/Apache-2.0)
+
+---
+- name: Save the contents of each spool file - Send https request
+  uri:
+    url: "{{ file_item['records-url'] }}?mode=text"
+    method: GET
+    return_content: yes
+    headers:
+      X-CSRF-ZOSMF-HEADER: "ZOSMF"
+    user: "{{ user }}"
+    password: "{{ password }}"
+    client_cert: "{{ crt }}"
+    client_key: "{{ key }}"
+    force_basic_auth: yes
+    status_code: "200"
+    validate_certs: no
+  delegate_to: localhost
+  register: save_record_result
+  failed_when: no
+
+- include_tasks: handle_request_error.yml
+  vars:
+    expect_rcode: 200
+    result: "{{ save_record_result }}"
+
+- name: Save the contents of each spool file - Save to local file
+  copy:
+    content: "{{ save_record_result.content }}"
+    dest: "{{ save_dir.path }}/{{ file_item.ddname }}({{ file_item.id }})"
+  delegate_to: localhost

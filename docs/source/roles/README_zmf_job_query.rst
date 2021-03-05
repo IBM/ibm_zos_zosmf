@@ -5,7 +5,7 @@
 zmf_job_query
 =============
 
-**IBM z/OSMF collection** provides provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, check its return code and user specified content from spool files.
+**IBM z/OSMF collection** provides an Ansible role, referred to as **zmf_job_query**, to query a job running on z/OS, check its return code and user specified content from spool files, and save the user specified spool files on Ansible control node.
 
 Role Variables
 --------------
@@ -135,11 +135,39 @@ complete_check_times
   | **default**: 10
 
 complete_check_delay
-  The interval time between periodic checks of the job status.
+  The interval time (seconds) between periodic checks of the job status.
 
   | **required**: False
   | **type**: int
   | **default**: 5
+
+job_save_output_localpath
+  The local path on control node where the specified spool files should be saved to. For example: ``/tmp/job_output``. 
+  
+  This path can be absolute or relative. The role will fail if the parent directory of *job_save_output_localpath* is a read-only file system.
+  
+  The directory ``{{ job_save_output_localpath }}/{{ inventory_hostname }}/{{ job_name }}_{{ job_id }}/`` will be created to save the specified spool files.
+
+  For example: ``/tmp/job_output/SY1/JCLSAMP1_JOB00000/``.
+
+  Use *job_save_output_ddname* to specify the spool files that you want to save.
+
+  | **required**: False
+  | **type**: str
+
+job_save_output_ddname
+  A list specifies the list of spool files which should be saved on control node. For example: ``["JESYSMSG", "JESJCL"]``. 
+  
+  This variable only take effects when *job_save_output_localpath* is defined.
+  
+  The spool files listed in this variable will be saved as separate files and named as ``{{ spoolfile_name }}({{ spoolfile_id }})``.
+  
+  For example: ``/tmp/job_output/SY1/JCLSAMP1_JOB00000/JESYSMSG(4)``.
+
+  If this variable is omitted, all spool files will be saved on control node.
+  
+  | **required**: False
+  | **type**: list
 
 Dependencies
 ------------
