@@ -46,7 +46,7 @@ console_broadcastmsg_keyword
 
   This value can be a string or a regular expression. To use a regular expression, you must also set *console_broadcastmsg_reg=true*.
 
-  This parameter is designed to help user determine whether the broadcast messages issued after the command matches with user's expectation.
+  This variable is designed to help user determine whether the broadcast messages issued after the command matches with user's expectation.
 
   If *console_cmdresponse_keyword* is not specified, the module will fail if the specified keyword can not be detected from broadcast messages.
 
@@ -85,7 +85,7 @@ console_cmdresponse_keyword
 
   This value can be a string or a regular expression. To use a regular expression, you must also set *console_cmdresponse_reg=true*.
 
-  This parameter is designed to help user determine whether the command response matches with user's expectation.
+  This variable is designed to help user determine whether the command response matches with user's expectation.
 
   If *console_broadcastmsg_keyword* is not specified, the module will fail if the specified keyword can not be detected from the command response.
 

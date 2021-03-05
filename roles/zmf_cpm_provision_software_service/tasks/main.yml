@@ -8,6 +8,20 @@
   include_tasks: instance_dir_util.yml
   run_once: true
 
+
+# Support input_vars to be provided via playbook. If input_vars isn't set then set default below
+- name: Set input_vars as fact
+  set_fact:
+    input_vars: ""
+  when: input_vars is not defined
+
+# Allow zmf_body to be set in previous tasks. If zmf_body isn't set then set default below
+- name: Set zmf_body as fact
+  set_fact:
+    zmf_body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}",
+      "systems-nicknames":["{{ systems_nicknames }}"],"input-variables":{{ input_vars }}}'
+  when: zmf_body is not defined
+
 - name: Provision template
   uri:
     url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/psc/{{ cpm_template_name }}/actions/run"
@@ -22,7 +36,7 @@
     status_code: "200"
     validate_certs: no
     body_format: json
-    body: '{"domain-name":"{{ domain_name }}","tenant-name":"{{ tenant_name }}","systems-nicknames":["{{ systems_nicknames }}"]}'
+    body: "{{ zmf_body }}"
   delegate_to: localhost
   register: provision_results
 
@@ -47,6 +61,10 @@
   vars:
     instance_object_id: "{{ provision_results.json['registry-info']['object-id'] }}"
 
+- name: Set full_instance_json as fact
+  set_fact:
+    full_instance_json: ""
+
 - name: Get provisioned instance information
   uri:
     url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ provision_results.json['registry-info']['object-id'] }}"
@@ -67,7 +85,7 @@
   block:
     - name: Update fully provisioned instance information to local
       copy:
-        content: '{ "registry-info" : {{ full_instance_json.json | to_nice_json(indent=2) }}}'
+        content: '{ "registry-info" : {{ full_instance_json.json | default('') | to_nice_json(indent=2) }}}'
         dest: "{{ instance_record_dir }}/{{ inventory_hostname }}/{{ cpm_template_name }}-{{ provision_results.json['registry-info']['external-name'] }}.json"
       delegate_to: localhost
 

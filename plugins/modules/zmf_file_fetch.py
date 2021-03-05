@@ -18,7 +18,7 @@ DOCUMENTATION = r"""
 module: zmf_file_fetch
 short_description: Fetch USS file from z/OS
 description:
-    - Retrieve the contents of a z/OS UNIX System Services (USS) file from the remote z/OS system, and save them on Ansible control node.
+    - Retrieve the contents of a z/OS UNIX System Services (USS) file from z/OS system, and save them on Ansible control node.
     - USS file that already exists at I(file_dest) will be overwritten if it is different than the I(file_src).
 version_added: "2.9"
 author:
@@ -51,7 +51,6 @@ options:
                 description: Hostname of the z/OSMF server.
                 required: true
                 type: str
-                default: null
             zmf_port:
                 description: Port number of the z/OSMF server.
                 required: false
@@ -108,11 +107,10 @@ options:
         default: null
     file_src:
         description:
-            - USS file on the remote z/OS system to fetch.
+            - USS file on z/OS system to fetch.
             - This variable must consist of a fully qualified path and file name. For example, C(/etc/profile).
         required: true
         type: str
-        default: null
     file_dest:
         description:
             - The local directory on control node where the USS file should be saved to. For example, C(/tmp/file_output).
@@ -121,7 +119,6 @@ options:
             - For example, if I(zmf_host=zosmf.ibm.com), a USS file named C(/etc/profile) would be saved into C(/tmp/file_output/zosmf.ibm.com/etc/profile).
         required: true
         type: str
-        default: null
     file_flat:
         description:
             - Specifies whether to override the default behavior of appending hostname/path/to/file to the destination.
@@ -133,7 +130,7 @@ options:
     file_search:
         description:
             - Specifies a series of parameters that are used to search the USS file.
-            - These parameters only take effects when I(file_data_type=text).
+            - This variable only take effects when I(file_data_type=text).
             - If this variable is specified, only the matched contents in the USS file will be fetched to the destination directory.
             - The matched contents in the USS file will be saved as C({{ file_dest }}/{{ zmf_host }}/{ file_src }}.search) on control node.
             - For example, the matched contents in the USS file named C(/etc/profile) would be saved as C(....../etc/profile.search).
@@ -147,7 +144,6 @@ options:
                     - The USS file is searched for the first line that contains the string or matches the given extended regular expression.
                 required: true
                 type: str
-                default: null
             insensitive:
                 description:
                     - Specifies whether the comparison of I(keyword) is case insensitive.
@@ -178,7 +174,7 @@ options:
     file_encoding:
         description:
             - Specifies which encodings the fetched USS file should be converted from and to.
-            - These parameters only take effects when I(file_data_type=text).
+            - This variable only take effects when I(file_data_type=text).
         required: false
         type: dict
         default: null
@@ -225,7 +221,7 @@ options:
         description:
             - Specifies the checksum to be used to verify that the USS file to be fetched is not changed since the checksum was generated.
             - If the checksum is matched which means the USS file is not changed, the USS file won't be fetched.
-        required: False
+        required: false
         type: str
         default: null
 requirements:
@@ -355,7 +351,7 @@ import os
 
 def validate_module_params(module):
     # validate file_src
-    if not (module.params['file_src'] is not None and module.params['file_src'].strip() != ''):
+    if not (module.params['file_src'] is not None and module.params['file_src'].strip() != '' and not module.params['file_src'].strip().endswith('/')):
         module.fail_json(msg='Missing required argument or invalid argument: file_src.')
     # validate file_dest
     if not (module.params['file_dest'] is not None and module.params['file_dest'].strip() != ''):
@@ -496,6 +492,13 @@ def fetch_file(module):
     fetch_src = file
     if not fetch_src.startswith('/'):
         fetch_src = '/' + fetch_src
+    # setup file parent path and file name
+    f_path = fetch_src[:fetch_src.rfind('/')]
+    f_name = fetch_src[fetch_src.rfind('/') + 1:]
+    if f_path.startswith('/'):
+        f_path = f_path[1:]
+    module.params['f_path'] = f_path
+    module.params['f_name'] = f_name
     # step1 - combine request headers
     request_headers = dict()
     if module.params['file_data_type'] == 'text' and module.params['file_encoding'] is not None:

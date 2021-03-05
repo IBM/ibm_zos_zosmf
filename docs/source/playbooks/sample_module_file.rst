@@ -2,16 +2,16 @@
 .. Copyright (c) IBM Corporation 2020                                        .
 .. ...........................................................................
 
-sample_module_file_copy
-=======================
+sample_module_file
+==================
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This `sample playbook`_ shows how to copy data to a USS file on z/OS system via z/OSMF.
+This `sample playbook`_ shows how to manage USS file or directory on z/OS system via z/OSMF.
 
 .. code-block:: yaml
 
-   - name: sample of copying data to a z/OS USS file
+   - name: sample of managing z/OS USS file or directory
      hosts: file
      gather_facts: no
      collections:
@@ -31,19 +31,22 @@ This `sample playbook`_ shows how to copy data to a USS file on z/OS system via 
            zmf_password: "{{ zmf_password }}"
          register: result_auth
          delegate_to: localhost
-       - zmf_file_copy:
+       - zmf_file:
            zmf_credential: "{{ result_auth }}" # Authentication credentials returned by module zmf_authenticate
-           file_src: "/tmp/file_input/profile"
-           # file_content: "Sample profile\nTZ=EST5EDT\n"
-           file_dest: "/etc/profile"
-           # file_force: true # Whether the target USS file must always be overwritten. Default is true
-           # file_data_type: "text" # Whether data conversion is to be performed on the data to be copied. Default is text (data conversion is performed)
-           # file_encoding: # Which encodings the data to be copied should be converted from and to
-           #   from: ISO8859-1
-           #   to: IBM-1047
-           # file_crlf: false # Whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF)
-           # file_diff: false # Whether the input consists of commands in the same format as produced by the z/OS UNIX 'diff -e' command
-           # file_checksum: "93822124D6E66E2213C64B0D10800224" # The checksum to be used to verify that the target USS file to copy to is not changed since the checksum was generated
+           file_path: "/etc/profile" # Path to the USS file or directory being managed
+           file_state: "file" # The final state desired for specified USS file or directory
+           # file_mode: # The permission the resulting USS file or directory should have
+           #   mode: "755"
+           #   recursive: false
+           # file_owner: # Indicates the function change owner
+           #   owner: "500000"
+           #   group: "0"
+           #   recursive: false
+           # file_tag: # Indicates the function change tag
+           #   tag: "mixed"
+           #   codeset: "IBM-1047"
+           #   recursive: false
+           # file_new_name: "/etc/profile.bak" # The new name of the USS file or directory
          register: result
          delegate_to: localhost
        - debug: var=result
@@ -56,18 +59,18 @@ This `sample playbook`_ shows how to copy data to a USS file on z/OS system via 
 
   * The inventory file `hosts`_ needs to be updated to identify the target z/OS managed node. The USS file managed by each z/OS managed node can be accessed by at least one z/OSMF server. Typically, this could be done by setup one z/OSMF in the same sysplex.
   
-  * Module `zmf_authenticate`_ is supported by z/OSMF APAR PH12143 (PTF UI66511 for V2R3, PTF UI66512 for V2R4). You are also allowed to authenticate with z/OSMF server in module `zmf_file_copy`_ directly.
+  * Module `zmf_authenticate`_ is supported by z/OSMF APAR PH12143 (PTF UI66511 for V2R3, PTF UI66512 for V2R4). You are also allowed to authenticate with z/OSMF server in module `zmf_file`_ directly.
 
-For more details about module variables, see `zmf_file_copy`_.
+For more details about module variables, see `zmf_file`_.
 
 
 .. _Playbook Documentation:
    ../playbooks.html
 .. _sample playbook:
-   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_module_file_copy.yml
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_module_file.yml
 .. _hosts:
    https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts
-.. _zmf_file_copy:
-   ../modules/zmf_file_copy.html
+.. _zmf_file:
+   ../modules/zmf_file.html
 .. _zmf_authenticate:
    ../modules/zmf_authenticate.html

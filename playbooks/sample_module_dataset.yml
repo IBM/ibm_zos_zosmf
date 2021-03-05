@@ -1,10 +1,10 @@
 # Copyright (c) IBM Corporation 2020 
 
-# This sample playbook demonstrates using module `zmf_dataset_copy` to copy data to a z/OS data set or member.
+# This sample playbook demonstrates using module `zmf_dataset` to manage z/OS data set or member
 # Example:
-# ansible-playbook -i hosts sample_module_dataset_copy.yml
+# ansible-playbook -i hosts sample_module_dataset.yml
 
-- name: sample of copying data to a z/OS data set or member
+- name: sample of managing z/OS data set or member
   hosts: dataset
   gather_facts: no
   collections:
@@ -24,24 +24,23 @@
         zmf_password: "{{ zmf_password }}"
       register: result_auth
       delegate_to: localhost
-    - zmf_dataset_copy:
+    - zmf_dataset:
         zmf_credential: "{{ result_auth }}"
-        dataset_src: "/tmp/dataset_input/member01"
-        # dataset_content: "Sample profile\nTZ=EST5EDT\n"
-        dataset_dest: "ZOSMF.ANSIBLE.PDS(MEMBER)"
-        # dataset_src_zos: false
-        # dataset_dest_volser: "VOL001"
-        # dataset_src_volser: "VOL002"
-        # dataset_force: true
+        dataset_name: "ZOSMF.ANSIBLE.PS"
+        dataset_state: "present"
+        # dataset_volser: "VOL001"
+        # dataset_type: "PS"
+        # dataset_replace: false
+        # dataset_create_attributes:
+        #   recfm: "FB"
+        #   lrecl: 80
+        #   alcunit: "TRK"
+        #   primary: 10
+        #   secondary: 5
+        #   unit: "3390"
         # dataset_create_like: "ZOSMF.ANSIBLE.MODEL"
-        # dataset_data_type: "text"
-        # dataset_encoding:
-        #   from: ISO8859-1
-        #   to: IBM-1047
-        # dataset_crlf: false
-        # dataset_diff: false
+        # dataset_new_name: "ZOSMF.ANSIBLE.PS01"
         # dataset_migrate_recall: "wait"
-        # dataset_checksum: "93822124D6E66E2213C64B0D10800224"
       register: result
       delegate_to: localhost
     - debug: var=result

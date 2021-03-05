@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v2.5.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.5.0) - 2021-03-05
+### Added
+- add modules: `zmf_dataset`, `zmf_file`
+- enhance for module: `zmf_dataset_copy`: support to copy file or data set from z/OS system
+- enhance for role: `zmf_cpm_provision_software_service`: add input_vars parameter for CPM provision role, add zmf_body parameter for using playbook in full automation
+
 ## [v2.4.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.4.0) - 2020-12-30
 ### Added
 - add modules: `zmf_dataset_copy`, `zmf_file_copy`

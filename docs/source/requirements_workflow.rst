@@ -5,16 +5,16 @@
 Requirements - Operate z/OS Workflows
 =====================================
 
-To use the modules and roles which supplied to interact with **z/OSMF Workflows** in your playbook, besides the `Overall Requirements`_, the following nodes require specific versions of software:
+* module: `zmf_workflow`_
+* role: `zmf_workflow_complete`_
+
+To use above modules and roles, it needs to ensure **z/OSMF Workflows** is configured in z/OSMF. Please refer to `here`_ for a quick approach to set up z/OSMF dependencies. 
+
+Besides the `Overall Requirements`_, the following nodes require specific versions of software:
 
 **Control Node**:
 
 * `Requests library for Python`_: 2.23 or later
-
-   It is required when using:
-  
-   * module: `zmf_workflow`_
-   * role: `zmf_workflow_complete`_
 
 
 .. _Overall Requirements:
@@ -25,3 +25,5 @@ To use the modules and roles which supplied to interact with **z/OSMF Workflows*
    modules/zmf_workflow.html
 .. _zmf_workflow_complete:
    roles/README_zmf_workflow_complete.html
+.. _here:
+   https://github.com/IBM/ibm_zos_zosmf/tree/master/docs/zmf_sample_conf/README.md

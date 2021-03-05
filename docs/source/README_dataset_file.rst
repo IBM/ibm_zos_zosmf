@@ -5,9 +5,7 @@
 Operate z/OS Data Sets and UNIX Files
 =====================================
 
-**IBM z/OSMF collection** provides several modules to work with z/OS data sets and UNIX files. You can use these modules to fetch z/OS data sets and UNIX files from the remote z/OS system to Ansible control node, and copy z/OS data sets and UNIX files from Ansible control node to the remote z/OS system.
-
-.. **IBM z/OSMF collection** provides several modules to work with z/OS data sets and UNIX files. You can use these modules to fetch z/OS data sets and UNIX files from the remote z/OS system to Ansible control node, copy z/OS data sets and UNIX files from Ansible control node to the remote z/OS system, and manage z/OS data sets and UNIX files on the remote z/OS system (create, delete and set attributes).
+**IBM z/OSMF collection** provides several modules to work with z/OS data sets and UNIX files. You can use these modules to fetch z/OS data sets and UNIX files from z/OS system to Ansible control node, copy z/OS data sets and UNIX files from Ansible control node to z/OS system, and manage z/OS data sets and UNIX files on z/OS system.
 
 .. note::
 
@@ -18,19 +16,27 @@ Modules
 
 * `zmf_dataset_fetch`_:
    
-   This module can be used to retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from the remote z/OS system, and save them on Ansible control node.
+   This module can be used to retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from z/OS system, and save them on Ansible control node.
 
 * `zmf_file_fetch`_:
    
-   This module can be used to retrieve the contents of a z/OS UNIX System Services (USS) file from the remote z/OS system, and save them on Ansible control node.
+   This module can be used to retrieve the contents of a z/OS UNIX System Services (USS) file from z/OS system, and save them on Ansible control node.
 
 * `zmf_dataset_copy`_:
    
-   This module can be used to copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.
+   This module can be used to copy data from Ansible control node or z/OS system and save it as a data set or data set member. If the source is from z/OS system, it could be a USS file or data set or data set member.
 
 * `zmf_file_copy`_:
    
-   This module can be used to copy data from Ansible control node to a z/OS UNIX System Services (USS) file on the remote z/OS system.
+   This module can be used to copy data from Ansible control node to a z/OS UNIX System Services (USS) file on z/OS system.
+
+* `zmf_dataset`_:
+   
+   This module can be used to create, delete and operate on a sequential or partitioned data set, or a member of partitioned data set (PDS or PDSE) on z/OS system. The available operations include rename data set or member, migrate data set and recall the migrated data set.
+
+* `zmf_file`_:
+   
+   This module can be used to create, delete and operate on a z/OS UNIX System Services (USS) file or a directory on z/OS system. The available operations include rename, change mode, change owner and change tag.
 
 Requirements
 ------------
@@ -51,6 +57,10 @@ See the section `Playbooks`_.
    modules/zmf_dataset_copy.html
 .. _zmf_file_copy:
    modules/zmf_file_copy.html
+.. _zmf_dataset:
+   modules/zmf_dataset.html
+.. _zmf_file:
+   modules/zmf_file.html
 .. _Requirements:
    requirements_dataset_file.html
 .. _Playbooks:

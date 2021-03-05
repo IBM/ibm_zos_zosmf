@@ -18,7 +18,7 @@ DOCUMENTATION = r"""
 module: zmf_file_copy
 short_description: Copy data to z/OS USS file
 description:
-    - Copy data from Ansible control node to a z/OS UNIX System Services (USS) file on the remote z/OS system.
+    - Copy data from Ansible control node to a z/OS UNIX System Services (USS) file on z/OS system.
     - If the target USS file already exists, it can be overwritten. If the target USS file does not exist, it can be created with mode 644.
 version_added: "2.9"
 author:
@@ -51,7 +51,6 @@ options:
                 description: Hostname of the z/OSMF server.
                 required: true
                 type: str
-                default: null
             zmf_port:
                 description: Port number of the z/OSMF server.
                 required: false
@@ -126,11 +125,10 @@ options:
         default: null
     file_dest:
         description:
-            - USS file on the remote z/OS system where the data should be copied to.
+            - USS file on z/OS system where the data should be copied to.
             - This variable must consist of a fully qualified path and file name. For example, C(/etc/profile).
         required: true
         type: str
-        default: null
     file_force:
         description:
             - Specifies whether the target USS file must always be overwritten.
@@ -160,7 +158,7 @@ options:
     file_encoding:
         description:
             - Specifies which encodings the data to be copied should be converted from and to.
-            - These parameters only take effects when I(file_data_type=text) and I(file_diff=false).
+            - This variable only take effects when I(file_data_type=text) and I(file_diff=false).
         required: false
         type: dict
         default: null
@@ -205,7 +203,7 @@ options:
             - Specifies the checksum to be used to verify that the target USS file to copy to is not changed since the checksum was generated.
             - The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.
             - This variable only take effects when I(file_force=true).
-        required: False
+        required: false
         type: str
         default: null
 requirements:
@@ -268,7 +266,7 @@ message:
     sample:
         sample1: "The target USS file /etc/profile is created and updated successfully."
         sample2: "The target USS file /etc/profile is updated successfully."
-        sample7: "No data is copied since the target USS file /etc/profile exists and file_force is set to False."
+        sample7: "No data is copied since the target USS file /etc/profile already exists and file_force is set to False."
 file_checksum:
     description: The checksum of the updated USS file.
     returned: on success
@@ -284,6 +282,8 @@ from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_util import 
 from ansible_collections.ibm.ibm_zos_zosmf.plugins.module_utils.zmf_file_api import (
     call_file_api
 )
+import json
+import os
 
 
 def validate_module_params(module):
@@ -291,8 +291,14 @@ def validate_module_params(module):
     if ((module.params['file_src'] is None or module.params['file_src'].strip() == '')
             and (module.params['file_content'] is None or module.params['file_content'].strip() == '')):
         module.fail_json(msg='Missing required argument or invalid argument: either file_src or file_content is required.')
+    elif module.params['file_src'] is not None and module.params['file_src'].strip() != '':
+        try:
+            if not os.path.isfile(module.params['file_src'].strip()):
+                module.fail_json(msg='file_src should be a path of a file.')
+        except OSError as ex:
+            module.fail_json(msg='Failed to read content of file_src ' + module.params['file_src'].strip() + ' ---- OS error: ' + str(ex))
     # validate file_dest
-    if not (module.params['file_dest'] is not None and module.params['file_dest'].strip() != ''):
+    if not (module.params['file_dest'] is not None and module.params['file_dest'].strip() != '' and not module.params['file_dest'].strip().endswith('/')):
         module.fail_json(msg='Missing required argument or invalid argument: file_dest.')
     # validate file_force and file_checksum
     if module.params['file_force'] is False and module.params['file_checksum'] is not None and module.params['file_checksum'].strip() != '':
@@ -364,14 +370,22 @@ def copy_file(module):
     copy_src = None
     if module.params['file_src'] is not None and module.params['file_src'].strip() != '':
         copy_src = module.params['file_src'].strip()
+    # setup file parent path and file name
+    f_path = copy_dest[:copy_dest.rfind('/')]
+    f_name = copy_dest[copy_dest.rfind('/') + 1:]
+    if f_path.startswith('/'):
+        f_path = f_path[1:]
+    module.params['f_path'] = f_path
+    module.params['f_name'] = f_name
     # step1 - check if the target USS file exists when file_force=false
     if module.params['file_force'] is False:
         res_list = call_file_api(module, session, 'list')
-        res_cd = res_list.status_code
         if res_list.status_code == 200:
-            # not fail - no data is copied since the target USS file exists
-            copy_result['message'] = 'No data is copied since the target USS file ' + copy_dest + ' exists and file_force is set to False.'
-            module.exit_json(**copy_result)
+            res_content = json.loads(res_list.content)
+            if 'returnedRows' in res_content and res_content['returnedRows'] > 0:
+                # not fail - no data is copied since the target USS file exists
+                copy_result['message'] = 'No data is copied since the target USS file ' + copy_dest + ' already exists and file_force is set to False.'
+                module.exit_json(**copy_result)
     # step2 - read file_src or file_content
     f_read = None
     request_body = None
@@ -415,14 +429,14 @@ def copy_file(module):
             # fail - file has been modified when file_checksum is specified (412)
             module.fail_json(
                 msg='Failed to copy data to the target USS file ' + copy_dest + ' ---- the target USS file has been modified and its checksum is: '
-                + res_copy.headers['Etag']
+                    + res_copy.headers['Etag']
             )
         else:
             # fail - return JSON error report
             res_error = res_copy.json()
             module.fail_json(
                 msg='Failed to copy data to the target USS file ' + copy_dest + ' ---- Http request error: '
-                + str(res_cd) + ': ' + str(res_error)
+                    + str(res_cd) + ': ' + str(res_error)
             )
     else:
         # handle response

@@ -26,7 +26,7 @@
       delegate_to: localhost
     - zmf_dataset_fetch:
         zmf_credential: "{{ result_auth }}"
-        dataset_src: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
+        dataset_src: "ZOSMF.ANSIBLE.PDS(MEMBER)"
         dataset_dest: "/tmp/dataset_output"
         # dataset_volser: "VOL001" 
         # dataset_flat: false 

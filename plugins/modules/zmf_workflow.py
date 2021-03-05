@@ -25,25 +25,6 @@ author:
     - Yang Cao (@zosmf-Young)
     - Yun Juan Yang (@zosmf-Robyn)
 options:
-    state:
-        description:
-            - Final state desired for the specified workflow.
-            - >
-              If I(state=existed), indicate whether a workflow with the given name does not exist,
-              or exists with same or different definition file, variables and properties.
-            - >
-              If I(state=started), create a workflow if it does not exist, and start it.
-            - >
-              If I(state=deleted), delete a workflow if it exists.
-            - >
-              If I(state=check), check the status of a workflow.
-        required: true
-        type: str
-        choices:
-            - existed
-            - started
-            - deleted
-            - check
     zmf_credential:
         description:
             - Authentication credentials, returned by module C(zmf_authenticate), for the successful authentication with z/OSMF server.
@@ -70,7 +51,6 @@ options:
                 description: Hostname of the z/OSMF server.
                 required: true
                 type: str
-                default: null
             zmf_port:
                 description: Port number of the z/OSMF server.
                 required: false
@@ -125,6 +105,25 @@ options:
         required: false
         type: str
         default: null
+    state:
+        description:
+            - Final state desired for the specified workflow.
+            - >
+              If I(state=existed), indicate whether a workflow with the given name does not exist,
+              or exists with same or different definition file, variables and properties.
+            - >
+              If I(state=started), create a workflow if it does not exist, and start it.
+            - >
+              If I(state=deleted), delete a workflow if it exists.
+            - >
+              If I(state=check), check the status of a workflow.
+        required: true
+        type: str
+        choices:
+            - existed
+            - started
+            - deleted
+            - check
     workflow_name:
         description:
             - Descriptive name of the workflow.
@@ -257,10 +256,10 @@ options:
             - Category for the workflow.
         required: false
         type: str
+        default: null
         choices:
             - general
             - configuration
-        default: null
     workflow_vendor:
         description:
             - Name of the vendor that provided the workflow definition file.

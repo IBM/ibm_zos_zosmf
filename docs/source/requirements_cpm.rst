@@ -5,7 +5,13 @@
 Requirements - Provision and Manage z/OS Software Instances
 ===========================================================
 
-To use the modules and roles which supplied to interact with **Cloud Provisioning & Management (CP&M)** in your playbook, besides the `Overall Requirements`_, the following nodes require specific versions of software:
+* role: `zmf_cpm_provision_software_service`_
+* role: `zmf_cpm_manage_software_instance`_
+* role: `zmf_cpm_remove_software_instance`_
+
+To use above modules and roles, it needs to ensure **Cloud Provisioning & Management (CP&M)** is configured in z/OSMF. 
+
+Besides the `Overall Requirements`_, the following nodes require specific versions of software:
 
 **Managed Node**:
 
@@ -13,19 +19,7 @@ To use the modules and roles which supplied to interact with **Cloud Provisionin
 
    The z/OSMF server must be installed and active on **each** managed z/OS system.
 
-   It is required when using:
-
-   * role: `zmf_cpm_provision_software_service`_
-   * role: `zmf_cpm_manage_software_instance`_
-   * role: `zmf_cpm_remove_software_instance`_
-
-* `Cloud Provisioning & Management`_:
-
-   It is required when using:
-
-   * role: `zmf_cpm_provision_software_service`_
-   * role: `zmf_cpm_manage_software_instance`_
-   * role: `zmf_cpm_remove_software_instance`_
+* `Cloud Provisioning & Management`_
 
 
 .. _Overall Requirements:
