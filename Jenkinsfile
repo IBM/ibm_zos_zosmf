@@ -43,15 +43,15 @@ pipeline {
 			echo "Remote workspace is ${remoteWorkspace}"
 			
 			dir("${remoteWorkspace}") {
-				if (fileExists('ibm-ibm_zos_zosmf-2.3.0.tar.gz')) {
-					echo "ibm-ibm_zos_zosmf-2.3.0.tar.gz existed"
-					sh 'rm ibm-ibm_zos_zosmf-2.3.0.tar.gz'
+				if (fileExists('ibm-ibm_zos_zosmf-2.5.0.tar.gz')) {
+					echo "ibm-ibm_zos_zosmf-2.5.0.tar.gz existed"
+					sh 'rm ibm-ibm_zos_zosmf-2.5.0.tar.gz'
 					sh '/usr/local/bin/ansible-galaxy collection build'
 				} else {
 					sh '/usr/local/bin/ansible-galaxy collection build'
 				}
 				sh "pwd"
-				sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.3.0.tar.gz'
+				sh '/usr/local/bin/ansible-galaxy collection install ibm-ibm_zos_zosmf-2.5.0.tar.gz'
 			}
 		}
             }
@@ -102,6 +102,25 @@ pipeline {
 		echo 'FileAPI Fetch BVT'
 		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
 			sh '/usr/local/bin/ansible-playbook FVT-FIle-Fetch-CICD1.yml'
+		}
+		echo 'DatasetAPI Copy BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook FVT-Dataset-Copy-CICD1.yml'
+		}
+		echo 'Dataset Create/Rename/Delete/Remote Copy BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_copy_remote_PDS2PDS.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_create_mem.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_rename.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_dataset_delete.yml'
+		}
+		echo 'FileAPI Create/Rename/changemode/Delete BVT'
+		dir("/Users/strangepear2019/.ansible/collections/ansible_collections/ibm/ibm_zos_zosmf/tests/CICD/playbooks") {
+			sh '/usr/local/bin/ansible-playbook CICDtest_file_create_dir.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_file_create_file.yml'
+			sh '/usr/local/bin/ansible-playbook CICDTest_file_rename_file.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_file_changemode_dir.yml'
+			sh '/usr/local/bin/ansible-playbook CICDtest_file_delete_dir.yml'
 		}
 		echo 'CICD test successfully!'
             }
