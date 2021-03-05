@@ -1,10 +1,10 @@
 # Copyright (c) IBM Corporation 2020 
 
-# This sample playbook demonstrates using module `zmf_dataset_fetch` to fetch data set from z/OS.
+# This sample playbook demonstrates using module `zmf_dataset_copy` to copy data to a z/OS data set or member.
 # Example:
-# ansible-playbook -i hosts sample_module_dataset_fetch.yml
+# ansible-playbook -i hosts sample_module_dataset_copy.yml
 
-- name: sample of fetching data set from z/OS
+- name: sample of copying data to a z/OS data set or member
   hosts: dataset
   gather_facts: no
   collections:
@@ -19,12 +19,15 @@
       delegate_to: localhost
     - zmf_dataset_copy:
         zmf_credential: "{{ result_auth }}"
-        dataset_src: "files/job_sample_jcl.jcl"
+        #dataset_src: "/tmp/dataset_input/member01"
+        dataset_src: "DEBUG26.SVT.JOBS"
         # dataset_content: "Sample profile\nTZ=EST5EDT\n"
-        dataset_dest: "DEBUG26.SVT.JOBS(CICDSAMP)"
-        # dataset_create_like: "ZOSMF.YUN.PDS"
-        # dataset_volser: "PEVTS2"
+        dataset_dest: "DEBUG26.SVT.JOBS.PDS1"
+        dataset_src_zos: true
+        # dataset_dest_volser: "VOL001"
+        # dataset_src_volser: "PEVTS3"
         # dataset_force: true
+        # dataset_create_like: "ZOSMF.ANSIBLE.MODEL"
         # dataset_data_type: "text"
         # dataset_encoding:
         #   from: ISO8859-1

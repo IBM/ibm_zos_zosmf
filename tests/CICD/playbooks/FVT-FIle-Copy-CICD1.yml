@@ -21,7 +21,7 @@
         zmf_credential: "{{ result_auth }}"
         file_src: "files/job_sample_jcl.jcl"
         # file_content: "Sample profile\nTZ=EST5EDT\n"
-        file_dest: "/var/zosmf/data/sample"
+        file_dest: "/tmp/sample.jcl"
         # file_force: true
         # file_data_type: "text"
         # file_encoding:

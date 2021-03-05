@@ -1,0 +1,38 @@
+# Copyright (c) IBM Corporation 2020 
+
+# This sample playbook demonstrates using module `zmf_file` to manage z/OS USS file or directory
+# Example:
+# ansible-playbook -i hosts sample_module_file.yml
+
+- name: sample of managing z/OS USS file or directory
+  hosts: file
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  tasks:
+    - zmf_authenticate:
+        zmf_host: "{{ zmf_host }}"
+        zmf_port: "{{ zmf_port }}"
+        zmf_user: "{{ zmf_user }}"
+        zmf_password: "{{ zmf_password }}"
+      register: result_auth
+      delegate_to: localhost
+    - zmf_file:
+        zmf_credential: "{{ result_auth }}"
+        file_path: "/tmp/testDir/test001"
+        file_state: "file"
+        # file_mode:
+        #   mode: "755"
+        #   recursive: false
+        # file_owner:
+        #   owner: "500000"
+        #   group: "0"
+        #   recursive: false
+        # file_tag:
+        #   tag: "mixed"
+        #   codeset: "IBM-1047"
+        #   recursive: false
+        file_new_name: "/tmp/testDir/test001.bak"
+      register: result
+      delegate_to: localhost
+    - debug: var=result
