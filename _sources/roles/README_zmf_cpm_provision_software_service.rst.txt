@@ -76,6 +76,16 @@ systems_nicknames
 
   | **required**: False
   | **type**: str
+  
+input_vars
+  Input variable names and values for the software service to be provisioned 
+  
+  This variable is required if software service expects specific inputs from user. This is a dictionary variable and needs to be in following format.
+
+  [{ "name":"VAR1","value":"VAR1_VALUE"},{..},...]
+
+  | **required**: False
+  | **type**: dict
 
 api_polling_retry_count
   Total retries number before role exit with failure waiting on instance action to complete. 

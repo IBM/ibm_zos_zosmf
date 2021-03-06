@@ -6,6 +6,26 @@
 Releases
 ========
 
+Version 2.5.0
+=============
+
+`v2.5.0`_
+
+Added
+-----
+  * add modules: `zmf_dataset`, `zmf_file`
+  * enhance for module: `zmf_dataset_copy`: support to copy file or data set from z/OS system
+  * enhance for role: `zmf_cpm_provision_software_service`: add input_vars parameter for CPM provision role, add zmf_body parameter for using playbook in full automation
+
+Availability
+------------
+  * `Galaxy`_
+  * `GitHub`_
+
+Reference
+---------
+  * Supported by z/OSMF APAR PH22030 (PTF UI68974 for V2R3, PTF UI68975 for V2R4)
+
 Version 2.4.0
 =============
 
@@ -19,7 +39,6 @@ Fixed
 -----
   * fix for role `zmf_workflow_complete`: refine final_result
   * fix for module `zmf_console_command`: console_cmdresponse_reg and console_broadcastmsg_reg should be bool type
-
 
 Availability
 ------------
@@ -237,3 +256,5 @@ Availability
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.3.0
 .. _v2.4.0:
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.4.0
+.. _v2.5.0:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.5.0

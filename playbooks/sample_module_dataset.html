@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sample_role_cpm_provision &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
+  <title>sample_module_dataset &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sample_role_cpm_remove_instance" href="sample_role_cpm_remove_instance.html" />
-    <link rel="prev" title="sample_role_cpm_manage_instance" href="sample_role_cpm_manage_instance.html" /> 
+    <link rel="next" title="sample_module_dataset_copy" href="sample_module_dataset_copy.html" />
+    <link rel="prev" title="sample_module_console_command" href="sample_module_console_command.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,7 +97,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#group-vars">Group Vars</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../playbooks.html#sample-playbooks">Sample Playbooks</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="sample_module_console_command.html">sample_module_console_command</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sample_module_dataset.html">sample_module_dataset</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sample_module_dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_dataset_copy.html">sample_module_dataset_copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_dataset_fetch.html">sample_module_dataset_fetch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_file.html">sample_module_file</a></li>
@@ -105,7 +105,7 @@
 <li class="toctree-l3"><a class="reference internal" href="sample_module_file_fetch.html">sample_module_file_fetch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_workflow.html">sample_module_workflow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_manage_instance.html">sample_role_cpm_manage_instance</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">sample_role_cpm_provision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_provision.html">sample_role_cpm_provision</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_cpm_remove_instance.html">sample_role_cpm_remove_instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_deploy_cics_application.html">sample_role_deploy_cics_application</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_role_job_complete.html">sample_role_job_complete</a></li>
@@ -176,14 +176,14 @@
         
           <li><a href="../playbooks.html">Playbooks</a> &raquo;</li>
         
-      <li>sample_role_cpm_provision</li>
+      <li>sample_module_dataset</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/playbooks/sample_role_cpm_provision.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/playbooks/sample_module_dataset.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -197,40 +197,62 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sample-role-cpm-provision">
-<h1>sample_role_cpm_provision<a class="headerlink" href="#sample-role-cpm-provision" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="sample-module-dataset">
+<h1>sample_module_dataset<a class="headerlink" href="#sample-module-dataset" title="Permalink to this headline">¶</a></h1>
 <p>For configuration and setup, see <a class="reference external" href="../playbooks.html">Playbook Documentation</a>.</p>
-<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_role_cpm_provision.yml">sample playbook</a> shows how to provision an instance in z/OSMF Cloud Provisioning &amp; Management (CP&amp;M).</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of provisioning software instance</span>
-  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cpmHost1</span>
+<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_module_dataset.yml">sample playbook</a> shows how to manage z/OS data set or member on z/OS system via z/OSMF.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of managing z/OS data set or member</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dataset</span>
   <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
   <span class="nt">collections</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ibm.ibm_zos_zosmf</span>
-  <span class="nt">vars</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">instance_info_json_path</span> <span class="c1"># will store instance json information globally thru the playbook</span>
   <span class="nt">vars_prompt</span><span class="p">:</span>
     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_user</span>
-      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">zOSMF</span><span class="nv"> </span><span class="s">username&quot;</span>
+      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">zOSMF</span><span class="nv"> </span><span class="s">username</span><span class="nv"> </span><span class="s">(skip</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">zmf_crt</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">zmf_key</span><span class="nv"> </span><span class="s">are</span><span class="nv"> </span><span class="s">supplied)&quot;</span>
       <span class="nt">private</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_password</span>
-      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">zOSMF</span><span class="nv"> </span><span class="s">password&quot;</span>
+      <span class="nt">prompt</span><span class="p">:</span> <span class="s">&quot;Enter</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">zOSMF</span><span class="nv"> </span><span class="s">password</span><span class="nv"> </span><span class="s">(skip</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">zmf_crt</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">zmf_key</span><span class="nv"> </span><span class="s">are</span><span class="nv"> </span><span class="s">supplied)&quot;</span>
       <span class="nt">private</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
   <span class="nt">tasks</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">include_role</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">zmf_cpm_provision_software_service</span>
-      <span class="nt">vars</span><span class="p">:</span>
-        <span class="nt">cpm_template_name</span><span class="p">:</span> <span class="s">&#39;&lt;fill-me-template-name&gt;&#39;</span> <span class="c1"># The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning &amp; Management</span>
-        <span class="nt">domain_name</span><span class="p">:</span> <span class="s">&#39;&lt;fill-me-domain-name&gt;&#39;</span> <span class="c1"># The value for property domain_name which identifies CP&amp;M domain in which specified template is defined</span>
-        <span class="nt">tenant_name</span><span class="p">:</span> <span class="s">&#39;&lt;tenant-name&gt;&#39;</span> <span class="c1"># The value for optional property tenant_name which identifies CP&amp;M tenant that is associated with the zmf_user that is provisioning the template</span>
-        <span class="nt">systems_nicknames</span><span class="p">:</span> <span class="s">&#39;&lt;system-name&gt;&#39;</span> <span class="c1"># The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned</span>
-        <span class="nt">input_vars</span><span class="p">:</span> <span class="s">&#39;&lt;input-variables&gt;&#39;</span> <span class="c1"># The value for optional property input_vars which identifies a list of dictionary objects that provides one or more input variables required for the template in &quot;name&quot; &quot;value&quot; format e.g. [{ &quot;name&quot;:&quot;VAR_NAME&quot;,&quot;value&quot;:&quot;VAR_VALUE&quot;}...]</span>
+    <span class="p p-Indicator">-</span> <span class="nt">zmf_authenticate</span><span class="p">:</span>
+        <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">zmf_host</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">zmf_port</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">zmf_port</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">zmf_user</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">zmf_user</span><span class="nv"> </span><span class="s">}}&quot;</span>
+        <span class="nt">zmf_password</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">zmf_password</span><span class="nv"> </span><span class="s">}}&quot;</span>
+      <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result_auth</span>
+      <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+    <span class="p p-Indicator">-</span> <span class="nt">zmf_dataset</span><span class="p">:</span>
+        <span class="nt">zmf_credential</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">result_auth</span><span class="nv"> </span><span class="s">}}&quot;</span> <span class="c1"># Authentication credentials returned by module zmf_authenticate</span>
+        <span class="nt">dataset_name</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span> <span class="c1"># Name of the data set or member being managed</span>
+        <span class="nt">dataset_state</span><span class="p">:</span> <span class="s">&quot;present&quot;</span> <span class="c1"># The final state desired for specified data set or member</span>
+        <span class="c1"># dataset_volser: &quot;VOL001&quot; # The volume serial to identify the volume to be searched for an uncataloged data set or member</span>
+        <span class="c1"># dataset_type: &quot;PS&quot; # The type to be used when creating a data set or member. Default is PS</span>
+        <span class="c1"># dataset_replace: false # Whether the existing data set or member will be replaced. Default is false</span>
+        <span class="c1"># dataset_create_attributes: # The attributes to be used to create a sequential or partitioned data set</span>
+        <span class="c1">#   recfm: &quot;FB&quot;</span>
+        <span class="c1">#   lrecl: 80</span>
+        <span class="c1">#   alcunit: &quot;TRK&quot;</span>
+        <span class="c1">#   primary: 10</span>
+        <span class="c1">#   secondary: 5</span>
+        <span class="c1">#   unit: &quot;3390&quot;</span>
+        <span class="c1"># dataset_create_like: &quot;ZOSMF.ANSIBLE.MODEL&quot; # The model data set to be used to create a sequential or partitioned data set. If both dataset_create_attributes and dataset_create_like are supplied, dataset_create_like is ignored</span>
+        <span class="c1"># dataset_new_name: &quot;ZOSMF.ANSIBLE.PS01&quot; # The new name of the data set or member</span>
+        <span class="c1"># dataset_migrate_recall: &quot;wait&quot; # How a migrated data set is handled. Default is wait</span>
+      <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">result</span>
+      <span class="nt">delegate_to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+    <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">var=result</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For CP&amp;M roles, the inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OSMF end points.</p>
+<p>To run the sample playbook, below preparation works are required:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">delegate_to:</span> <span class="pre">localhost</span></code> statement is required for using this module to avoid setting up an SSH connection and install Python on the target z/OS systems.</p></li>
+<li><p>The inventory file <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/hosts">hosts</a> needs to be updated to identify the target z/OS managed node. The data set managed by each z/OS managed node can be accessed by at least one z/OSMF server. Typically, this could be done by setup one z/OSMF in the same sysplex.</p></li>
+<li><p>Module <a class="reference external" href="../modules/zmf_authenticate.html">zmf_authenticate</a> is supported by z/OSMF APAR PH12143 (PTF UI66511 for V2R3, PTF UI66512 for V2R4). You are also allowed to authenticate with z/OSMF server in module <a class="reference external" href="../modules/zmf_dataset.html">zmf_dataset</a> directly.</p></li>
+</ul>
 </div>
-<p>For more details about role variables, see <a class="reference external" href="../roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a>.</p>
+<p>For more details about module variables, see <a class="reference external" href="../modules/zmf_dataset.html">zmf_dataset</a>.</p>
 </div>
 
 
@@ -241,10 +263,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="sample_role_cpm_remove_instance.html" class="btn btn-neutral float-right" title="sample_role_cpm_remove_instance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="sample_module_dataset_copy.html" class="btn btn-neutral float-right" title="sample_module_dataset_copy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sample_role_cpm_manage_instance.html" class="btn btn-neutral float-left" title="sample_role_cpm_manage_instance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sample_module_console_command.html" class="btn btn-neutral float-left" title="sample_module_console_command" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

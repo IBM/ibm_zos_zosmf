@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>IBM z/OS Management Facility Collection &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>IBM z/OS Management Facility Collection &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,7 +33,6 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Installation" href="installation.html" /> 
@@ -155,7 +154,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.4.0/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -169,13 +168,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="ibm-z-os-management-facility-collection">
+  <div class="section" id="ibm-z-os-management-facility-collection">
 <h1>IBM z/OS Management Facility Collection<a class="headerlink" href="#ibm-z-os-management-facility-collection" title="Permalink to this headline">¶</a></h1>
 <p><strong>IBM z/OS Management Facility (z/OSMF) Collection</strong>, referred to as <strong>ibm_zos_zosmf</strong>, consists of modules and roles that you can use with z/OS.</p>
 <p><strong>IBM z/OSMF collection</strong> intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, z/OS console REST services, z/OS data set and file REST services, Cloud Provisioning and Management services etc.</p>
@@ -238,8 +231,10 @@
 <li class="toctree-l2"><a class="reference internal" href="modules.html#module-reference">Module Reference</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_dataset.html">zmf_dataset – Manage z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_dataset_copy.html">zmf_dataset_copy – Copy data to z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_dataset_fetch.html">zmf_dataset_fetch – Fetch z/OS data set or member from z/OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/zmf_file.html">zmf_file – Manage z/OS USS file or directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_file_copy.html">zmf_file_copy – Copy data to z/OS USS file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
@@ -268,8 +263,10 @@
 <li class="toctree-l2"><a class="reference internal" href="playbooks.html#group-vars">Group Vars</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks.html#sample-playbooks">Sample Playbooks</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_console_command.html">sample_module_console_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_dataset.html">sample_module_dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_dataset_copy.html">sample_module_dataset_copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_dataset_fetch.html">sample_module_dataset_fetch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_file.html">sample_module_file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_file_copy.html">sample_module_file_copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_file_fetch.html">sample_module_file_fetch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks/sample_module_workflow.html">sample_module_workflow</a></li>
@@ -303,7 +300,7 @@
 <li class="toctree-l3"><a class="reference internal" href="requirements_workflow.html">Requirements - Operate z/OS Workflows</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_cpm.html">Requirements - Provision and Manage z/OS Software Instances</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_job.html">Requirements - Operate z/OS Jobs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="requirements_console.html">Requirements - MVS Command Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_console.html">Requirements - Operate MVS Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_dataset_file.html">Requirements - Operate z/OS Data Sets and UNIX Files</a></li>
 </ul>
 </li>
@@ -352,8 +349,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -364,25 +360,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="v2.4.0/index.html">v2.4.0</a></dd>
-            <dd><a href="v2.3.0/index.html">v2.3.0</a></dd>
-            <dd><a href="v2.2.1/index.html">v2.2.1</a></dd>
-            <dd><a href="v2.2.0/index.html">v2.2.0</a></dd>
-            <dd><a href="v2.1.0/index.html">v2.1.0</a></dd>
-            <dd><a href="v2.0.1/index.html">v2.0.1</a></dd>
-            <dd><a href="v2.0.0/index.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">

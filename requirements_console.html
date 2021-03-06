@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Requirements - MVS Command Operations &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>Requirements - Operate MVS Commands &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,7 +33,6 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Requirements - Operate z/OS Data Sets and UNIX Files" href="requirements_dataset_file.html" />
@@ -105,7 +104,7 @@
 <li class="toctree-l3"><a class="reference internal" href="requirements_workflow.html">Requirements - Operate z/OS Workflows</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_cpm.html">Requirements - Provision and Manage z/OS Software Instances</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_job.html">Requirements - Operate z/OS Jobs</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Requirements - MVS Command Operations</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Requirements - Operate MVS Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_dataset_file.html">Requirements - Operate z/OS Data Sets and UNIX Files</a></li>
 </ul>
 </li>
@@ -162,14 +161,14 @@
         
           <li><a href="requirements.html">Requirements</a> &raquo;</li>
         
-      <li>Requirements - MVS Command Operations</li>
+      <li>Requirements - Operate MVS Commands</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.4.0/docs/source/requirements_console.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/requirements_console.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -183,24 +182,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="requirements-mvs-command-operations">
-<h1>Requirements - MVS Command Operations<a class="headerlink" href="#requirements-mvs-command-operations" title="Permalink to this headline">¶</a></h1>
-<p>To use the modules and roles which supplied to interact with <strong>z/OS console REST services</strong> in your playbook, besides the <a class="reference external" href="requirements.html">Overall Requirements</a>, the following nodes require specific versions of software:</p>
-<p><strong>Control Node</strong>:</p>
-<ul>
-<li><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/">Requests library for Python</a>: 2.23 or later</p>
-<blockquote>
-<div><p>It is required when using:</p>
+  <div class="section" id="requirements-operate-mvs-commands">
+<h1>Requirements - Operate MVS Commands<a class="headerlink" href="#requirements-operate-mvs-commands" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p>module: <a class="reference external" href="modules/zmf_console_command.html">zmf_console_command</a></p></li>
 </ul>
-<div class="admonition note">
+<p>To use above modules and roles, it needs to ensure <strong>z/OS console REST services</strong> is configured in z/OSMF. Please refer to <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/docs/zmf_sample_conf/README.md">here</a> for a quick approach to set up z/OSMF dependencies.</p>
+<p>Besides the <a class="reference external" href="requirements.html">Overall Requirements</a>, the following nodes require specific versions of software:</p>
+<p><strong>Control Node</strong>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/">Requests library for Python</a>: 2.23 or later</p></li>
+</ul>
+<p><strong>Managed Node</strong>:</p>
+<ul>
+<li><p><a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3.izua300/abstract.html">z/OS Management Facility</a>: V02.03.00 or later</p>
+<blockquote>
+<div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p>To use the detect keywords function by regular expression in the command response or broadcast messages (by specifying <cite>console_cmdresponse_reg=True</cite> or <cite>console_broadcastmsg_reg=True</cite>) for module: <a class="reference external" href="modules/zmf_console_command.html">zmf_console_command</a>, it also requires: <strong>z/OSMF APAR PH24072 (PTF UI69958 for V2R3, PTF UI69959 for V2R4)</strong></p></li>
@@ -234,8 +231,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -246,25 +242,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="v2.4.0/requirements_console.html">v2.4.0</a></dd>
-            <dd><a href="v2.3.0/requirements_console.html">v2.3.0</a></dd>
-            <dd><a href="v2.2.1/requirements_console.html">v2.2.1</a></dd>
-            <dd><a href="v2.2.0/requirements_console.html">v2.2.0</a></dd>
-            <dd><a href="v2.1.0/requirements_console.html">v2.1.0</a></dd>
-            <dd><a href="v2.0.1/index.html">v2.0.1</a></dd>
-            <dd><a href="v2.0.0/index.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">

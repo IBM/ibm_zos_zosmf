@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Operate z/OS Data Sets and UNIX Files &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>Operate z/OS Data Sets and UNIX Files &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,7 +33,6 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Modules" href="modules.html" />
@@ -174,7 +173,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.4.0/docs/source/README_dataset_file.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/README_dataset_file.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -188,15 +187,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="operate-z-os-data-sets-and-unix-files">
+  <div class="section" id="operate-z-os-data-sets-and-unix-files">
 <h1>Operate z/OS Data Sets and UNIX Files<a class="headerlink" href="#operate-z-os-data-sets-and-unix-files" title="Permalink to this headline">¶</a></h1>
-<p><strong>IBM z/OSMF collection</strong> provides several modules to work with z/OS data sets and UNIX files. You can use these modules to fetch z/OS data sets and UNIX files from the remote z/OS system to Ansible control node, and copy z/OS data sets and UNIX files from Ansible control node to the remote z/OS system.</p>
+<p><strong>IBM z/OSMF collection</strong> provides several modules to work with z/OS data sets and UNIX files. You can use these modules to fetch z/OS data sets and UNIX files from z/OS system to Ansible control node, copy z/OS data sets and UNIX files from Ansible control node to z/OS system, and manage z/OS data sets and UNIX files on z/OS system.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -208,22 +201,32 @@
 <ul>
 <li><p><a class="reference external" href="modules/zmf_dataset_fetch.html">zmf_dataset_fetch</a>:</p>
 <blockquote>
-<div><p>This module can be used to retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from the remote z/OS system, and save them on Ansible control node.</p>
+<div><p>This module can be used to retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from z/OS system, and save them on Ansible control node.</p>
 </div></blockquote>
 </li>
 <li><p><a class="reference external" href="modules/zmf_file_fetch.html">zmf_file_fetch</a>:</p>
 <blockquote>
-<div><p>This module can be used to retrieve the contents of a z/OS UNIX System Services (USS) file from the remote z/OS system, and save them on Ansible control node.</p>
+<div><p>This module can be used to retrieve the contents of a z/OS UNIX System Services (USS) file from z/OS system, and save them on Ansible control node.</p>
 </div></blockquote>
 </li>
 <li><p><a class="reference external" href="modules/zmf_dataset_copy.html">zmf_dataset_copy</a>:</p>
 <blockquote>
-<div><p>This module can be used to copy data from Ansible control node to a sequential data set, or a member of a partitioned data set (PDS or PDSE) on the remote z/OS system.</p>
+<div><p>This module can be used to copy data from Ansible control node or z/OS system and save it as a data set or data set member. If the source is from z/OS system, it could be a USS file or data set or data set member.</p>
 </div></blockquote>
 </li>
 <li><p><a class="reference external" href="modules/zmf_file_copy.html">zmf_file_copy</a>:</p>
 <blockquote>
-<div><p>This module can be used to copy data from Ansible control node to a z/OS UNIX System Services (USS) file on the remote z/OS system.</p>
+<div><p>This module can be used to copy data from Ansible control node to a z/OS UNIX System Services (USS) file on z/OS system.</p>
+</div></blockquote>
+</li>
+<li><p><a class="reference external" href="modules/zmf_dataset.html">zmf_dataset</a>:</p>
+<blockquote>
+<div><p>This module can be used to create, delete and operate on a sequential or partitioned data set, or a member of partitioned data set (PDS or PDSE) on z/OS system. The available operations include rename data set or member, migrate data set and recall the migrated data set.</p>
+</div></blockquote>
+</li>
+<li><p><a class="reference external" href="modules/zmf_file.html">zmf_file</a>:</p>
+<blockquote>
+<div><p>This module can be used to create, delete and operate on a z/OS UNIX System Services (USS) file or a directory on z/OS system. The available operations include rename, change mode, change owner and change tag.</p>
 </div></blockquote>
 </li>
 </ul>
@@ -261,8 +264,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -273,25 +275,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="v2.4.0/README_dataset_file.html">v2.4.0</a></dd>
-            <dd><a href="v2.3.0/README_dataset_file.html">v2.3.0</a></dd>
-            <dd><a href="v2.2.1/index.html">v2.2.1</a></dd>
-            <dd><a href="v2.2.0/index.html">v2.2.0</a></dd>
-            <dd><a href="v2.1.0/index.html">v2.1.0</a></dd>
-            <dd><a href="v2.0.1/index.html">v2.0.1</a></dd>
-            <dd><a href="v2.0.0/index.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">

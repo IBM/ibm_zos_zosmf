@@ -5,7 +5,7 @@
 sample_role_cpm_provision
 =========================
 
-For configuration and setup, see `Playbook Documentation`_. 
+For configuration and setup, see `Playbook Documentation`_.
 
 This `sample playbook`_ shows how to provision an instance in z/OSMF Cloud Provisioning & Management (CP&M).
 
@@ -29,15 +29,15 @@ This `sample playbook`_ shows how to provision an instance in z/OSMF Cloud Provi
        - include_role:
            name: zmf_cpm_provision_software_service
          vars:
-           cpm_template_name: "<fill-me-template-name>" # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
-           domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
-           tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
-           systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
-
+           cpm_template_name: '<fill-me-template-name>' # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
+           domain_name: '<fill-me-domain-name>' # The value for property domain_name which identifies CP&M domain in which specified template is defined
+           tenant_name: '<tenant-name>' # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
+           systems_nicknames: '<system-name>' # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+           input_vars: '<input-variables>' # The value for optional property input_vars which identifies a list of dictionary objects that provides one or more input variables required for the template in "name" "value" format e.g. [{ "name":"VAR_NAME","value":"VAR_VALUE"}...]
 .. note::
 
   For CP&M roles, the inventory file `hosts`_ needs to be updated to identify the target z/OSMF end points.
-  
+
 For more details about role variables, see `zmf_cpm_provision_software_service`_.
 
 

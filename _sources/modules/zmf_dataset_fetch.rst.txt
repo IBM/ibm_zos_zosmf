@@ -16,7 +16,7 @@ zmf_dataset_fetch -- Fetch z/OS data set or member from z/OS
 
 Synopsis
 --------
-- Retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from the remote z/OS system.
+- Retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from z/OS system.
 - Save the retrieved data set or member on Ansible control node.
 - Data set or member that already exists at *dataset_dest* will be overwritten if it is different than the *dataset_src*.
 
@@ -79,9 +79,9 @@ dataset_dest
 
   The directory ``{{ dataset_dest }}/{{ zmf_host }}/`` will be created to save the data set, where *zmf_host* is the hostname of the z/OSMF server.
 
-  If *zmf_host=zosmf.ibm.com*, a data set named ``ZOSMF.ANSIBLE.DATA`` would be saved into ``{{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.DATA``.
+  If *zmf_host=zosmf.ibm.com*, a data set named ``ZOSMF.ANSIBLE.PS`` would be saved into ``{{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.PS``.
 
-  If *dataset_volser=VOL001*, the above data set would be saved into ``{{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.DATA``.
+  If *dataset_volser=VOL001*, the above data set would be saved into ``{{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.PS``.
 
 
   | **required**: True
@@ -93,7 +93,7 @@ dataset_dest
 dataset_encoding
   Specifies which encodings the fetched data set should be converted from and to.
 
-  These parameters only take effects when *dataset_data_type=text*.
+  This variable only take effects when *dataset_data_type=text*.
 
 
   | **required**: False
@@ -108,7 +108,6 @@ dataset_encoding
 
     | **required**: True
     | **type**: str
-    | **default**: IBM-1047
 
 
  
@@ -119,7 +118,6 @@ dataset_encoding
 
     | **required**: True
     | **type**: str
-    | **default**: ISO8859-1
 
 
 
@@ -130,7 +128,7 @@ dataset_flat
 
   If *dataset_flat=true*, the data set will be fetched to the destination directory using its name without appending *zmf_host*.
 
-  For example, if *dataset_dest=/tmp/dataset*, a data set named ``ZOSMF.ANSIBLE.DATA`` would be saved into ``/tmp/dataset/ZOSMF.ANSIBLE.DATA``.
+  For example, if *dataset_dest=/tmp/dataset*, a data set named ``ZOSMF.ANSIBLE.PS`` would be saved into ``/tmp/dataset/ZOSMF.ANSIBLE.PS``.
 
 
   | **required**: False
@@ -141,7 +139,7 @@ dataset_flat
  
      
 dataset_migrate_recall
-  Specify how a migrated data set is handled.
+  Specifies how a migrated data set is handled.
 
   When *dataset_migrate_recall=wait*, the migrated data set is recalled synchronously.
 
@@ -165,7 +163,7 @@ dataset_range
 
   The retrieved range of the data set will be saved as ``{{ dataset_dest }}/{{ zmf_host }}/{{ dataset_src }}.range`` on control node.
 
-  For example, the retrieved range of the dat set named ``ZOSMF.ANSIBLE.DATA`` would be saved as ``/tmp/dataset/ZOSMF.ANSIBLE.DATA.range``.
+  For example, the retrieved range of the dat set named ``ZOSMF.ANSIBLE.PS`` would be saved as ``/tmp/dataset/ZOSMF.ANSIBLE.PS.range``.
 
 
   | **required**: False
@@ -202,7 +200,7 @@ dataset_range
 dataset_search
   Specifies a series of parameters that are used to search the content of data set.
 
-  These parameters only take effects when *dataset_data_type=text*.
+  This variable only take effects when *dataset_data_type=text*.
 
   If this variable is specified, only the matched records in the data set will be fetched to the destination directory.
 
@@ -210,7 +208,7 @@ dataset_search
 
   The matched contents in the data set will be saved as ``{{ dataset_dest }}/{{ zmf_host }}/{{ dataset_src }}.search`` on control node.
 
-  For example, the matched contents in the data set named ``ZOSMF.ANSIBLE.DATA`` would be saved as ``/tmp/dataset/ZOSMF.ANSIBLE.DATA.search``.
+  For example, the matched contents in the data set named ``ZOSMF.ANSIBLE.PS`` would be saved as ``/tmp/dataset/ZOSMF.ANSIBLE.PS.search``.
 
 
   | **required**: False
@@ -257,11 +255,11 @@ dataset_search
  
      
 dataset_src
-  Data set or the name of the PDS or PDSE member on the remote z/OS system to fetch.
+  Data set or the name of the PDS or PDSE member on z/OS system to fetch.
 
   This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.
 
-  For example, specifying a data set like ``ZOSMF.ANSIBLE.DATA``, or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER``).
+  For example, specifying a data set like ``ZOSMF.ANSIBLE.PS``, or a PDS or PDSE member like ``ZOSMF.ANSIBLE.PDS(MEMBER)``.
 
 
   | **required**: True
@@ -431,44 +429,44 @@ Examples
 .. code-block:: yaml+jinja
 
    
-   - name: Fetch a data set and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE
+   - name: Fetch a data set and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.PS
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+       dataset_src: "ZOSMF.ANSIBLE.PS"
        dataset_dest: "/tmp/dataset"
 
-   - name: Fetch a PDS member and store in /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER
+   - name: Fetch a PDS member and store in /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+       dataset_src: "ZOSMF.ANSIBLE.PDS(MEMBER)"
        dataset_dest: "/tmp/dataset"
        dataset_flat: true
 
-   - name: Fetch an uncataloged PDS member and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE/MEMBER
+   - name: Fetch an uncataloged PDS member and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.PDS/MEMBER
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE(MEMBER)"
+       dataset_src: "ZOSMF.ANSIBLE.PDS(MEMBER)"
        dataset_volser: "VOL001"
        dataset_dest: "/tmp/dataset"
 
    - name: Fetch a data set as binary
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+       dataset_src: "ZOSMF.ANSIBLE.PS"
        dataset_dest: "/tmp/dataset"
        dataset_data_type: "binary"
 
    - name: Fetch a data set in record format
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+       dataset_src: "ZOSMF.ANSIBLE.PS"
        dataset_dest: "/tmp/dataset"
        dataset_data_type: "record"
 
    - name: Fetch a data set and convert it from IBM-037 to ISO8859-1
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+       dataset_src: "ZOSMF.ANSIBLE.PS"
        dataset_dest: "/tmp/dataset"
        dataset_encoding:
            from: IBM-037
@@ -477,7 +475,7 @@ Examples
    - name: Fetch a range of records from a data set (the first 500 lines)
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+       dataset_src: "ZOSMF.ANSIBLE.PS"
        dataset_dest: "/tmp/dataset"
        dataset_range:
            start: 0
@@ -486,7 +484,7 @@ Examples
    - name: Fetch a range of records from a data set (the final 500 lines)
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+       dataset_src: "ZOSMF.ANSIBLE.PS"
        dataset_dest: "/tmp/dataset"
        dataset_range:
            end: 500
@@ -494,7 +492,7 @@ Examples
    - name: Fetch 100 lines of records from the first matched line that contains "ansible" in a data set
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+       dataset_src: "ZOSMF.ANSIBLE.PS"
        dataset_dest: "/tmp/dataset"
        dataset_search:
            keyword: "ansible"
@@ -503,7 +501,7 @@ Examples
    - name: Fetch a data set and validate its checksum
      zmf_dataset_fetch:
        zmf_host: "sample.ibm.com"
-       dataset_src: "ZOSMF.ANSIBLE.SAMPLE"
+       dataset_src: "ZOSMF.ANSIBLE.PS"
        dataset_dest: "/tmp/dataset"
        dataset_checksum: "93822124D6E66E2213C64B0D10800224"
 
@@ -540,17 +538,17 @@ Return Values
 
         **sample**: ::
 
-                  "The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER."
+                  "The data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER."
 
-                  "The matched contents in the data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER.serarch."
+                  "The matched contents in the data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER.serarch."
 
-                  "The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since no matched contents is found with the specified search keyword."
+                  "The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since no matched contents is found with the specified search keyword."
 
-                  "A range of records in the data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER.range."
+                  "A range of records in the data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER.range."
 
-                  "The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since no contents is returned in the specified range."
+                  "The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since no contents is returned in the specified range."
 
-                  "The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since it is not changed."
+                  "The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since it is not changed."
 
 
 

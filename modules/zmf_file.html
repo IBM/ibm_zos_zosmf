@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_file_copy – Copy data to z/OS USS file &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
+  <title>zmf_file – Manage z/OS USS file or directory &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="zmf_file_fetch – Fetch USS file from z/OS" href="zmf_file_fetch.html" />
-    <link rel="prev" title="zmf_file – Manage z/OS USS file or directory" href="zmf_file.html" /> 
+    <link rel="next" title="zmf_file_copy – Copy data to z/OS USS file" href="zmf_file_copy.html" />
+    <link rel="prev" title="zmf_dataset_fetch – Fetch z/OS data set or member from z/OS" href="zmf_dataset_fetch.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,14 +94,14 @@
 <li class="toctree-l3"><a class="reference internal" href="zmf_dataset.html">zmf_dataset – Manage z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_dataset_copy.html">zmf_dataset_copy – Copy data to z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_dataset_fetch.html">zmf_dataset_fetch – Fetch z/OS data set or member from z/OS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="zmf_file.html">zmf_file – Manage z/OS USS file or directory</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_file_copy – Copy data to z/OS USS file</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_file – Manage z/OS USS file or directory</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#return-values">Return Values</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_file_copy.html">zmf_file_copy – Copy data to z/OS USS file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
 </ul>
@@ -173,7 +173,7 @@
         
           <li><a href="../modules.html">Modules</a> &raquo;</li>
         
-      <li>zmf_file_copy – Copy data to z/OS USS file</li>
+      <li>zmf_file – Manage z/OS USS file or directory</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -181,7 +181,7 @@
             
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/zmf_file_copy.py" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/zmf_file.py" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -195,8 +195,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="zmf-file-copy-copy-data-to-z-os-uss-file">
-<span id="zmf-file-copy-module"></span><h1>zmf_file_copy – Copy data to z/OS USS file<a class="headerlink" href="#zmf-file-copy-copy-data-to-z-os-uss-file" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="zmf-file-manage-z-os-uss-file-or-directory">
+<span id="zmf-file-module"></span><h1>zmf_file – Manage z/OS USS file or directory<a class="headerlink" href="#zmf-file-manage-z-os-uss-file-or-directory" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
@@ -208,119 +208,129 @@
 <div class="section" id="synopsis">
 <h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Copy data from Ansible control node to a z/OS UNIX System Services (USS) file on z/OS system.</p></li>
-<li><p>If the target USS file already exists, it can be overwritten. If the target USS file does not exist, it can be created with mode 644.</p></li>
+<li><p>Create, delete and operate on a z/OS UNIX System Services (USS) file or a directory on z/OS system.</p></li>
+<li><p>The available operations include rename, change mode, change owner and change tag.</p></li>
 </ul>
 </div>
 <div class="section" id="parameters">
 <h2><a class="toc-backref" href="#id2">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl>
-<dt>file_checksum</dt><dd><p>Specifies the checksum to be used to verify that the target USS file to copy to is not changed since the checksum was generated.</p>
-<p>The module will fail and no data will be copied if the checksum is not matched which means the target data set has been modified.</p>
-<p>This variable only take effects when <em>file_force=true</em>.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
-<div class="line"><strong>type</strong>: str</div>
-</div>
-</dd>
-<dt>file_content</dt><dd><p>The contents to be copied to the target USS file. This variable is used instead of <em>file_src</em>.</p>
-<p>This variable only take effects when <em>file_data_type=text</em>.</p>
-<p>Each line of the contents should be terminated with <code class="docutils literal notranslate"><span class="pre">\n</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">profile\nTZ=EST5EDT\n</span></code>.</p>
-<p>If <em>file_content</em> is supplied and <em>file_data_type=text</em>, <em>file_src</em> is ignored.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
-<div class="line"><strong>type</strong>: str</div>
-</div>
-</dd>
-<dt>file_crlf</dt><dd><p>Specifies whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).</p>
-<p>If <em>file_crlf=true</em>, CRLF characters are used.</p>
-<p>This variable only take effects when <em>file_data_type=text</em>.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
-<div class="line"><strong>type</strong>: bool</div>
-<div class="line"><strong>default</strong>: false</div>
-</div>
-</dd>
-<dt>file_data_type</dt><dd><p>Specifies whether data conversion is to be performed on the data to be copied.</p>
-<p>When <em>file_data_type=text</em>, data conversion is performed.</p>
-<p>You can use <em>file_encoding</em> to specify which encodings the data to be copied should be converted from and to.</p>
-<p>If <em>file_encoding</em> is not supplied, the data transfer process converts each byte from <code class="docutils literal notranslate"><span class="pre">ISO8859-1</span></code> to <code class="docutils literal notranslate"><span class="pre">IBM-1047</span></code> by default.</p>
-<p>You can use <em>file_crlf</em> to control whether each input text line is terminated with a carriage return line feed (CRLF) or a line feed (LF).</p>
-<p>If <em>file_crlf</em> is not supplied, LF characters are left intact by default.</p>
-<p>You can use <em>file_diff</em> to specify whether the input consists of commands in the same format as produced by the z/OS UNIX ‘diff -e’ command.</p>
-<p>If <em>file_diff</em> is not supplied, the input is regarded as not consisting of commands by default.</p>
-<p>When <em>file_data_type=binary</em>, no data conversion is performed.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
-<div class="line"><strong>type</strong>: str</div>
-<div class="line"><strong>default</strong>: text</div>
-<div class="line"><strong>choices</strong>: text, binary</div>
-</div>
-</dd>
-<dt>file_dest</dt><dd><p>USS file on z/OS system where the data should be copied to.</p>
-<p>This variable must consist of a fully qualified path and file name. For example, <code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code>.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: True</div>
-<div class="line"><strong>type</strong>: str</div>
-</div>
-</dd>
-<dt>file_diff</dt><dd><p>Specifies whether the input consists of commands in the same format as produced by the z/OS UNIX ‘diff -e’ command.</p>
-<p>These commands are used to add, replace and delete lines in the target USS file. The following commands are supported.</p>
-<p><code class="docutils literal notranslate"><span class="pre">a</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">c</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">d</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">s/.//</span></code></p>
-<p>opt <code class="docutils literal notranslate"><span class="pre">g|&lt;n&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">g</span></code> means global, <code class="docutils literal notranslate"><span class="pre">n</span></code> means search and replace <code class="docutils literal notranslate"><span class="pre">n</span></code> times.</p>
-<p>Each command may be optionally preceded by a line or line range, as allowed by the z/OS UNIX ‘ed’ command.</p>
-<p>The module will fail if an error is detected while processing a command.</p>
-<p>This variable only take effects when <em>file_data_type=text</em>.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
-<div class="line"><strong>type</strong>: bool</div>
-<div class="line"><strong>default</strong>: false</div>
-</div>
-</dd>
-<dt>file_encoding</dt><dd><p>Specifies which encodings the data to be copied should be converted from and to.</p>
-<p>This variable only take effects when <em>file_data_type=text</em> and <em>file_diff=false</em>.</p>
+<dt>file_mode</dt><dd><p>Specifies the permission the resulting USS file or directory should have.</p>
+<p>This variable only take effects when <em>file_state=file</em> or <em>file_state=directory</em>.</p>
+<p>If <em>file_path</em> does not exist, this value is used in creating <em>file_path</em>. If this value is omitted, 755 is used by default.</p>
+<p>If <em>file_path</em> exists, this value is used in changing mode of <em>file_path</em>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: dict</div>
 </div>
 <dl>
-<dt>from</dt><dd><p>The character set of the data to be copied.</p>
-<p>Supported character sets rely on the charset conversion utility (iconv) version. The most common character sets are supported.</p>
+<dt>mode</dt><dd><p>The value of file mode bits.</p>
+<p>This value could be either the POSIX symbolic form (e.g., <code class="docutils literal notranslate"><span class="pre">RWXRW-RW-</span></code>) or octal value (e.g., <code class="docutils literal notranslate"><span class="pre">755</span></code>).</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
-<dt>to</dt><dd><p>The destination character set for the target USS file.</p>
-<p>Supported character sets rely on the charset conversion utility (iconv) version. The most common character sets are supported.</p>
+<dt>recursive</dt><dd><p>This variable only take effects when <em>file_state=directory</em>.</p>
+<p>When <em>recursive=true</em>, the file mode bits of the directory and all files in the file hierarchy below it are changed (chmod -R).</p>
 <div class="line-block">
-<div class="line"><strong>required</strong>: True</div>
-<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: false</div>
 </div>
 </dd>
 </dl>
 </dd>
-<dt>file_force</dt><dd><p>Specifies whether the target USS file must always be overwritten.</p>
-<p>If <em>file_force=true</em> and <em>file_checksum</em> is not supplied, the target USS file will always be overwritten.</p>
-<p>If <em>file_force=true</em> and <em>file_checksum</em> is supplied, the target USS file will be overwritten only when the checksum is matched.</p>
-<p>If <em>file_force=false</em>, the data will only be copied if the target USS file does not exist.</p>
-<div class="line-block">
-<div class="line"><strong>required</strong>: False</div>
-<div class="line"><strong>type</strong>: bool</div>
-<div class="line"><strong>default</strong>: true</div>
-</div>
-</dd>
-<dt>file_src</dt><dd><p>The local path on control node of the data to be copied to the target USS file. For example, <code class="docutils literal notranslate"><span class="pre">/tmp/file_input/profile</span></code>.</p>
-<p>This path can be absolute or relative. The module will fail if <em>file_src</em> has no read permission.</p>
-<p>The data is interpreted as one of binary, text or ‘diff -e’ format according to the value of <em>file_data_type</em> and <em>file_diff</em>.</p>
-<p>If <em>file_content</em> is supplied and <em>file_data_type=text</em>, <em>file_src</em> is ignored.</p>
+<dt>file_new_name</dt><dd><p>Specifies the new name of the USS file or directory.</p>
+<p>This variable only take effects when <em>file_state=file</em> or <em>file_state=directory</em>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
+</dd>
+<dt>file_owner</dt><dd><p>Indicates the function change owner.</p>
+<p>This variable only take effects when <em>file_state=file</em> or <em>file_state=directory</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<dl>
+<dt>group</dt><dd><p>The group ID or GID.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>owner</dt><dd><p>The user ID or UID.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>recursive</dt><dd><p>This variable only take effects when <em>file_state=directory</em>.</p>
+<p>When <em>recursive=true</em>, changes all the files and subdirectories in that directory to belong to the specified owner and group (chown -R).</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: false</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>file_path</dt><dd><p>Path to the USS file or directory being managed.</p>
+<p>This variable must consist of a fully qualified path and file or directory name. For example, <code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code>.</p>
+<p>The module will fail if parent directory of <em>file_path</em> does not exist or is a read-only file system.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>file_state</dt><dd><p>The final state desired for specified USS file or directory.</p>
+<p>If <em>file_state=file</em> and <em>file_path</em> does not exist, <em>file_path</em> is created as a USS file, the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=True</span></code>.</p>
+<p>If <em>file_state=directory</em> and <em>file_path</em> does not exist, <em>file_path</em> is created as a directory, the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=True</span></code>.</p>
+<p>If <em>file_state=file</em> or <em>file_state=directory</em>, and <em>file_path</em> exists, <em>file_path</em> is modified with other supplied variables (e.g., <em>file_mode</em>), the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=True</span></code>.</p>
+<p>If <em>file_state=file</em> or <em>file_state=directory</em>, and <em>file_path</em> exists, no action taken if no other variables are supplied (e.g., <em>file_mode</em>), the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=False</span></code>.</p>
+<p>If <em>file_state=absent</em> and <em>file_path</em> does not exist, no action taken, the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=False</span></code>.</p>
+<p>If <em>file_state=absent</em> and <em>file_path</em> exists, the existing <em>file_path</em> is deleted, the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=True</span></code>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>choices</strong>: file, directory, absent</div>
+</div>
+</dd>
+<dt>file_tag</dt><dd><p>Indicates the function change tag.</p>
+<p>This variable only take effects when <em>file_state=file</em> or <em>file_state=directory</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<dl>
+<dt>codeset</dt><dd><p>Specifies the coded character set in which text data is encoded, such as ASCII or EBCDIC.</p>
+<p>For example, the code set for ASCII is ISO8859–1; the code set for EBCDIC is IBM-1047.</p>
+<p>This variable only take effects when <em>tag=mixed</em> or <em>tag=text</em>.</p>
+<p>This variable is required when <em>tag=text</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>recursive</dt><dd><p>This variable only take effects when <em>file_state=directory</em>.</p>
+<p>When <em>recursive=true</em>, tags all the files and subdirectories in that directory (chtag -R).</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: false</div>
+</div>
+</dd>
+<dt>tag</dt><dd><p>The type of file tag.</p>
+<p>If <em>tag=absent</em>, any existing file tag is removed.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>choices</strong>: mixed, text, binary, absent</div>
+</div>
+</dd>
+</dl>
 </dd>
 <dt>zmf_credential</dt><dd><p>Authentication credentials, returned by module <code class="docutils literal notranslate"><span class="pre">zmf_authenticate</span></code>, for the successful authentication with z/OSMF server.</p>
 <p>If <em>zmf_credential</em> is supplied, <em>zmf_host</em>, <em>zmf_port</em>, <em>zmf_user</em>, <em>zmf_password</em>, <em>zmf_crt</em> and <em>zmf_key</em> are ignored.</p>
@@ -410,47 +420,63 @@
 </div>
 <div class="section" id="examples">
 <h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy a local file to USS file /etc/profile</span>
-  <span class="nt">zmf_file_copy</span><span class="p">:</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a USS file /etc/profile with default mode 755</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">file_src</span><span class="p">:</span> <span class="s">&quot;/tmp/file_input/profile&quot;</span>
-    <span class="nt">file_dest</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;file&quot;</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy a local file to USS file /etc/profile only if it does not exist</span>
-  <span class="nt">zmf_file_copy</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a directory /etc/some_directory with mode 644</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">file_src</span><span class="p">:</span> <span class="s">&quot;/tmp/file_input/profile&quot;</span>
-    <span class="nt">file_dest</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
-    <span class="nt">file_force</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/some_directory&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;directory&quot;</span>
+    <span class="nt">file_mode</span><span class="p">:</span>
+        <span class="nt">mode</span><span class="p">:</span> <span class="s">&quot;644&quot;</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy the contents to USS file /etc/profile</span>
-  <span class="nt">zmf_file_copy</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Change the permissions, owner, group and tag of a USS file /etc/profile</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">file_conntent</span><span class="p">:</span> <span class="s">&quot;Sample</span><span class="nv"> </span><span class="s">profile\nTZ=EST5EDT\n&quot;</span>
-    <span class="nt">file_dest</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;file&quot;</span>
+    <span class="nt">file_mode</span><span class="p">:</span>
+        <span class="nt">mode</span><span class="p">:</span> <span class="s">&quot;644&quot;</span>
+    <span class="nt">file_owner</span><span class="p">:</span>
+        <span class="nt">owner</span><span class="p">:</span> <span class="s">&quot;500000&quot;</span>
+        <span class="nt">group</span><span class="p">:</span> <span class="s">&quot;0&quot;</span>
+    <span class="nt">file_tag</span><span class="p">:</span>
+        <span class="nt">tag</span><span class="p">:</span> <span class="s">&quot;text&quot;</span>
+        <span class="nt">codeset</span><span class="p">:</span> <span class="s">&quot;IBM-1047&quot;</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy a local file to USS file /etc/profile as binary</span>
-  <span class="nt">zmf_file_copy</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Change the permissions of a directory /etc/some_directory, and recursively change its owner, group and tag</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">file_src</span><span class="p">:</span> <span class="s">&quot;/tmp/file_input/profile&quot;</span>
-    <span class="nt">file_dest</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
-    <span class="nt">file_data_type</span><span class="p">:</span> <span class="s">&quot;binary&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/some_directory&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;directory&quot;</span>
+    <span class="nt">file_mode</span><span class="p">:</span>
+        <span class="nt">mode</span><span class="p">:</span> <span class="s">&quot;644&quot;</span>
+        <span class="nt">recursive</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+    <span class="nt">file_owner</span><span class="p">:</span>
+        <span class="nt">owner</span><span class="p">:</span> <span class="s">&quot;500000&quot;</span>
+        <span class="nt">group</span><span class="p">:</span> <span class="s">&quot;0&quot;</span>
+        <span class="nt">recursive</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">file_tag</span><span class="p">:</span>
+        <span class="nt">tag</span><span class="p">:</span> <span class="s">&quot;text&quot;</span>
+        <span class="nt">codeset</span><span class="p">:</span> <span class="s">&quot;IBM-1047&quot;</span>
+        <span class="nt">recursive</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy a local file to USS file /etc/profile and convert from ISO8859-1 to IBM-037</span>
-  <span class="nt">zmf_file_copy</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Rename a USS file /etc/profile to /etc/profile.bak</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">file_src</span><span class="p">:</span> <span class="s">&quot;/tmp/file_input/profile&quot;</span>
-    <span class="nt">file_dest</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
-    <span class="nt">file_encoding</span><span class="p">:</span>
-      <span class="nt">from</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ISO8859-1</span>
-      <span class="nt">to</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">IBM-037</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;file&quot;</span>
+    <span class="nt">file_new_name</span><span class="p">:</span> <span class="s">&quot;/etc/profile.bak&quot;</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Copy a local file to USS file /etc/profile and validate its checksum</span>
-  <span class="nt">zmf_file_copy</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Delete a USS file /etc/profile</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">file_src</span><span class="p">:</span> <span class="s">&quot;/tmp/file_input/profile&quot;</span>
-    <span class="nt">file_dest</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
-    <span class="nt">file_checksum</span><span class="p">:</span> <span class="s">&quot;93822124D6E66E2213C64B0D10800224&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;absent&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -464,27 +490,33 @@
 <div class="line"><strong>type</strong>: bool</div>
 </div>
 </dd>
-<dt>message</dt><dd><p>The output message generated by the module to indicate whether the USS file is successfully copied.</p>
+<dt>message</dt><dd><p>The output message generated by the module to indicate whether the USS file or directory is successfully created, deleted, or updated.</p>
 <div class="line-block">
 <div class="line"><strong>returned</strong>: on success</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 <p><strong>sample</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;The target USS file /etc/profile is created and updated successfully.&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;The file /etc/profile is created successfully.&quot;</span>
 
-<span class="s2">&quot;The target USS file /etc/profile is updated successfully.&quot;</span>
+<span class="s2">&quot;The directory /etc/some_directory is deleted successfully.&quot;</span>
 
-<span class="s2">&quot;No data is copied since the target USS file /etc/profile already exists and file_force is set to False.&quot;</span>
+<span class="s2">&quot;The file or directory /etc/profile does not exist.&quot;</span>
+
+<span class="s2">&quot;The file /etc/profile already exists.&quot;</span>
+
+<span class="s2">&quot;The file /etc/profile is updated successfully.&quot;</span>
+
+<span class="s2">&quot;The file /etc/profile is successfully renamed to /etc/profile.bak.&quot;</span>
 </pre></div>
 </div>
 </dd>
-<dt>file_checksum</dt><dd><p>The checksum of the updated USS file.</p>
+<dt>file_properties</dt><dd><p>The properties of the present USS file or directory.</p>
 <div class="line-block">
 <div class="line"><strong>returned</strong>: on success</div>
-<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>type</strong>: dict</div>
 </div>
 <p><strong>sample</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;93822124D6E66E2213C64B0D10800224&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;gid&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;OPERATOR&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;-rwxr-xr-x&quot;</span><span class="p">,</span> <span class="s2">&quot;mtime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-01-21T01:24:04&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;t IBM-1047    T=on  /etc/profile&quot;</span><span class="p">,</span> <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="mi">500000</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;IBMUSER&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </dd>
@@ -501,10 +533,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="zmf_file_fetch.html" class="btn btn-neutral float-right" title="zmf_file_fetch – Fetch USS file from z/OS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="zmf_file_copy.html" class="btn btn-neutral float-right" title="zmf_file_copy – Copy data to z/OS USS file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="zmf_file.html" class="btn btn-neutral float-left" title="zmf_file – Manage z/OS USS file or directory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="zmf_dataset_fetch.html" class="btn btn-neutral float-left" title="zmf_dataset_fetch – Fetch z/OS data set or member from z/OS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

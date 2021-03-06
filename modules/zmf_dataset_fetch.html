@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_dataset_fetch – Fetch z/OS data set or member from z/OS &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>zmf_dataset_fetch – Fetch z/OS data set or member from z/OS &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,10 +33,9 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="zmf_file_copy – Copy data to z/OS USS file" href="zmf_file_copy.html" />
+    <link rel="next" title="zmf_file – Manage z/OS USS file or directory" href="zmf_file.html" />
     <link rel="prev" title="zmf_dataset_copy – Copy data to z/OS data set or member" href="zmf_dataset_copy.html" /> 
 </head>
 
@@ -92,6 +91,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module Reference</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset.html">zmf_dataset – Manage z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_dataset_copy.html">zmf_dataset_copy – Copy data to z/OS data set or member</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_dataset_fetch – Fetch z/OS data set or member from z/OS</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
@@ -100,6 +100,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#return-values">Return Values</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_file.html">zmf_file – Manage z/OS USS file or directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_file_copy.html">zmf_file_copy – Copy data to z/OS USS file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
@@ -194,13 +195,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="zmf-dataset-fetch-fetch-z-os-data-set-or-member-from-z-os">
+  <div class="section" id="zmf-dataset-fetch-fetch-z-os-data-set-or-member-from-z-os">
 <span id="zmf-dataset-fetch-module"></span><h1>zmf_dataset_fetch – Fetch z/OS data set or member from z/OS<a class="headerlink" href="#zmf-dataset-fetch-fetch-z-os-data-set-or-member-from-z-os" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -213,7 +208,7 @@
 <div class="section" id="synopsis">
 <h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from the remote z/OS system.</p></li>
+<li><p>Retrieve the contents of a sequential data set, or a member of a partitioned data set (PDS or PDSE) from z/OS system.</p></li>
 <li><p>Save the retrieved data set or member on Ansible control node.</p></li>
 <li><p>Data set or member that already exists at <em>dataset_dest</em> will be overwritten if it is different than the <em>dataset_src</em>.</p></li>
 </ul>
@@ -248,15 +243,15 @@
 <dt>dataset_dest</dt><dd><p>The local directory on control node where the data set or member should be saved to. For example, <code class="docutils literal notranslate"><span class="pre">/tmp/dataset</span></code>.</p>
 <p>This directory can be absolute or relative. The module will fail if the parent directory of <em>dataset_dest</em> is a read-only file system.</p>
 <p>The directory <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">dataset_dest</span> <span class="pre">}}/{{</span> <span class="pre">zmf_host</span> <span class="pre">}}/</span></code> will be created to save the data set, where <em>zmf_host</em> is the hostname of the z/OSMF server.</p>
-<p>If <em>zmf_host=zosmf.ibm.com</em>, a data set named <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.DATA</span></code> would be saved into <code class="docutils literal notranslate"><span class="pre">{{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.DATA</span></code>.</p>
-<p>If <em>dataset_volser=VOL001</em>, the above data set would be saved into <code class="docutils literal notranslate"><span class="pre">{{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.DATA</span></code>.</p>
+<p>If <em>zmf_host=zosmf.ibm.com</em>, a data set named <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.PS</span></code> would be saved into <code class="docutils literal notranslate"><span class="pre">{{dataset_dest}}/zosmf.ibm.com/ZOSMF.ANSIBLE.PS</span></code>.</p>
+<p>If <em>dataset_volser=VOL001</em>, the above data set would be saved into <code class="docutils literal notranslate"><span class="pre">{{dataset_dest}}/zosmf.ibm.com/VOL001/ZOSMF.ANSIBLE.PS</span></code>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
 <dt>dataset_encoding</dt><dd><p>Specifies which encodings the fetched data set should be converted from and to.</p>
-<p>These parameters only take effects when <em>dataset_data_type=text</em>.</p>
+<p>This variable only take effects when <em>dataset_data_type=text</em>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: dict</div>
@@ -266,28 +261,26 @@
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
-<div class="line"><strong>default</strong>: IBM-1047</div>
 </div>
 </dd>
 <dt>to</dt><dd><p>The destination character set for the output to be written as.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
-<div class="line"><strong>default</strong>: ISO8859-1</div>
 </div>
 </dd>
 </dl>
 </dd>
 <dt>dataset_flat</dt><dd><p>Specifies whether to override the default behavior of appending <em>zmf_host</em> to the destination.</p>
 <p>If <em>dataset_flat=true</em>, the data set will be fetched to the destination directory using its name without appending <em>zmf_host</em>.</p>
-<p>For example, if <em>dataset_dest=/tmp/dataset</em>, a data set named <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.DATA</span></code> would be saved into <code class="docutils literal notranslate"><span class="pre">/tmp/dataset/ZOSMF.ANSIBLE.DATA</span></code>.</p>
+<p>For example, if <em>dataset_dest=/tmp/dataset</em>, a data set named <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.PS</span></code> would be saved into <code class="docutils literal notranslate"><span class="pre">/tmp/dataset/ZOSMF.ANSIBLE.PS</span></code>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: bool</div>
 <div class="line"><strong>default</strong>: false</div>
 </div>
 </dd>
-<dt>dataset_migrate_recall</dt><dd><p>Specify how a migrated data set is handled.</p>
+<dt>dataset_migrate_recall</dt><dd><p>Specifies how a migrated data set is handled.</p>
 <p>When <em>dataset_migrate_recall=wait</em>, the migrated data set is recalled synchronously.</p>
 <p>When <em>dataset_migrate_recall=nowait</em>, request the migrated data set to be recalled, but do not wait.</p>
 <p>When <em>dataset_migrate_recall=error</em>, do not attempt to recall the migrated data set.</p>
@@ -301,7 +294,7 @@
 <dt>dataset_range</dt><dd><p>Specifies a range that is used to retrieve records of the data set.</p>
 <p>If this variable is specified, only the retrieved range of the data set will be fetched to the destination directory.</p>
 <p>The retrieved range of the data set will be saved as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">dataset_dest</span> <span class="pre">}}/{{</span> <span class="pre">zmf_host</span> <span class="pre">}}/{{</span> <span class="pre">dataset_src</span> <span class="pre">}}.range</span></code> on control node.</p>
-<p>For example, the retrieved range of the dat set named <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.DATA</span></code> would be saved as <code class="docutils literal notranslate"><span class="pre">/tmp/dataset/ZOSMF.ANSIBLE.DATA.range</span></code>.</p>
+<p>For example, the retrieved range of the dat set named <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.PS</span></code> would be saved as <code class="docutils literal notranslate"><span class="pre">/tmp/dataset/ZOSMF.ANSIBLE.PS.range</span></code>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: dict</div>
@@ -324,11 +317,11 @@
 </dl>
 </dd>
 <dt>dataset_search</dt><dd><p>Specifies a series of parameters that are used to search the content of data set.</p>
-<p>These parameters only take effects when <em>dataset_data_type=text</em>.</p>
+<p>This variable only take effects when <em>dataset_data_type=text</em>.</p>
 <p>If this variable is specified, only the matched records in the data set will be fetched to the destination directory.</p>
 <p>Records are returned starting with the first matching record. The <em>dataset_range</em> may be used to specify the range of records to be searched.</p>
 <p>The matched contents in the data set will be saved as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">dataset_dest</span> <span class="pre">}}/{{</span> <span class="pre">zmf_host</span> <span class="pre">}}/{{</span> <span class="pre">dataset_src</span> <span class="pre">}}.search</span></code> on control node.</p>
-<p>For example, the matched contents in the data set named <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.DATA</span></code> would be saved as <code class="docutils literal notranslate"><span class="pre">/tmp/dataset/ZOSMF.ANSIBLE.DATA.search</span></code>.</p>
+<p>For example, the matched contents in the data set named <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.PS</span></code> would be saved as <code class="docutils literal notranslate"><span class="pre">/tmp/dataset/ZOSMF.ANSIBLE.PS.search</span></code>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: dict</div>
@@ -358,9 +351,9 @@
 </dd>
 </dl>
 </dd>
-<dt>dataset_src</dt><dd><p>Data set or the name of the PDS or PDSE member on the remote z/OS system to fetch.</p>
+<dt>dataset_src</dt><dd><p>Data set or the name of the PDS or PDSE member on z/OS system to fetch.</p>
 <p>This variable must consist of a fully qualified data set name. The length of the data set name cannot exceed 44 characters.</p>
-<p>For example, specifying a data set like <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.DATA</span></code>, or a PDS or PDSE member like <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.PDS(MEMBER</span></code>).</p>
+<p>For example, specifying a data set like <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.PS</span></code>, or a PDS or PDSE member like <code class="docutils literal notranslate"><span class="pre">ZOSMF.ANSIBLE.PDS(MEMBER)</span></code>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
 <div class="line"><strong>type</strong>: str</div>
@@ -461,44 +454,44 @@
 </div>
 <div class="section" id="examples">
 <h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a data set and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a data set and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.PS</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a PDS member and store in /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a PDS member and store in /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE(MEMBER)&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PDS(MEMBER)&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
     <span class="nt">dataset_flat</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch an uncataloged PDS member and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.SAMPLE/MEMBER</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch an uncataloged PDS member and store in /tmp/dataset/sample.ibm.com/ZOSMF.ANSIBLE.PDS/MEMBER</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE(MEMBER)&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PDS(MEMBER)&quot;</span>
     <span class="nt">dataset_volser</span><span class="p">:</span> <span class="s">&quot;VOL001&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
 
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a data set as binary</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
     <span class="nt">dataset_data_type</span><span class="p">:</span> <span class="s">&quot;binary&quot;</span>
 
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a data set in record format</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
     <span class="nt">dataset_data_type</span><span class="p">:</span> <span class="s">&quot;record&quot;</span>
 
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a data set and convert it from IBM-037 to ISO8859-1</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
     <span class="nt">dataset_encoding</span><span class="p">:</span>
         <span class="nt">from</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">IBM-037</span>
@@ -507,7 +500,7 @@
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a range of records from a data set (the first 500 lines)</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
     <span class="nt">dataset_range</span><span class="p">:</span>
         <span class="nt">start</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
@@ -516,7 +509,7 @@
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a range of records from a data set (the final 500 lines)</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
     <span class="nt">dataset_range</span><span class="p">:</span>
         <span class="nt">end</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">500</span>
@@ -524,7 +517,7 @@
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch 100 lines of records from the first matched line that contains &quot;ansible&quot; in a data set</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
     <span class="nt">dataset_search</span><span class="p">:</span>
         <span class="nt">keyword</span><span class="p">:</span> <span class="s">&quot;ansible&quot;</span>
@@ -533,7 +526,7 @@
 <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Fetch a data set and validate its checksum</span>
   <span class="nt">zmf_dataset_fetch</span><span class="p">:</span>
     <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
-    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.SAMPLE&quot;</span>
+    <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PS&quot;</span>
     <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset&quot;</span>
     <span class="nt">dataset_checksum</span><span class="p">:</span> <span class="s">&quot;93822124D6E66E2213C64B0D10800224&quot;</span>
 </pre></div>
@@ -555,17 +548,17 @@
 <div class="line"><strong>type</strong>: str</div>
 </div>
 <p><strong>sample</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER.&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;The data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER.&quot;</span>
 
-<span class="s2">&quot;The matched contents in the data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER.serarch.&quot;</span>
+<span class="s2">&quot;The matched contents in the data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER.serarch.&quot;</span>
 
-<span class="s2">&quot;The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since no matched contents is found with the specified search keyword.&quot;</span>
+<span class="s2">&quot;The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since no matched contents is found with the specified search keyword.&quot;</span>
 
-<span class="s2">&quot;A range of records in the data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.SAMPLE/MEMBER.range.&quot;</span>
+<span class="s2">&quot;A range of records in the data set ZOSMF.ANSIBLE.PDS(MEMBER) is fetched successfully and saved in: /tmp/dataset/ZOSMF.ANSIBLE.PDS/MEMBER.range.&quot;</span>
 
-<span class="s2">&quot;The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since no contents is returned in the specified range.&quot;</span>
+<span class="s2">&quot;The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since no contents is returned in the specified range.&quot;</span>
 
-<span class="s2">&quot;The data set ZOSMF.ANSIBLE.SAMPLE(MEMBER) is not fetched since it is not changed.&quot;</span>
+<span class="s2">&quot;The data set ZOSMF.ANSIBLE.PDS(MEMBER) is not fetched since it is not changed.&quot;</span>
 </pre></div>
 </div>
 </dd>
@@ -623,7 +616,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="zmf_file_copy.html" class="btn btn-neutral float-right" title="zmf_file_copy – Copy data to z/OS USS file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="zmf_file.html" class="btn btn-neutral float-right" title="zmf_file – Manage z/OS USS file or directory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="zmf_dataset_copy.html" class="btn btn-neutral float-left" title="zmf_dataset_copy – Copy data to z/OS data set or member" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -638,8 +631,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -650,25 +642,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="../v2.4.0/modules/zmf_dataset_fetch.html">v2.4.0</a></dd>
-            <dd><a href="../v2.3.0/modules/zmf_dataset_fetch.html">v2.3.0</a></dd>
-            <dd><a href="../v2.2.1/index.html">v2.2.1</a></dd>
-            <dd><a href="../v2.2.0/index.html">v2.2.0</a></dd>
-            <dd><a href="../v2.1.0/index.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/index.html">v2.0.1</a></dd>
-            <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">

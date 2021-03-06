@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Requirements - Provision and Manage z/OS Software Instances &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>Requirements - Provision and Manage z/OS Software Instances &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,7 +33,6 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Requirements - Operate z/OS Jobs" href="requirements_job.html" />
@@ -105,7 +104,7 @@
 <li class="toctree-l3"><a class="reference internal" href="requirements_workflow.html">Requirements - Operate z/OS Workflows</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Requirements - Provision and Manage z/OS Software Instances</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_job.html">Requirements - Operate z/OS Jobs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="requirements_console.html">Requirements - MVS Command Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_console.html">Requirements - Operate MVS Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="requirements_dataset_file.html">Requirements - Operate z/OS Data Sets and UNIX Files</a></li>
 </ul>
 </li>
@@ -169,7 +168,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.4.0/docs/source/requirements_cpm.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/requirements_cpm.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -183,38 +182,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="requirements-provision-and-manage-z-os-software-instances">
+  <div class="section" id="requirements-provision-and-manage-z-os-software-instances">
 <h1>Requirements - Provision and Manage z/OS Software Instances<a class="headerlink" href="#requirements-provision-and-manage-z-os-software-instances" title="Permalink to this headline">¶</a></h1>
-<p>To use the modules and roles which supplied to interact with <strong>Cloud Provisioning &amp; Management (CP&amp;M)</strong> in your playbook, besides the <a class="reference external" href="requirements.html">Overall Requirements</a>, the following nodes require specific versions of software:</p>
+<ul class="simple">
+<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a></p></li>
+<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a></p></li>
+<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_remove_software_instance.html">zmf_cpm_remove_software_instance</a></p></li>
+</ul>
+<p>To use above modules and roles, it needs to ensure <strong>Cloud Provisioning &amp; Management (CP&amp;M)</strong> is configured in z/OSMF.</p>
+<p>Besides the <a class="reference external" href="requirements.html">Overall Requirements</a>, the following nodes require specific versions of software:</p>
 <p><strong>Managed Node</strong>:</p>
 <ul>
 <li><p><a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3.izua300/abstract.html">z/OS Management Facility</a>: V02.03.00 or later</p>
 <blockquote>
 <div><p>The z/OSMF server must be installed and active on <strong>each</strong> managed z/OS system.</p>
-<p>It is required when using:</p>
-<ul class="simple">
-<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a></p></li>
-<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a></p></li>
-<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_remove_software_instance.html">zmf_cpm_remove_software_instance</a></p></li>
-</ul>
 </div></blockquote>
 </li>
-<li><p><a class="reference external" href="https://www.ibm.com/support/z-content-solutions/cloud-provisioning">Cloud Provisioning &amp; Management</a>:</p>
-<blockquote>
-<div><p>It is required when using:</p>
-<ul class="simple">
-<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_provision_software_service.html">zmf_cpm_provision_software_service</a></p></li>
-<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_manage_software_instance.html">zmf_cpm_manage_software_instance</a></p></li>
-<li><p>role: <a class="reference external" href="roles/README_zmf_cpm_remove_software_instance.html">zmf_cpm_remove_software_instance</a></p></li>
-</ul>
-</div></blockquote>
-</li>
+<li><p><a class="reference external" href="https://www.ibm.com/support/z-content-solutions/cloud-provisioning">Cloud Provisioning &amp; Management</a></p></li>
 </ul>
 </div>
 
@@ -241,8 +225,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -253,25 +236,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="v2.4.0/requirements_cpm.html">v2.4.0</a></dd>
-            <dd><a href="v2.3.0/requirements_cpm.html">v2.3.0</a></dd>
-            <dd><a href="v2.2.1/requirements_cpm.html">v2.2.1</a></dd>
-            <dd><a href="v2.2.0/requirements_cpm.html">v2.2.0</a></dd>
-            <dd><a href="v2.1.0/requirements_cpm.html">v2.1.0</a></dd>
-            <dd><a href="v2.0.1/requirements_cpm.html">v2.0.1</a></dd>
-            <dd><a href="v2.0.0/requirements_cpm.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">

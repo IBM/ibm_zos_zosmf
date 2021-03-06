@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_console_command – Issue MVS command &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>zmf_console_command – Issue MVS command &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,10 +33,9 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="zmf_dataset_copy – Copy data to z/OS data set or member" href="zmf_dataset_copy.html" />
+    <link rel="next" title="zmf_dataset – Manage z/OS data set or member" href="zmf_dataset.html" />
     <link rel="prev" title="zmf_authenticate – Authenticate with z/OSMF server" href="zmf_authenticate.html" /> 
 </head>
 
@@ -98,8 +97,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#return-values">Return Values</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset.html">zmf_dataset – Manage z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_dataset_copy.html">zmf_dataset_copy – Copy data to z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_dataset_fetch.html">zmf_dataset_fetch – Fetch z/OS data set or member from z/OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_file.html">zmf_file – Manage z/OS USS file or directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_file_copy.html">zmf_file_copy – Copy data to z/OS USS file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_workflow.html">zmf_workflow – Operate z/OS workflows</a></li>
@@ -194,13 +195,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="zmf-console-command-issue-mvs-command">
+  <div class="section" id="zmf-console-command-issue-mvs-command">
 <span id="zmf-console-command-module"></span><h1>zmf_console_command – Issue MVS command<a class="headerlink" href="#zmf-console-command-issue-mvs-command" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -230,7 +225,7 @@
 </dd>
 <dt>console_broadcastmsg_keyword</dt><dd><p>Specifies a keyword that you want to detect in broadcast messages. Case is not significant.</p>
 <p>This value can be a string or a regular expression. To use a regular expression, you must also set <em>console_broadcastmsg_reg=true</em>.</p>
-<p>This parameter is designed to help user determine whether the broadcast messages issued after the command matches with user’s expectation.</p>
+<p>This variable is designed to help user determine whether the broadcast messages issued after the command matches with user’s expectation.</p>
 <p>If <em>console_cmdresponse_keyword</em> is not specified, the module will fail if the specified keyword can not be detected from broadcast messages.</p>
 <p>Otherwise, the module will fail if the specified keywords can not be detected from both command response and broadcast messages.</p>
 <div class="line-block">
@@ -253,7 +248,7 @@
 </dd>
 <dt>console_cmdresponse_keyword</dt><dd><p>Specifies a keyword that you want to detect in the command response. Case is not significant.</p>
 <p>This value can be a string or a regular expression. To use a regular expression, you must also set <em>console_cmdresponse_reg=true</em>.</p>
-<p>This parameter is designed to help user determine whether the command response matches with user’s expectation.</p>
+<p>This variable is designed to help user determine whether the command response matches with user’s expectation.</p>
 <p>If <em>console_broadcastmsg_keyword</em> is not specified, the module will fail if the specified keyword can not be detected from the command response.</p>
 <p>Otherwise, the module will fail if the specified keywords can not be detected from both command response and broadcast messages.</p>
 <div class="line-block">
@@ -492,7 +487,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="zmf_dataset_copy.html" class="btn btn-neutral float-right" title="zmf_dataset_copy – Copy data to z/OS data set or member" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="zmf_dataset.html" class="btn btn-neutral float-right" title="zmf_dataset – Manage z/OS data set or member" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="zmf_authenticate.html" class="btn btn-neutral float-left" title="zmf_authenticate – Authenticate with z/OSMF server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -507,8 +502,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -519,25 +513,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="../v2.4.0/modules/zmf_console_command.html">v2.4.0</a></dd>
-            <dd><a href="../v2.3.0/modules/zmf_console_command.html">v2.3.0</a></dd>
-            <dd><a href="../v2.2.1/modules/zmf_console_command.html">v2.2.1</a></dd>
-            <dd><a href="../v2.2.0/modules/zmf_console_command.html">v2.2.0</a></dd>
-            <dd><a href="../v2.1.0/modules/zmf_console_command.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/index.html">v2.0.1</a></dd>
-            <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sample_module_dataset_copy &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>sample_module_dataset_copy &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,11 +33,10 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sample_module_dataset_fetch" href="sample_module_dataset_fetch.html" />
-    <link rel="prev" title="sample_module_console_command" href="sample_module_console_command.html" /> 
+    <link rel="prev" title="sample_module_dataset" href="sample_module_dataset.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -98,8 +97,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../playbooks.html#group-vars">Group Vars</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../playbooks.html#sample-playbooks">Sample Playbooks</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="sample_module_console_command.html">sample_module_console_command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_module_dataset.html">sample_module_dataset</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sample_module_dataset_copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_dataset_fetch.html">sample_module_dataset_fetch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_module_file.html">sample_module_file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_file_copy.html">sample_module_file_copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_file_fetch.html">sample_module_file_fetch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sample_module_workflow.html">sample_module_workflow</a></li>
@@ -182,7 +183,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.4.0/docs/source/playbooks/sample_module_dataset_copy.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/playbooks/sample_module_dataset_copy.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -196,16 +197,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="sample-module-dataset-copy">
+  <div class="section" id="sample-module-dataset-copy">
 <h1>sample_module_dataset_copy<a class="headerlink" href="#sample-module-dataset-copy" title="Permalink to this headline">¶</a></h1>
 <p>For configuration and setup, see <a class="reference external" href="../playbooks.html">Playbook Documentation</a>.</p>
-<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_module_dataset_copy.yml">sample playbook</a> shows how to copy data to a z/OS data set or member on the remote z/OS system via z/OSMF.</p>
+<p>This <a class="reference external" href="https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/sample_module_dataset_copy.yml">sample playbook</a> shows how to copy data to a z/OS data set or member on z/OS system via z/OSMF.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample of copying data to a z/OS data set or member</span>
   <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dataset</span>
   <span class="nt">gather_facts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">no</span>
@@ -230,9 +225,12 @@
         <span class="nt">zmf_credential</span><span class="p">:</span> <span class="s">&quot;{{</span><span class="nv"> </span><span class="s">result_auth</span><span class="nv"> </span><span class="s">}}&quot;</span> <span class="c1"># Authentication credentials returned by module zmf_authenticate</span>
         <span class="nt">dataset_src</span><span class="p">:</span> <span class="s">&quot;/tmp/dataset_input/member01&quot;</span>
         <span class="c1"># dataset_content: &quot;Sample profile\nTZ=EST5EDT\n&quot;</span>
-        <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.LIB(MEMBER01)&quot;</span>
-        <span class="c1"># dataset_volser: &quot;VOL001&quot; # The volume to be searched for an uncataloged data set or member</span>
+        <span class="nt">dataset_dest</span><span class="p">:</span> <span class="s">&quot;ZOSMF.ANSIBLE.PDS(MEMBER)&quot;</span>
+        <span class="c1"># dataset_src_zos: false # Whether copy file or data set from z/OS system. Default is false</span>
+        <span class="c1"># dataset_dest_volser: &quot;VOL001&quot; # The volume to be searched for an uncataloged target data set or member</span>
+        <span class="c1"># dataset_src_volser: &quot;VOL002&quot; # The volume to be searched for an uncataloged source data set or member</span>
         <span class="c1"># dataset_force: true # Whether the target data set must always be overwritten. Default is true</span>
+        <span class="c1"># dataset_create_like: &quot;ZOSMF.ANSIBLE.MODEL&quot; # When copying a local file to a non-existing PDS, PDSE or PS, specify a model data set to allocate the target data set</span>
         <span class="c1"># dataset_data_type: &quot;text&quot; # Whether data conversion is to be performed on the data to be copied. Default is text (data conversion is performed)</span>
         <span class="c1"># dataset_encoding: # Which encodings the data to be copied should be converted from and to</span>
         <span class="c1">#   from: ISO8859-1</span>
@@ -269,7 +267,7 @@
         <a href="sample_module_dataset_fetch.html" class="btn btn-neutral float-right" title="sample_module_dataset_fetch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sample_module_console_command.html" class="btn btn-neutral float-left" title="sample_module_console_command" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sample_module_dataset.html" class="btn btn-neutral float-left" title="sample_module_dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -281,8 +279,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -293,25 +290,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="../v2.4.0/playbooks/sample_module_dataset_copy.html">v2.4.0</a></dd>
-            <dd><a href="../v2.3.0/index.html">v2.3.0</a></dd>
-            <dd><a href="../v2.2.1/index.html">v2.2.1</a></dd>
-            <dd><a href="../v2.2.0/index.html">v2.2.0</a></dd>
-            <dd><a href="../v2.1.0/index.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/index.html">v2.0.1</a></dd>
-            <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">

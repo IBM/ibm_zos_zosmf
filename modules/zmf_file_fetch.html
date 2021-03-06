@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_file_fetch – Fetch USS file from z/OS &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>zmf_file_fetch – Fetch USS file from z/OS &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,7 +33,6 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="zmf_workflow – Operate z/OS workflows" href="zmf_workflow.html" />
@@ -92,8 +91,10 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module Reference</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset.html">zmf_dataset – Manage z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_dataset_copy.html">zmf_dataset_copy – Copy data to z/OS data set or member</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_dataset_fetch.html">zmf_dataset_fetch – Fetch z/OS data set or member from z/OS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_file.html">zmf_file – Manage z/OS USS file or directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zmf_file_copy.html">zmf_file_copy – Copy data to z/OS USS file</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_file_fetch – Fetch USS file from z/OS</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
@@ -194,13 +195,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="zmf-file-fetch-fetch-uss-file-from-z-os">
+  <div class="section" id="zmf-file-fetch-fetch-uss-file-from-z-os">
 <span id="zmf-file-fetch-module"></span><h1>zmf_file_fetch – Fetch USS file from z/OS<a class="headerlink" href="#zmf-file-fetch-fetch-uss-file-from-z-os" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -213,7 +208,7 @@
 <div class="section" id="synopsis">
 <h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Retrieve the contents of a z/OS UNIX System Services (USS) file from the remote z/OS system, and save them on Ansible control node.</p></li>
+<li><p>Retrieve the contents of a z/OS UNIX System Services (USS) file from z/OS system, and save them on Ansible control node.</p></li>
 <li><p>USS file that already exists at <em>file_dest</em> will be overwritten if it is different than the <em>file_src</em>.</p></li>
 </ul>
 </div>
@@ -249,7 +244,7 @@
 </div>
 </dd>
 <dt>file_encoding</dt><dd><p>Specifies which encodings the fetched USS file should be converted from and to.</p>
-<p>These parameters only take effects when <em>file_data_type=text</em>.</p>
+<p>This variable only take effects when <em>file_data_type=text</em>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: False</div>
 <div class="line"><strong>type</strong>: dict</div>
@@ -310,7 +305,7 @@
 </dl>
 </dd>
 <dt>file_search</dt><dd><p>Specifies a series of parameters that are used to search the USS file.</p>
-<p>These parameters only take effects when <em>file_data_type=text</em>.</p>
+<p>This variable only take effects when <em>file_data_type=text</em>.</p>
 <p>If this variable is specified, only the matched contents in the USS file will be fetched to the destination directory.</p>
 <p>The matched contents in the USS file will be saved as <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">file_dest</span> <span class="pre">}}/{{</span> <span class="pre">zmf_host</span> <span class="pre">}}/{</span> <span class="pre">file_src</span> <span class="pre">}}.search</span></code> on control node.</p>
 <p>For example, the matched contents in the USS file named <code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code> would be saved as <code class="docutils literal notranslate"><span class="pre">....../etc/profile.search</span></code>.</p>
@@ -344,7 +339,7 @@
 </dd>
 </dl>
 </dd>
-<dt>file_src</dt><dd><p>USS file on the remote z/OS system to fetch.</p>
+<dt>file_src</dt><dd><p>USS file on z/OS system to fetch.</p>
 <p>This variable must consist of a fully qualified path and file name. For example, <code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code>.</p>
 <div class="line-block">
 <div class="line"><strong>required</strong>: True</div>
@@ -603,8 +598,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -615,25 +609,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="../v2.4.0/modules/zmf_file_fetch.html">v2.4.0</a></dd>
-            <dd><a href="../v2.3.0/modules/zmf_file_fetch.html">v2.3.0</a></dd>
-            <dd><a href="../v2.2.1/index.html">v2.2.1</a></dd>
-            <dd><a href="../v2.2.0/index.html">v2.2.0</a></dd>
-            <dd><a href="../v2.1.0/index.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/index.html">v2.0.1</a></dd>
-            <dd><a href="../v2.0.0/index.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">

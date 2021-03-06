@@ -7,7 +7,7 @@ sample_module_dataset_copy
 
 For configuration and setup, see `Playbook Documentation`_. 
 
-This `sample playbook`_ shows how to copy data to a z/OS data set or member on the remote z/OS system via z/OSMF.
+This `sample playbook`_ shows how to copy data to a z/OS data set or member on z/OS system via z/OSMF.
 
 .. code-block:: yaml
 
@@ -35,9 +35,12 @@ This `sample playbook`_ shows how to copy data to a z/OS data set or member on t
            zmf_credential: "{{ result_auth }}" # Authentication credentials returned by module zmf_authenticate
            dataset_src: "/tmp/dataset_input/member01"
            # dataset_content: "Sample profile\nTZ=EST5EDT\n"
-           dataset_dest: "ZOSMF.ANSIBLE.LIB(MEMBER01)"
-           # dataset_volser: "VOL001" # The volume to be searched for an uncataloged data set or member
+           dataset_dest: "ZOSMF.ANSIBLE.PDS(MEMBER)"
+           # dataset_src_zos: false # Whether copy file or data set from z/OS system. Default is false
+           # dataset_dest_volser: "VOL001" # The volume to be searched for an uncataloged target data set or member
+           # dataset_src_volser: "VOL002" # The volume to be searched for an uncataloged source data set or member
            # dataset_force: true # Whether the target data set must always be overwritten. Default is true
+           # dataset_create_like: "ZOSMF.ANSIBLE.MODEL" # When copying a local file to a non-existing PDS, PDSE or PS, specify a model data set to allocate the target data set
            # dataset_data_type: "text" # Whether data conversion is to be performed on the data to be copied. Default is text (data conversion is performed)
            # dataset_encoding: # Which encodings the data to be copied should be converted from and to
            #   from: ISO8859-1

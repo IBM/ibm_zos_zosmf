@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>zmf_cpm_provision_software_service &mdash; IBM z/OSMF Collection 2.4.0 documentation</title>
+  <title>zmf_cpm_provision_software_service &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
   
 
   
@@ -33,7 +33,6 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="zmf_cpm_manage_software_instance" href="README_zmf_cpm_manage_software_instance.html" />
@@ -175,7 +174,7 @@
         
             
             
-              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.4.0/docs/source/roles/README_zmf_cpm_provision_software_service.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/master/docs/source/roles/README_zmf_cpm_provision_software_service.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -189,13 +188,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
-
-
-
-
-
-<div class="section" id="zmf-cpm-provision-software-service">
+  <div class="section" id="zmf-cpm-provision-software-service">
 <h1>zmf_cpm_provision_software_service<a class="headerlink" href="#zmf-cpm-provision-software-service" title="Permalink to this headline">¶</a></h1>
 <p><strong>IBM z/OSMF collection</strong> provides an Ansible role, referred to as <strong>zmf_cpm_provision_software_service</strong>, to provision a z/OS middleware/software service using Cloud Provisioning &amp; Management (CP&amp;M) template.</p>
 <div class="section" id="role-variables">
@@ -265,6 +258,14 @@
 <div class="line"><strong>type</strong>: str</div>
 </div>
 </dd>
+<dt>input_vars</dt><dd><p>Input variable names and values for the software service to be provisioned</p>
+<p>This variable is required if software service expects specific inputs from user. This is a dictionary variable and needs to be in following format.</p>
+<p>[{ “name”:”VAR1”,”value”:”VAR1_VALUE”},{..},…]</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+</dd>
 <dt>api_polling_retry_count</dt><dd><p>Total retries number before role exit with failure waiting on instance action to complete.</p>
 <p>This variable is specified in host specific variables file in <em>host_vars</em> directory.</p>
 <div class="line-block">
@@ -320,8 +321,7 @@
         &copy; Copyright 2020, IBM
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
@@ -332,25 +332,6 @@
 
   </div>
   
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        <span class="fa fa-book"> Other Versions</span>
-        v: v2.4.0
-        <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Tags</dt>
-            <dd><a href="../v2.4.0/roles/README_zmf_cpm_provision_software_service.html">v2.4.0</a></dd>
-            <dd><a href="../v2.3.0/roles/README_zmf_cpm_provision_software_service.html">v2.3.0</a></dd>
-            <dd><a href="../v2.2.1/roles/README_zmf_cpm_provision_software_service.html">v2.2.1</a></dd>
-            <dd><a href="../v2.2.0/roles/README_zmf_cpm_provision_software_service.html">v2.2.0</a></dd>
-            <dd><a href="../v2.1.0/roles/README_zmf_cpm_provision_software_service.html">v2.1.0</a></dd>
-            <dd><a href="../v2.0.1/roles/README_zmf_cpm_provision_software_service.html">v2.0.1</a></dd>
-            <dd><a href="../v2.0.0/roles/README_zmf_cpm_provision_software_service.html">v2.0.0</a></dd>
-        </dl>
-    </div>
-</div>
 
 
   <script type="text/javascript">
