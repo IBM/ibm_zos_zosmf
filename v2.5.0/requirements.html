@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Requirements &mdash; IBM z/OSMF Collection 2.5.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Requirements - Operate z/OS Workflows" href="requirements_workflow.html" />
+    <link rel="prev" title="Contributing" href="community_guides.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> IBM z/OSMF Collection
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roles.html">Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playbooks.html">Playbooks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="community_guides.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="community_guides.html#helpful-links">Helpful Links</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Requirements</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overall-requirements">Overall Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specific-requirements">Specific Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="requirements_workflow.html">Requirements - Operate z/OS Workflows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_cpm.html">Requirements - Provision and Manage z/OS Software Instances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_job.html">Requirements - Operate z/OS Jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_console.html">Requirements - Operate MVS Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements_dataset_file.html">Requirements - Operate z/OS Data Sets and UNIX Files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">IBM z/OSMF Collection</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Requirements</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/IBM/ibm_zos_zosmf/blob/v2.5.0/docs/source/requirements.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="requirements">
+<h1>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h1>
+<p><strong>Control node</strong> is any machine with Ansible installed. From the control node, you can run commands and playbooks from a laptop, desktop, or server machine. However, you cannot run <strong>IBM z/OSMF collection</strong> on a Windows machine.</p>
+<p><strong>Managed node</strong> is often referred to as a target node, or host, and is the node that is managed by Ansible. Ansible does not need to be installed on a managed node.</p>
+<div class="section" id="overall-requirements">
+<h2>Overall Requirements<a class="headerlink" href="#overall-requirements" title="Permalink to this headline">¶</a></h2>
+<p>To use this collection, the following nodes require specific versions of software:</p>
+<p><strong>Control Node</strong>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html">Ansible</a>: 2.9 or later</p></li>
+<li><p><a class="reference external" href="https://www.python.org">Python</a>: 2.7 or later</p></li>
+</ul>
+<p><strong>Managed Node</strong>:</p>
+<ul>
+<li><p><a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3/en/homepage.html">z/OS</a>: V02.03.00 or later</p>
+<blockquote>
+<div><p>The target z/OS systems should be configured as the target hosts (managed nodes) in your playbook. It is not necessary to set up an SSH connection and install Python on the target z/OS systems. Instead, the modules and roles in this collection will create HTTPS connections with the z/OSMF server. Therefore <code class="docutils literal notranslate"><span class="pre">delegate_to:</span> <span class="pre">localhost</span></code> statement is required for using the modules in your playbook task. This statement is hard-coded within the roles.</p>
+</div></blockquote>
+</li>
+<li><p><a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3.izua300/abstract.html">z/OS Management Facility</a>: V02.03.00 or later</p>
+<blockquote>
+<div><p>The z/OSMF server must be installed and active on <strong>at least one</strong> z/OS system in the same sysplex. Information about the z/OSMF server must be configured in the inventory <code class="docutils literal notranslate"><span class="pre">hosts</span></code> file or in the <code class="docutils literal notranslate"><span class="pre">vars</span></code> file, such as the hostname, port number, and authentication info. The authentication info to connect to the z/OSMF server is provided when running playbook or it will be prompted during playbook run.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="specific-requirements">
+<h2>Specific Requirements<a class="headerlink" href="#specific-requirements" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements_workflow.html">Requirements - Operate z/OS Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements_cpm.html">Requirements - Provision and Manage z/OS Software Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements_job.html">Requirements - Operate z/OS Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements_console.html">Requirements - Operate MVS Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements_dataset_file.html">Requirements - Operate z/OS Data Sets and UNIX Files</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="requirements_workflow.html" class="btn btn-neutral float-right" title="Requirements - Operate z/OS Workflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="community_guides.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, IBM
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v2.5.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="requirements.html">v2.5.0</a></dd>
+            <dd><a href="../v2.4.0/requirements.html">v2.4.0</a></dd>
+            <dd><a href="../v2.3.0/requirements.html">v2.3.0</a></dd>
+            <dd><a href="../v2.2.1/requirements.html">v2.2.1</a></dd>
+            <dd><a href="../v2.2.0/requirements.html">v2.2.0</a></dd>
+            <dd><a href="../v2.1.0/requirements.html">v2.1.0</a></dd>
+            <dd><a href="../v2.0.1/requirements.html">v2.0.1</a></dd>
+            <dd><a href="../v2.0.0/requirements.html">v2.0.0</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
