@@ -29,7 +29,7 @@
       delegate_to: localhost
       register: action_results
 
-    - name: "Action <{{ instance_action_name }}> progress status: in-progress"
+    - name: "Get action <{{ instance_action_name }}> progress status"
       uri:
         url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf\
             /provisioning/rest/1.0/scr\
@@ -56,6 +56,36 @@
         msg: "Action <{{ instance_action_name }}> progress status: {{ action_status_result.json.state }} "
       when: action_status_result.json.state == "failed"
 
-    - debug:
-        msg: "Action <{{ instance_action_name }}> progress status: {{ action_status_result.json.state }}"
+     - name: "Get updated instance information for {{ instance_record['registry-info']['object-id'] }}"
+      uri:
+        url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_record['registry-info']['object-id'] }}"
+        method: GET
+        user: "{{ zmf_user | trim  }}"
+        password: "{{ zmf_password | trim  }}"
+        force_basic_auth: yes
+        headers:
+          Host: "{{ zmf_host }}"
+          Origin: "https://{{ zmf_host }}"
+        status_code: "200"
+        validate_certs: no
+        return_content: yes
+      register: full_instance_json
+      when: action_status_result.json.state == "complete"
+      delegate_to: localhost
+    
+    - name: Update local copy of instance information 
+      block:
+        - name: Update fully provisioned instance information to local
+          copy:
+            content: '{ "registry-info" : {{ full_instance_json.json | to_nice_json(indent=2) }}}'
+            dest: '{{ instance_info_json_path }}'
+          delegate_to: localhost
+
+    - name: Display instance record file path
+      debug:
+        msg: "Instance record updated at: {{ instance_info_json_path }}"
+
+    - name: Display action performed and complete status
+      debug:
+        msg: "Action <{{ instance_action_name }}> final status: {{ action_status_result.json.state }}"
       when: action_status_result.json.state == "complete"
