@@ -9,6 +9,12 @@
     - name: Read from json file path
       set_fact:
         instance_record: "{{ lookup('file', instance_info_json_path) | from_json }}"
+    
+    # Support input_vars to be provided via playbook. If input_vars isn't set then set default below
+    - name: Set input_vars as fact
+      set_fact:
+        input_vars: "[]"
+      when: input_vars is not defined
 
     - name: "Perform action <{{ instance_action_name }}> on {{ instance_record['registry-info']['object-id'] }}"
       uri:
@@ -25,7 +31,7 @@
         status_code: "200"
         validate_certs: no
         body_format: json
-        body: '{}'
+        body: '{"input-variables":{{ input_vars }}}'
       delegate_to: localhost
       register: action_results
 
@@ -56,6 +62,7 @@
         msg: "Action <{{ instance_action_name }}> progress status: {{ action_status_result.json.state }} "
       when: action_status_result.json.state == "failed"
 
+
      - name: "Get updated instance information for {{ instance_record['registry-info']['object-id'] }}"
       uri:
         url: "https://{{ zmf_host }}:{{ zmf_port }}/zosmf/provisioning/rest/1.0/scr/{{ instance_record['registry-info']['object-id'] }}"
@@ -81,9 +88,11 @@
             dest: '{{ instance_info_json_path }}'
           delegate_to: localhost
 
+
     - name: Display instance record file path
       debug:
         msg: "Instance record updated at: {{ instance_info_json_path }}"
+
 
     - name: Display action performed and complete status
       debug:
