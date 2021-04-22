@@ -84,7 +84,7 @@
       block:
         - name: Update fully provisioned instance information to local
           copy:
-            content: '{ "registry-info" : {{ full_instance_json.json | to_nice_json(indent=2) }}}'
+            content: '{ "registry-info" : {{ full_instance_json.json | default("") | to_nice_json(indent=2) }}}'
             dest: '{{ instance_info_json_path }}'
           delegate_to: localhost
 
