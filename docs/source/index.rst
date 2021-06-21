@@ -7,18 +7,7 @@ IBM z/OS Management Facility Collection
 
 **IBM z/OS Management Facility (z/OSMF) Collection**, referred to as **ibm_zos_zosmf**, consists of modules and roles that you can use with z/OS.
 
-**IBM z/OSMF collection** intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, z/OS console REST services, z/OS data set and file REST services, Cloud Provisioning and Management services etc.
-
-.. **IBM z/OS Management Facility (z/OSMF) collection**, referred to as **ibm_zos_zosmf**, is part of the broader offering **Red Hat® Ansible Certified Content for IBM Z**. 
-
-.. **IBM z/OSMF collection** consists of modules and roles that you can use with z/OS, it intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OSMF workflow services, z/OS jobs REST services, z/OS console REST services, z/OS data set and file REST services, Cloud Provisioning and Management services etc.
-
-.. Red Hat Ansible Certified Content for IBM Z
-.. ===========================================
-
-.. **Red Hat® Ansible Certified Content for IBM Z** provides the ability to connect IBM Z® to clients' wider enterprise automation strategy through the Ansible Automation Platform ecosystem. This enables development and operations automation on Z through a seamless, unified workflow orchestration with configuration management, provisioning, and application deployment in one easy-to-use platform.
-
-.. **IBM z/OSMF collection**, as part of the broader offering **Red Hat® Ansible Certified Content for IBM Z**, will be available on both, Galaxy as community supported and Automation Hub with enterprise support.
+**IBM z/OSMF collection** intends to allow Ansible to drive z/OS operation and configuration by manipulating z/OS resources and data based on z/OSMF RESTful services, such as z/OS jobs REST services, z/OS console REST services, z/OS data set and file REST services etc.
 
 Features
 ========
