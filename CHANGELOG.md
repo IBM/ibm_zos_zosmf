@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [v3.0.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v3.0.0) - 2021-06-20
 ### Removed
 - remove module: `zmf_workflow`: use `ibm.ibm_zosmf.zmf_workflow` instead
+- remove role: `zmf_workflow_complete`: use `ibm.ibm_zosmf.zmf_workflow_complete` instead
 - remove role: `zmf_cpm_provision_software_service`: use `ibm.ibm_zosmf.zmf_cpm_provision_software_service` instead
 - remove role: `zmf_cpm_manage_software_instance`: use `ibm.ibm_zosmf.zmf_cpm_manage_software_instance` instead
 - remove role: `zmf_cpm_remove_software_instance`: use `ibm.ibm_zosmf.zmf_cpm_remove_software_instance` instead

@@ -15,6 +15,7 @@ Removed
 -------
 
   * remove module: `zmf_workflow`: use `ibm.ibm_zosmf.zmf_workflow` instead
+  * remove role: `zmf_workflow_complete`: use `ibm.ibm_zosmf.zmf_workflow_complete` instead
   * remove role: `zmf_cpm_provision_software_service`: use `ibm.ibm_zosmf.zmf_cpm_provision_software_service` instead
   * remove role: `zmf_cpm_manage_software_instance`: use `ibm.ibm_zosmf.zmf_cpm_manage_software_instance` instead
   * remove role: `zmf_cpm_remove_software_instance`: use `ibm.ibm_zosmf.zmf_cpm_remove_software_instance` instead
