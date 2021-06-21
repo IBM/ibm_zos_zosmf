@@ -19,7 +19,7 @@
       delegate_to: localhost
     - zmf_file_fetch:
         zmf_credential: "{{ result_auth }}"
-        file_src: "/etc/profile"
+        file_src: "/etc/log"
         file_dest: "/Users/strangepear2019/.ansible/tmp/file_output"
         file_flat: false
         file_range:
