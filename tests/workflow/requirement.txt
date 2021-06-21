@@ -1,0 +1,5 @@
+# Copyright (c) IBM Corporation 2020 
+
+ansible >= 2.9.0
+python >= 2.7.0
+requests >= 2.23.0

@@ -16,5 +16,9 @@ Role Reference
    :maxdepth: 1
    :glob:
 
+   roles/README_zmf_workflow_complete
+   roles/README_zmf_cpm_provision_software_service
+   roles/README_zmf_cpm_manage_software_instance
+   roles/README_zmf_cpm_remove_software_instance
    roles/README_zmf_job_complete
    roles/README_zmf_job_query

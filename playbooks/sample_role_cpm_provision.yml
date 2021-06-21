@@ -1,0 +1,26 @@
+# Copyright (c) IBM Corporation 2020
+
+- name: test role for zmf_cpm_provision_software_service
+  hosts: cpmHost1 # need to match host nick name specified in hosts inventory file
+  gather_facts: no
+  collections:
+    - ibm.ibm_zos_zosmf
+  vars:
+    - name: instance_info_json_path #will store instance json information globally thru the playbook
+  vars_prompt:
+    - name: zmf_user
+      prompt: "Enter your zOSMF username"
+      private: no
+
+    - name: zmf_password
+      prompt: "Enter your zOSMF password"
+      private: yes
+  tasks:
+    - include_role:
+        name: zmf_cpm_provision_software_service
+      vars:
+        cpm_template_name: "<fill-me-template-name>"   # The value for property cpm_template_name which identifies the template (software service) user wants to provision with Cloud Provisioning & Management
+        domain_name: "<domain-name>" # The value for property domain_name which identifies CP&M domain in which specified template is defined
+        tenant_name: "<tenant-name>" # The value for optional property tenant_name which identifies CP&M tenant that is associated with the zmf_user that is provisioning the template
+        systems_nicknames: "<system-name>" # The value for optional property systems_nicknames which identifies on which system the software instance will be provisioned
+        input_vars: "<input-vars>" # The value for optional property input_vars which identifies a list of dictionary objects that provides one or more input variables required for the template in "name" "value" format e.g. [{ "name":"VAR_NAME","value":"VAR_VALUE"}...]

@@ -36,6 +36,8 @@ Specific Requirements
    :maxdepth: 1
    :glob:
 
+   requirements_workflow
+   requirements_cpm
    requirements_job
    requirements_console
    requirements_dataset_file
