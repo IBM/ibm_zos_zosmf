@@ -1,0 +1,611 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>zmf_file – Manage z/OS USS file or directory &mdash; IBM z/OSMF Collection 3.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/banner.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="zmf_file_copy – Copy data to z/OS USS file" href="zmf_file_copy.html" />
+    <link rel="prev" title="zmf_dataset_fetch – Fetch z/OS data set or member from z/OS" href="zmf_dataset_fetch.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> IBM z/OSMF Collection
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module Reference</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="zmf_authenticate.html">zmf_authenticate – Authenticate with z/OSMF server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_console_command.html">zmf_console_command – Issue MVS command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset.html">zmf_dataset – Manage z/OS data set or member</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset_copy.html">zmf_dataset_copy – Copy data to z/OS data set or member</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_dataset_fetch.html">zmf_dataset_fetch – Fetch z/OS data set or member from z/OS</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">zmf_file – Manage z/OS USS file or directory</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-values">Return Values</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_file_copy.html">zmf_file_copy – Copy data to z/OS USS file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zmf_file_fetch.html">zmf_file_fetch – Fetch USS file from z/OS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html#module-documentation">Module Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../roles.html">Roles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbooks.html">Playbooks</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Community Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community_guides.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community_guides.html#helpful-links">Helpful Links</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Requirements</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../requirements.html">Requirements</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">IBM z/OSMF Collection</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../modules.html">Modules</a> &raquo;</li>
+        
+      <li>zmf_file – Manage z/OS USS file or directory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/IBM/ibm_zos_zosmf/tree/master/plugins/modules/zmf_file.py" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+
+
+
+
+
+<div class="section" id="zmf-file-manage-z-os-uss-file-or-directory">
+<span id="zmf-file-module"></span><h1>zmf_file – Manage z/OS USS file or directory<a class="headerlink" href="#zmf-file-manage-z-os-uss-file-or-directory" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id3">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id4">Return Values</a></p></li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Create, delete and operate on a z/OS UNIX System Services (USS) file or a directory on z/OS system.</p></li>
+<li><p>The available operations include rename, change mode, change owner and change tag.</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id2">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>file_mode</dt><dd><p>Specifies the permission the resulting USS file or directory should have.</p>
+<p>This variable only take effects when <em>file_state=file</em> or <em>file_state=directory</em>.</p>
+<p>If <em>file_path</em> does not exist, this value is used in creating <em>file_path</em>. If this value is omitted, 755 is used by default.</p>
+<p>If <em>file_path</em> exists, this value is used in changing mode of <em>file_path</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<dl>
+<dt>mode</dt><dd><p>The value of file mode bits.</p>
+<p>This value could be either the POSIX symbolic form (e.g., <code class="docutils literal notranslate"><span class="pre">RWXRW-RW-</span></code>) or octal value (e.g., <code class="docutils literal notranslate"><span class="pre">755</span></code>).</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>recursive</dt><dd><p>This variable only take effects when <em>file_state=directory</em>.</p>
+<p>When <em>recursive=true</em>, the file mode bits of the directory and all files in the file hierarchy below it are changed (chmod -R).</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: false</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>file_new_name</dt><dd><p>Specifies the new name of the USS file or directory.</p>
+<p>This variable only take effects when <em>file_state=file</em> or <em>file_state=directory</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>file_owner</dt><dd><p>Indicates the function change owner.</p>
+<p>This variable only take effects when <em>file_state=file</em> or <em>file_state=directory</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<dl>
+<dt>group</dt><dd><p>The group ID or GID.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>owner</dt><dd><p>The user ID or UID.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>recursive</dt><dd><p>This variable only take effects when <em>file_state=directory</em>.</p>
+<p>When <em>recursive=true</em>, changes all the files and subdirectories in that directory to belong to the specified owner and group (chown -R).</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: false</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>file_path</dt><dd><p>Path to the USS file or directory being managed.</p>
+<p>This variable must consist of a fully qualified path and file or directory name. For example, <code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code>.</p>
+<p>The module will fail if parent directory of <em>file_path</em> does not exist or is a read-only file system.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>file_state</dt><dd><p>The final state desired for specified USS file or directory.</p>
+<p>If <em>file_state=file</em> and <em>file_path</em> does not exist, <em>file_path</em> is created as a USS file, the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=True</span></code>.</p>
+<p>If <em>file_state=directory</em> and <em>file_path</em> does not exist, <em>file_path</em> is created as a directory, the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=True</span></code>.</p>
+<p>If <em>file_state=file</em> or <em>file_state=directory</em>, and <em>file_path</em> exists, <em>file_path</em> is modified with other supplied variables (e.g., <em>file_mode</em>), the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=True</span></code>.</p>
+<p>If <em>file_state=file</em> or <em>file_state=directory</em>, and <em>file_path</em> exists, no action taken if no other variables are supplied (e.g., <em>file_mode</em>), the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=False</span></code>.</p>
+<p>If <em>file_state=absent</em> and <em>file_path</em> does not exist, no action taken, the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=False</span></code>.</p>
+<p>If <em>file_state=absent</em> and <em>file_path</em> exists, the existing <em>file_path</em> is deleted, the module completes successfully with <code class="docutils literal notranslate"><span class="pre">changed=True</span></code>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>choices</strong>: file, directory, absent</div>
+</div>
+</dd>
+<dt>file_tag</dt><dd><p>Indicates the function change tag.</p>
+<p>This variable only take effects when <em>file_state=file</em> or <em>file_state=directory</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<dl>
+<dt>codeset</dt><dd><p>Specifies the coded character set in which text data is encoded, such as ASCII or EBCDIC.</p>
+<p>For example, the code set for ASCII is ISO8859–1; the code set for EBCDIC is IBM-1047.</p>
+<p>This variable only take effects when <em>tag=mixed</em> or <em>tag=text</em>.</p>
+<p>This variable is required when <em>tag=text</em>.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>recursive</dt><dd><p>This variable only take effects when <em>file_state=directory</em>.</p>
+<p>When <em>recursive=true</em>, tags all the files and subdirectories in that directory (chtag -R).</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: bool</div>
+<div class="line"><strong>default</strong>: false</div>
+</div>
+</dd>
+<dt>tag</dt><dd><p>The type of file tag.</p>
+<p>If <em>tag=absent</em>, any existing file tag is removed.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+<div class="line"><strong>choices</strong>: mixed, text, binary, absent</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>zmf_credential</dt><dd><p>Authentication credentials, returned by module <code class="docutils literal notranslate"><span class="pre">zmf_authenticate</span></code>, for the successful authentication with z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_host</em>, <em>zmf_port</em>, <em>zmf_user</em>, <em>zmf_password</em>, <em>zmf_crt</em> and <em>zmf_key</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<dl>
+<dt>jwtToken</dt><dd><p>The value of JSON Web token, which supports strong encryption.</p>
+<p>If <em>LtpaToken2</em> is not supplied, <em>jwtToken</em> is required.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>LtpaToken2</dt><dd><p>The value of Lightweight Third Party Access (LTPA) token, which supports strong encryption.</p>
+<p>If <em>jwtToken</em> is not supplied, <em>LtpaToken2</em> is required.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_host</dt><dd><p>Hostname of the z/OSMF server.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: True</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_port</dt><dd><p>Port number of the z/OSMF server.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt>zmf_crt</dt><dd><p>Location of the PEM-formatted certificate chain file to be used for HTTPS client authentication.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_crt</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_crt</em> is required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_host</dt><dd><p>Hostname of the z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_host</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_host</em> is required.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_key</dt><dd><p>Location of the PEM-formatted file with your private key to be used for HTTPS client authentication.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_key</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_key</em> is required when <em>zmf_user</em> and <em>zmf_password</em> are not supplied.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_password</dt><dd><p>Password to be used for authenticating with z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_password</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_password</em> is required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
+<p>If <em>zmf_credential</em> is not supplied and <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+<dt>zmf_port</dt><dd><p>Port number of the z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_port</em> is ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: int</div>
+</div>
+</dd>
+<dt>zmf_user</dt><dd><p>User name to be used for authenticating with z/OSMF server.</p>
+<p>If <em>zmf_credential</em> is supplied, <em>zmf_user</em> is ignored.</p>
+<p>If <em>zmf_credential</em> is not supplied, <em>zmf_user</em> is required when <em>zmf_crt</em> and <em>zmf_key</em> are not supplied.</p>
+<p>If <em>zmf_credential</em> is not supplied and <em>zmf_crt</em> and <em>zmf_key</em> are supplied, <em>zmf_user</em> and <em>zmf_password</em> are ignored.</p>
+<div class="line-block">
+<div class="line"><strong>required</strong>: False</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a USS file /etc/profile with default mode 755</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;file&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create a directory /etc/some_directory with mode 644</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/some_directory&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;directory&quot;</span>
+    <span class="nt">file_mode</span><span class="p">:</span>
+        <span class="nt">mode</span><span class="p">:</span> <span class="s">&quot;644&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Change the permissions, owner, group and tag of a USS file /etc/profile</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;file&quot;</span>
+    <span class="nt">file_mode</span><span class="p">:</span>
+        <span class="nt">mode</span><span class="p">:</span> <span class="s">&quot;644&quot;</span>
+    <span class="nt">file_owner</span><span class="p">:</span>
+        <span class="nt">owner</span><span class="p">:</span> <span class="s">&quot;500000&quot;</span>
+        <span class="nt">group</span><span class="p">:</span> <span class="s">&quot;0&quot;</span>
+    <span class="nt">file_tag</span><span class="p">:</span>
+        <span class="nt">tag</span><span class="p">:</span> <span class="s">&quot;text&quot;</span>
+        <span class="nt">codeset</span><span class="p">:</span> <span class="s">&quot;IBM-1047&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Change the permissions of a directory /etc/some_directory, and recursively change its owner, group and tag</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/some_directory&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;directory&quot;</span>
+    <span class="nt">file_mode</span><span class="p">:</span>
+        <span class="nt">mode</span><span class="p">:</span> <span class="s">&quot;644&quot;</span>
+        <span class="nt">recursive</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+    <span class="nt">file_owner</span><span class="p">:</span>
+        <span class="nt">owner</span><span class="p">:</span> <span class="s">&quot;500000&quot;</span>
+        <span class="nt">group</span><span class="p">:</span> <span class="s">&quot;0&quot;</span>
+        <span class="nt">recursive</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">file_tag</span><span class="p">:</span>
+        <span class="nt">tag</span><span class="p">:</span> <span class="s">&quot;text&quot;</span>
+        <span class="nt">codeset</span><span class="p">:</span> <span class="s">&quot;IBM-1047&quot;</span>
+        <span class="nt">recursive</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Rename a USS file /etc/profile to /etc/profile.bak</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;file&quot;</span>
+    <span class="nt">file_new_name</span><span class="p">:</span> <span class="s">&quot;/etc/profile.bak&quot;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Delete a USS file /etc/profile</span>
+  <span class="nt">zmf_file</span><span class="p">:</span>
+    <span class="nt">zmf_host</span><span class="p">:</span> <span class="s">&quot;sample.ibm.com&quot;</span>
+    <span class="nt">file_path</span><span class="p">:</span> <span class="s">&quot;/etc/profile&quot;</span>
+    <span class="nt">file_state</span><span class="p">:</span> <span class="s">&quot;absent&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="return-values">
+<h2><a class="toc-backref" href="#id4">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl>
+<dt>changed</dt><dd><p>Indicates if any change is made during the module operation.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: always</div>
+<div class="line"><strong>type</strong>: bool</div>
+</div>
+</dd>
+<dt>message</dt><dd><p>The output message generated by the module to indicate whether the USS file or directory is successfully created, deleted, or updated.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: on success</div>
+<div class="line"><strong>type</strong>: str</div>
+</div>
+<p><strong>sample</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;The file /etc/profile is created successfully.&quot;</span>
+
+<span class="s2">&quot;The directory /etc/some_directory is deleted successfully.&quot;</span>
+
+<span class="s2">&quot;The file or directory /etc/profile does not exist.&quot;</span>
+
+<span class="s2">&quot;The file /etc/profile already exists.&quot;</span>
+
+<span class="s2">&quot;The file /etc/profile is updated successfully.&quot;</span>
+
+<span class="s2">&quot;The file /etc/profile is successfully renamed to /etc/profile.bak.&quot;</span>
+</pre></div>
+</div>
+</dd>
+<dt>file_properties</dt><dd><p>The properties of the present USS file or directory.</p>
+<div class="line-block">
+<div class="line"><strong>returned</strong>: on success</div>
+<div class="line"><strong>type</strong>: dict</div>
+</div>
+<p><strong>sample</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;gid&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;OPERATOR&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;-rwxr-xr-x&quot;</span><span class="p">,</span> <span class="s2">&quot;mtime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-01-21T01:24:04&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;t IBM-1047    T=on  /etc/profile&quot;</span><span class="p">,</span> <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="mi">500000</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;IBMUSER&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="zmf_file_copy.html" class="btn btn-neutral float-right" title="zmf_file_copy – Copy data to z/OS USS file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="zmf_dataset_fetch.html" class="btn btn-neutral float-left" title="zmf_dataset_fetch – Fetch z/OS data set or member from z/OS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, IBM.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v3.0.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="zmf_file.html">v3.0.0</a></dd>
+            <dd><a href="../../v2.5.0/modules/zmf_file.html">v2.5.0</a></dd>
+            <dd><a href="../../v2.4.0/index.html">v2.4.0</a></dd>
+            <dd><a href="../../v2.3.0/index.html">v2.3.0</a></dd>
+            <dd><a href="../../v2.2.1/index.html">v2.2.1</a></dd>
+            <dd><a href="../../v2.2.0/index.html">v2.2.0</a></dd>
+            <dd><a href="../../v2.1.0/index.html">v2.1.0</a></dd>
+            <dd><a href="../../v2.0.1/index.html">v2.0.1</a></dd>
+            <dd><a href="../../v2.0.0/index.html">v2.0.0</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
