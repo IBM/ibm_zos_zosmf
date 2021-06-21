@@ -7,7 +7,7 @@ namespace: ibm
 name: ibm_zos_zosmf
 
 # The collection version
-version: 2.5.0
+version: 3.0.0
 
 # Collection README file
 readme: README.md
@@ -35,17 +35,8 @@ tags:
   - zosmf
   - zos_management_facility
   - mvs
-  - workflow
   - job
   - console
-  - cpm
-  - cloud_provisioning
-  - cics
-  - db2
-  - ims
-  - mq
-  - liberty
-  - was
   - dataset
   - uss
 

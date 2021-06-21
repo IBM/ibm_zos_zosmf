@@ -1,5 +1,0 @@
-# Copyright (c) IBM Corporation 2020 
-
-[sysplex1]
-SY1 ansible_host=pev090.pok.ibm.com
-SY2 ansible_host=pev060.pok.ibm.com

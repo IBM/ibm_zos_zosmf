@@ -1,0 +1,12 @@
+# Copyright (c) IBM Corporation 2020 
+
+---
+requires_ansible: '>=2.9.10'
+
+plugin_routing:
+  modules:
+    zmf_workflow:
+      tombstone:
+        removal_version: 3.0.0
+        warning_text: zmf_workflow has been removed. Use ibm.ibm_zosmf.zmf_workflow instead.
+      redirect: ibm.ibm_zosmf.zmf_workflow
