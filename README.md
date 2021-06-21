@@ -15,6 +15,7 @@ For a quick approach to set up z/OSMF dependencies for z/OSMF collection **ibm_z
 
 Check out the sample Ansible playbooks for automating 3 different z/OS use case [here](https://github.com/IBM/ibm_zos_zosmf/tree/master/playbooks/use_cases/).
 
+If you want to use z/OSMF Workflow or CP&M functions, please use [ibm_zosmf](https://github.com/IBM/ibm_zosmf) collection.
 
 ## Copyright
 © Copyright IBM Corporation 2020

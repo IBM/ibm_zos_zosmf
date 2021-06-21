@@ -6,6 +6,24 @@
 Releases
 ========
 
+Version 3.0.0
+=============
+
+`v3.0.0`_
+
+Removed
+-------
+
+  * remove module: `zmf_workflow`: use `ibm.ibm_zosmf.zmf_workflow` instead
+  * remove role: `zmf_cpm_provision_software_service`: use `ibm.ibm_zosmf.zmf_cpm_provision_software_service` instead
+  * remove role: `zmf_cpm_manage_software_instance`: use `ibm.ibm_zosmf.zmf_cpm_manage_software_instance` instead
+  * remove role: `zmf_cpm_remove_software_instance`: use `ibm.ibm_zosmf.zmf_cpm_remove_software_instance` instead
+
+Availability
+------------
+  * `Galaxy`_
+  * `GitHub`_
+
 Version 2.5.0
 =============
 
@@ -258,3 +276,5 @@ Availability
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.4.0
 .. _v2.5.0:
     https://github.com/IBM/ibm_zos_zosmf/releases/tag/v2.5.0
+.. _v3.0.0:
+    https://github.com/IBM/ibm_zos_zosmf/releases/tag/v3.0.0
