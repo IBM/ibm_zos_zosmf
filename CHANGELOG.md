@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v3.0.1](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v3.0.1) - 2021-08-27
+### Changed
+- change documentation: `README.md`: add deprecation clarification
+
 ## [v3.0.0](https://github.com/IBM/ibm_zos_zosmf/releases/tag/v3.0.0) - 2021-06-20
 ### Removed
 - remove module: `zmf_workflow`: use `ibm.ibm_zosmf.zmf_workflow` instead

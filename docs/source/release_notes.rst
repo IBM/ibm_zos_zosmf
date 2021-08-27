@@ -6,6 +6,21 @@
 Releases
 ========
 
+Version 3.0.1
+=============
+
+`v3.0.1`_
+
+Changed
+-------
+
+  * change documentation: `README.md`: add deprecation clarification
+
+Availability
+------------
+  * `Galaxy`_
+  * `GitHub`_
+
 Version 3.0.0
 =============
 
